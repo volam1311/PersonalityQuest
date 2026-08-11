@@ -1,4 +1,4 @@
-package com.example.personalityquest;
+package com.example.personalityquest.Main;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -1,4 +1,4 @@
-package com.example.personalityquest;
+package com.example.personalityquest.Controller;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
