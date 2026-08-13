@@ -4,6 +4,7 @@ module com.example.personalityquest {
     requires java.xml;
     requires java.desktop;
     requires java.sql;
+    requires bcrypt;
 
     opens com.example.personalityquest to javafx.fxml;
     exports com.example.personalityquest;

@@ -2,6 +2,7 @@ package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.AccountSignInApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
+import com.example.personalityquest.Hashing;
 import com.example.personalityquest.SQLite;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -37,7 +38,7 @@ public class AccountCreationController {
         statement.setString(2, userNameEntry.getText());
         statement.setString(3, firstNameEntry.getText());
         statement.setString(4, lastNameEntry.getText());
-        statement.setString(5, passwordEntry.getText());
+        statement.setString(5, Hashing.Hash(passwordEntry.getText()));
 
         // execute statement
         statement.executeUpdate();
