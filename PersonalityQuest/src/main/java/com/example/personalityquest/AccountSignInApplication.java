@@ -1,17 +1,16 @@
 package com.example.personalityquest;
 
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AccountCreationApplication{
+public class AccountSignInApplication {
     public static void launch(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AccountCreationApplication.class.getResource("AccountCreation.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AccountCreationApplication.class.getResource("AccountSignIn.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 620);
-        stage.setTitle("Account Creation");
+        stage.setTitle("Account Login");
         stage.setScene(scene);
         stage.show();
     }
