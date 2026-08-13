@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.personalityquest.AccountCreationController">
+      fx:controller="com.example.personalityquest.Controllers.AccountCreationController">
 
     <padding>
         <Insets  left="20.0" right="20.0"/>
