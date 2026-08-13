@@ -5,7 +5,6 @@ module com.example.personalityquest {
     requires java.desktop;
     requires java.sql;
 
-
     opens com.example.personalityquest to javafx.fxml;
     exports com.example.personalityquest;
     exports com.example.personalityquest.Controllers;
