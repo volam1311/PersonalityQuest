@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.personalityquest.Controllers.AccountSignInController">
+
+    <padding>
+        <Insets  left="20.0" right="20.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_RIGHT">
+        <padding>
+            <Insets right="20.0"/>
+        </padding>
+        <Label text="Email" />
+    </HBox>
+    <TextField fx:id="emailEntry"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <padding>
+            <Insets right="20.0"/>
+        </padding>
+        <Label text="Password" />
+    </HBox>
+    <TextField fx:id="passwordEntry"/>
+
+    <VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml">
+        <Button text="Sign In" onAction="#OnSignIn"/>
+
+        <Label underline="true" text="Or Click Here to Sign Up" onMouseClicked="#OnSignUp"/>
+
+    </VBox>
+</VBox>
