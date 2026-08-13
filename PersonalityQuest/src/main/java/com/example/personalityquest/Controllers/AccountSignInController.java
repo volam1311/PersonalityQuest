@@ -1,6 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.AccountCreationApplication;
+import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.SQLite;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -21,11 +22,13 @@ public class AccountSignInController {
     private TextField emailEntry, passwordEntry;
 
     @FXML
-    private void OnSignIn() throws SQLException {
+    private void OnSignIn() throws SQLException, IOException {
         if (!isValidSignIn()) {
             System.out.println("Account Sign In Invalid");
             return;
         }
+
+        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
         System.out.println("Sign in complete");
     }
 
