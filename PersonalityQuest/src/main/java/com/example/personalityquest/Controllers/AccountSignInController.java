@@ -2,6 +2,7 @@ package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.AccountCreationApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
+import com.example.personalityquest.Hashing;
 import com.example.personalityquest.SQLite;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 
 public class AccountSignInController {
     private final String checkForExistingAccount = "SELECT * FROM " +
-            "Accounts WHERE email = ? AND password = ?";
+            "Accounts WHERE email = ?";
     @FXML
     private TextField emailEntry, passwordEntry;
 
@@ -35,17 +36,29 @@ public class AccountSignInController {
     private boolean isValidSignIn() throws SQLException {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(checkForExistingAccount);
+
         statement.setString(1, emailEntry.getText());
-        statement.setString(2, passwordEntry.getText());
         ResultSet rs = statement.executeQuery();
 
         // count rs set to see if there is a result
         int count = 0;
+        // holds the last hashed password seen
+        String lastPassword = "";
+
         while (rs.next()){
             count++;
+            lastPassword = rs.getString(5);
         }
+
+        // if an account does not exist
         if (count != 1){
             System.out.println("Email or Password is incorrect");
+            return false;
+        }
+
+        // if the passwords do not match
+        if (!Hashing.VerifyHash(lastPassword, passwordEntry.getText())){
+            System.out.println("Password is incorrect");
             return false;
         }
 
