@@ -1,71 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.personalityquest.Controllers.AccountCreationController">
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="10" style="-fx-background-color: lightblue;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.example.personalityquest.Controllers.AccountCreationController">
 
     <padding>
-        <Insets  left="20.0" right="20.0"/>
+        <Insets left="20.0" right="20.0" />
     </padding>
 
     <HBox alignment="CENTER_RIGHT">
         <padding>
-            <Insets right="20.0"/>
+            <Insets right="20.0" />
         </padding>
-        <Label text="Email" />
+        <Label style="-fx-font-weight: bold;" text="Email" />
     </HBox>
-    <TextField fx:id="emailEntry"/>
+    <TextField fx:id="emailEntry" />
 
     <HBox alignment="CENTER_RIGHT">
         <padding>
-            <Insets right="20.0"/>
+            <Insets right="20.0" />
         </padding>
-        <Label text="UserName" />
+        <Label style="-fx-font-weight: bold;" text="UserName" />
     </HBox>
-    <TextField fx:id="userNameEntry"/>
+    <TextField fx:id="userNameEntry" />
 
     <HBox alignment="CENTER_RIGHT">
         <padding>
-            <Insets right="20.0"/>
+            <Insets right="20.0" />
         </padding>
-        <Label text="FirstName" />
+        <Label style="-fx-font-weight: bold;" text="FirstName" />
     </HBox>
-    <TextField fx:id="firstNameEntry"/>
+    <TextField fx:id="firstNameEntry" />
 
     <HBox alignment="CENTER_RIGHT">
         <padding>
-            <Insets right="20.0"/>
+            <Insets right="20.0" />
         </padding>
-        <Label text="LastName" />
+        <Label style="-fx-font-weight: bold;" text="LastName" />
     </HBox>
-    <TextField fx:id="lastNameEntry"/>
+    <TextField fx:id="lastNameEntry" />
 
     <HBox alignment="CENTER_RIGHT">
         <padding>
-            <Insets right="20.0"/>
+            <Insets right="20.0" />
         </padding>
-        <Label text="Password" />
+        <Label style="-fx-font-weight: bold;" text="Password" />
     </HBox>
-    <TextField fx:id="passwordEntry"/>
+    <TextField fx:id="passwordEntry" />
 
     <HBox alignment="CENTER_RIGHT">
         <padding>
-            <Insets right="20.0"/>
+            <Insets right="20.0" />
         </padding>
-        <Label text="Re-Enter Password" />
+        <Label style="-fx-font-weight: bold;" text="Re-Enter Password" />
     </HBox>
-    <TextField fx:id="reEnterPasswordEntry"/>
+    <TextField fx:id="reEnterPasswordEntry" />
 
     <VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml">
-        <Button text="Sign Up" onAction="#OnSignUp"/>
+        <Button onAction="#OnSignUp" style="-fx-font-weight: bold;" text="Sign Up" />
 
-        <Label fx:id="signIn" underline="true" text="Or Click Here to Sign In" onMouseClicked="#OnSignIn"/>
+        <Label fx:id="signIn" onMouseClicked="#OnSignIn" text="Or Click Here to Sign In" underline="true" />
 
     </VBox>
 </VBox>
