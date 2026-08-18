@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+    <Button mnemonicParsing="false" prefWidth="80.0" style="-fx-font-weight: bold;" text="Quiz" />
+    <Button mnemonicParsing="false" prefWidth="80.0" style="-fx-font-weight: bold;" text="Tasks" />
+    <Button mnemonicParsing="false" prefWidth="80.0" style="-fx-font-weight: bold;" text="Dashboard" />
+    <Button mnemonicParsing="false" prefWidth="80.0" style="-fx-font-weight: bold;" text="Profile" />
+</HBox>

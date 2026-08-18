@@ -22,6 +22,9 @@ public class AccountSignInController {
     @FXML
     private TextField emailEntry, passwordEntry;
 
+    /*
+     * When "Sign In" Button is clicked
+     * */
     @FXML
     private void OnSignIn() throws SQLException, IOException {
         if (!isValidSignIn()) {
@@ -33,6 +36,10 @@ public class AccountSignInController {
         System.out.println("Sign in complete");
     }
 
+    /*
+     * Checks to see if the given email and password will work as a valid
+     * sign in
+     * */
     private boolean isValidSignIn() throws SQLException {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(checkForExistingAccount);
@@ -65,6 +72,10 @@ public class AccountSignInController {
 
         return true;
     }
+
+    /*
+    * When "Click here to Sign Up" label is clicked
+    * */
     @FXML
     private void OnSignUp(MouseEvent event) throws IOException {
         Stage currentStage = (Stage)((Node) event.getSource()).getScene().getWindow();
