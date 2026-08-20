@@ -7,13 +7,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static com.example.personalityquest.MainApplication.fxmlPrefix;
+import static com.example.personalityquest.SceneInfo.Dimensions.SCENEHEIGHT;
+import static com.example.personalityquest.SceneInfo.Dimensions.SCENEWIDTH;
 
 public class DashboardApplication {
     public static void launch(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(AccountCreationApplication.class.getResource(fxmlPrefix +  "Dashboard.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 620);
+        Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
         stage.setTitle("Dashboard");
         stage.setScene(scene);
         stage.show();
+
     }
 }

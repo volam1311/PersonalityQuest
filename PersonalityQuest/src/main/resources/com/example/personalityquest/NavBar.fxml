@@ -6,9 +6,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-    <Button mnemonicParsing="false" prefWidth="80.0" style="-fx-font-weight: bold;" text="Quiz" />
-    <Button mnemonicParsing="false" prefWidth="80.0" style="-fx-font-weight: bold;" text="Tasks" />
-    <Button mnemonicParsing="false" prefWidth="80.0" style="-fx-font-weight: bold;" text="Dashboard" />
-    <Button mnemonicParsing="false" prefWidth="80.0" style="-fx-font-weight: bold;" text="Profile" />
-</HBox>
+
+    <VBox alignment="CENTER" spacing="50" prefHeight="480" prefWidth="100" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.NavBarController">
+        <Button mnemonicParsing="false" prefWidth="180" style="-fx-font-weight: bold;" text="Quiz" onAction="#OnQuiz"/>
+        <Button mnemonicParsing="false" prefWidth="180" style="-fx-font-weight: bold;" text="Settings" onAction="#OnSettings"/>
+        <Button mnemonicParsing="false" prefWidth="180" style="-fx-font-weight: bold;" text="Dashboard" onAction="#OnDashboard"/>
+        <Button mnemonicParsing="false" prefWidth="180" style="-fx-font-weight: bold;" text="Profile" onAction="#OnProfile"/>
+    </VBox>
