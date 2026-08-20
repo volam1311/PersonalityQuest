@@ -7,11 +7,14 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" spacing="10" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.AccountSignInController">
+    <HBox>
+        <fx:include source="NavBar.fxml"/>
+        <VBox alignment="TOP_CENTER" spacing="10" prefHeight="480" prefWidth="520" VBox.vgrow="ALWAYS">
+            <Label style="-fx-font-weight: bold;" text="Dashboard" textAlignment="RIGHT">
+                <font>
+                    <Font size="24.0" />
+                </font></Label>
+        </VBox>
+    </HBox>
 
-    <Label style="-fx-font-weight: bold;" text="Dashboard" textAlignment="CENTER">
-      <font>
-         <Font size="24.0" />
-      </font></Label>
-   <VBox prefHeight="200.0" prefWidth="100.0" />
-   <fx:include source="NavBar.fxml"/>
 </VBox>

@@ -2,8 +2,10 @@ package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.AccountCreationApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
+import com.example.personalityquest.Applications.UpdateAccountPersonalDetailsApplication;
 import com.example.personalityquest.Hashing;
 import com.example.personalityquest.SQLite;
+import com.example.personalityquest.SystemManager;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
@@ -33,6 +35,12 @@ public class AccountSignInController {
         }
 
         DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
+
+        /*
+         * Set currently logged in account
+         * */
+        SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
+
         System.out.println("Sign in complete");
     }
 
