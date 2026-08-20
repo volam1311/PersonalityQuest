@@ -9,11 +9,12 @@ import java.io.IOException;
 import static com.example.personalityquest.MainApplication.fxmlPrefix;
 import static com.example.personalityquest.SystemManager.SceneInfo.SCENEHEIGHT;
 import static com.example.personalityquest.SystemManager.SceneInfo.SCENEWIDTH;
-public class AccountSignInApplication {
+
+public class UpdateAccountPersonalDetailsApplication {
     public static void launch(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AccountCreationApplication.class.getResource(fxmlPrefix +  "AccountSignIn.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(UpdateAccountPersonalDetailsApplication.class.getResource(fxmlPrefix + "UpdateAccountPersonalDetails.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
-        stage.setTitle("Account Login");
+        stage.setTitle("Update Details");
         stage.setScene(scene);
         stage.show();
     }
