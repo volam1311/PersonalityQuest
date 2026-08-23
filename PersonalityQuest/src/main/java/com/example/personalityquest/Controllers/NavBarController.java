@@ -5,19 +5,19 @@ import javafx.fxml.FXML;
 public class NavBarController {
 
     /*
-    * Profile Button Clicked
-    * */
-    @FXML
-    public void OnProfile(){
-        System.out.println("Going to profile scene");
-    }
-
-    /*
      * Dashboard Button Clicked
      * */
     @FXML
     public void OnDashboard(){
         System.out.println("Going to dashboard scene");
+    }
+
+    /*
+    * Account Button Button Clicked
+    * */
+    @FXML
+    public void OnAccount(){
+        System.out.println("Going to account scene");
     }
 
     /*
@@ -29,10 +29,26 @@ public class NavBarController {
     }
 
     /*
-     * Quiz Button Clicked
+     * Quests Button Clicked
      * */
     @FXML
-    public void OnQuiz(){
-        System.out.println("Going to Quiz scene");
+    public void OnQuests(){
+        System.out.println("Going to quests scene");
+    }
+
+    /*
+     * Quests Button Clicked
+     * */
+    @FXML
+    public void OnTasks(){
+        System.out.println("Going to tasks scene");
+    }
+
+    /*
+     * Quests Button Clicked
+     * */
+    @FXML
+    public void OnArchetype(){
+        System.out.println("Going to archetype scene");
     }
 }
