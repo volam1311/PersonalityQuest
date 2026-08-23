@@ -1,7 +1,27 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.Managers.SystemManager;
+
 public class EmailDetails {
     public EmailDetails(String email, String userName, String firstName, String lastName){
+        if (SystemManager.isEmpty(email)){
+            System.out.println("Email is null");
+            email = "";
+        }
+        if (SystemManager.isEmpty(userName)){
+            System.out.println("UserName is null");
+            userName = "";
+        }
+
+        if (SystemManager.isEmpty(firstName)){
+            System.out.println("FirstName is null");
+            firstName = "";
+        }
+        if (SystemManager.isEmpty(lastName)){
+            System.out.println("LastName is null");
+            lastName = "";
+        }
+
         this.email = email;
         this.userName = userName;
         this.firstName = firstName;
@@ -28,4 +48,5 @@ public class EmailDetails {
     public String getLastName(){
         return lastName;
     }
+
 }
