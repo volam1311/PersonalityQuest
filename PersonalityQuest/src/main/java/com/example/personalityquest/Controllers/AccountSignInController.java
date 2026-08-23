@@ -3,6 +3,7 @@ package com.example.personalityquest.Controllers;
 import com.example.personalityquest.Applications.AccountCreationApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Applications.UpdateAccountPasswordApplication;
+import com.example.personalityquest.Applications.UpdateAccountPersonalDetailsApplication;
 import com.example.personalityquest.Managers.EmailManager;
 import com.example.personalityquest.Managers.HashingManager;
 import com.example.personalityquest.Managers.PasswordManager;

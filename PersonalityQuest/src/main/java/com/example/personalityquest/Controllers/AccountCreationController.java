@@ -45,12 +45,13 @@ public class AccountCreationController {
                 lastNameEntry.getText(),
                 passwordEntry.getText());
 
-        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
 
         /*
-        * Set currently logged in account
-        * */
+         * Set currently logged in account
+         * */
         SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
+
+        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
 
         System.out.println("Account created");
     }

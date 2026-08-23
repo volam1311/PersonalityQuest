@@ -13,10 +13,16 @@ public class EmailManager {
     protected final static String accountExists =
             "SELECT * FROM Accounts WHERE email = ?";
 
+
     /*
     * Checks whether the given string exists as an account in the database
     * */
     public static boolean DoesAccountWithEmailExist(String email) throws SQLException {
+        // check nulls
+        if (SystemManager.isEmpty(email)) {
+            System.out.println("Email is null therefor it does not exist");
+            return false;}
+
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
         // assign parameters
@@ -41,6 +47,11 @@ public class EmailManager {
      * Returns: Email details or null if account doesn't exist
      * */
     public static EmailDetails GetDetailsForEmail(String email) throws Exception {
+        // check nulls
+        if (SystemManager.isEmpty(email)) {
+            System.out.println("Email is null therefor details can not be gotten");
+            return null;}
+
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
         // assign parameters
