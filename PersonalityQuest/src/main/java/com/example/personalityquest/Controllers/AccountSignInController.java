@@ -2,6 +2,7 @@ package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.AccountCreationApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
+import com.example.personalityquest.Applications.UpdateAccountPasswordApplication;
 import com.example.personalityquest.Applications.UpdateAccountPersonalDetailsApplication;
 import com.example.personalityquest.Hashing;
 import com.example.personalityquest.SQLite;
@@ -39,7 +40,7 @@ public class AccountSignInController {
          * */
         SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
 
-        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
+        UpdateAccountPersonalDetailsApplication.launch((Stage)emailEntry.getScene().getWindow());
 
 
         System.out.println("Sign in complete");
@@ -63,7 +64,7 @@ public class AccountSignInController {
 
         while (rs.next()){
             count++;
-            lastPassword = rs.getString(5);
+            lastPassword = rs.getString("password");
         }
 
         // if an account does not exist
