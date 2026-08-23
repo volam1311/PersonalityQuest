@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="10" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.AccountSignInController">
+<VBox alignment="CENTER" spacing="10" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.DashboardController">
     <HBox>
         <fx:include source="NavBar.fxml"/>
         <VBox alignment="TOP_CENTER" spacing="10" prefHeight="480" prefWidth="520" VBox.vgrow="ALWAYS">

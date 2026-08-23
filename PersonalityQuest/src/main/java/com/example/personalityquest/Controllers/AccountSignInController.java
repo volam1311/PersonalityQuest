@@ -34,12 +34,13 @@ public class AccountSignInController {
             return;
         }
 
-        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
-
         /*
          * Set currently logged in account
          * */
         SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
+
+        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
+
 
         System.out.println("Sign in complete");
     }
