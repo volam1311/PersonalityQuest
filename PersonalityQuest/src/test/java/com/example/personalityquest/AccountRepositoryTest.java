@@ -1,5 +1,6 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.Managers.HashingManager;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
@@ -62,8 +63,8 @@ class AccountRepositoryTest {
         String storedPassword = storedPasswordFor("alex@example.com");
         assertNotEquals(password, storedPassword);
         assertTrue(storedPassword.startsWith("$2a$"));
-        assertTrue(Hashing.VerifyHash(storedPassword, password));
-        assertFalse(Hashing.VerifyHash(storedPassword, "wrong-password"));
+        assertTrue(HashingManager.VerifyHash(storedPassword, password));
+        assertFalse(HashingManager.VerifyHash(storedPassword, "wrong-password"));
     }
 
     @Test

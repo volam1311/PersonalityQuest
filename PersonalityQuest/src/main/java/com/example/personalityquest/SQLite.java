@@ -17,6 +17,13 @@ public class SQLite {
 
     }
 
+    /*
+     * Used for tests as they need to connect to an in memory db
+     * */
+    public static void setConnection(Connection newConnection){
+        instance = newConnection;
+    }
+
     public static Connection getConnection(){
         if (instance == null){
             new SQLite();

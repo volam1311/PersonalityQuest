@@ -13,4 +13,8 @@ public  class SystemManager {
         */
         public static String currentEmail = "";
     }
+
+    public static boolean isEmpty(String value) {
+        return value == null || value.isEmpty();
+    }
 }

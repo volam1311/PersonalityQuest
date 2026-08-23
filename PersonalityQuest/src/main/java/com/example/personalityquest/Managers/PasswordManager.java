@@ -19,6 +19,16 @@ public class PasswordManager {
     * Returns: Whether the password matches the one for the given email
     * */
     public static boolean isPasswordForEmail(String email, String password) throws SQLException {
+        // check nulls
+        if (SystemManager.isEmpty(email)) {
+            System.out.println("Email is null and therefore the password wont match");
+            return false;
+        }
+        if (SystemManager.isEmpty(password)) {
+            System.out.println("Can not check a null password");
+            return false;
+        }
+
         // email doesn't exist so no the password doesn't match
         if (!EmailManager.DoesAccountWithEmailExist(email)){
             return false;
@@ -40,6 +50,16 @@ public class PasswordManager {
     * Returns: Whether account update was successful
     * */
     public static boolean UpdatePasswordForEmail(String email, String newPassword) throws SQLException {
+        // check nulls
+        if (SystemManager.isEmpty(email)) {
+            System.out.println("Email is null and therefore password can not be updated for account");
+            return false;
+        }
+        if (SystemManager.isEmpty(newPassword)) {
+            System.out.println("Can not have a null password for new account");
+            return false;
+        }
+
         // email doesn't exist so no the password doesn't match
         if (!EmailManager.DoesAccountWithEmailExist(email)){
             return false;
@@ -53,5 +73,9 @@ public class PasswordManager {
 
         statement.executeUpdate();
         return true;
+    }
+
+    private void NullCheck(){
+
     }
 }
