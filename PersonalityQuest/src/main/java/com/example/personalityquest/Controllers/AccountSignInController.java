@@ -43,7 +43,7 @@ public class AccountSignInController {
          * */
         SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
 
-        UpdateAccountPasswordApplication.launch((Stage)emailEntry.getScene().getWindow());
+        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
 
 
         System.out.println("Sign in complete");
