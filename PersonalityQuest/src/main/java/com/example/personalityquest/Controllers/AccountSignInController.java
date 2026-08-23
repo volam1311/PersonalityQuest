@@ -1,6 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.AccountCreationApplication;
+import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Applications.UpdateAccountPasswordApplication;
 import com.example.personalityquest.Managers.EmailManager;
 import com.example.personalityquest.Managers.HashingManager;
@@ -41,7 +42,7 @@ public class AccountSignInController {
          * */
         SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
 
-        UpdateAccountPasswordApplication.launch((Stage)emailEntry.getScene().getWindow());
+        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
 
 
         System.out.println("Sign in complete");

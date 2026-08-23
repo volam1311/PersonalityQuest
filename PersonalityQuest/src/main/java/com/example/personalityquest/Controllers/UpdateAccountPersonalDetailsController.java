@@ -101,7 +101,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
 
         return true;
     }
-    
+
     /*
     * Populates the entry fields with their current values
     * */

@@ -29,6 +29,9 @@ public class EmailManager {
             count++;
         }
 
+        if (count == 0){
+            System.out.println("Email doesnt exist");
+        }
         return count == 1;
     }
 
@@ -43,13 +46,11 @@ public class EmailManager {
         // assign parameters
         statement.setString(1, email);
 
-        int count = 0;
 
         ResultSet rs = statement.executeQuery();
         EmailDetails emailDetails = null;
 
         while (rs.next()){
-            count++;
             emailDetails = new EmailDetails(
                 rs.getString("email"),
                 rs.getString("userName"),
@@ -58,6 +59,9 @@ public class EmailManager {
             );
         }
 
+        if (emailDetails == null){
+            System.out.println("Email Details is null");
+        }
         return emailDetails;
     }
 
