@@ -1,6 +1,8 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.*;
+import com.example.personalityquest.Managers.EmailManager;
+import com.example.personalityquest.Managers.SystemManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -76,8 +78,9 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
         Message.setText("Updated Details");
         System.out.println("Updated Details");
     }
+
     /*
-     * Exits without updating users details
+     * Returns to previous screen without updating user details
      * */
     public void OnExit(){
 
@@ -90,7 +93,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
         /*
         * Does the new email already exist and is the email being updated
         * */
-        if (EmailInformation.DoesAccountWithEmailExist(emailEntry.getText()) && !Objects.equals(oldEmail, emailEntry.getText())){
+        if (EmailManager.DoesAccountWithEmailExist(emailEntry.getText()) && !Objects.equals(oldEmail, emailEntry.getText())){
             Message.setText("Email of " + emailEntry.getText() + " Already exists. Please Use Another");
             System.out.println("Email of " + emailEntry.getText() + " Already exists");
             return false;
@@ -98,19 +101,12 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
 
         return true;
     }
-
-    /*
-     * Returns to previous screen
-     * */
-    private void ExitScreen(){
-
-    }
-
+    
     /*
     * Populates the entry fields with their current values
     * */
     private boolean PopulateEntryFields() throws Exception {
-        EmailDetails emailDetails = EmailInformation.GetDetailsForEmail(oldEmail);
+        EmailDetails emailDetails = EmailManager.GetDetailsForEmail(oldEmail);
 
         if (Objects.equals(emailDetails, null)){
             System.out.println("Account doesnt exist with the given email " + oldEmail);

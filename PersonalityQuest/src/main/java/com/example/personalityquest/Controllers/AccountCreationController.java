@@ -5,7 +5,7 @@ import com.example.personalityquest.AccountSignUpValidator;
 import com.example.personalityquest.Applications.AccountSignInApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.SQLite;
-import com.example.personalityquest.SystemManager;
+import com.example.personalityquest.Managers.SystemManager;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
@@ -30,6 +30,7 @@ public class AccountCreationController {
                 lastNameEntry.getText(),
                 passwordEntry.getText(),
                 reEnterPasswordEntry.getText());
+
         if (validationError != null) {
             System.out.println(validationError);
             System.out.println("Account creation Invalid");

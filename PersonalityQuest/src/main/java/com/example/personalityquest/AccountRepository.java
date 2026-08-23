@@ -1,5 +1,7 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.Managers.HashingManager;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -18,7 +20,7 @@ public final class AccountRepository {
             statement.setString(2, userName);
             statement.setString(3, firstName);
             statement.setString(4, lastName);
-            statement.setString(5, Hashing.Hash(password));
+            statement.setString(5, HashingManager.Hash(password));
             statement.executeUpdate();
         }
     }
