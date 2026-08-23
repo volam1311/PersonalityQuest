@@ -1,8 +1,8 @@
-package com.example.personalityquest;
+package com.example.personalityquest.Managers;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
-public class Hashing {
+public class HashingManager {
     /*
     * Hashes the given String text and then returns it
     * */

@@ -1,4 +1,4 @@
-package com.example.personalityquest;
+package com.example.personalityquest.Managers;
 
 
 public  class SystemManager {

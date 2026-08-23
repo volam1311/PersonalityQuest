@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static com.example.personalityquest.MainApplication.fxmlPrefix;
-import static com.example.personalityquest.SystemManager.SceneInfo.SCENEHEIGHT;
-import static com.example.personalityquest.SystemManager.SceneInfo.SCENEWIDTH;
+import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEHEIGHT;
+import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEWIDTH;
 public class AccountSignInApplication {
     public static void launch(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(AccountCreationApplication.class.getResource(fxmlPrefix +  "AccountSignIn.fxml"));

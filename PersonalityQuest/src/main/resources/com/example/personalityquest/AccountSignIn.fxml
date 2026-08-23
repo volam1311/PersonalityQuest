@@ -30,8 +30,8 @@
     <TextField fx:id="passwordEntry" />
 
     <VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml">
+        <Label style="-fx-font-weight: bold;" fx:id="Message"/>
         <Button onAction="#OnSignIn" style="-fx-font-weight: bold;" text="Sign In" />
-
         <Label onMouseClicked="#OnSignUp" text="Or Click Here to Sign Up" underline="true" />
 
     </VBox>
