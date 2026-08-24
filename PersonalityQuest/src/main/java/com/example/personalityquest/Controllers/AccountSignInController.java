@@ -10,7 +10,6 @@ import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -38,8 +37,6 @@ public class AccountSignInController {
 
     @FXML
     private void initialize() {
-        loadFonts();
-
         Rectangle clip = new Rectangle();
         clip.setArcWidth(56);
         clip.setArcHeight(56);
@@ -56,19 +53,6 @@ public class AccountSignInController {
         root.widthProperty().addListener((obs, oldWidth, newWidth) -> applyResponsiveLayout());
         root.heightProperty().addListener((obs, oldHeight, newHeight) -> applyResponsiveLayout());
         Platform.runLater(this::applyResponsiveLayout);
-    }
-
-    private void loadFonts() {
-        String[] fontFiles = {
-                "/com/example/personalityquest/fonts/Poppins-Regular.ttf",
-                "/com/example/personalityquest/fonts/Poppins-Bold.ttf",
-                "/com/example/personalityquest/fonts/Poppins-Italic.ttf",
-                "/com/example/personalityquest/fonts/Montserrat-Regular.ttf",
-                "/com/example/personalityquest/fonts/Montserrat-Bold.ttf"
-        };
-        for (String fontFile : fontFiles) {
-            Font.loadFont(getClass().getResourceAsStream(fontFile), 12);
-        }
     }
 
     private void applyResponsiveLayout() {

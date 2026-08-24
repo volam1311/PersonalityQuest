@@ -1,28 +1,3 @@
-@font-face {
-    font-family: Poppins;
-    src: url("fonts/Poppins-Regular.ttf");
-}
-
-@font-face {
-    font-family: "Poppins Bold";
-    src: url("fonts/Poppins-Bold.ttf");
-}
-
-@font-face {
-    font-family: "Poppins Italic";
-    src: url("fonts/Poppins-Italic.ttf");
-}
-
-@font-face {
-    font-family: Montserrat;
-    src: url("fonts/Montserrat-Regular.ttf");
-}
-
-@font-face {
-    font-family: "Montserrat Bold";
-    src: url("fonts/Montserrat-Bold.ttf");
-}
-
 .signin-root {
     -fx-background-color: #000000;
     -fx-padding: 24;
@@ -48,13 +23,15 @@
 }
 
 .brand-title {
-    -fx-font-family: "Montserrat Bold";
+    -fx-font-family: Montserrat;
+    -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
     -fx-font-size: 28px;
 }
 
 .brand-tagline {
-    -fx-font-family: "Poppins Italic";
+    -fx-font-family: Poppins;
+    -fx-font-style: italic;
     -fx-text-fill: rgba(255, 255, 255, 0.88);
     -fx-font-size: 15px;
 }
@@ -72,7 +49,8 @@
 }
 
 .signin-heading {
-    -fx-font-family: "Montserrat Bold";
+    -fx-font-family: Montserrat;
+    -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
     -fx-font-size: 42px;
 }
@@ -114,7 +92,8 @@
 }
 
 .error-label {
-    -fx-font-family: "Poppins Italic";
+    -fx-font-family: Poppins;
+    -fx-font-style: italic;
     -fx-text-fill: #ef4444;
     -fx-font-size: 13px;
 }
@@ -126,7 +105,8 @@
 }
 
 .signup-link {
-    -fx-font-family: "Poppins Bold";
+    -fx-font-family: Poppins;
+    -fx-font-weight: bold;
     -fx-text-fill: #a78bfa;
     -fx-font-size: 14px;
     -fx-underline: true;
@@ -138,7 +118,8 @@
 }
 
 .login-button {
-    -fx-font-family: "Montserrat Bold";
+    -fx-font-family: Montserrat;
+    -fx-font-weight: bold;
     -fx-background-color: linear-gradient(to right, #c084fc, #7c6af7);
     -fx-background-radius: 40;
     -fx-background-insets: 0;
