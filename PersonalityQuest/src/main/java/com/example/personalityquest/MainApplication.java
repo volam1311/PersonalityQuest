@@ -1,6 +1,7 @@
 package com.example.personalityquest;
 
 import com.example.personalityquest.Applications.AccountCreationApplication;
+import com.example.personalityquest.Applications.UpdateAccountPersonalDetailsApplication;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

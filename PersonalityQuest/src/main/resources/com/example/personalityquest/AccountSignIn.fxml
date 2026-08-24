@@ -1,39 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.personalityquest.Controllers.AccountSignInController">
+<StackPane fx:id="root"
+           maxHeight="Infinity"
+           maxWidth="Infinity"
+           styleClass="signin-root"
+           stylesheets="@signin.css"
+           xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.personalityquest.Controllers.AccountSignInController">
 
-    <padding>
-        <Insets  left="20.0" right="20.0"/>
-    </padding>
+    <GridPane fx:id="contentGrid"
+              hgap="36"
+              maxHeight="Infinity"
+              maxWidth="Infinity"
+              vgap="20">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="50.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="50.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="0" vgrow="ALWAYS"/>
+            <RowConstraints minHeight="0" vgrow="NEVER"/>
+        </rowConstraints>
 
-    <HBox alignment="CENTER_RIGHT">
-        <padding>
-            <Insets right="20.0"/>
-        </padding>
-        <Label text="Email" />
-    </HBox>
-    <TextField fx:id="emailEntry"/>
+        <StackPane fx:id="brandingPane"
+                   maxHeight="Infinity"
+                   maxWidth="Infinity"
+                   minHeight="0"
+                   minWidth="0"
+                   styleClass="branding-card"
+                   GridPane.columnIndex="0"
+                   GridPane.hgrow="ALWAYS"
+                   GridPane.rowIndex="0"
+                   GridPane.vgrow="ALWAYS">
+            <ImageView fx:id="brandingImage"
+                       preserveRatio="true"
+                       smooth="true"
+                       styleClass="branding-image"
+                       StackPane.alignment="CENTER">
+                <image>
+                    <Image url="@img/Archetypes-12-jungian-map.png"/>
+                </image>
+            </ImageView>
+            <Region maxHeight="160"
+                    maxWidth="Infinity"
+                    minHeight="120"
+                    prefHeight="160"
+                    styleClass="branding-scrim"
+                    StackPane.alignment="BOTTOM_CENTER"/>
 
-    <HBox alignment="CENTER_RIGHT">
-        <padding>
-            <Insets right="20.0"/>
-        </padding>
-        <Label text="Password" />
-    </HBox>
-    <TextField fx:id="passwordEntry"/>
+            <VBox spacing="4" styleClass="branding-copy" StackPane.alignment="BOTTOM_LEFT">
+                <Label styleClass="brand-title" text="PersonalityQuest"/>
+                <Label styleClass="brand-tagline" text="Your journey begins now."/>
+            </VBox>
+        </StackPane>
 
-    <VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml">
-        <Button text="Sign In" onAction="#OnSignIn"/>
+        <VBox fx:id="formPane"
+              fillWidth="true"
+              maxHeight="Infinity"
+              maxWidth="Infinity"
+              minHeight="0"
+              minWidth="0"
+              spacing="14"
+              styleClass="signin-form"
+              GridPane.columnIndex="1"
+              GridPane.hgrow="ALWAYS"
+              GridPane.rowIndex="0"
+              GridPane.vgrow="ALWAYS">
+            <Label styleClass="signin-heading" text="Sign In"/>
 
-        <Label underline="true" text="Or Click Here to Sign Up" onMouseClicked="#OnSignUp"/>
+            <TextField fx:id="emailEntry"
+                       maxWidth="Infinity"
+                       prefHeight="46"
+                       promptText="Email@email.com"
+                       styleClass="signin-input"/>
 
-    </VBox>
-</VBox>
+            <Label fx:id="Message"
+                   maxWidth="Infinity"
+                   minHeight="18"
+                   styleClass="error-label"
+                   wrapText="true"/>
+
+            <PasswordField fx:id="passwordEntry"
+                           maxWidth="Infinity"
+                           prefHeight="46"
+                           promptText="Password"
+                           styleClass="signin-input"/>
+
+            <HBox alignment="CENTER_LEFT" spacing="4">
+                <padding>
+                    <Insets top="2.0"/>
+                </padding>
+                <Label styleClass="signup-hint" text="Don't have an account?"/>
+                <Label onMouseClicked="#OnSignUp" styleClass="signup-link" text="Sign up"/>
+            </HBox>
+
+            <Region minHeight="8" VBox.vgrow="ALWAYS"/>
+
+            <Button defaultButton="true"
+                    maxWidth="Infinity"
+                    onAction="#OnSignIn"
+                    prefHeight="48"
+                    styleClass="login-button"
+                    text="Login"/>
+        </VBox>
+    </GridPane>
+</StackPane>

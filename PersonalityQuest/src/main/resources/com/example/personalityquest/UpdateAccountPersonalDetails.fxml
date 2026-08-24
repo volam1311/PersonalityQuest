@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="10" style="-fx-background-color: lightblue;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.example.personalityquest.Controllers.AccountCreationController">
+<VBox alignment="CENTER" spacing="10" style="-fx-background-color: lightblue;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.example.personalityquest.Controllers.UpdateAccountPersonalDetailsController">
 
     <padding>
         <Insets left="20.0" right="20.0" />
@@ -45,26 +45,9 @@
     </HBox>
     <TextField fx:id="lastNameEntry" />
 
-    <HBox alignment="CENTER_RIGHT">
-        <padding>
-            <Insets right="20.0" />
-        </padding>
-        <Label style="-fx-font-weight: bold;" text="Password" />
-    </HBox>
-    <TextField fx:id="passwordEntry" />
-
-    <HBox alignment="CENTER_RIGHT">
-        <padding>
-            <Insets right="20.0" />
-        </padding>
-        <Label style="-fx-font-weight: bold;" text="Re-Enter Password" />
-    </HBox>
-    <TextField fx:id="reEnterPasswordEntry" />
-
     <VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml">
-        <Button onAction="#OnSignUp" style="-fx-font-weight: bold;" text="Sign Up" />
-
-        <Label fx:id="signIn" onMouseClicked="#OnSignIn" text="Or Click Here to Sign In" underline="true" />
-
+        <Label style="-fx-font-weight: bold;" fx:id="Message"/>
+        <Button onAction="#OnSaveAndExit" style="-fx-font-weight: bold;" text="Save And Exit" />
+        <Button onAction="#OnExit" style="-fx-font-weight: bold;" text="Exit" />
     </VBox>
 </VBox>

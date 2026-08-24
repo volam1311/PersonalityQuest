@@ -7,11 +7,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static com.example.personalityquest.MainApplication.fxmlPrefix;
+import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEHEIGHT;
+import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEWIDTH;
 
 public class AccountCreationApplication{
     public static void launch(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(AccountCreationApplication.class.getResource(fxmlPrefix + "AccountCreation.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 620);
+        Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
         stage.setTitle("Account Creation");
         stage.setScene(scene);
         stage.show();

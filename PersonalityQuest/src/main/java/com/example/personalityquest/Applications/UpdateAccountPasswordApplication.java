@@ -10,13 +10,12 @@ import static com.example.personalityquest.MainApplication.fxmlPrefix;
 import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEHEIGHT;
 import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEWIDTH;
 
-public class DashboardApplication {
+public class UpdateAccountPasswordApplication {
     public static void launch(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AccountCreationApplication.class.getResource(fxmlPrefix +  "Dashboard.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(UpdateAccountPersonalDetailsApplication.class.getResource(fxmlPrefix + "UpdateAccountPassword.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
-        stage.setTitle("Dashboard");
+        stage.setTitle("Update Password");
         stage.setScene(scene);
         stage.show();
-
     }
 }
