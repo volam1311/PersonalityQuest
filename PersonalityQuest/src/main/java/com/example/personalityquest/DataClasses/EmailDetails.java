@@ -1,4 +1,4 @@
-package com.example.personalityquest;
+package com.example.personalityquest.DataClasses;
 
 import com.example.personalityquest.Managers.SystemManager;
 

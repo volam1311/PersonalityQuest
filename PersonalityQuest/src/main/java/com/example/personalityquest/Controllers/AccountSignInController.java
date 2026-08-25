@@ -1,6 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.*;
+import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
 import com.example.personalityquest.Managers.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -123,7 +124,7 @@ public class AccountSignInController {
          * */
         SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
 
-        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
+        WeeklyTaskReflectionApplication.launch((Stage)emailEntry.getScene().getWindow());
 
 
         System.out.println("Sign in complete");
