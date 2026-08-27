@@ -69,8 +69,7 @@ public class WeeklyTaskManager {
 
         WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
         for (int i = 0; i < taskIds.length; i++) {
-            Task task = GetTaskForId(taskIds[i]);
-            tasks[i] = new WeeklyTask(email, task.getTaskId(), "Not Started", "", String.valueOf(weekStart));
+            tasks[i] = GetWeeklyTask(email, taskIds[i], weekStart);
         }
 
         // returns tasks for given week

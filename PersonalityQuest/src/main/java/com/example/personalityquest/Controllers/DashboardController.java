@@ -90,7 +90,7 @@ public class DashboardController implements Initializable {
     @FXML
     private void OnTaskClick(MouseEvent event) throws IOException {
         WeeklyTask selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
-
+        System.out.println("Selected Task Reflection: " + selectedTask.getReflection());
         if (selectedTask != null) {
             WeeklyTaskReflectionApplication.launch((Stage)weeklyTasks.getScene().getWindow(), selectedTask);
         }
