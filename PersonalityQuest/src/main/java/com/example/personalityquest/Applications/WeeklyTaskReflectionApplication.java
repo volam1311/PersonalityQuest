@@ -1,7 +1,7 @@
 package com.example.personalityquest.Applications;
 
 import com.example.personalityquest.Controllers.WeeklyTaskReflectionController;
-import com.example.personalityquest.DataClasses.Task;
+import com.example.personalityquest.DataClasses.WeeklyTask;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -13,7 +13,7 @@ import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCEN
 import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEWIDTH;
 
 public class WeeklyTaskReflectionApplication {
-    public static void launch(Stage stage, Task taskLoookingAt) throws IOException {
+    public static void launch(Stage stage, WeeklyTask taskLoookingAt) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(WeeklyTaskReflectionApplication.class.getResource(fxmlPrefix + "WeeklyTaskReflection.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
         stage.setTitle("Task Reflection");

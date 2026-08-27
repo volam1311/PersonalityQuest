@@ -2,7 +2,7 @@ package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
 import com.example.personalityquest.DataClasses.EmailDetails;
-import com.example.personalityquest.DataClasses.Task;
+import com.example.personalityquest.DataClasses.WeeklyTask;
 import com.example.personalityquest.Managers.EmailManager;
 import com.example.personalityquest.Managers.SystemManager;
 import com.example.personalityquest.Managers.WeeklyTaskManager;
@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -24,7 +23,7 @@ public class DashboardController implements Initializable {
     @FXML
     private Label welcomeMessage;
     @FXML
-    private ListView<Task> weeklyTasks;
+    private ListView<WeeklyTask> weeklyTasks;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,7 +64,7 @@ public class DashboardController implements Initializable {
      * */
     private void PopulateWeeklyTasks() throws Exception {
         // Need Weekly Quests Before I can do this so this is just dummy data
-        Task[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek(SystemManager.CurrentAccount.currentEmail);
+        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek(SystemManager.CurrentAccount.currentEmail);
 
         // first time this week logging in so Generate Tasks
         if (Objects.equals(tasks, null)){
@@ -90,7 +89,7 @@ public class DashboardController implements Initializable {
     }
     @FXML
     private void OnTaskClick(MouseEvent event) throws IOException {
-        Task selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
+        WeeklyTask selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
 
         if (selectedTask != null) {
             WeeklyTaskReflectionApplication.launch((Stage)weeklyTasks.getScene().getWindow(), selectedTask);

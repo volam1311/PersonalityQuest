@@ -1,10 +1,8 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.DashboardApplication;
-import com.example.personalityquest.DataClasses.Task;
+import com.example.personalityquest.DataClasses.WeeklyTask;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -14,9 +12,9 @@ public class WeeklyTaskReflectionController {
     @FXML
     private TextField reflection;
 
-    private Task currentTask;
+    private WeeklyTask currentTask;
 
-    public void setTask(Task task){
+    public void setTask(WeeklyTask task){
         this.currentTask = task;
         DisplayTask();
     }
