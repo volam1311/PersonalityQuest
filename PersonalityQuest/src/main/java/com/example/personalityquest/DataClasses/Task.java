@@ -50,4 +50,8 @@ public class Task {
         return this.labourId;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
