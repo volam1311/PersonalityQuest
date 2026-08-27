@@ -80,6 +80,7 @@ public class WeeklyTaskManagerTest {
         SQLite.setConnection(connection);
     }
 
+    /// RETRIEVING TASKS
     @Test
     public void RetriveTasks() throws Exception {
         dummyTasks = new Task[] {
@@ -101,7 +102,6 @@ public class WeeklyTaskManagerTest {
 
         assertTrue(Objects.equals(dummyTasks[0].getTaskId(), tasks[0].getTaskId()));
     }
-
     @Test
     public void NoTasksExist() throws Exception {
         dummyTasks = new Task[] {
@@ -111,9 +111,14 @@ public class WeeklyTaskManagerTest {
         WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek("test");
         assertNull(tasks);
     }
-
     @Test
-    public void GenerateTasksIfNull() throws Exception {
+    public void GettingTasksForThisWeekWithNullEmail() throws Exception {
+        assertNull(WeeklyTaskManager.GetTasksForEmailForThisWeek(null));
+    }
+
+    /// GENERATING
+    @Test
+    public void GeneratingWeeklyTasksIfNull() throws Exception {
         dummyTasks = new Task[] {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
@@ -127,9 +132,114 @@ public class WeeklyTaskManagerTest {
         }
         assertTrue(Objects.equals(dummyTasks[0].getTaskId(), tasks[0].getTaskId()));
     }
+    @Test
+    public void GeneratingWeeklyTasksWithEmailThatDoesntExist() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        WeeklyTaskManager.SetDefaultTaskSearchNum(9999);
+        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek("test");
+
+        if (Objects.equals(tasks, null)){
+            System.out.println("Generating New Tasks");
+            tasks = WeeklyTaskManager.GenerateTasksForThisWeek("doesnt exisgjbfjsdahjsd");
+        }
+        assertNull(tasks);
+    }
+    @Test
+    public void GeneratingWeeklyTasksWithTaskIdThatDoesntExist() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        WeeklyTaskManager.SetDefaultTaskSearchNum(17982331);
+        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek("test");
+
+        if (Objects.equals(tasks, null)){
+            System.out.println("Generating New Tasks");
+            tasks = WeeklyTaskManager.GenerateTasksForThisWeek("doesnt exisgjbfjsdahjsd");
+        }
+        assertNull(tasks);
+    }
+    @Test
+    public void GeneratingWeeklyTasksWithWeeklyStartInTheFuture() throws Exception {
+        assertNull(WeeklyTaskManager.GetWeeklyTask("test", 9999, LocalDate.MAX));
+    }
+
+    /// RETRIEVING WEEKLY TASKS
+    @Test
+    public void GetWeeklyTask() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, weekStart)
+                    VALUES ("test", 9999, "NotStarted", ?);
+                    """);
+        statement.setString(1, String.valueOf(weekStart));
+        statement.executeUpdate();
+
+        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+
+        assertEquals(task.getEmail(), "test");
+
+
+    }
+    @Test
+    public void GetWeeklyTaskThatDoesntExistShouldBeNull() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, weekStart)
+                    VALUES ("test", 9999, "NotStarted", ?);
+                    """);
+        statement.setString(1, String.valueOf(weekStart));
+        statement.executeUpdate();
+
+        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("wrong email", 9999, weekStart);
+
+        assertNull(task);
+
+
+    }
+    @Test
+    public void GettingWeeklyTaskWithNullEmail() throws Exception {
+        assertNull(WeeklyTaskManager.GetWeeklyTask(null, 1, LocalDate.now()));
+    }
+    @Test
+    public void GettingWeeklyTaskWithNullWeekStart() throws Exception {
+        assertNull(WeeklyTaskManager.GetWeeklyTask("test", 9999, null));
+    }
+    @Test
+    public void GettingWeeklyTaskWithTaskIdThatDoesntExist() throws Exception {
+        assertNull(WeeklyTaskManager.GetWeeklyTask("test", -217371237, LocalDate.now()));
+    }
+    @Test
+    public void GettingWeeklyTaskWithEmailThatDoesntExist() throws Exception {
+        assertNull(WeeklyTaskManager.GetWeeklyTask("random email ashdahsdhas", 9999, null));
+    }
 
     @Test
-    public void UpdateTaskToDraft() throws Exception {
+    public void GettingWeeklyTaskWithWeeklyStartInTheFuture() throws Exception {
+        assertNull(WeeklyTaskManager.GetWeeklyTask("test", 9999, LocalDate.MAX));
+    }
+
+
+    /// UPDATING WEEKLY TASKS
+    @Test
+    public void UpdateWeeklyTaskToDraft() throws Exception {
         dummyTasks = new Task[] {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
@@ -153,4 +263,146 @@ public class WeeklyTaskManagerTest {
 
         assertEquals("New Reflection", task.getReflection());
     }
+    @Test
+    public void UpdateWeeklyTaskToDraftThatIsNull() throws Exception {
+        assertNull(WeeklyTaskManager.UpdateGivenTaskToDraft(null, "New Reflection", "test"));
+    }
+    @Test
+    public void UpdatingWeeklyTaskToDraftWithNullEmail() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, weekStart)
+                    VALUES ("test", 9999, "NotStarted", ?);
+                    """);
+        statement.setString(1, String.valueOf(weekStart));
+        statement.executeUpdate();
+
+        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+
+        assertNull( WeeklyTaskManager.UpdateGivenTaskToDraft(task, "New Reflection", null));
+    }
+    @Test
+    public void UpdatingWeeklyTaskToDraftWithNullReflection() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, weekStart)
+                    VALUES ("test", 9999, "NotStarted", ?);
+                    """);
+        statement.setString(1, String.valueOf(weekStart));
+        statement.executeUpdate();
+
+        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+
+        assertNull( WeeklyTaskManager.UpdateGivenTaskToDraft(task, null, "test"));
+    }
+
+    /// FINISHING WEEKLY TASKS
+    @Test
+    public void UpdateWeeklyTaskToBeFinished() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, weekStart)
+                    VALUES ("test", 9999, "NotStarted", ?);
+                    """);
+        statement.setString(1, String.valueOf(weekStart));
+        statement.executeUpdate();
+
+        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+
+        WeeklyTaskManager.UpdateGivenTaskToBeFinished(task, "New Reflection", "test");
+
+        task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+
+        assertEquals("New Reflection", task.getReflection());
+    }
+    @Test
+    public void UpdateWeeklyTaskToBeFinishedThatIsNull() throws Exception {
+        assertNull(WeeklyTaskManager.UpdateGivenTaskToBeFinished(null, "New Reflection", "test"));
+    }
+    @Test
+    public void UpdatingWeeklyTaskToBeFinishedWithNullEmail() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, weekStart)
+                    VALUES ("test", 9999, "NotStarted", ?);
+                    """);
+        statement.setString(1, String.valueOf(weekStart));
+        statement.executeUpdate();
+
+        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+
+        assertNull( WeeklyTaskManager.UpdateGivenTaskToBeFinished(task, "New Reflection", null));
+    }
+    @Test
+    public void UpdatingWeeklyTaskToBeFinishedWithEmailThatDoesntExist() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, weekStart)
+                    VALUES ("test", 9999, "NotStarted", ?);
+                    """);
+        statement.setString(1, String.valueOf(weekStart));
+        statement.executeUpdate();
+
+        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+
+        assertNull( WeeklyTaskManager.UpdateGivenTaskToBeFinished(task, "New Reflection", "asdhjgfbhasjdahjsd"));
+    }
+    @Test
+    public void UpdatingWeeklyTaskToBeFinishedWithNullReflection() throws Exception {
+        dummyTasks = new Task[] {
+                new Task(9999, "TestTask", "This is a Test Task", 1)
+        };
+
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, weekStart)
+                    VALUES ("test", 9999, "NotStarted", ?);
+                    """);
+        statement.setString(1, String.valueOf(weekStart));
+        statement.executeUpdate();
+
+        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+
+        assertNull( WeeklyTaskManager.UpdateGivenTaskToBeFinished(task, null, "test"));
+    }
+
+
 }

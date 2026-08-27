@@ -8,17 +8,18 @@ import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Arrays;
 
 public class WeeklyTaskManager {
 
 
-    private final static int AMOUNTOFTASKS = 1;
+    private final static int AMOUNTOFTASKS = 9;
     private final static String SQL_UPDATE_DRAFT = "UPDATE WeeklyTasks" +
             " SET reflection = ?, status = " + "'Started'" +
             " WHERE accountEmail = ? AND taskId = ?";
 
     private final static String SQL_FINISH_TASK = "UPDATE WeeklyTasks" +
-            " SET reflection = ?, SET status = " + "Finished" +
+            " SET reflection = ?, status = " + "'Finished'" +
             " WHERE accountEmail = ? AND taskId = ?";
 
     private final static String TASK_FOR_EMAIL = """
@@ -41,8 +42,11 @@ public class WeeklyTaskManager {
     public static void SetDefaultTaskSearchNum(int num){
         defaultTaskSearchNum = num;
     }
+
+    /// RETRIVING
     public static WeeklyTask[] GetTasksForEmailForThisWeek(String email) throws Exception {
-        if (!EmailManager.DoesAccountWithEmailExist(email)) {
+
+        if (IsEmailNull(email) || !EmailManager.DoesAccountWithEmailExist(email)) {
             return null;
         }
 
@@ -72,29 +76,10 @@ public class WeeklyTaskManager {
         // returns tasks for given week
         return tasks;
     }
-    public static WeeklyTask[] GenerateTasksForThisWeek(String email) throws Exception {
-        if (!EmailManager.DoesAccountWithEmailExist(email)) {
+    public static Task GetTaskForId(int taskId) throws Exception {
+        if (IsTaskIdNull(taskId)){
             return null;
         }
-
-        // gets the week start
-        // to find the tasks that have been assigned this week
-        LocalDate localDate = LocalDate.now();
-        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-
-        InsertTasks(email, weekStart);
-        int[] taskIds = GetTaskIds(email, weekStart);
-
-        WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
-        for (int i = 0; i < taskIds.length; i++) {
-            Task task = GetTaskForId(taskIds[i]);
-            tasks[i] = new WeeklyTask(email, task.getTaskId(), "Not Started", "", String.valueOf(weekStart));
-
-        }
-
-        return tasks;
-    }
-    public static Task GetTaskForId(int taskId) throws Exception {
         // appends all task ids to FindTaskInfo Query and then
         // executes it find all task info
         Connection connection = SQLite.getConnection();
@@ -121,16 +106,10 @@ public class WeeklyTaskManager {
         }
         return task;
     }
-    public static void UpdateGivenTaskToDraft(WeeklyTask task, String reflection, String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_DRAFT);
-        statement.setString(1, reflection);
-        statement.setString(2, email);
-        statement.setInt(3, task.getTaskId());
-
-        statement.executeUpdate();
-    }
     public static WeeklyTask GetWeeklyTask(String email, int taskId, LocalDate weekStart) throws Exception {
+        if (IsWeekStartNull(weekStart) || IsTaskIdNull(taskId) || IsEmailNull(email)){
+            return null;
+        }
         // executes the query to find the given taskId, email and weekStart date
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK);
@@ -154,8 +133,61 @@ public class WeeklyTaskManager {
         System.out.println("GetWeeklyTask Returned Null");
         return null;
     }
+    private static int[] GetTaskIds(String email, LocalDate weekStart) throws Exception {
+        if (IsWeekStartNull(weekStart) || IsEmailNull(email)){
+            throw new Exception("Week start or email is null");
+        }
+        // executes the query to find all tasks that were assigned this week
+        Connection connection = SQLite.getConnection();
+        PreparedStatement statement = connection.prepareStatement(TASK_FOR_EMAIL);
+        // assign parameters
+        statement.setString(1, email);
+        statement.setString(2, String.valueOf(weekStart));
 
+        // appends all taskId's from the query to an array
+        // to be used in next query
+        int[] taskIds = new int[AMOUNTOFTASKS];
+        ResultSet rs = statement.executeQuery();
+        int count = 0;
+        while (rs.next()) {
+            taskIds[count] = rs.getInt("taskId");
+            count++;
+        }
+
+        // if its counted least one task then the user has a set this week
+        // if it hasn't must return null
+        if (count < AMOUNTOFTASKS && count != 0){
+            return Arrays.copyOf(taskIds, count);
+        }
+        return taskIds;
+    }
+    /// GENERATING
+    public static WeeklyTask[] GenerateTasksForThisWeek(String email) throws Exception {
+        if (IsEmailNull(email) || !EmailManager.DoesAccountWithEmailExist(email)) {
+            return null;
+        }
+
+        // gets the week start
+        // to find the tasks that have been assigned this week
+        LocalDate localDate = LocalDate.now();
+        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+        InsertTasks(email, weekStart);
+        int[] taskIds = GetTaskIds(email, weekStart);
+
+        WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
+        for (int i = 0; i < taskIds.length; i++) {
+            Task task = GetTaskForId(taskIds[i]);
+            tasks[i] = new WeeklyTask(email, task.getTaskId(), "Not Started", "", String.valueOf(weekStart));
+
+        }
+
+        return tasks;
+    }
     private static void InsertTasks(String email, LocalDate weekStart) throws Exception {
+        if (IsWeekStartNull(weekStart) || IsEmailNull(email)){
+            throw new Exception("Week start or email is null");
+        }
 
         /// HAVE A WAY TO CHOOSE WHICH TASKS GET ASSIGNED FOR NOW JUST TEST TASK
         String INSERT_3_NEW_TASKS = " INSERT INTO WeeklyTasks (accountEmail, taskId, status, weekStart) VALUES";
@@ -188,26 +220,55 @@ public class WeeklyTaskManager {
 
         statement.executeUpdate();
     }
-    private static int[] GetTaskIds(String email, LocalDate weekStart) throws SQLException {
-        // executes the query to find all tasks that were assigned this week
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(TASK_FOR_EMAIL);
-        // assign parameters
-        statement.setString(1, email);
-        statement.setString(2, String.valueOf(weekStart));
 
-        // appends all taskId's from the query to an array
-        // to be used in next query
-        int[] taskIds = new int[AMOUNTOFTASKS];
-        ResultSet rs = statement.executeQuery();
-        int count = 0;
-        while (rs.next()) {
-            taskIds[count] = rs.getInt("taskId");
-            count++;
+    /// UPDATING WEEKLY TASKS
+    public static WeeklyTask UpdateGivenTaskToDraft(WeeklyTask task, String reflection, String email) throws Exception {
+        if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){
+            return null;
         }
+        Connection connection = SQLite.getConnection();
+        PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_DRAFT);
+        statement.setString(1, reflection);
+        statement.setString(2, email);
+        statement.setInt(3, task.getTaskId());
 
-        return taskIds;
+        statement.executeUpdate();
+
+        return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));
     }
 
+    /// FINISHING WEEKLY TASKS
+    public static WeeklyTask UpdateGivenTaskToBeFinished(WeeklyTask task, String reflection, String email) throws Exception {
+        if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){
+            return null;
+        }
+        Connection connection = SQLite.getConnection();
+        PreparedStatement statement = connection.prepareStatement(SQL_FINISH_TASK);
+        statement.setString(1, reflection);
+        statement.setString(2, email);
+        statement.setInt(3, task.getTaskId());
 
+        statement.executeUpdate();
+
+        return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));
+    }
+
+    /// NULL CHECKING
+    private static boolean IsEmailNull(String email){
+        return SystemManager.isEmpty(email);
+    }
+    private static boolean IsWeeklyTaskNull(WeeklyTask task){
+        return task == null;
+    }
+    private static boolean IsWeekStartNull(LocalDate weekStart){
+        if (weekStart == null) {return false;}
+        if (weekStart.isAfter(LocalDate.now())) {return false;}
+        return String.valueOf(weekStart) == null;
+    }
+    private static boolean IsReflectionNull(String reflection){
+        return SystemManager.isEmpty(reflection);
+    }
+    private static boolean IsTaskIdNull(int taskId){
+        return taskId == 0;
+    }
 }
