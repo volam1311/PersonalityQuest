@@ -1,6 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.*;
+import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
 import com.example.personalityquest.Managers.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

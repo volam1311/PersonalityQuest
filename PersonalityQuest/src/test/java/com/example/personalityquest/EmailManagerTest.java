@@ -1,5 +1,6 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.DataClasses.EmailDetails;
 import com.example.personalityquest.Managers.EmailManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

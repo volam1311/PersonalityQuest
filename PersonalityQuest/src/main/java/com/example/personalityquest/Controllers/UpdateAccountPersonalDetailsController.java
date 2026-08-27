@@ -1,6 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.*;
+import com.example.personalityquest.DataClasses.EmailDetails;
 import com.example.personalityquest.Managers.EmailManager;
 import com.example.personalityquest.Managers.SystemManager;
 import javafx.fxml.FXML;

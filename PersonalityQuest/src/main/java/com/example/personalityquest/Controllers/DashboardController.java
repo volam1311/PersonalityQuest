@@ -1,14 +1,22 @@
 package com.example.personalityquest.Controllers;
 
-import com.example.personalityquest.EmailDetails;
+import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
+import com.example.personalityquest.DataClasses.EmailDetails;
+import com.example.personalityquest.DataClasses.Task;
 import com.example.personalityquest.Managers.EmailManager;
 import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.Managers.WeeklyTaskManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -16,7 +24,7 @@ public class DashboardController implements Initializable {
     @FXML
     private Label welcomeMessage;
     @FXML
-    private ListView weeklyTasks;
+    private ListView<Task> weeklyTasks;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -28,7 +36,11 @@ public class DashboardController implements Initializable {
             throw new RuntimeException(e);
         }
         PopulateQuestline();
-        PopulateWeeklyTasks();
+        try {
+            PopulateWeeklyTasks();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         PopulateProgressGraph();
     }
 
@@ -51,15 +63,24 @@ public class DashboardController implements Initializable {
     /*
      * Populates the Weekly tasks fxml with the users data
      * */
-    private void PopulateWeeklyTasks(){
+    private void PopulateWeeklyTasks() throws Exception {
         // Need Weekly Quests Before I can do this so this is just dummy data
-        weeklyTasks.getItems().addAll("Dummy Task 1", "Dummy Task 2", "Dummy Task 3");
-        weeklyTasks.setMinHeight(weeklyTasks.getItems().size() * 24);
+        Task[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek(SystemManager.CurrentAccount.currentEmail);
 
+        // first time this week logging in so Generate Tasks
+        if (Objects.equals(tasks, null)){
+            System.out.println("No tasks this week so generating some");
+            tasks = WeeklyTaskManager.GenerateTasksForThisWeek(SystemManager.CurrentAccount.currentEmail);
+        }
+
+
+        for (int i = 0; i < tasks.length; i++){
+            weeklyTasks.getItems().add(i, tasks[i]);
+        }
+
+        weeklyTasks.setMinHeight(weeklyTasks.getItems().size() * 24);
         System.out.println("Populated Weekly Tasks");
     }
-
-
 
     /*
      * Populates the graph fxml with the users data
@@ -67,5 +88,12 @@ public class DashboardController implements Initializable {
     private void PopulateProgressGraph(){
         System.out.println("Populated Progress Graph");
     }
+    @FXML
+    private void OnTaskClick(MouseEvent event) throws IOException {
+        Task selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
 
+        if (selectedTask != null) {
+            WeeklyTaskReflectionApplication.launch((Stage)weeklyTasks.getScene().getWindow(), selectedTask);
+        }
+    }
 }
