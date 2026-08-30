@@ -1,0 +1,373 @@
+.material-symbol {
+    -fx-font-family: "Material Symbols Rounded";
+    -fx-font-size: 24px;
+    -fx-text-fill: #a884ff;
+    -fx-alignment: CENTER;
+    -fx-translate-y: 2px;
+}
+
+.dashboard-root {
+    -fx-background-color: #050505;
+    -fx-font-family: Poppins;
+}
+
+.sidebar {
+    -fx-background-color: #191919;
+    -fx-padding: 14 12 14 12;
+    -fx-pref-width: 250;
+    -fx-min-width: 250;
+    -fx-max-width: 250;
+}
+
+.sidebar-collapsed {
+    -fx-pref-width: 72;
+    -fx-min-width: 72;
+    -fx-max-width: 72;
+}
+
+.sidebar-header {
+    -fx-padding: 0 2 18 2;
+}
+
+.brand-label {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.menu-button,
+.settings-button {
+    -fx-min-width: 44px;
+    -fx-pref-width: 44px;
+    -fx-max-width: 44px;
+
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    -fx-max-height: 44px;
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+}
+
+.menu-button:hover,
+.settings-button:hover {
+    -fx-background-color: #30284a;
+}
+
+.navigation-list {
+    -fx-padding: 0;
+    -fx-fill-width: true;
+}
+
+.button-graphic {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.sidebar-collapsed .button-graphic {
+    -fx-alignment: CENTER;
+}
+
+.nav-button,
+.profile-button {
+    -fx-pref-width: 9999;
+    -fx-max-width: 9999;
+    -fx-min-height: 44px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: #2d2745;
+    -fx-background-insets: 0;
+    -fx-background-radius: 9;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-family: Poppins;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-text-fill: #a884ff;
+    -fx-padding: 0 12 0 12;
+    -fx-cursor: hand;
+}
+
+.nav-button {
+    -fx-min-height: 52px;
+    -fx-pref-height: 52px;
+    -fx-max-height: 52px;
+}
+
+.profile-button {
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    -fx-max-height: 44px;
+}
+
+.nav-label {
+    -fx-font-family: Poppins;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a884ff;
+}
+
+.nav-button:hover,
+.profile-button:hover {
+    -fx-background-color: #423761;
+}
+
+.nav-button.selected-nav-button,
+.nav-button.selected-nav-button:hover,
+.nav-button.selected-nav-button:focused {
+    -fx-background-color: #9a72ff;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: #140e25;
+}
+
+.nav-button.selected-nav-button .material-symbol,
+.nav-button.selected-nav-button .nav-label {
+    -fx-text-fill: #140e25;
+}
+
+#homeButton,
+#homeButton:hover,
+#homeButton:focused,
+#homeButton:armed {
+    -fx-background-color: #9a72ff;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-border-width: 0;
+    -fx-text-fill: #140e25;
+}
+
+#homeButton .material-symbol,
+#homeButton .nav-label {
+    -fx-text-fill: #140e25;
+}
+
+.sidebar-footer {
+    -fx-padding: 8 0 0 0;
+}
+
+.settings-button {
+    -fx-background-color: #2d2745;
+    -fx-background-radius: 9;
+    -fx-text-fill: #a884ff;
+}
+
+.sidebar-collapsed .nav-button,
+.sidebar-collapsed .profile-button {
+    -fx-min-width: 44px;
+    -fx-pref-width: 44px;
+    -fx-max-width: 44px;
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    -fx-max-height: 44px;
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+}
+
+.content-scroll,
+.content-scroll > .viewport {
+    -fx-background-color: #050505;
+}
+
+.content-scroll > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 4 0 0;
+}
+
+.content-scroll > .scroll-bar:vertical .thumb {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+}
+
+.content-container {
+    -fx-background-color: #050505;
+}
+
+.welcome-label {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.streak-badge {
+    -fx-background-color: linear-gradient(to bottom, #ff9c00, #ffc400);
+    -fx-background-radius: 12;
+    -fx-padding: 10 18 10 18;
+}
+
+.streak-icon {
+    -fx-font-family: "Material Symbols Rounded";
+    -fx-font-size: 30px;
+    -fx-min-width: 30px;
+    -fx-pref-width: 30px;
+    -fx-alignment: CENTER;
+    -fx-translate-y: 2px;
+    -fx-text-fill: #ffffff;
+}
+
+.streak-text {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.card {
+    -fx-background-color: #1a1a1a;
+    -fx-background-radius: 10;
+    -fx-border-color: #8c5dff;
+    -fx-border-radius: 10;
+    -fx-border-width: 1.5;
+    -fx-padding: 12;
+}
+
+.quest-card {
+    -fx-background-color: linear-gradient(to bottom, #285623, #77995f);
+    -fx-border-color: #72a34d;
+}
+
+#questCard {
+    -fx-background-color: #1a1a1a;
+    -fx-background-radius: 10;
+    -fx-border-color: #8c5dff;
+    -fx-border-radius: 10;
+    -fx-border-width: 1.5;
+    -fx-padding: 12;
+}
+
+.card-title {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+}
+
+#dailiesTitle,
+#tasksTitle,
+#progressTitle {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+}
+
+.centered-title {
+    -fx-alignment: CENTER;
+    -fx-max-width: 999999;
+    -fx-text-alignment: CENTER;
+}
+
+.quest-divider {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.quest-description {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-text-alignment: CENTER;
+}
+
+.progress-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.progress-bar {
+    -fx-pref-height: 18;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #090909;
+    -fx-background-radius: 6;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: #a172ff;
+    -fx-background-radius: 6;
+    -fx-background-insets: 0;
+}
+
+.task-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.task-list .viewport {
+    -fx-background-color: transparent;
+}
+
+.task-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8;
+    -fx-padding: 4 6 4 6;
+    -fx-text-fill: #aa86ff;
+}
+
+.task-list .list-cell:filled {
+    -fx-background-color: #2d2745;
+}
+
+.task-list .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.task-list .list-cell:filled:selected,
+.task-list .list-cell:filled:hover {
+    -fx-background-color: #403460;
+}
+
+.task-list .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.task-list .scroll-bar:vertical .thumb {
+    -fx-background-color: #8460df;
+    -fx-background-radius: 6;
+}
+
+.task-row {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 2 0 2 0;
+}
+
+.task-row .label {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #aa86ff;
+}
+
+.task-row .check-box {
+    -fx-font-size: 18px;
+}
+
+.task-row .check-box .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #a172ff;
+    -fx-border-radius: 5;
+    -fx-border-width: 1.5;
+    -fx-padding: 5;
+}
+
+.task-row .check-box:selected .box {
+    -fx-background-color: #8860dd;
+}
+
+.task-row .check-box:selected .mark {
+    -fx-background-color: #ffffff;
+}

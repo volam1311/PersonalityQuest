@@ -10,15 +10,18 @@ import java.time.LocalDate;
 
 public class StreakManager {
 
-    private static final String ensureProgressRow = """
+    private static final int NO_STREAK = 0;
+    private static final int FIRST_STREAK = 1;
+
+    private static final String ENSURE_PROGRESS_ROW = """
             INSERT OR IGNORE INTO UserProgress (accountEmail)
             SELECT email FROM Accounts WHERE email = ?
             """;
 
-    private static final String getProgress =
+    private static final String GET_PROGRESS =
             "SELECT * FROM UserProgress WHERE accountEmail = ?";
 
-    private static final String updateProgress ="""
+    private static final String UPDATE_PROGRESS = """
             UPDATE UserProgress
             SET currentStreak = ?, bestStreak = ?, lastCompletionDate = ?
             WHERE accountEmail = ?
@@ -28,10 +31,9 @@ public class StreakManager {
     }
 
     public static int RecordCompletion(String email, LocalDate completionDate) throws SQLException {
-
-//        Check for nulls
+        // Calculate and save the streak for a completion date
         if (SystemManager.isEmpty(email) || completionDate == null) {
-            return 0;
+            return NO_STREAK;
         }
 
         Connection connection = SQLite.getConnection();
@@ -42,7 +44,7 @@ public class StreakManager {
         int bestStreak;
         LocalDate lastCompletionDate = null;
 
-        try (PreparedStatement statement = connection.prepareStatement(getProgress)) {
+        try (PreparedStatement statement = connection.prepareStatement(GET_PROGRESS)) {
             statement.setString(1, email);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -69,16 +71,17 @@ public class StreakManager {
 
         int updatedStreak;
 
-        if (lastCompletionDate != null && lastCompletionDate.plusDays(1).equals(completionDate)) {
+        if (lastCompletionDate != null
+                && lastCompletionDate.plusDays(1).equals(completionDate)) {
             updatedStreak = currentStreak + 1;
         } else {
-            updatedStreak = 1;
+            updatedStreak = FIRST_STREAK;
         }
 
         int updatedBestStreak = Math.max(bestStreak, updatedStreak);
 
-        try (PreparedStatement statement =
-                     connection.prepareStatement(updateProgress)) {
+            try (PreparedStatement statement =
+                     connection.prepareStatement(UPDATE_PROGRESS)) {
 
             statement.setInt(1, updatedStreak);
             statement.setInt(2, updatedBestStreak);
@@ -93,9 +96,9 @@ public class StreakManager {
 
 
     public static int GetCurrentStreak(String email) throws SQLException {
-//        Check for nulls
+        // Read the current streak for an account
         if (SystemManager.isEmpty(email)) {
-            return 0;
+            return NO_STREAK;
         }
         Connection connection = SQLite.getConnection();
 
@@ -103,12 +106,12 @@ public class StreakManager {
 
         int currentStreak;
 
-        try (PreparedStatement statement = connection.prepareStatement(getProgress)) {
+        try (PreparedStatement statement = connection.prepareStatement(GET_PROGRESS)) {
             statement.setString(1, email);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (!resultSet.next()) {
-                    return 0;
+                    return NO_STREAK;
                 }
 
                 currentStreak = resultSet.getInt("currentStreak");
@@ -118,12 +121,13 @@ public class StreakManager {
         }
     }
 
-    private static  void EnsureProgressRow(
+    // Create a progress row when an account does not have one yet
+    private static void EnsureProgressRow(
             Connection connection,
             String email) throws SQLException {
 
         try (PreparedStatement statement =
-                     connection.prepareStatement(ensureProgressRow)) {
+                     connection.prepareStatement(ENSURE_PROGRESS_ROW)) {
 
             statement.setString(1, email);
             statement.executeUpdate();
