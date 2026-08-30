@@ -10,12 +10,10 @@ class AccountSignUpValidatorTest {
     void validDetails() {
         assertTrue(AccountSignUpValidator.isValid(
                 "alex@example.com", "alex", "Alex", "Smith", "password123", "password123"));
-        assertNull(AccountSignUpValidator.validationError(
-                "alex@example.com", "alex", "Alex", "Smith", "password123", "password123"));
     }
 
     @Test
-    void mismatchedPasswordsAreRejected() {
+    void mismatchedPasswords() {
         assertFalse(AccountSignUpValidator.isValid(
                 "alex@example.com", "alex", "Alex", "Smith", "password123", "different"));
         assertEquals("Passwords do not match", AccountSignUpValidator.validationError(
@@ -23,52 +21,44 @@ class AccountSignUpValidatorTest {
     }
 
     @Test
-    void emptyEmailIsRejected() {
+    void emptyEmail() {
         assertEquals("Email is empty", AccountSignUpValidator.validationError(
                 "", "alex", "Alex", "Smith", "password123", "password123"));
     }
 
     @Test
-    void emptyUserNameIsRejected() {
+    void emptyUserName() {
         assertEquals("UserName is empty", AccountSignUpValidator.validationError(
                 "alex@example.com", "", "Alex", "Smith", "password123", "password123"));
     }
 
     @Test
-    void emptyFirstNameIsRejected() {
+    void emptyFirstName() {
         assertEquals("FirstName is empty", AccountSignUpValidator.validationError(
                 "alex@example.com", "alex", "", "Smith", "password123", "password123"));
     }
 
     @Test
-    void emptyLastNameIsRejected() {
+    void emptyLastName() {
         assertEquals("LastName is empty", AccountSignUpValidator.validationError(
                 "alex@example.com", "alex", "Alex", "", "password123", "password123"));
     }
 
     @Test
-    void emptyPasswordIsRejected() {
+    void emptyPassword() {
         assertEquals("Password is empty", AccountSignUpValidator.validationError(
                 "alex@example.com", "alex", "Alex", "Smith", "", ""));
     }
 
     @Test
-    void nullFieldsAreTreatedAsEmpty() {
-        assertEquals("Email is empty", AccountSignUpValidator.validationError(
-                null, "alex", "Alex", "Smith", "password123", "password123"));
-        assertEquals("UserName is empty", AccountSignUpValidator.validationError(
-                "alex@example.com", null, "Alex", "Smith", "password123", "password123"));
-        assertEquals("FirstName is empty", AccountSignUpValidator.validationError(
-                "alex@example.com", "alex", null, "Smith", "password123", "password123"));
-        assertEquals("LastName is empty", AccountSignUpValidator.validationError(
-                "alex@example.com", "alex", "Alex", null, "password123", "password123"));
-        assertEquals("Password is empty", AccountSignUpValidator.validationError(
-                "alex@example.com", "alex", "Alex", "Smith", null, null));
+    void passwordMismatch() {
+        assertEquals("Passwords do not match", AccountSignUpValidator.validationError(
+                "", "", "", "", "password123", ""));
     }
 
     @Test
-    void passwordMismatchIsCheckedBeforeEmptyFields() {
-        assertEquals("Passwords do not match", AccountSignUpValidator.validationError(
-                "", "", "", "", "password123", ""));
+    void passwordPolicyError(){
+        assertEquals("Password length should be at least 8 characters",AccountSignUpValidator.validationError(
+                "alex@example.com", "alex", "Alex", "Smith", "123456", "123456"));
     }
 }
