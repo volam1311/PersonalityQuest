@@ -1,0 +1,10 @@
+.signin-heading {
+    -fx-font-family: Montserrat;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 42px;
+}
+
+.signin-root.compact .signin-heading {
+    -fx-font-size: 32px;
+}
