@@ -1,9 +1,10 @@
-6de9ea4 was Lam (vophuclam1311@gmail.com), 1788150875, 45 minutes ago, message: documentation: Add acceptance criteria for user stories
+07228a7 was Lam (vophuclam1311@gmail.com), 1788153604, 9 minutes ago, message: chore: Add git commit command for checkpoints
+6de9ea4 was Lam (vophuclam1311@gmail.com), 1788150875, 54 minutes ago, message: documentation: Add acceptance criteria for user stories
 9bb57e3 was Lam (vophuclam1311@gmail.com), 1788143357, 3 hours ago, message: fix: Move the dashboard styles into folder
 a073d1a was Lam (vophuclam1311@gmail.com), 1788140180, 4 hours ago, message: fix: Split css into folders
 f5f4580 was Lam (vophuclam1311@gmail.com), 1788140051, 4 hours ago, message: fix: Fix the UI of the sign up page
 f9934cb was OpineDev (devopine@gmail.com), 1788089780, 18 hours ago, message: Improve dashboard UI and clean up streak code
-3f9b85e was Lam (vophuclam1311@gmail.com), 1788087550, 18 hours ago, message: documentation: Add sprint and release plan
+3f9b85e was Lam (vophuclam1311@gmail.com), 1788087550, 19 hours ago, message: documentation: Add sprint and release plan
 7fc76b6 was OpineDev (devopine@gmail.com), 1788077412, 21 hours ago, message: Add streak manager
 02bb80c was Lam (vophuclam1311@gmail.com), 1788072405, 23 hours ago, message: test: Add tests for account sign up validator
 d06c0e1 was Lam (vophuclam1311@gmail.com), 1788071776, 23 hours ago, message: fix: Add account validation logic
