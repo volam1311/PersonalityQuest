@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.DashboardController">
+<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.DashboardController">
     <left>
         <VBox fx:id="sidebar" styleClass="sidebar">
             <HBox alignment="CENTER_LEFT" spacing="12" styleClass="sidebar-header">
