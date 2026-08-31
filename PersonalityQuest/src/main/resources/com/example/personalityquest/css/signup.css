@@ -1,0 +1,61 @@
+.signup-heading {
+    -fx-font-family: Montserrat;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 36px;
+}
+
+.signin-root.compact .signup-heading {
+    -fx-font-size: 26px;
+}
+
+.signup-form {
+    -fx-padding: 8 8 4 8;
+}
+
+.signin-root.compact .signup-form {
+    -fx-padding: 4 4 4 4;
+}
+
+.signup-fields {
+    -fx-padding: 0 4 8 2;
+}
+
+.signup-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+.signup-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.signup-scroll > .corner {
+    -fx-background-color: transparent;
+}
+
+.signup-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.signup-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #6d28d9;
+    -fx-background-radius: 8;
+}
+
+.signup-scroll .scroll-bar:vertical .increment-button,
+.signup-scroll .scroll-bar:vertical .decrement-button,
+.signup-scroll .increment-arrow,
+.signup-scroll .decrement-arrow {
+    -fx-padding: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+    -fx-min-height: 0;
+    -fx-min-width: 0;
+    -fx-shape: null;
+    -fx-background-color: transparent;
+}
