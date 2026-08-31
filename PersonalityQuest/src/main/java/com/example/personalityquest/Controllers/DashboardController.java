@@ -368,11 +368,11 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void OnTaskClick(MouseEvent event) throws IOException {
-        WeeklyTask selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
+        WeeklyTask selectedTask = dailiesList.getSelectionModel().getSelectedItem();
 
         if (selectedTask != null) {
             WeeklyTaskReflectionApplication.launch(
-                    (Stage) weeklyTasks.getScene().getWindow(), selectedTask);
+                    (Stage) dailiesList.getScene().getWindow(), selectedTask);
         }
     }
 }

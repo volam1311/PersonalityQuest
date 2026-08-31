@@ -118,7 +118,7 @@
 
                         <VBox fx:id="dailiesCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
                             <Label id="dailiesTitle" styleClass="card-title centered-title" text="Dailies" />
-                            <ListView fx:id="dailiesList" focusTraversable="false" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                            <ListView onMouseClicked="#OnTaskClick" fx:id="dailiesList" focusTraversable="false" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
                     </GridPane>
 
