@@ -1,0 +1,80 @@
+07228a7 was Lam (vophuclam1311@gmail.com), 1788153604, 9 minutes ago, message: chore: Add git commit command for checkpoints
+6de9ea4 was Lam (vophuclam1311@gmail.com), 1788150875, 54 minutes ago, message: documentation: Add acceptance criteria for user stories
+9bb57e3 was Lam (vophuclam1311@gmail.com), 1788143357, 3 hours ago, message: fix: Move the dashboard styles into folder
+a073d1a was Lam (vophuclam1311@gmail.com), 1788140180, 4 hours ago, message: fix: Split css into folders
+f5f4580 was Lam (vophuclam1311@gmail.com), 1788140051, 4 hours ago, message: fix: Fix the UI of the sign up page
+f9934cb was OpineDev (devopine@gmail.com), 1788089780, 18 hours ago, message: Improve dashboard UI and clean up streak code
+3f9b85e was Lam (vophuclam1311@gmail.com), 1788087550, 19 hours ago, message: documentation: Add sprint and release plan
+7fc76b6 was OpineDev (devopine@gmail.com), 1788077412, 21 hours ago, message: Add streak manager
+02bb80c was Lam (vophuclam1311@gmail.com), 1788072405, 23 hours ago, message: test: Add tests for account sign up validator
+d06c0e1 was Lam (vophuclam1311@gmail.com), 1788071776, 23 hours ago, message: fix: Add account validation logic
+1f00b14 was Lam (vophuclam1311@gmail.com), 1787828769, 4 days ago, message: documentation: Add quests for The Innocent
+48784b7 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787824832, 4 days ago, message: Made Reflection For Task
+954cd48 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787820075, 4 days ago, message: Wrote more tests for WeeklyTasks
+7759ea8 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787817234, 4 days ago, message: Made Some Tests for WeeklyTaskManager
+f8d111d was Kappikin (thisisthefinalliamkorver@gmail.com), 1787809584, 4 days ago, message: Read Poml item
+e1eecf7 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787808921, 4 days ago, message: Edge cases are now covered I think
+51f4764 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787806803, 4 days ago, message: Got A Dummy Task System Working
+aba662b was Lam (vophuclam1311@gmail.com), 1787645507, 6 days ago, message: documentation: Finalise group's user stories
+900d80e was Kappikin (thisisthefinalliamkorver@gmail.com), 1787636813, 6 days ago, message: Began task reflection
+8b820d6 was Lam (vophuclam1311@gmail.com), 1787635704, 6 days ago, message: feat: Add User model
+a02a1d0 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787633628, 6 days ago, message: Fixed: No db
+4a735c3 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787630837, 6 days ago, message: poml stuff
+dee3ca4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787615885, 6 days ago, message: Fixed: Maven Dependecy that caused test to all crash
+d11aea4 was Lam (vophuclam1311@gmail.com), 1787614410, 6 days ago, message: fix: Stop tracking the SQLite database
+d79d7ee was Lam (vophuclam1311@gmail.com), 1787612712, 6 days ago, message: fix: Fix the font of the sign in page
+0571cc0 was Lam (vophuclam1311@gmail.com), 1787612055, 6 days ago, message: fix: Fix the design of Sign In
+4636823 was Lam (vophuclam1311@gmail.com), 1787611895, 6 days ago, message: fix: Add new fonts for UI sign in
+45fb069 was OpineDev (devopine@gmail.com), 1787571058, 7 days ago, message: added 10 user stories
+8a09bd8 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787564050, 7 days ago, message: Did meeting minutes for week 6
+c8533f4 was Roaming (cameronstavens@hotmail.com), 1787532324, 7 days ago, message: Add files via upload
+beae493 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787466031, 8 days ago, message: Wrote simple test cases for EmailDetails
+de8098c was Kappikin (thisisthefinalliamkorver@gmail.com), 1787464574, 8 days ago, message: Changed Launch back
+d3fd5c5 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787464502, 8 days ago, message: Made Tests For Password Manager and Email Manager and then fixed problems for failed test
+02330f4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787460849, 8 days ago, message: Added Welcome Message and Dummy Weekly Task View until actual db tasks are made.
+16512a4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787458119, 8 days ago, message: Added Debug Messages for Email Updating
+cd054c6 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787457536, 8 days ago, message: Adding Password Updating for accounts. Additionally Added a PasswordManager
+d2bf1d4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787455087, 8 days ago, message: Made Email Information class to verify and retrive sql results for a given email
+779d053 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787451871, 8 days ago, message: Account Details now populate the entry fields with the users information
+678ddc2 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787450307, 8 days ago, message: Updated Navbar for finalised Ui Design
+0be205e was OpineDev (devopine@gmail.com), 1787393645, 9 days ago, message: Add finalised UI design document to docs/UI Design
+0adbdc1 was Lam (vophuclam1311@gmail.com), 1787231057, 11 days ago, message: test: Add test for creating new account
+724bfa9 was Lam (vophuclam1311@gmail.com), 1787230927, 11 days ago, message: feat: Account validator for sign up
+8de79f1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787210896, 11 days ago, message: Made an Personal information account updater
+cf5fe28 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787206435, 11 days ago, message: Made NavBar navigation for dashboard and other screens
+076e0a6 was Lam (vophuclam1311@gmail.com), 1787140043, 12 days ago, message: documentation: Make 20 user stories #22
+152f030 was Roaming (cameronstavens@hotmail.com), 1787030323, 13 days ago, message: Delete docs/UI Design/Cameron low fidelity UI designs.pdf
+5982247 was Roaming (cameronstavens@hotmail.com), 1787029936, 13 days ago, message: Add files via upload
+4290c54 was Daniel (dfitt10@gmail.com), 1787027569, 13 days ago, message: Added Archetype Clock and Heros Journey Plan
+7593351 was Daniel (dfitt10@gmail.com), 1787027313, 13 days ago, message: Added project overview meeting notes
+718b57f was Kappikin (thisisthefinalliamkorver@gmail.com), 1787026319, 13 days ago, message: Updated db
+dde3140 was Daniel (dfitt10@gmail.com), 1787025752, 13 days ago, message: Added Quest Storyline
+30cf9ae was Daniel (dfitt10@gmail.com), 1787023290, 13 days ago, message: Added personality quiz
+dcfc062 was Roaming (cameronstavens@hotmail.com), 1787021864, 13 days ago, message: Add files via upload
+e9394c1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786964463, 2 weeks ago, message: Added week 5 minutes
+3735db8 was Lam (vophuclam1311@gmail.com), 1786880981, 2 weeks ago, message: documentation: Add flow chart for user activities
+f2ee379 was Lam (vophuclam1311@gmail.com), 1786707037, 2 weeks ago, message: documentation: Low Fidelity for PersonalityQuest
+17de198 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786680641, 2 weeks ago, message: Added explanations for why certain ui screens where chosen
+b4bf656 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786678893, 2 weeks ago, message: Made A Nav Bar for dashboard and additionally put css on Account Creation, Login and Dashboard screen
+0d15d83 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786604707, 3 weeks ago, message: Created password Hashing for secruity.
+296fa47 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786596903, 3 weeks ago, message: Account Creation and Sign In go to blank dashboard upon success
+c3aa440 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786596684, 3 weeks ago, message: Created account sign in and basic error prevention
+74953ad was Kappikin (thisisthefinalliamkorver@gmail.com), 1786595173, 3 weeks ago, message: Connected Sign Up Page to database along with having basic error prevention
+5333eac was Kappikin (thisisthefinalliamkorver@gmail.com), 1786593299, 3 weeks ago, message: Created Sign In Page
+eace6b7 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786592984, 3 weeks ago, message: Created Link between Sign Up and Sign In page
+6c27be1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786515036, 3 weeks ago, message: Begin Work on account creation
+d69decc was dfitt10 (51282455+dfitt10@users.noreply.github.com), 1786430667, 3 weeks ago, message: Add files via upload
+f60f3eb was Kappikin (thisisthefinalliamkorver@gmail.com), 1786427138, 3 weeks ago, message: Did some Ui research for ui mockups
+4662bdc was Lam (vophuclam1311@gmail.com), 1786425390, 3 weeks ago, message: Add configuration
+fae52f3 was Lam (vophuclam1311@gmail.com), 1786423430, 3 weeks ago, message: Initialize project
+18994d6 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786423371, 3 weeks ago, message: Style Guide For Java Code
+f2ede83 was Lam (vophuclam1311@gmail.com), 1786412290, 3 weeks ago, message: Documentation: Restructure meeting folder and create requirements
+7d6edf0 was OpineDev (devopine@gmail.com), 1786357224, 3 weeks ago, message: docs: add week 4 meeting recap pdf
+a09baa9 was OpineDev (devopine@gmail.com), 1786357086, 3 weeks ago, message: docs: add week 4 meeting recap
+15a3735 was Lam (vophuclam1311@gmail.com), 1786343395, 3 weeks ago, message: idea: Second idea from Leon
+2c0497b was Kappikin (thisisthefinalliamkorver@gmail.com), 1785987186, 4 weeks ago, message: More Admin stories
+12a4ddc was Kappikin (thisisthefinalliamkorver@gmail.com), 1785985035, 4 weeks ago, message: Extra UIser stories for the customer and Admin. Additionally broke up the stories into catergories
+72b07e3 was OpineDev (devopine@gmail.com), 1785842278, 4 weeks ago, message: Add Andy's project idea PDF
+13078e2 was Kappikin (thisisthefinalliamkorver@gmail.com), 1785840544, 4 weeks ago, message: Began Writing User Stories For the Customer
+f12e114 was Lam (vophuclam1311@gmail.com), 1785836308, 4 weeks ago, message: Idea: Circular Economic Hub idea from Leon
+153510d was Lam (vophuclam1311@gmail.com), 1785835942, 4 weeks ago, message: Initialize project

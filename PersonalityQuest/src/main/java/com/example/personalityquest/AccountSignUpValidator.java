@@ -16,20 +16,23 @@ public final class AccountSignUpValidator {
         if (!Objects.equals(password, reEnterPassword)) {
             return "Passwords do not match";
         }
-        if (isEmpty(email)) {
+        if (isEmpty(email.trim())) {
             return "Email is empty";
         }
-        if (isEmpty(userName)) {
+        if (isEmpty(userName.trim())) {
             return "UserName is empty";
         }
-        if (isEmpty(firstName)) {
+        if (isEmpty(firstName.trim())) {
             return "FirstName is empty";
         }
-        if (isEmpty(lastName)) {
+        if (isEmpty(lastName.trim())) {
             return "LastName is empty";
         }
-        if (isEmpty(password)) {
+        if (isEmpty(password.trim())) {
             return "Password is empty";
+        }
+        if (password.length() < 8){
+            return "Password length should be at least 8 characters";
         }
         return null;
     }

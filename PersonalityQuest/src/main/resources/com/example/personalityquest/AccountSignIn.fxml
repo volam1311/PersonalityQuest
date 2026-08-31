@@ -9,7 +9,7 @@
            maxHeight="Infinity"
            maxWidth="Infinity"
            styleClass="signin-root"
-           stylesheets="@signin.css"
+           stylesheets="@css/auth.css, @css/signin.css"
            xmlns="http://javafx.com/javafx/21"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.example.personalityquest.Controllers.AccountSignInController">
@@ -54,7 +54,12 @@
                     styleClass="branding-scrim"
                     StackPane.alignment="BOTTOM_CENTER"/>
 
-            <VBox spacing="4" styleClass="branding-copy" StackPane.alignment="BOTTOM_LEFT">
+            <VBox alignment="BOTTOM_LEFT"
+                  maxHeight="-Infinity"
+                  maxWidth="-Infinity"
+                  spacing="4"
+                  styleClass="branding-copy"
+                  StackPane.alignment="BOTTOM_LEFT">
                 <Label styleClass="brand-title" text="PersonalityQuest"/>
                 <Label styleClass="brand-tagline" text="Your journey begins now."/>
             </VBox>

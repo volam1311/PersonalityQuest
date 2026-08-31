@@ -1,43 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="10" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.DashboardController">
-    <HBox spacing="20.0">
-        <fx:include source="NavBar.fxml" />
-        <VBox alignment="TOP_CENTER" prefHeight="480" prefWidth="500.0" spacing="10" VBox.vgrow="ALWAYS">
-            <Label fx:id="welcomeMessage" style="-fx-font-weight: bold;" text="Dashboard" textAlignment="LEFT">
-                <font>
-                    <Font size="24.0" />
-                </font></Label>
-         <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
-            <children>
-               <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="520.0" spacing="10">
-                  <children>
-                     <Label alignment="CENTER" text="Weekly Tasks" textAlignment="CENTER">
-                        <font>
-                           <Font name="System Bold" size="18.0" />
-                        </font>
-                     </Label>
-                     <ListView fx:id="weeklyTasks" prefHeight="200.0" prefWidth="200.0" />
-                  </children>
-               </VBox>
-               <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="520.0" spacing="10">
-                  <children>
-                     <Label alignment="CENTER" text="Progress Graph" textAlignment="CENTER">
-                        <font>
-                           <Font name="System Bold" size="18.0" />
-                        </font>
-                     </Label>
-                  </children>
-               </VBox>
-            </children>
-         </HBox>
+<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.DashboardController">
+    <left>
+        <VBox fx:id="sidebar" styleClass="sidebar">
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="sidebar-header">
+                <Button fx:id="menuButton" mnemonicParsing="false" onAction="#OnMenuToggle" styleClass="menu-button">
+                    <graphic>
+                        <Label styleClass="material-symbol" text="&#xE5D2;" />
+                    </graphic>
+                </Button>
+                <Label fx:id="brandLabel" styleClass="brand-label" text="PersonalityQuest" />
+            </HBox>
+
+            <VBox spacing="8" styleClass="navigation-list">
+                <Button fx:id="homeButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button selected-nav-button">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                            <Label styleClass="material-symbol" text="&#xE9B2;" />
+                            <Label fx:id="homeNavLabel" styleClass="nav-label" text="Home" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button fx:id="questsButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                            <Label styleClass="material-symbol" text="&#xF04C;" />
+                            <Label fx:id="questsNavLabel" styleClass="nav-label" text="Quests" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button fx:id="tasksButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                            <Label styleClass="material-symbol" text="&#xF075;" />
+                            <Label fx:id="tasksNavLabel" styleClass="nav-label" text="Tasks" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button fx:id="archetypeButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                            <Label styleClass="material-symbol" text="&#xE7AF;" />
+                            <Label fx:id="archetypeNavLabel" styleClass="nav-label" text="Archetype" />
+                        </HBox>
+                    </graphic>
+                </Button>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <HBox alignment="CENTER" spacing="8" styleClass="sidebar-footer">
+                <Button fx:id="profileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="profile-button" HBox.hgrow="ALWAYS">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="button-graphic">
+                            <Label styleClass="material-symbol" text="&#xF20B;" />
+                            <Label fx:id="profileNameLabel" styleClass="nav-label" text="Profile" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="settings-button">
+                    <graphic>
+                        <Label styleClass="material-symbol" text="&#xE8B8;" />
+                    </graphic>
+                </Button>
+            </HBox>
         </VBox>
-    </HBox>
+    </left>
 
-</VBox>
+    <center>
+        <ScrollPane fx:id="contentScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
+            <content>
+                <VBox fx:id="contentContainer" spacing="18" styleClass="content-container">
+                    <padding>
+                        <Insets bottom="24" left="24" right="24" top="24" />
+                    </padding>
+
+                    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="dashboard-header">
+                        <Label fx:id="welcomeMessage" styleClass="welcome-label" text="Welcome back, Leon!" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <HBox styleClass="streak-badge" spacing="8">
+                            <Label styleClass="material-symbol streak-icon" text="&#xEF55;" />
+                            <Label fx:id="streakLabel" styleClass="streak-text" text="Day 0" />
+                        </HBox>
+                    </HBox>
+
+                    <GridPane fx:id="topGrid" hgap="12" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="65" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="35" />
+                        </columnConstraints>
+
+                        <VBox fx:id="questCard" spacing="12" styleClass="card quest-card" GridPane.columnIndex="0">
+                            <Label fx:id="questTitleLabel" styleClass="card-title" text="The Hydra Questline" />
+                            <Label styleClass="quest-divider" text="━━━━━━━━━━━━━━━━━━━━" />
+                            <Label styleClass="quest-divider" text="━━━━━━━━━━━━━━━━━━━━" />
+                            <Region VBox.vgrow="ALWAYS" />
+                            <Label fx:id="questDescriptionLabel" styleClass="quest-description" text="Complete today's daily quests to continue the story" wrapText="true" />
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <ProgressBar fx:id="questProgress" maxWidth="1.7976931348623157E308" progress="0.2" HBox.hgrow="ALWAYS" />
+                                <Label fx:id="questProgressLabel" styleClass="progress-label" text="20% Complete" />
+                            </HBox>
+                        </VBox>
+
+                        <VBox fx:id="dailiesCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
+                            <Label id="dailiesTitle" styleClass="card-title centered-title" text="Dailies" />
+                            <ListView fx:id="dailiesList" focusTraversable="false" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        </VBox>
+                    </GridPane>
+
+                    <GridPane fx:id="lowerGrid" hgap="12" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="36" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="64" />
+                        </columnConstraints>
+
+                        <VBox fx:id="tasksCard" spacing="10" styleClass="card" GridPane.columnIndex="0">
+                            <Label id="tasksTitle" styleClass="card-title centered-title" text="Today's Tasks" />
+                            <ListView fx:id="weeklyTasks" focusTraversable="false" onMouseClicked="#OnTaskClick" prefHeight="270" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        </VBox>
+
+                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="1">
+                            <Label id="progressTitle" styleClass="card-title centered-title" text="Your Progress" />
+                            <Canvas fx:id="progressChart" height="260" width="420" />
+                        </VBox>
+                    </GridPane>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

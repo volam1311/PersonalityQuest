@@ -1,6 +1,6 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.Managers.EmailManager;
+import com.example.personalityquest.DataClasses.EmailDetails;
 import com.example.personalityquest.Managers.HashingManager;
 import com.example.personalityquest.Managers.PasswordManager;
 import org.junit.jupiter.api.BeforeEach;

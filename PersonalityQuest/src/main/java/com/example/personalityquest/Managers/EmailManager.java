@@ -1,6 +1,6 @@
 package com.example.personalityquest.Managers;
 
-import com.example.personalityquest.EmailDetails;
+import com.example.personalityquest.DataClasses.EmailDetails;
 import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
@@ -73,6 +73,7 @@ public class EmailManager {
         if (emailDetails == null){
             System.out.println("Email Details is null");
         }
+
         return emailDetails;
     }
 

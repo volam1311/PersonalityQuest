@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainApplication extends Application {
-    public final static String fxmlPrefix = "/com/example/personalityQuest/";
+    public final static String fxmlPrefix = "/com/example/personalityquest/";
     @Override
     public void start(Stage stage) throws IOException{
         AccountCreationApplication.launch(stage);
