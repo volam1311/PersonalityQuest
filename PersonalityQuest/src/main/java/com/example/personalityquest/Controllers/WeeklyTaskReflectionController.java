@@ -53,6 +53,7 @@ public class WeeklyTaskReflectionController {
         // Use this to mark a task as Finished
         System.out.println(reflection.getText());
         WeeklyTaskManager.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), SystemManager.CurrentAccount.currentEmail);
+
         GoToDashboard();
     }
 
