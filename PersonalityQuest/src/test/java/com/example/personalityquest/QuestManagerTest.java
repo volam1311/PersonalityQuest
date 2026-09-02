@@ -98,27 +98,27 @@ public class QuestManagerTest {
         }
     }
     @Test
-    public void GetQuestForLabourId() throws ExecutionControl.NotImplementedException {
+    public void GetQuestForLabourId() {
         QuestManager.GetQuestForLabourId(labourId);
     }
     @Test
-    public void GetQuestForNonExistentLabourId() throws ExecutionControl.NotImplementedException {
+    public void GetQuestForNonExistentLabourId()  {
         QuestManager.GetQuestForLabourId(999999);
     }
     @Test
-    public void GetQuestsForArchetypeId() throws ExecutionControl.NotImplementedException {
+    public void GetQuestsForArchetypeId()  {
         QuestManager.GetQuestsForArchetypeId(99);
     }
     @Test
-    public void GetQuestsForNonExistentArchetypeId() throws ExecutionControl.NotImplementedException {
+    public void GetQuestsForNonExistentArchetypeId()  {
         QuestManager.GetQuestsForArchetypeId(999999);
     }
     @Test
-    public void GetRandomAmountOfQuestsForArchetypeId() throws ExecutionControl.NotImplementedException {
+    public void GetRandomAmountOfQuestsForArchetypeId()  {
         QuestManager.GetAmountOfRandomQuestsForArchetypeId(1, archetypeId);
     }
     @Test
-    public void GetRandomAmountOfQuestsForArchetypeIdWithMoreThenExist() throws ExecutionControl.NotImplementedException {
+    public void GetRandomAmountOfQuestsForArchetypeIdWithMoreThenExist()  {
         QuestManager.GetAmountOfRandomQuestsForArchetypeId(3, archetypeId);
     }
     @Test

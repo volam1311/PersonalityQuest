@@ -114,7 +114,7 @@ public class UserQuestManagerTest {
 
     /// GET USER QUEST FOR EMAIL
     @Test
-    public void GetUserQuestForEmail() throws SQLException, ExecutionControl.NotImplementedException {
+    public void GetUserQuestForEmail() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -126,7 +126,7 @@ public class UserQuestManagerTest {
         UserQuestManager.GetCurrentUserQuestForEmail("test");
     }
     @Test
-    public void GetUserQuestForEmailIfNoActiveQuestExists() throws SQLException, ExecutionControl.NotImplementedException {
+    public void GetUserQuestForEmailIfNoActiveQuestExists() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -139,7 +139,7 @@ public class UserQuestManagerTest {
         UserQuestManager.GetCurrentUserQuestForEmail("test");
     }
     @Test
-    public void GetUserQuestForEmailThatDoesntExist() throws SQLException, ExecutionControl.NotImplementedException {
+    public void GetUserQuestForEmailThatDoesntExist() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -153,7 +153,7 @@ public class UserQuestManagerTest {
 
     /// SET QUEST AS ACTIVE
     @Test
-    public void SetQuestToActive() throws SQLException, ExecutionControl.NotImplementedException {
+    public void SetQuestToActive() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -185,7 +185,7 @@ public class UserQuestManagerTest {
         UserQuestManager.SetUserQuesStatusAsActive(quest, "realEmail");
     }
     @Test
-    public void SetNullQuestToActive() throws ExecutionControl.NotImplementedException {
+    public void SetNullQuestToActive() {
         UserQuest quest = null;
 
         UserQuestManager.SetUserQuesStatusAsActive(quest, "realEmail");
@@ -193,7 +193,7 @@ public class UserQuestManagerTest {
 
     /// SET QUEST TO PERCENTAGE COMPLETE
     @Test
-    public void SetUserQuestToPercentageCompleteOf0_5() throws ExecutionControl.NotImplementedException, SQLException {
+    public void SetUserQuestToPercentageCompleteOf0_5() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -223,7 +223,7 @@ public class UserQuestManagerTest {
         UserQuestManager.SetUserQuestToPercentageComplete(quest, "realEmail", 0.5f);
     }
     @Test
-    public void SetUserQuestToPercentageCompleteAbove1() throws ExecutionControl.NotImplementedException, SQLException {
+    public void SetUserQuestToPercentageCompleteAbove1() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -253,7 +253,7 @@ public class UserQuestManagerTest {
         UserQuestManager.SetUserQuestToPercentageComplete(quest, "realEmail", 1.2f);
     }
     @Test
-    public void SetUserQuestToPercentageCompleteBelow0() throws ExecutionControl.NotImplementedException, SQLException {
+    public void SetUserQuestToPercentageCompleteBelow0() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -285,7 +285,7 @@ public class UserQuestManagerTest {
 
     /// SET QUEST TO STATUS COMPLETE
     @Test
-    public void SetQuestToStatusComplete() throws SQLException, ExecutionControl.NotImplementedException {
+    public void SetQuestToStatusComplete() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -316,7 +316,7 @@ public class UserQuestManagerTest {
         UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail");
     }
     @Test
-    public void SetNullQuestToStatusComplete() throws ExecutionControl.NotImplementedException {
+    public void SetNullQuestToStatusComplete() {
         UserQuest quest = null;
 
         UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail");
@@ -324,7 +324,7 @@ public class UserQuestManagerTest {
 
     /// INSERT QUEST FOR EMAIL
     @Test
-    public void InsertNewQuestForEmail() throws  SQLException, ExecutionControl.NotImplementedException {
+    public void InsertNewQuestForEmail() throws  SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * FROM Quests
@@ -346,7 +346,7 @@ public class UserQuestManagerTest {
         UserQuestManager.InsertNewQuestForEmail(quest, "realEmail");
     }
     @Test
-    public void InsertNewNullQuestForEmail() throws ExecutionControl.NotImplementedException {
+    public void InsertNewNullQuestForEmail() {
         Quest quest = null;
 
         UserQuestManager.InsertNewQuestForEmail(quest, "realEmail");
