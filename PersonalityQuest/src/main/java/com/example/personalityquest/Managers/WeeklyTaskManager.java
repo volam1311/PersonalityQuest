@@ -14,6 +14,7 @@ public class WeeklyTaskManager {
 
     private final static int AMOUNTOFTASKS = 9;
 
+
     private final static String SQL_UPDATE_DRAFT = "UPDATE WeeklyTasks" +
             " SET reflection = ?, status = " + "'Started'" +
             " WHERE accountEmail = ? AND taskId = ?";
