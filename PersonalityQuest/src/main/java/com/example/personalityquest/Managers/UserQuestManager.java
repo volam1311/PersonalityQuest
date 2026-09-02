@@ -5,7 +5,7 @@ import com.example.personalityquest.DataClasses.UserQuest;
 import jdk.jshell.spi.ExecutionControl;
 
 public class UserQuestManager {
-    public static UserQuest GetCurrentQuestForEmail(String email) throws ExecutionControl.NotImplementedException {
+    public static UserQuest GetCurrentUserQuestForEmail(String email) throws ExecutionControl.NotImplementedException {
         throw new ExecutionControl.NotImplementedException("Get Current Quest For Email is not implemented");
     }
     public static UserQuest InsertNewQuestForEmail(Quest quest, String email) throws ExecutionControl.NotImplementedException {

@@ -11,7 +11,10 @@ public class UserQuest {
     private final String accountEmail;
     private float percentageComplete;
 
-    public UserQuest(int labourId, String accountEmail, float percentageComplete){
+    // Either 'Active', 'Completed'
+    private String status;
+
+    public UserQuest(int labourId, String accountEmail, float percentageComplete, String status){
         if (labourId <= 0){
             throw new IllegalArgumentException("Labour Id is null");
         }
@@ -21,10 +24,14 @@ public class UserQuest {
         if (percentageComplete < 0 || percentageComplete > 1){
             throw new IllegalArgumentException("Percentage complete is out of range of 0 - 1");
         }
+        if (SystemManager.isEmpty(status)){
+            throw new IllegalArgumentException("Status is null");
+        }
 
         this.labourId = labourId;
         this.accountEmail = accountEmail;
         this.percentageComplete = percentageComplete;
+        this.status = status;
     }
 
     public int getLabourId() {
@@ -39,7 +46,15 @@ public class UserQuest {
         return accountEmail;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setPercentageComplete(float percentageComplete) {
         this.percentageComplete = percentageComplete;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
