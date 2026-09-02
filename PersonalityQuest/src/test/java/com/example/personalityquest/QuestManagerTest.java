@@ -1,17 +1,20 @@
 package com.example.personalityquest;
 
 import com.example.personalityquest.Managers.HashingManager;
+import com.example.personalityquest.Managers.QuestManager;
+import jdk.jshell.spi.ExecutionControl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class QuestManagerTest {
 
     private Connection connection;
+
+    private int labourId;
+    private int archetypeId;
 
     @BeforeEach
     void setUp() throws SQLException {
@@ -83,6 +86,9 @@ public class QuestManagerTest {
 
             statement.executeUpdate();
         }
+
+        labourId = 20;
+        archetypeId = 99;
     }
 
     @AfterEach
@@ -92,7 +98,35 @@ public class QuestManagerTest {
         }
     }
     @Test
-    public void GetQuestForLabourId(){
-
+    public void GetQuestForLabourId() throws ExecutionControl.NotImplementedException {
+        QuestManager.GetQuestForLabourId(labourId);
+    }
+    @Test
+    public void GetQuestForNonExistentLabourId() throws ExecutionControl.NotImplementedException {
+        QuestManager.GetQuestForLabourId(999999);
+    }
+    @Test
+    public void GetQuestsForArchetypeId() throws ExecutionControl.NotImplementedException {
+        QuestManager.GetQuestsForArchetypeId(99);
+    }
+    @Test
+    public void GetQuestsForNonExistentArchetypeId() throws ExecutionControl.NotImplementedException {
+        QuestManager.GetQuestsForArchetypeId(999999);
+    }
+    @Test
+    public void GetRandomAmountOfQuestsForArchetypeId() throws ExecutionControl.NotImplementedException {
+        QuestManager.GetAmountOfRandomQuestsForArchetypeId(1, archetypeId);
+    }
+    @Test
+    public void GetRandomAmountOfQuestsForArchetypeIdWithMoreThenExist() throws ExecutionControl.NotImplementedException {
+        QuestManager.GetAmountOfRandomQuestsForArchetypeId(3, archetypeId);
+    }
+    @Test
+    public void GetRandomAmountOfQuestsForArchetypeIdWithNegativeNumber() throws ExecutionControl.NotImplementedException {
+        QuestManager.GetAmountOfRandomQuestsForArchetypeId(-5, archetypeId);
+    }
+    @Test
+    public void GetRandomAmountOfQuestsForNonExistentArchetypeId() throws ExecutionControl.NotImplementedException {
+        QuestManager.GetAmountOfRandomQuestsForArchetypeId(1, 999999);
     }
 }

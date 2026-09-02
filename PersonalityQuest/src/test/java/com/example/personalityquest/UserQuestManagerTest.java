@@ -1,5 +1,7 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.DataClasses.Quest;
+import com.example.personalityquest.DataClasses.UserQuest;
 import com.example.personalityquest.Managers.HashingManager;
 import com.example.personalityquest.Managers.UserQuestManager;
 import jdk.jshell.spi.ExecutionControl;
@@ -13,6 +15,8 @@ public class UserQuestManagerTest {
 
     private Connection connection;
 
+    private int labourId;
+    private int archetypeId;
     @BeforeEach
     void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
@@ -97,7 +101,8 @@ public class UserQuestManagerTest {
             statement.executeUpdate();
         }
 
-
+        labourId = 20;
+        archetypeId = 99;
     }
 
     @AfterEach
@@ -107,20 +112,19 @@ public class UserQuestManagerTest {
         }
     }
 
+    /// GET USER QUEST FOR EMAIL
     @Test
     public void GetUserQuestForEmail() throws SQLException, ExecutionControl.NotImplementedException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
                         (accountEmail, labourId, percentageComplete, status)
-                    VALUES ("test", 20, 0.0, 'Active')
+                    VALUES ("test", ?, 0.0, 'Active')
                     """);
 
-        statement.executeUpdate();
-
+        statement.setInt(1, labourId);
         UserQuestManager.GetCurrentUserQuestForEmail("test");
     }
-
     @Test
     public void GetUserQuestForEmailIfNoActiveQuestExists() throws SQLException, ExecutionControl.NotImplementedException {
         PreparedStatement statement = connection.prepareStatement(
@@ -134,7 +138,6 @@ public class UserQuestManagerTest {
 
         UserQuestManager.GetCurrentUserQuestForEmail("test");
     }
-
     @Test
     public void GetUserQuestForEmailThatDoesntExist() throws SQLException, ExecutionControl.NotImplementedException {
         PreparedStatement statement = connection.prepareStatement(
@@ -144,9 +147,208 @@ public class UserQuestManagerTest {
                     VALUES ("test", 20, 0.0, 'Not Started')
                     """);
 
-        statement.executeUpdate();
-
+        statement.execute();
         UserQuestManager.GetCurrentUserQuestForEmail("realEmail");
     }
-    
+
+    /// SET QUEST AS ACTIVE
+    @Test
+    public void SetQuestToActive() throws SQLException, ExecutionControl.NotImplementedException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
+
+        statement.execute();
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest = null;
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        }
+
+        System.out.println(quest.getAccountEmail());
+
+        UserQuestManager.SetUserQuesStatusAsActive(quest, "realEmail");
+    }
+    @Test
+    public void SetNullQuestToActive() throws ExecutionControl.NotImplementedException {
+        UserQuest quest = null;
+
+        UserQuestManager.SetUserQuesStatusAsActive(quest, "realEmail");
+    }
+
+    /// SET QUEST TO PERCENTAGE COMPLETE
+    @Test
+    public void SetUserQuestToPercentageCompleteOf0_5() throws ExecutionControl.NotImplementedException, SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
+
+        statement.execute();
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest = null;
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        }
+
+        UserQuestManager.SetUserQuestToPercentageComplete(quest, "realEmail", 0.5f);
+    }
+    @Test
+    public void SetUserQuestToPercentageCompleteAbove1() throws ExecutionControl.NotImplementedException, SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
+
+        statement.execute();
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest = null;
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        }
+
+        UserQuestManager.SetUserQuestToPercentageComplete(quest, "realEmail", 1.2f);
+    }
+    @Test
+    public void SetUserQuestToPercentageCompleteBelow0() throws ExecutionControl.NotImplementedException, SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
+
+        statement.execute();
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest = null;
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        }
+
+        UserQuestManager.SetUserQuestToPercentageComplete(quest, "realEmail", -0.5f);
+    }
+
+    /// SET QUEST TO STATUS COMPLETE
+    @Test
+    public void SetQuestToStatusComplete() throws SQLException, ExecutionControl.NotImplementedException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
+
+        statement.execute();
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest = null;
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        }
+
+
+        UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail");
+    }
+    @Test
+    public void SetNullQuestToStatusComplete() throws ExecutionControl.NotImplementedException {
+        UserQuest quest = null;
+
+        UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail");
+    }
+
+    /// INSERT QUEST FOR EMAIL
+    @Test
+    public void InsertNewQuestForEmail() throws  SQLException, ExecutionControl.NotImplementedException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    SELECT * FROM Quests
+                    WHERE labourId = ?
+                    """);
+
+        statement.setInt(1, labourId);
+        ResultSet rs = statement.executeQuery();
+        Quest quest = null;
+        if (rs.next()){
+            quest = new Quest(
+                    rs.getInt("labourId"),
+                    rs.getInt(("archetypeId")),
+                    rs.getString("name")
+            );
+        }
+
+        System.out.println(quest.getName());
+        UserQuestManager.InsertNewQuestForEmail(quest, "realEmail");
+    }
+    @Test
+    public void InsertNewNullQuestForEmail() throws ExecutionControl.NotImplementedException {
+        Quest quest = null;
+
+        UserQuestManager.InsertNewQuestForEmail(quest, "realEmail");
+    }
 }
