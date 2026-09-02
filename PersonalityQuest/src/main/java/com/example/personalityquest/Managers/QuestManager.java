@@ -4,13 +4,12 @@ import com.example.personalityquest.DataClasses.Quest;
 import jdk.jshell.spi.ExecutionControl;
 
 public class QuestManager {
-    public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Get Current Quest For Email is not implemented");
+    public static Quest[] GetQuestsForArchetypeId(int archetypeId) {
+        return null;
     }
-    public static void GetQuestForLabourId(int labourId) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Get Current Quest For Email is not implemented");
+    public static void GetQuestForLabourId(int labourId) {
     }
-    public static Quest[] GetAmountOfRandomQuestsForArchetypeId(int amountOfQuests, int archetypeId) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Set Quest To Complete is not implemented");
+    public static Quest[] GetAmountOfRandomQuestsForArchetypeId(int amountOfQuests, int archetypeId) {
+        return null;
     }
 }
