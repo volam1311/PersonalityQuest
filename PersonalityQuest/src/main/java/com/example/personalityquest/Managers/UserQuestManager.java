@@ -8,6 +8,9 @@ public class UserQuestManager {
     public static UserQuest GetCurrentUserQuestForEmail(String email) throws ExecutionControl.NotImplementedException {
         throw new ExecutionControl.NotImplementedException("Get Current Quest For Email is not implemented");
     }
+    public static UserQuest SetUserQuestAsActive(UserQuest quest, String email) throws ExecutionControl.NotImplementedException {
+        throw new ExecutionControl.NotImplementedException("Get Current Quest For Email is not implemented");
+    }
     public static UserQuest InsertNewQuestForEmail(Quest quest, String email) throws ExecutionControl.NotImplementedException {
         throw new ExecutionControl.NotImplementedException("Get Current Quest For Email is not implemented");
     }

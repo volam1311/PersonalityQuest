@@ -1,5 +1,6 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.Managers.HashingManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class QuestManagerTest {
 
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
-                    CREATE TABLE Arechtype (
+                    CREATE TABLE Arechetype (
                         archetypeId INT PRIMARY KEY,
                         name TEXT NOT NULL,
                         smallDescription TEXT NOT NULL
@@ -46,6 +47,48 @@ public class QuestManagerTest {
                         FOREIGN KEY(archetypeId) REFERENCES Arechtype(archetypeId)
                     )
                     """);
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO Accounts
+                        (email, userName, firstName, lastName, password)
+                    VALUES ("test", "test", "test", "test", ?)
+                    """))
+        {
+            String hashedPassword = HashingManager.Hash("test");
+            statement.setString(1, hashedPassword);
+
+            statement.executeUpdate();
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO Arechetype
+                        (archetypeId, name, smallDescription)
+                    VALUES (99, "testArechtypeName", "testArechtypeDescription")
+                    """))
+        {
+
+            statement.executeUpdate();
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO Quests
+                        (labourId, archetypeId, name)
+                    VALUES (20, 99, "testQuestName")
+                    """))
+        {
+
+            statement.executeUpdate();
+        }
+    }
+
+    @AfterEach
+    void tearDown() throws SQLException {
+        if (connection != null) {
+            connection.close();
         }
     }
     @Test
