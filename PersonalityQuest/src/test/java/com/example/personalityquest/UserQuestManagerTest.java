@@ -243,8 +243,7 @@ public class UserQuestManagerTest {
     public void SetNullQuestToActive() throws Exception {
         UserQuest quest = null;
 
-        UserQuest userQuest = UserQuestManager.SetUserQuesStatusAsActive(quest, "realEmail");
-        assertNull(userQuest);
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuesStatusAsActive(quest, "test"));
     }
 
     /// SET QUEST TO PERCENTAGE COMPLETE

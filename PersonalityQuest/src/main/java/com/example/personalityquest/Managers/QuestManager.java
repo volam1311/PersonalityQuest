@@ -12,6 +12,9 @@ import java.util.jar.JarEntry;
 
 public class QuestManager {
     public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
+        if (archetypeId == 0){
+            throw new IllegalArgumentException("Bad archetypeId of 0");
+        }
         int count = GetCountOfQuestsForArchetypeId(archetypeId);
 
         // no quests exist for this given ID
@@ -51,6 +54,9 @@ public class QuestManager {
     }
 
     public static Quest GetQuestForLabourId(int labourId) throws SQLException {
+        if (labourId == 0){
+            throw new IllegalArgumentException("Bad labourId of 0");
+        }
         Connection connection = SQLite.getConnection();
         PreparedStatement getQuestForLabourID = connection.prepareStatement(
                 """

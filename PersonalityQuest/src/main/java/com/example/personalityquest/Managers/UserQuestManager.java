@@ -10,7 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserQuestManager {
-    public static UserQuest GetCurrentActiveUserQuestForEmail(String email) throws SQLException {
+    public static UserQuest GetCurrentActiveUserQuestForEmail(String email) throws IllegalArgumentException, SQLException {
+        if (SystemManager.isEmpty(email)){
+            throw new IllegalArgumentException("Checking for active quest with null email");
+        }
+
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(
                 """
@@ -35,7 +39,7 @@ public class UserQuestManager {
 
     public static UserQuest SetUserQuesStatusAsActive(UserQuest quest, String email) throws IllegalArgumentException, SQLException {
         if (quest == null || SystemManager.isEmpty(email)){
-            return null;
+            throw new IllegalArgumentException("Checking for active quest with null email");
         }
         if (DoesUserHaveActiveQuest(email)){
             throw new IllegalArgumentException("User already has an active quest with labourId "
