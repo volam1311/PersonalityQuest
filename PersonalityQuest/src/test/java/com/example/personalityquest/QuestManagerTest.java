@@ -1,6 +1,8 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.DataClasses.Quest;
 import com.example.personalityquest.Managers.HashingManager;
+import com.example.personalityquest.Managers.PasswordManager;
 import com.example.personalityquest.Managers.QuestManager;
 import jdk.jshell.spi.ExecutionControl;
 import org.junit.jupiter.api.AfterEach;
@@ -8,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class QuestManagerTest {
 
@@ -87,8 +91,21 @@ public class QuestManagerTest {
             statement.executeUpdate();
         }
 
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO Quests
+                        (labourId, archetypeId, name)
+                    VALUES (21, 99, "testQuestName2")
+                    """))
+        {
+
+            statement.executeUpdate();
+        }
+
         labourId = 20;
         archetypeId = 99;
+
+        SQLite.setConnection(connection);
     }
 
     @AfterEach
@@ -97,36 +114,63 @@ public class QuestManagerTest {
             connection.close();
         }
     }
+
     @Test
-    public void GetQuestForLabourId() {
-        QuestManager.GetQuestForLabourId(labourId);
+    public void GetQuestForLabourId() throws SQLException {
+        Quest quest = QuestManager.GetQuestForLabourId(labourId);
+
+        // 1st quest
+        assertEquals(labourId, quest.getLabourId());
+        assertEquals(archetypeId, quest.getArchetypeId());
+        assertEquals("testQuestName", quest.getName());
     }
     @Test
-    public void GetQuestForNonExistentLabourId()  {
-        QuestManager.GetQuestForLabourId(999999);
+    public void GetQuestForNonExistentLabourId() throws SQLException {
+        Quest quest = QuestManager.GetQuestForLabourId(999999);
+
+        assertNull(quest);
     }
     @Test
-    public void GetQuestsForArchetypeId()  {
-        QuestManager.GetQuestsForArchetypeId(99);
+    public void GetQuestsForArchetypeId() throws SQLException  {
+        Quest[] quests = QuestManager.GetQuestsForArchetypeId(99);
+
+        // 1st quest
+        assertEquals(labourId, quests[0].getLabourId());
+        assertEquals(archetypeId, quests[0].getArchetypeId());
+        assertEquals("testQuestName", quests[0].getName());
+
+        // 2nd quest
+        assertEquals(21, quests[1].getLabourId());
+        assertEquals(archetypeId, quests[1].getArchetypeId());
+        assertEquals("testQuestName2", quests[1].getName());
+
     }
     @Test
-    public void GetQuestsForNonExistentArchetypeId()  {
-        QuestManager.GetQuestsForArchetypeId(999999);
+    public void GetQuestsForNonExistentArchetypeId() throws SQLException  {
+        Quest[] quests = QuestManager.GetQuestsForArchetypeId(999999);
+
+        assertNull(quests);
     }
     @Test
-    public void GetRandomAmountOfQuestsForArchetypeId()  {
-        QuestManager.GetAmountOfRandomQuestsForArchetypeId(1, archetypeId);
+    public void GetRandomQuestForArchetypeId() throws SQLException {
+        Quest quest = QuestManager.GetRandomQuestForArchetypeId(archetypeId);
+
+        // the random nature requires this
+        if (quest.getLabourId() == 20){
+            assertEquals(labourId, quest.getLabourId());
+            assertEquals(archetypeId, quest.getArchetypeId());
+            assertEquals("testQuestName", quest.getName());
+        }
+        else{
+            assertEquals(21, quest.getLabourId());
+            assertEquals(archetypeId, quest.getArchetypeId());
+            assertEquals("testQuestName2", quest.getName());
+        }
     }
     @Test
-    public void GetRandomAmountOfQuestsForArchetypeIdWithMoreThenExist()  {
-        QuestManager.GetAmountOfRandomQuestsForArchetypeId(3, archetypeId);
-    }
-    @Test
-    public void GetRandomAmountOfQuestsForArchetypeIdWithNegativeNumber() throws ExecutionControl.NotImplementedException {
-        QuestManager.GetAmountOfRandomQuestsForArchetypeId(-5, archetypeId);
-    }
-    @Test
-    public void GetRandomAmountOfQuestsForNonExistentArchetypeId() throws ExecutionControl.NotImplementedException {
-        QuestManager.GetAmountOfRandomQuestsForArchetypeId(1, 999999);
+    public void GetRandomQuestForNonExistentArchetypeId() throws SQLException {
+        Quest quest = QuestManager.GetRandomQuestForArchetypeId(999999);
+
+        assertNull(quest);
     }
 }
