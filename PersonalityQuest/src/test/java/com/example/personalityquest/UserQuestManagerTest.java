@@ -4,19 +4,20 @@ import com.example.personalityquest.DataClasses.Quest;
 import com.example.personalityquest.DataClasses.UserQuest;
 import com.example.personalityquest.Managers.HashingManager;
 import com.example.personalityquest.Managers.UserQuestManager;
-import jdk.jshell.spi.ExecutionControl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class UserQuestManagerTest {
 
     private Connection connection;
 
     private int labourId;
-    private int archetypeId;
+
     @BeforeEach
     void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
@@ -56,11 +57,11 @@ public class UserQuestManagerTest {
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE UserQuests (
-                        id INT PRIMARY KEY,
                         accountEmail TEXT NOT NULL,
                         labourId INT NOT NULL,
-                        percentageComplete REAL NOT NULL,
+                        percentageComplete FLOAT NOT NULL,
                         status TEXT NOT NULL,
+                        PRIMARY KEY(accountEmail, labourId)
                         FOREIGN KEY(labourId) REFERENCES Quests(labourId)
                     )
                     """);
@@ -101,8 +102,8 @@ public class UserQuestManagerTest {
             statement.executeUpdate();
         }
 
+        SQLite.setConnection(connection);
         labourId = 20;
-        archetypeId = 99;
     }
 
     @AfterEach
@@ -123,7 +124,10 @@ public class UserQuestManagerTest {
                     """);
 
         statement.setInt(1, labourId);
-        UserQuestManager.GetCurrentUserQuestForEmail("test");
+        statement.execute();
+        UserQuest quest = UserQuestManager.GetCurrentActiveUserQuestForEmail("test");
+
+        assertEquals(labourId, quest.getLabourId());
     }
     @Test
     public void GetUserQuestForEmailIfNoActiveQuestExists() throws SQLException {
@@ -135,8 +139,9 @@ public class UserQuestManagerTest {
                     """);
 
         statement.executeUpdate();
+        UserQuest quest = UserQuestManager.GetCurrentActiveUserQuestForEmail("test");
 
-        UserQuestManager.GetCurrentUserQuestForEmail("test");
+        assertNull(quest);
     }
     @Test
     public void GetUserQuestForEmailThatDoesntExist() throws SQLException {
@@ -148,12 +153,15 @@ public class UserQuestManagerTest {
                     """);
 
         statement.execute();
-        UserQuestManager.GetCurrentUserQuestForEmail("realEmail");
+        UserQuest quest = UserQuestManager.GetCurrentActiveUserQuestForEmail("realEmail");
+
+        assertNull(quest);
     }
+
 
     /// SET QUEST AS ACTIVE
     @Test
-    public void SetQuestToActive() throws SQLException {
+    public void SetQuestToActive() throws Exception {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO UserQuests
@@ -162,6 +170,7 @@ public class UserQuestManagerTest {
                     """);
 
         statement.execute();
+
         statement = connection.prepareStatement(
                 """
                     SELECT * FROM UserQuests
@@ -171,6 +180,7 @@ public class UserQuestManagerTest {
         statement.setInt(2, labourId);
         ResultSet rs = statement.executeQuery();
         UserQuest quest = null;
+
         if (rs.next()){
             quest = new UserQuest(
                     rs.getInt("labourId"),
@@ -180,15 +190,61 @@ public class UserQuestManagerTest {
             );
         }
 
-        System.out.println(quest.getAccountEmail());
+        UserQuest userQuest = UserQuestManager.SetUserQuesStatusAsActive(quest, "test");
 
-        UserQuestManager.SetUserQuesStatusAsActive(quest, "realEmail");
+        assertEquals(quest.getLabourId(), userQuest.getLabourId());
+        assertEquals(quest.getAccountEmail(), userQuest.getAccountEmail());
+        assertEquals("Active", userQuest.getStatus());
+        assertEquals(quest.getPercentageComplete(), userQuest.getPercentageComplete());
     }
     @Test
-    public void SetNullQuestToActive() {
+    public void SetQuestToActiveIfEmailAlreadyHasAnActiveQuest() throws Exception {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
+
+        statement.execute();
+
+        statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 21, 0.0, 'Active')
+                    """);
+        statement.execute();
+
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+         UserQuest quest;
+
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        } else {
+            quest = null;
+        }
+
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuesStatusAsActive(quest, "test"));
+    }
+    @Test
+    public void SetNullQuestToActive() throws Exception {
         UserQuest quest = null;
 
-        UserQuestManager.SetUserQuesStatusAsActive(quest, "realEmail");
+        UserQuest userQuest = UserQuestManager.SetUserQuesStatusAsActive(quest, "realEmail");
+        assertNull(userQuest);
     }
 
     /// SET QUEST TO PERCENTAGE COMPLETE
@@ -198,7 +254,7 @@ public class UserQuestManagerTest {
                 """
                     INSERT INTO UserQuests
                         (accountEmail, labourId, percentageComplete, status)
-                    VALUES ("test", 20, 0.0, 'Not Started')
+                    VALUES ("test", 20, 0.0, 'Active')
                     """);
 
         statement.execute();
@@ -220,7 +276,12 @@ public class UserQuestManagerTest {
             );
         }
 
-        UserQuestManager.SetUserQuestToPercentageComplete(quest, "realEmail", 0.5f);
+        UserQuest updatedQuest = UserQuestManager.SetUserQuestToPercentageComplete(quest, "test", 0.5f);
+
+        assertEquals(quest.getLabourId(), updatedQuest.getLabourId());
+        assertEquals(quest.getAccountEmail(), updatedQuest.getAccountEmail());
+        assertEquals("Active", updatedQuest.getStatus());
+        assertEquals(0.5f, updatedQuest.getPercentageComplete());
     }
     @Test
     public void SetUserQuestToPercentageCompleteAbove1() throws SQLException {
@@ -228,7 +289,7 @@ public class UserQuestManagerTest {
                 """
                     INSERT INTO UserQuests
                         (accountEmail, labourId, percentageComplete, status)
-                    VALUES ("test", 20, 0.0, 'Not Started')
+                    VALUES ("test", 20, 0.0, 'Active')
                     """);
 
         statement.execute();
@@ -240,7 +301,7 @@ public class UserQuestManagerTest {
         statement.setString(1, "test");
         statement.setInt(2, labourId);
         ResultSet rs = statement.executeQuery();
-        UserQuest quest = null;
+        UserQuest quest;
         if (rs.next()){
             quest = new UserQuest(
                     rs.getInt("labourId"),
@@ -248,9 +309,11 @@ public class UserQuestManagerTest {
                     rs.getFloat("percentageComplete"),
                     rs.getString("status")
             );
+        } else {
+            quest = null;
         }
 
-        UserQuestManager.SetUserQuestToPercentageComplete(quest, "realEmail", 1.2f);
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(quest, "test", 1.2f));
     }
     @Test
     public void SetUserQuestToPercentageCompleteBelow0() throws SQLException {
@@ -258,7 +321,7 @@ public class UserQuestManagerTest {
                 """
                     INSERT INTO UserQuests
                         (accountEmail, labourId, percentageComplete, status)
-                    VALUES ("test", 20, 0.0, 'Not Started')
+                    VALUES ("test", 20, 0.0, 'Active')
                     """);
 
         statement.execute();
@@ -270,7 +333,7 @@ public class UserQuestManagerTest {
         statement.setString(1, "test");
         statement.setInt(2, labourId);
         ResultSet rs = statement.executeQuery();
-        UserQuest quest = null;
+        UserQuest quest;
         if (rs.next()){
             quest = new UserQuest(
                     rs.getInt("labourId"),
@@ -278,9 +341,11 @@ public class UserQuestManagerTest {
                     rs.getFloat("percentageComplete"),
                     rs.getString("status")
             );
+        } else {
+            quest = null;
         }
 
-        UserQuestManager.SetUserQuestToPercentageComplete(quest, "realEmail", -0.5f);
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(quest, "test", -0.5f));
     }
 
     /// SET QUEST TO STATUS COMPLETE
@@ -312,14 +377,18 @@ public class UserQuestManagerTest {
             );
         }
 
+        UserQuest userQuest = UserQuestManager.SetUserQuestStatusAsComplete(quest, "test");
 
-        UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail");
+        assertEquals(quest.getLabourId(), userQuest.getLabourId());
+        assertEquals(quest.getAccountEmail(), userQuest.getAccountEmail());
+        assertEquals("Complete", userQuest.getStatus());
+        assertEquals(quest.getPercentageComplete(), userQuest.getPercentageComplete());
     }
     @Test
-    public void SetNullQuestToStatusComplete() {
+    public void SetNullQuestToStatusComplete() throws SQLException {
         UserQuest quest = null;
 
-        UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail");
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail"));
     }
 
     /// INSERT QUEST FOR EMAIL
@@ -343,12 +412,17 @@ public class UserQuestManagerTest {
         }
 
         System.out.println(quest.getName());
-        UserQuestManager.InsertNewQuestForEmail(quest, "realEmail");
+        UserQuest userQuest = UserQuestManager.InsertNewQuestForEmail(quest, "test");
+
+        assertEquals(quest.getLabourId(), userQuest.getLabourId());
+        assertEquals("test", userQuest.getAccountEmail());
+        assertEquals("Not Started", userQuest.getStatus());
+        assertEquals(0.0, userQuest.getPercentageComplete());
     }
     @Test
-    public void InsertNewNullQuestForEmail() {
+    public void InsertNewNullQuestForEmail() throws SQLException {
         Quest quest = null;
 
-        UserQuestManager.InsertNewQuestForEmail(quest, "realEmail");
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.InsertNewQuestForEmail(quest, "test"));
     }
 }

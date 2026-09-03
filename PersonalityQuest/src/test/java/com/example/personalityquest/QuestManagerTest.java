@@ -114,7 +114,7 @@ public class QuestManagerTest {
             connection.close();
         }
     }
-    
+
     @Test
     public void GetQuestForLabourId() throws SQLException {
         Quest quest = QuestManager.GetQuestForLabourId(labourId);
