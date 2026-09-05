@@ -157,8 +157,18 @@ public class UserQuestManagerTest {
 
         assertNull(quest);
     }
+    @Test
+    public void GetUserQuestForNullEmail() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
 
-
+        statement.execute();
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.GetCurrentActiveUserQuestForEmail(null));
+    }
     /// SET QUEST AS ACTIVE
     @Test
     public void SetQuestToActive() throws Exception {
@@ -244,6 +254,49 @@ public class UserQuestManagerTest {
         UserQuest quest = null;
 
         assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuesStatusAsActive(quest, "test"));
+    }
+
+    @Test
+    public void SetQuestToActiveWithNullEmail() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
+
+        statement.execute();
+
+        statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 21, 0.0, 'Active')
+                    """);
+        statement.execute();
+
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest;
+
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        } else {
+            quest = null;
+        }
+
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuesStatusAsActive(quest, null));
     }
 
     /// SET QUEST TO PERCENTAGE COMPLETE
@@ -346,7 +399,70 @@ public class UserQuestManagerTest {
 
         assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(quest, "test", -0.5f));
     }
+    @Test
+    public void SetUserQuestToPercentageCompleteWithNullEmail() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Active')
+                    """);
 
+        statement.execute();
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest;
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        } else {
+            quest = null;
+        }
+
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(quest, null, 0.5f));
+    }
+    @Test
+    public void SetUserQuestToPercentageCompleteWithNulQuest() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Active')
+                    """);
+
+        statement.execute();
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest;
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        } else {
+            quest = null;
+        }
+
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(null, "test", 0.5f));
+    }
     /// SET QUEST TO STATUS COMPLETE
     @Test
     public void SetQuestToStatusComplete() throws SQLException {
@@ -389,7 +505,39 @@ public class UserQuestManagerTest {
 
         assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail"));
     }
+    @Test
+    public void SetQuestToStatusCompleteWithNullEmail() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO UserQuests
+                        (accountEmail, labourId, percentageComplete, status)
+                    VALUES ("test", 20, 0.0, 'Not Started')
+                    """);
 
+        statement.execute();
+        statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
+        statement.setString(1, "test");
+        statement.setInt(2, labourId);
+        ResultSet rs = statement.executeQuery();
+        UserQuest quest;
+        if (rs.next()){
+            quest = new UserQuest(
+                    rs.getInt("labourId"),
+                    rs.getString(("accountEmail")),
+                    rs.getFloat("percentageComplete"),
+                    rs.getString("status")
+            );
+        } else {
+            quest = null;
+        }
+
+
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestStatusAsComplete(quest, null));
+    }
     /// INSERT QUEST FOR EMAIL
     @Test
     public void InsertNewQuestForEmail() throws  SQLException {
@@ -423,5 +571,30 @@ public class UserQuestManagerTest {
         Quest quest = null;
 
         assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.InsertNewQuestForEmail(quest, "test"));
+    }
+
+    @Test
+    public void InsertNewQuestForEmailWithNullEmail() throws  SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                    
+                        SELECT * FROM Quests
+                    WHERE labourId = ?
+                    """);
+
+        statement.setInt(1, labourId);
+        ResultSet rs = statement.executeQuery();
+        Quest quest;
+        if (rs.next()){
+            quest = new Quest(
+                    rs.getInt("labourId"),
+                    rs.getInt(("archetypeId")),
+                    rs.getString("name")
+            );
+        } else {
+            quest = null;
+        }
+        
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.InsertNewQuestForEmail(quest, null));
     }
 }
