@@ -131,6 +131,10 @@ public class QuestManagerTest {
         assertNull(quest);
     }
     @Test
+    public void GetQuestForNullLabourId() {
+        assertThrowsExactly(IllegalArgumentException.class, () -> QuestManager.GetQuestForLabourId(0));
+    }
+    @Test
     public void GetQuestsForArchetypeId() throws SQLException  {
         Quest[] quests = QuestManager.GetQuestsForArchetypeId(99);
 
@@ -150,6 +154,10 @@ public class QuestManagerTest {
         Quest[] quests = QuestManager.GetQuestsForArchetypeId(999999);
 
         assertNull(quests);
+    }
+    @Test
+    public void GetQuestsForNullArchetypeId() {
+        assertThrowsExactly(IllegalArgumentException.class, () -> QuestManager.GetQuestsForArchetypeId(0));
     }
     @Test
     public void GetRandomQuestForArchetypeId() throws SQLException {
@@ -172,5 +180,9 @@ public class QuestManagerTest {
         Quest quest = QuestManager.GetRandomQuestForArchetypeId(999999);
 
         assertNull(quest);
+    }
+    @Test
+    public void GetRandomQuestForNullArchetypeId() {
+        assertThrowsExactly(IllegalArgumentException.class, () -> QuestManager.GetRandomQuestForArchetypeId(0));
     }
 }
