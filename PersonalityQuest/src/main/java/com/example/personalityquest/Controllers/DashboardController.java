@@ -1,12 +1,12 @@
 package com.example.personalityquest.Controllers;
 
+import com.example.personalityquest.Applications.SettingsApplication;
 import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
 import com.example.personalityquest.DataClasses.EmailDetails;
+import com.example.personalityquest.DataClasses.Quest;
+import com.example.personalityquest.DataClasses.UserQuest;
 import com.example.personalityquest.DataClasses.WeeklyTask;
-import com.example.personalityquest.Managers.EmailManager;
-import com.example.personalityquest.Managers.StreakManager;
-import com.example.personalityquest.Managers.SystemManager;
-import com.example.personalityquest.Managers.WeeklyTaskManager;
+import com.example.personalityquest.Managers.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -78,7 +78,7 @@ public class DashboardController implements Initializable {
     @FXML
     private ProgressBar questProgress;
     @FXML
-    private Label questProgressLabel;
+    private Label questTitleLabel, questProgressLabel;
     @FXML
     private Canvas progressChart;
 
@@ -157,8 +157,20 @@ public class DashboardController implements Initializable {
     }
 
     private void PopulateQuestline() {
-        questProgress.setProgress(DEFAULT_QUEST_PROGRESS);
-        questProgressLabel.setText(DEFAULT_QUEST_PROGRESS_LABEL);
+        try{
+            UserQuest userQuest = UserQuestManager.GetCurrentActiveUserQuestForEmail(SystemManager.CurrentAccount.currentEmail);
+            Quest trueQuest = QuestManager.GetQuestForLabourId(userQuest.getLabourId());
+
+            float truePercentageComplete = userQuest.getPercentageComplete() * 100;
+            String formatedPercentageString = String.format("%.0f", truePercentageComplete);
+            questTitleLabel.setText(trueQuest.getName());
+            questProgress.setProgress(userQuest.getPercentageComplete());
+            questProgressLabel.setText(formatedPercentageString + "% Complete");
+        }
+        catch (Exception e){
+            questProgress.setProgress(DEFAULT_QUEST_PROGRESS);
+            questProgressLabel.setText(DEFAULT_QUEST_PROGRESS_LABEL);
+        }
     }
 
     private void PopulateWeeklyTasks() throws Exception {
@@ -361,18 +373,24 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    private void OnNavigationClick(ActionEvent event) {
-        javafx.scene.control.Button button = (javafx.scene.control.Button) event.getSource();
+    private void OnNavigationClick(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+
+        if (button == settingsButton) {
+            SettingsApplication.launch((Stage) dashboardRoot.getScene().getWindow());
+            return;
+        }
+
         System.out.println("Selected dashboard navigation: " + button.getId());
     }
 
     @FXML
     private void OnTaskClick(MouseEvent event) throws IOException {
-        WeeklyTask selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
+        WeeklyTask selectedTask = dailiesList.getSelectionModel().getSelectedItem();
 
         if (selectedTask != null) {
             WeeklyTaskReflectionApplication.launch(
-                    (Stage) weeklyTasks.getScene().getWindow(), selectedTask);
+                    (Stage) dailiesList.getScene().getWindow(), selectedTask);
         }
     }
 }

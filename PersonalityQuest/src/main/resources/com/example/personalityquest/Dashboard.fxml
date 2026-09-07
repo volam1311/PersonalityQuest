@@ -27,7 +27,7 @@
             </HBox>
 
             <VBox spacing="8" styleClass="navigation-list">
-                <Button fx:id="homeButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button selected-nav-button">
+                <Button fx:id="homeButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button, selected-nav-button">
                     <graphic>
                         <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
                             <Label styleClass="material-symbol" text="&#xE9B2;" />
@@ -118,7 +118,7 @@
 
                         <VBox fx:id="dailiesCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
                             <Label id="dailiesTitle" styleClass="card-title centered-title" text="Dailies" />
-                            <ListView fx:id="dailiesList" focusTraversable="false" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                            <ListView onMouseClicked="#OnTaskClick" fx:id="dailiesList" focusTraversable="false" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
                     </GridPane>
 
