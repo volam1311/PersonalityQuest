@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Holds the details pertaining to WeeklyTasks that have been assigned in the database to users
+ */
 /// This is the class for the actual current running tasks that the user is able to complete
 /// Go check out Task if you want to see the class structure for the Tasks that turn into Weekly Tasks.
 public class WeeklyTask {
@@ -63,6 +66,11 @@ public class WeeklyTask {
     public void setStatus(String status){ this.status = status; }
     public void setReflection(String reflection){ this.reflection = reflection; }
 
+    /**
+     * Converts the weekly task to a string
+     * in the form of its name
+     * @return the name of the weeklyTask
+     */
     @Override
     public String toString() {
         Connection connection = SQLite.getConnection();

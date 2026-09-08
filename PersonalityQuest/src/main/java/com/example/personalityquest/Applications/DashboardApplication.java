@@ -13,7 +13,7 @@ import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCEN
 public class DashboardApplication {
     public static void launch(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(AccountCreationApplication.class.getResource(fxmlPrefix +  "Dashboard.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1180, 760);
+        Scene scene = new Scene(fxmlLoader.load(), 1100, 720);
         stage.setTitle("Dashboard");
         stage.setMinWidth(680);
         stage.setMinHeight(520);
