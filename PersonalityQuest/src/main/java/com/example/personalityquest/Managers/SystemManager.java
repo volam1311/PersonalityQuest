@@ -14,6 +14,11 @@ public  class SystemManager {
         public static String currentEmail = "";
     }
 
+    /**
+     * Checks to see if a given string is null or empty
+     * @param value the string you want to check
+     * @return Whether a given string isEmpty
+     */
     public static boolean isEmpty(String value) {
         return value == null || value.isEmpty();
     }

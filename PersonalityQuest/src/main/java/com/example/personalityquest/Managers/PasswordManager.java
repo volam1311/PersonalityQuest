@@ -13,11 +13,14 @@ public class PasswordManager {
 
     protected final static String updatePassword =
             "UPDATE Accounts SET password = ? WHERE email = ?";
-    /*
-    * Does the given email have the given password for its account
-    *
-    * Returns: Whether the password matches the one for the given email
-    * */
+
+    /**
+     * Checks to see if the given password is for the given email's account
+     * @param email "The email of the account that is for the password"
+     * @param password "The password that wants to be checked"
+     * @return "Whether password matches the given account email"
+     * @throws SQLException "Database Access Failure"
+     */
     public static boolean isPasswordForEmail(String email, String password) throws SQLException {
         // check nulls
         if (SystemManager.isEmpty(email)) {
@@ -44,11 +47,13 @@ public class PasswordManager {
         return HashingManager.VerifyHash(rs.getString("password"), password);
     }
 
-    /*
-    * Updates the account to have the newPassword
-    *
-    * Returns: Whether account update was successful
-    * */
+    /**
+     * Updates the account with the given email to have a new hashed password
+     * @param email "The accounts email you want to update the password for"
+     * @param newPassword "The new password in plain text"
+     * @return "Whether the update to the database was successful"
+     * @throws SQLException "Database Access Failure"
+     */
     public static boolean UpdatePasswordForEmail(String email, String newPassword) throws SQLException {
         // check nulls
         if (SystemManager.isEmpty(email)) {
@@ -75,7 +80,4 @@ public class PasswordManager {
         return true;
     }
 
-    private void NullCheck(){
-
-    }
 }

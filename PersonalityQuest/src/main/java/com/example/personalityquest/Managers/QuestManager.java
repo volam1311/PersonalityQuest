@@ -11,6 +11,12 @@ import java.util.Random;
 import java.util.jar.JarEntry;
 
 public class QuestManager {
+    /**
+     * Gets an Array of Quests for the given archetypeId
+     * @param archetypeId The archetypeId you want to get quests for
+     * @return Array of quests matching archetypeId
+     * @throws SQLException "Database Access Failure"
+     */
     public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
         if (archetypeId == 0){
             throw new IllegalArgumentException("Bad archetypeId of 0");
@@ -53,6 +59,12 @@ public class QuestManager {
         return quests;
     }
 
+    /**
+     * Retrives Quest Details for the given questId
+     * @param labourId the labourId for the quest you want
+     * @return The Quest is successful or null if labourId doesn't match a quest in the database
+     * @throws SQLException Database Access Failure
+     */
     public static Quest GetQuestForLabourId(int labourId) throws SQLException {
         if (labourId == 0){
             throw new IllegalArgumentException("Bad labourId of 0");
@@ -79,6 +91,12 @@ public class QuestManager {
         return quest;
     }
 
+    /**
+     * Retrives a Random Quest from the database that matches the archetypeId
+     * @param archetypeId The archetypeId of the quest you want to retrieve
+     * @return The Random Quests information
+     * @throws SQLException "Database Access Failure"
+     */
     public static Quest GetRandomQuestForArchetypeId(int archetypeId) throws SQLException {
         Quest[] quests = GetQuestsForArchetypeId(archetypeId);
 
@@ -92,6 +110,12 @@ public class QuestManager {
         return quests[randomInt];
     }
 
+    /**
+     * The amount of quests that match the archetypeId
+     * @param archetypeId The archetypeId that matches quests you want to retrieve the counts for
+     * @return the amount of quests in the database for the archetypeId
+     * @throws SQLException Database Access Failure
+     */
     private static int GetCountOfQuestsForArchetypeId(int archetypeId) throws SQLException {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(
