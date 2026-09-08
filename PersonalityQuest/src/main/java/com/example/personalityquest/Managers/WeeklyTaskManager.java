@@ -12,6 +12,11 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
+/**
+ * This class managers everything to do with WeeklyTasks such as retrieving this current
+ * weeks tasks for a user, get their taskId's, generate new tasks for this week or update existing
+ * tasks
+ */
 public class WeeklyTaskManager {
 
     private final static int AMOUNTOFTASKS = 3;

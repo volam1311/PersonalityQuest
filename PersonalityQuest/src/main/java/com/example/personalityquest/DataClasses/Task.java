@@ -4,6 +4,9 @@ import com.example.personalityquest.Managers.SystemManager;
 
 import java.util.Objects;
 
+/**
+ * Holds the details pertaining to Tasks that have not yet been assigned
+ */
 public class Task {
     public Task(int taskId, String name, String description, int labourId) throws Exception {
         if (taskId == 0){

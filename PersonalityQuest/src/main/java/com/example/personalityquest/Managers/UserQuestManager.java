@@ -9,6 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class managers everything to do with UserQuests and has utility functions to retrieve
+ * userQuests matching email, whether there's an active userQuest, to update userQuests in the database
+ * and to insert new ones
+ */
 public class UserQuestManager {
     /**
      * Retrives the current active quest for the user matching the account

@@ -2,10 +2,13 @@ package com.example.personalityquest.DataClasses;
 
 import com.example.personalityquest.Managers.SystemManager;
 
+/**
+ * Holds the details pertaining to Quests that have not yet been assigned
+ */
 /*
-* This is a quest which is the ones that are unassigned and only used as information to make a User Quest.
-* Not to be mistaken with a User Quest which is the ones the user actually completes
-* */
+ * This is a quest which is the ones that are unassigned and only used as information to make a User Quest.
+ * Not to be mistaken with a User Quest which is the ones the user actually completes
+ * */
 public class Quest {
 
     private final int labourId;

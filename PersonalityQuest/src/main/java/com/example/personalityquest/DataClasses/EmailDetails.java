@@ -2,6 +2,9 @@ package com.example.personalityquest.DataClasses;
 
 import com.example.personalityquest.Managers.SystemManager;
 
+/**
+ * Holds the details pertaining to an account
+ */
 public class EmailDetails {
     public EmailDetails(String email, String userName, String firstName, String lastName){
         if (SystemManager.isEmpty(email)){

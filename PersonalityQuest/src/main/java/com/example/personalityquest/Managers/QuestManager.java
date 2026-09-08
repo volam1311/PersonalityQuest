@@ -10,6 +10,11 @@ import java.text.ParseException;
 import java.util.Random;
 import java.util.jar.JarEntry;
 
+/**
+ * This class managers everything to do with quests and has utility functions to retrieve
+ * quests matching archetypeId's or a labourId or get the count of how many quests
+ * match an archetypeId
+ */
 public class QuestManager {
     /**
      * Gets an Array of Quests for the given archetypeId

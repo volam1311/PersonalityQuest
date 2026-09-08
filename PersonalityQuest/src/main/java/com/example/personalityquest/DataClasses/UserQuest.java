@@ -2,6 +2,9 @@ package com.example.personalityquest.DataClasses;
 
 import com.example.personalityquest.Managers.SystemManager;
 
+/**
+ * Holds the details pertaining to UserQuests that have been assigned in the database to users
+ */
 /*
 * This is a user quest which is the ones that get assigned to the user for them to complete.
 * Not to be mistaken with a Quest which is only the unassigned information of the quest.

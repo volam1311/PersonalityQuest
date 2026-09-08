@@ -1,7 +1,10 @@
 package com.example.personalityquest.Managers;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-
+/**
+ * This class managers everything to do with hashing and has utility functions to hash
+ * a string or check whether a given hashed string and a plaintext string match
+ */
 public class HashingManager {
     /**
      * Hashes the given string

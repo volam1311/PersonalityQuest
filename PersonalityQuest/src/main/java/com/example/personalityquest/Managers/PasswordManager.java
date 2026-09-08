@@ -7,6 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class managers everything to do with password and has utility functions to check
+ * weather a password matches an email in the database or to update the password in the database
+ */
 public class PasswordManager {
     protected final static String accountExists =
             "SELECT * FROM Accounts WHERE email = ?";

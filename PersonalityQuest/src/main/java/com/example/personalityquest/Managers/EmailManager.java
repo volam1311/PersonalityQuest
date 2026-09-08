@@ -8,6 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class managers everything to do with emails and has utility functions to check
+ * if account exist for them or retrieve the EmailDetails matching the email
+ */
 public class EmailManager {
 
 
