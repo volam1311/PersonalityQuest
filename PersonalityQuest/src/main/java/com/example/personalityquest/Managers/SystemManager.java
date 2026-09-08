@@ -7,8 +7,8 @@ package com.example.personalityquest.Managers;
  */
 public  class SystemManager {
     public static class SceneInfo {
-        public static final int SCENEWIDTH = 720;
-        public static final int SCENEHEIGHT = 480;
+        public static final int SCENEWIDTH = 1100;
+        public static final int SCENEHEIGHT = 720;
     }
 
     public static class CurrentAccount{
