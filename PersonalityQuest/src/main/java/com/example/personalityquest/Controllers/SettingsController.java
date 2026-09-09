@@ -17,7 +17,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -59,16 +58,6 @@ public class SettingsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        URL materialFont = getClass().getResource(
-                "/com/example/personalityquest/fonts/MaterialSymbolsRounded.ttf");
-
-        if (materialFont != null) {
-            Font.loadFont(materialFont.toExternalForm(), 24);
-        } else {
-            System.err.println("Material Symbols font not found. Add "
-                    + "MaterialSymbolsRounded.ttf to the fonts resource folder.");
-        }
-
         KeepToggleSelected(backgroundColorGroup);
         KeepToggleSelected(languageGroup);
         SetProfileLabel();

@@ -1,9 +1,15 @@
 .material-symbol {
-    -fx-font-family: "Material Symbols Rounded";
-    -fx-font-size: 24px;
+    -fx-font: normal 24px "Material Symbols Rounded";
     -fx-text-fill: #a884ff;
     -fx-alignment: CENTER;
     -fx-translate-y: 2px;
+}
+
+.nav-button .material-symbol,
+.profile-button .material-symbol,
+.menu-button .material-symbol,
+.settings-button .material-symbol {
+    -fx-font: normal 24px "Material Symbols Rounded";
 }
 
 .dashboard-root {
@@ -199,8 +205,7 @@
 }
 
 .streak-icon {
-    -fx-font-family: "Material Symbols Rounded";
-    -fx-font-size: 30px;
+    -fx-font: normal 30px "Material Symbols Rounded";
     -fx-min-width: 30px;
     -fx-pref-width: 30px;
     -fx-alignment: CENTER;
