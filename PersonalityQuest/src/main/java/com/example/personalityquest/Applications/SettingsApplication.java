@@ -1,5 +1,6 @@
 package com.example.personalityquest.Applications;
 
+import com.example.personalityquest.AppFonts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -10,6 +11,7 @@ import static com.example.personalityquest.MainApplication.fxmlPrefix;
 
 public class SettingsApplication {
     public static void launch(Stage stage) throws IOException {
+        AppFonts.load();
         FXMLLoader fxmlLoader = new FXMLLoader(
                 SettingsApplication.class.getResource(fxmlPrefix + "Settings.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1180, 760);

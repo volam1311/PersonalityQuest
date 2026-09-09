@@ -11,6 +11,7 @@ public class MainApplication extends Application {
     public final static String fxmlPrefix = "/com/example/personalityquest/";
     @Override
     public void start(Stage stage) throws IOException{
+        AppFonts.load();
         AccountCreationApplication.launch(stage);
     }
 }
