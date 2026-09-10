@@ -61,7 +61,7 @@ public class TaskDAO {
     /**
      * Gets all the TaskId's that match a given labourId
      * @param labourId The labourId you want to get the taskIds for
-     * @return A List<Interger> of the taskId's
+     * @return A List Interger of the taskId's
      * @throws SQLException Database Access Failure
      */
     public static List<Integer> GetTaskIdsForLabourID(int labourId) throws SQLException {

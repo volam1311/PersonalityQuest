@@ -68,7 +68,6 @@ public class UserQuestDAO {
      * Inserts a new User Quest into the database then returns it
      * @param quest The quest you want to turn into a userQuest
      * @param email The account you want to insert a new quest for
-     * @return The new UserQuest that was made
      * @throws SQLException If A constraint on foreign keys fails or Database Update Failure
      */
     public static void InsertNewQuestForEmail(Quest quest, String email) throws SQLException {
@@ -94,7 +93,6 @@ public class UserQuestDAO {
      * Sets the given UserQuest to status "Complete" in the database
      * @param quest The UserQuest you want to set as "Complete"
      * @param email The account you want to set the quest as complete for
-     * @return The updated UserQuest with a status complete
      * @throws IllegalArgumentException If quest is null or email is empty
      * @throws SQLException Database Access and Update Failure
      */
@@ -117,7 +115,6 @@ public class UserQuestDAO {
      * @param quest The user quest you want to update
      * @param email The account email you want to update the user quest for
      * @param percentage The percentage between 0 and 1 you want the quest to be at
-     * @return The updated UserQuest with the new percentageComplete
      * @throws IllegalArgumentException If the quest or email is null Or if the percentageComplete is not between
      * 0 and 1
      * @throws SQLException Database Access or Update Failure
