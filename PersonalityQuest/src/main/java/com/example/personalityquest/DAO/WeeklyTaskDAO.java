@@ -1,18 +1,16 @@
 package com.example.personalityquest.DAO;
 
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.SQLite;
+import com.example.personalityquest.Services.UserQuestService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 
 public class WeeklyTaskDAO {
@@ -42,15 +40,7 @@ public class WeeklyTaskDAO {
             accountEmail = ? AND weekStart = ?
             """;
 
-    private static int defaultTaskSearchNum = 1;
 
-    /**
-     * Sets the default task num to insert into the database if no quest is active
-     * @param num The number you want to set
-     */
-    public static void SetDefaultTaskSearchNum(int num){
-        defaultTaskSearchNum = num;
-    }
 
     /**
      * Gets a Weekly Task for a given taskId, email and weekStart
@@ -117,7 +107,6 @@ public class WeeklyTaskDAO {
         }
         return taskIds;
     }
-
     /**
      * Inserts new Tasks into the database for the given email and weekStart by randomly choosing
      * from the list of available tasks for your quest
@@ -139,7 +128,7 @@ public class WeeklyTaskDAO {
         }
 
         try{
-            UserQuest currentActiveQuest = UserQuestDAO.GetCurrentActiveUserQuestForEmail
+            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail
                     (ApplicationManager.CurrentAccount.getCurrentEmail());
 
             System.out.println("Current Quest labourId is" + currentActiveQuest.getLabourId());
@@ -179,7 +168,7 @@ public class WeeklyTaskDAO {
             for (int i = 0; i < AMOUNT_OF_TASKS; i++){
                 int start = i * 4;
                 statement.setString(start + 1, email);
-                statement.setInt(start + 2, defaultTaskSearchNum);
+                statement.setInt(start + 2, ApplicationManager.TaskConfig.getDefaultSearchNum());
                 statement.setString(start + 3, "NotStarted");
                 statement.setString(start + 4, String.valueOf(weekStart));
             }

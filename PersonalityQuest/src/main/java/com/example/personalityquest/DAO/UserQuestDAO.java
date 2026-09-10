@@ -1,8 +1,8 @@
 package com.example.personalityquest.DAO;
 
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
-import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
@@ -10,11 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * This class managers everything to do with UserQuests and has utility functions to retrieve
- * userQuests matching email, whether there's an active userQuest, to update userQuests in the database
- * and to insert new ones
- */
 public class UserQuestDAO {
     /**
      * Retrives the current active quest for the user matching the account
@@ -24,10 +19,6 @@ public class UserQuestDAO {
      * @throws SQLException Database Access Failure
      */
     public static UserQuest GetCurrentActiveUserQuestForEmail(String email) throws IllegalArgumentException, SQLException {
-        if (ApplicationManager.isEmpty(email)){
-            throw new IllegalArgumentException("Checking for active quest with null email");
-        }
-
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(
                 """
@@ -54,20 +45,11 @@ public class UserQuestDAO {
      * Sets the given UserQuest to active in the database
      * @param userQuest The userQuest you want to set as active
      * @param email The account you want to set the quest active for
-     * @return The updated UserQuest with a status active
      * @throws IllegalArgumentException If the quest or email is null Or if the given email doesn't
      * have an active quest
      * @throws SQLException Database Update Failure
      */
-    public static UserQuest SetUserQuesStatusAsActive(UserQuest userQuest, String email) throws IllegalArgumentException, SQLException {
-        if (userQuest == null || ApplicationManager.isEmpty(email)){
-            throw new IllegalArgumentException("Checking for active quest with null email");
-        }
-        if (DoesUserHaveActiveQuest(email)){
-            throw new IllegalArgumentException("User already has an active quest with labourId "
-                    + GetCurrentActiveUserQuestForEmail(email).getLabourId());
-        }
-
+    public static void SetUserQuesStatusAsActive(UserQuest userQuest, String email) throws IllegalArgumentException, SQLException {
         Connection connection = SQLite.getConnection();
 
         PreparedStatement statement = connection.prepareStatement(
@@ -80,7 +62,6 @@ public class UserQuestDAO {
         statement.setInt(2, userQuest.getLabourId());
         statement.executeUpdate();
 
-        return GetCurrentActiveUserQuestForEmail(email);
     }
 
     /**
@@ -90,11 +71,7 @@ public class UserQuestDAO {
      * @return The new UserQuest that was made
      * @throws SQLException If A constraint on foreign keys fails or Database Update Failure
      */
-    public static UserQuest InsertNewQuestForEmail(Quest quest, String email) throws SQLException {
-        if (quest == null || ApplicationManager.isEmpty(email)){
-            throw new IllegalArgumentException("Quest you wanted to set or email is null");
-        }
-
+    public static void InsertNewQuestForEmail(Quest quest, String email) throws SQLException {
         Connection connection = SQLite.getConnection();
         try{
             PreparedStatement statement = connection.prepareStatement(
@@ -108,8 +85,6 @@ public class UserQuestDAO {
             statement.setInt(2, quest.getLabourId());
             statement.execute();
 
-
-            return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
         } catch (Exception e) {
             throw new SQLException(e.getMessage());
         }
@@ -123,11 +98,7 @@ public class UserQuestDAO {
      * @throws IllegalArgumentException If quest is null or email is empty
      * @throws SQLException Database Access and Update Failure
      */
-    public static UserQuest SetUserQuestStatusAsComplete(UserQuest quest, String email) throws SQLException {
-        if (quest == null || ApplicationManager.isEmpty(email)){
-            throw new IllegalArgumentException("Quest you wanted to set or email is null");
-        }
-
+    public static void SetUserQuestStatusAsComplete(UserQuest quest, String email) throws SQLException {
         Connection connection = SQLite.getConnection();
 
         PreparedStatement statement = connection.prepareStatement(
@@ -139,9 +110,6 @@ public class UserQuestDAO {
         statement.setString(1, email);
         statement.setInt(2, quest.getLabourId());
         statement.executeUpdate();
-
-
-        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
     }
 
     /**
@@ -154,14 +122,7 @@ public class UserQuestDAO {
      * 0 and 1
      * @throws SQLException Database Access or Update Failure
      */
-    public static UserQuest SetUserQuestToPercentageComplete(UserQuest quest, String email, float percentage) throws SQLException {
-        if (quest == null || ApplicationManager.isEmpty(email)){
-            throw new IllegalArgumentException("Quest you wanted to set or email is null");
-        }
-
-        if (IsPercentageOutOfRange(percentage)){
-            throw new IllegalArgumentException("Percentage is out of the 0-1 range");
-        }
+    public static void SetUserQuestToPercentageComplete(UserQuest quest, String email, float percentage) throws SQLException {
 
         Connection connection = SQLite.getConnection();
 
@@ -176,17 +137,16 @@ public class UserQuestDAO {
         statement.setInt(3, quest.getLabourId());
         statement.executeUpdate();
 
-        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
     }
 
     /**
      * Checks to see if a given account email has a currently active quest
      * @param email The email of the account you want to check
-    * @return Whether the given email has an account with an active quest
+     * @return Whether the given email has an account with an active quest
      * @throws IllegalArgumentException If the user has more than 1 active quest
      * @throws SQLException Database Access Failure
      */
-    private static boolean DoesUserHaveActiveQuest(String email) throws IllegalArgumentException, SQLException {
+    public static boolean DoesUserHaveActiveQuest(String email) throws IllegalArgumentException, SQLException {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(
                 """
@@ -209,33 +169,20 @@ public class UserQuestDAO {
     }
 
     /**
-     * Checks to see whether a given percentage is between 0 and 1
-     * @param percentage The given percentage you want to check
-     * @return Whether the given percentage was between 0 and 1
-     */
-    private static boolean IsPercentageOutOfRange(float percentage){
-        if (percentage < 0 || percentage > 1){
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Gets an accounts specific UserQuest for the labourId
      * @param email The account email you want to retrieve a UserQuest for
      * @param labourId The labourId that matches a UserQuest in the database for email
      * @return The UserQuest matching the email and labourId given OR null if none could be retrived
      * @throws SQLException Database Access Failure
      */
-    private static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
+    public static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
         Connection connection = SQLite.getConnection();
 
         PreparedStatement statement = connection.prepareStatement(
-                        """
-                            SELECT * FROM UserQuests
-                            WHERE accountEmail = ? AND labourId = ?
-                            """);
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ? AND labourId = ?
+                    """);
 
 
         statement.setString(1, email);

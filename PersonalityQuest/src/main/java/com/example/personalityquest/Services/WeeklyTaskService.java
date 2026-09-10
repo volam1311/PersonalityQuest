@@ -2,19 +2,15 @@ package com.example.personalityquest.Services;
 
 import com.example.personalityquest.DAO.EmailDAO;
 import com.example.personalityquest.DAO.TaskDAO;
-import com.example.personalityquest.DAO.UserQuestDAO;
 import com.example.personalityquest.DAO.WeeklyTaskDAO;
 import com.example.personalityquest.Model.Task;
-import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.SQLite;
 
 import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
 
 /**
  * This class managers everything to do with WeeklyTasks such as retrieving this current
@@ -138,7 +134,7 @@ public class WeeklyTaskService {
         if (IsWeekStartNull(weekStart) || IsEmailNull(email)){
             throw new IllegalArgumentException("Week start or email is null");
         }
-        
+
 
         WeeklyTask[] tasks = GetTasksForEmailForThisWeek(email);
 

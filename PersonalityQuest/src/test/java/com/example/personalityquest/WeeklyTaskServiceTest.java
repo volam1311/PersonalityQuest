@@ -16,7 +16,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WeeklyTaskDAOTest {
+public class WeeklyTaskServiceTest {
     private Connection connection;
 
     private Task[] dummyTasks;
@@ -124,7 +124,7 @@ public class WeeklyTaskDAOTest {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
 
-        WeeklyTaskDAO.SetDefaultTaskSearchNum(9999);
+        ApplicationManager.TaskConfig.setDefaultSearchNum(9999);
         WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek("test");
 
         if (Objects.equals(tasks, null)){
@@ -139,7 +139,7 @@ public class WeeklyTaskDAOTest {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
 
-        WeeklyTaskDAO.SetDefaultTaskSearchNum(9999);
+        ApplicationManager.TaskConfig.setDefaultSearchNum(9999);
         WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek("test");
 
         if (Objects.equals(tasks, null)){
@@ -153,7 +153,7 @@ public class WeeklyTaskDAOTest {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
 
-        WeeklyTaskDAO.SetDefaultTaskSearchNum(17982331);
+        ApplicationManager.TaskConfig.setDefaultSearchNum(17982331);
         WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek("test");
 
         if (Objects.equals(tasks, null)){

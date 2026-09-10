@@ -12,10 +12,17 @@ public class ApplicationManager {
     }
 
     public static class TaskConfig{
-        private final static int AMOUNT_OF_TASKS = 3;
+        private static int AMOUNT_OF_TASKS = 3;
+        private static int DEFAULT_SEARTCH_NUM = 1;
 
         public static int getAmountOfTasks(){
             return AMOUNT_OF_TASKS;
+        }
+        public static int getDefaultSearchNum(){
+            return DEFAULT_SEARTCH_NUM;
+        }
+        public static void setDefaultSearchNum(int defaultSeartchNum){
+            DEFAULT_SEARTCH_NUM = defaultSeartchNum;
         }
     }
 

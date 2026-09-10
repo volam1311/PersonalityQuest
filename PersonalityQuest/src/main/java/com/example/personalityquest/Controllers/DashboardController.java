@@ -8,6 +8,7 @@ import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Services.UserQuestService;
 import com.example.personalityquest.Services.WeeklyTaskService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -148,7 +149,7 @@ public class DashboardController implements Initializable {
 
     private void PopulateQuestline() {
         try{
-            UserQuest userQuest = UserQuestDAO.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
             Quest trueQuest = QuestDAO.GetQuestForLabourId(userQuest.getLabourId());
 
             float truePercentageComplete = userQuest.getPercentageComplete() * 100;

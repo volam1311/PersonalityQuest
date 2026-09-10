@@ -9,7 +9,7 @@ import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.DAO.EmailDAO;
 import com.example.personalityquest.DAO.QuestDAO;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.DAO.UserQuestDAO;
+import com.example.personalityquest.Services.UserQuestService;
 import com.example.personalityquest.SQLite;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -213,8 +213,8 @@ public class AccountCreationController {
         // DUMMY ARCHETYPE IMPLEMENTATION FOR NOW
         // Inserts the testLabour for each account
         Quest quest = QuestDAO.GetQuestForLabourId(1);
-        UserQuest userQuest = UserQuestDAO.InsertNewQuestForEmail(quest, ApplicationManager.CurrentAccount.getCurrentEmail() );
-        UserQuestDAO.SetUserQuesStatusAsActive(userQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
+        UserQuest userQuest = UserQuestService.InsertNewQuestForEmail(quest, ApplicationManager.CurrentAccount.getCurrentEmail() );
+        UserQuestService.SetUserQuesStatusAsActive(userQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
 
         DashboardApplication.launch((Stage) emailEntry.getScene().getWindow());
         System.out.println("Account created");
