@@ -7,7 +7,7 @@ import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.DAO.EmailDAO;
-import com.example.personalityquest.DAO.QuestDAO;
+import com.example.personalityquest.Services.QuestService;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Services.UserQuestService;
 import com.example.personalityquest.SQLite;
@@ -212,7 +212,7 @@ public class AccountCreationController {
 
         // DUMMY ARCHETYPE IMPLEMENTATION FOR NOW
         // Inserts the testLabour for each account
-        Quest quest = QuestDAO.GetQuestForLabourId(1);
+        Quest quest = QuestService.GetQuestForLabourId(1);
         UserQuest userQuest = UserQuestService.InsertNewQuestForEmail(quest, ApplicationManager.CurrentAccount.getCurrentEmail() );
         UserQuestService.SetUserQuesStatusAsActive(userQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
 

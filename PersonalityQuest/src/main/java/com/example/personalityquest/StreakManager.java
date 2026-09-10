@@ -1,7 +1,4 @@
-package com.example.personalityquest.DAO;
-
-import com.example.personalityquest.SQLite;
-import com.example.personalityquest.ApplicationManager;
+package com.example.personalityquest;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class StreakDAO {
+public class StreakManager {
 
     private static final int NO_STREAK = 0;
     private static final int FIRST_STREAK = 1;
@@ -28,7 +25,7 @@ public class StreakDAO {
             WHERE accountEmail = ?
             """;
 
-    private StreakDAO() {
+    private StreakManager() {
     }
 
     public static int RecordCompletion(String email, LocalDate completionDate) throws SQLException {

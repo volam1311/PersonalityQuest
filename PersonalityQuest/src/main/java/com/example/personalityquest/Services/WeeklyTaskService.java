@@ -1,7 +1,6 @@
 package com.example.personalityquest.Services;
 
 import com.example.personalityquest.DAO.EmailDAO;
-import com.example.personalityquest.DAO.TaskDAO;
 import com.example.personalityquest.DAO.WeeklyTaskDAO;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.Model.WeeklyTask;
@@ -116,7 +115,7 @@ public class WeeklyTaskService {
 
         WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
         for (int i = 0; i < taskIds.length; i++) {
-            Task task = TaskDAO.GetTaskForId(taskIds[i]);
+            Task task = TaskService.GetTaskForId(taskIds[i]);
             tasks[i] = new WeeklyTask(email, task.getTaskId(), "Not Started", "", String.valueOf(weekStart));
 
         }

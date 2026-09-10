@@ -8,8 +8,10 @@ import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Services.QuestService;
 import com.example.personalityquest.Services.UserQuestService;
 import com.example.personalityquest.Services.WeeklyTaskService;
+import com.example.personalityquest.StreakManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -139,7 +141,7 @@ public class DashboardController implements Initializable {
     private void UpdateStreakLabel() {
         // Display the saved streak without preventing the dashboard from loading.
         try {
-            int streak = StreakDAO.GetCurrentStreak(
+            int streak = StreakManager.GetCurrentStreak(
                     ApplicationManager.CurrentAccount.getCurrentEmail());
             streakLabel.setText("Day " + streak);
         } catch (Exception exception) {
@@ -150,7 +152,7 @@ public class DashboardController implements Initializable {
     private void PopulateQuestline() {
         try{
             UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
-            Quest trueQuest = QuestDAO.GetQuestForLabourId(userQuest.getLabourId());
+            Quest trueQuest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
 
             float truePercentageComplete = userQuest.getPercentageComplete() * 100;
             String formatedPercentageString = String.format("%.0f", truePercentageComplete);

@@ -4,6 +4,7 @@ import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.SQLite;
+import com.example.personalityquest.Services.TaskService;
 import com.example.personalityquest.Services.UserQuestService;
 
 import java.sql.Connection;
@@ -133,7 +134,7 @@ public class WeeklyTaskDAO {
 
             System.out.println("Current Quest labourId is" + currentActiveQuest.getLabourId());
 
-            int[] taskIds = TaskDAO.GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
+            int[] taskIds = TaskService.GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
 
             // checks for successful retrieval of all the different tasks and none were null
             for (int i = 0; i < taskIds.length; i++){

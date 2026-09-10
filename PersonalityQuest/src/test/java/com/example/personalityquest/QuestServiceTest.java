@@ -2,7 +2,7 @@ package com.example.personalityquest;
 
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Services.HashingService;
-import com.example.personalityquest.DAO.QuestDAO;
+import com.example.personalityquest.Services.QuestService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class QuestDAOTest {
+public class QuestServiceTest {
 
     private Connection connection;
 
@@ -115,7 +115,7 @@ public class QuestDAOTest {
 
     @Test
     public void GetQuestForLabourId() throws SQLException {
-        Quest quest = QuestDAO.GetQuestForLabourId(labourId);
+        Quest quest = QuestService.GetQuestForLabourId(labourId);
 
         // 1st quest
         assertEquals(labourId, quest.getLabourId());
@@ -124,17 +124,17 @@ public class QuestDAOTest {
     }
     @Test
     public void GetQuestForNonExistentLabourId() throws SQLException {
-        Quest quest = QuestDAO.GetQuestForLabourId(999999);
+        Quest quest = QuestService.GetQuestForLabourId(999999);
 
         assertNull(quest);
     }
     @Test
     public void GetQuestForNullLabourId() {
-        assertThrowsExactly(IllegalArgumentException.class, () -> QuestDAO.GetQuestForLabourId(0));
+        assertThrowsExactly(IllegalArgumentException.class, () -> QuestService.GetQuestForLabourId(0));
     }
     @Test
     public void GetQuestsForArchetypeId() throws SQLException  {
-        Quest[] quests = QuestDAO.GetQuestsForArchetypeId(99);
+        Quest[] quests = QuestService.GetQuestsForArchetypeId(99);
 
         // 1st quest
         assertEquals(labourId, quests[0].getLabourId());
@@ -149,17 +149,17 @@ public class QuestDAOTest {
     }
     @Test
     public void GetQuestsForNonExistentArchetypeId() throws SQLException  {
-        Quest[] quests = QuestDAO.GetQuestsForArchetypeId(999999);
+        Quest[] quests = QuestService.GetQuestsForArchetypeId(999999);
 
         assertNull(quests);
     }
     @Test
     public void GetQuestsForNullArchetypeId() {
-        assertThrowsExactly(IllegalArgumentException.class, () -> QuestDAO.GetQuestsForArchetypeId(0));
+        assertThrowsExactly(IllegalArgumentException.class, () -> QuestService.GetQuestsForArchetypeId(0));
     }
     @Test
     public void GetRandomQuestForArchetypeId() throws SQLException {
-        Quest quest = QuestDAO.GetRandomQuestForArchetypeId(archetypeId);
+        Quest quest = QuestService.GetRandomQuestForArchetypeId(archetypeId);
 
         // the random nature requires this
         if (quest.getLabourId() == 20){
@@ -175,12 +175,12 @@ public class QuestDAOTest {
     }
     @Test
     public void GetRandomQuestForNonExistentArchetypeId() throws SQLException {
-        Quest quest = QuestDAO.GetRandomQuestForArchetypeId(999999);
+        Quest quest = QuestService.GetRandomQuestForArchetypeId(999999);
 
         assertNull(quest);
     }
     @Test
     public void GetRandomQuestForNullArchetypeId() {
-        assertThrowsExactly(IllegalArgumentException.class, () -> QuestDAO.GetRandomQuestForArchetypeId(0));
+        assertThrowsExactly(IllegalArgumentException.class, () -> QuestService.GetRandomQuestForArchetypeId(0));
     }
 }
