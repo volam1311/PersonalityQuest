@@ -1,7 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.DAO.EmailDAO;
-import com.example.personalityquest.DAO.PasswordDAO;
+import com.example.personalityquest.Services.PasswordService;
 import com.example.personalityquest.ApplicationManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -29,7 +29,7 @@ public class UpdateAccountPasswordController {
         }
 
         // current password entered does not match account
-        if (!PasswordDAO.isPasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), currentPasswordEntry.getText())){
+        if (!PasswordService.isPasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), currentPasswordEntry.getText())){
             Message.setText("Current Password does not match account");
             return;
         }
@@ -40,7 +40,7 @@ public class UpdateAccountPasswordController {
             return;
         }
 
-        PasswordDAO.UpdatePasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), newPasswordEntry.getText());
+        PasswordService.UpdatePasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), newPasswordEntry.getText());
         Message.setText("Password Updated for account");
 
         OnExit();

@@ -2,7 +2,7 @@ package com.example.personalityquest;
 
 import com.example.personalityquest.Model.EmailDetails;
 import com.example.personalityquest.Services.HashingService;
-import com.example.personalityquest.DAO.PasswordDAO;
+import com.example.personalityquest.Services.PasswordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PasswordDAOTest {
+public class PasswordServiceTest {
     private Connection connection;
 
     private EmailDetails fakeEmailDetails = new EmailDetails(
@@ -53,52 +53,52 @@ public class PasswordDAOTest {
 
     @Test
     public void PasswordDoesntMatch() throws Exception {
-        assertFalse(PasswordDAO.isPasswordForEmail("test", "not-test"));
+        assertFalse(PasswordService.isPasswordForEmail("test", "not-test"));
     }
 
     @Test
     public void PasswordDoesMatch() throws Exception {
-        assertTrue(PasswordDAO.isPasswordForEmail("test", "test"));
+        assertTrue(PasswordService.isPasswordForEmail("test", "test"));
     }
 
     @Test
     public void NewPasswordIsInDB() throws Exception {
-        PasswordDAO.UpdatePasswordForEmail("test", "newPassword");
+        PasswordService.UpdatePasswordForEmail("test", "newPassword");
 
-        assertTrue(PasswordDAO.isPasswordForEmail("test", "newPassword"));
+        assertTrue(PasswordService.isPasswordForEmail("test", "newPassword"));
     }
     @Test
     public void OldPasswordIsNotInDb() throws Exception {
-        PasswordDAO.UpdatePasswordForEmail("test", "newPassword");
+        PasswordService.UpdatePasswordForEmail("test", "newPassword");
 
-        assertFalse(PasswordDAO.isPasswordForEmail("test", "test"));
+        assertFalse(PasswordService.isPasswordForEmail("test", "test"));
     }
 
     @Test
     public void PasswordCheckWithNullEmail() throws Exception {
-        assertFalse(PasswordDAO.isPasswordForEmail(null, "test"));
+        assertFalse(PasswordService.isPasswordForEmail(null, "test"));
     }
 
     @Test
     public void PasswordCheckWithNullPassword() throws Exception {
-        assertFalse(PasswordDAO.isPasswordForEmail("test", null));
+        assertFalse(PasswordService.isPasswordForEmail("test", null));
     }
     @Test
     public void PasswordCheckWithBothNull() throws Exception {
-        assertFalse(PasswordDAO.isPasswordForEmail(null, null));
+        assertFalse(PasswordService.isPasswordForEmail(null, null));
     }
 
     @Test
     public void UpdatePasswordWithNullEmail() throws Exception {
-        assertFalse(PasswordDAO.UpdatePasswordForEmail(null, "test"));
+        assertFalse(PasswordService.UpdatePasswordForEmail(null, "test"));
     }
 
     @Test
     public void UpdatePasswordWithNullPassword() throws Exception {
-        assertFalse(PasswordDAO.UpdatePasswordForEmail("test", null));
+        assertFalse(PasswordService.UpdatePasswordForEmail("test", null));
     }
     @Test
     public void UpdatePasswordWithBothNull() throws Exception {
-        assertFalse(PasswordDAO.UpdatePasswordForEmail(null, null));
+        assertFalse(PasswordService.UpdatePasswordForEmail(null, null));
     }
 }
