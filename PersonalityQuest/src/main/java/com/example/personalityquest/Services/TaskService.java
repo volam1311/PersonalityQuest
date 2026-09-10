@@ -3,12 +3,7 @@ package com.example.personalityquest.Services;
 import com.example.personalityquest.DAO.TaskDAO;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.SQLite;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +24,20 @@ public class TaskService {
         }
 
         return TaskDAO.GetTaskForId(taskId);
+    }
+
+    /**
+     * Gets every Task that belongs to a labour.
+     * @param labourId The labourId you want the tasks for
+     * @return A list of Task objects, empty if none exist
+     * @throws Exception If the labourId is invalid or a Database Access Failure occurs
+     */
+    public static List<Task> GetTasksForLabourId(int labourId) throws Exception {
+        if (IsLabourIdNull(labourId)) {
+            throw new IllegalArgumentException("Labour Id is null");
+        }
+
+        return TaskDAO.GetTasksForLabourId(labourId);
     }
 
 

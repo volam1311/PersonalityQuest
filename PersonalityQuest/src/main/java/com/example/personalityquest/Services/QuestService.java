@@ -2,9 +2,8 @@ package com.example.personalityquest.Services;
 
 import com.example.personalityquest.DAO.QuestDAO;
 import com.example.personalityquest.Model.Quest;
-import com.example.personalityquest.SQLite;
 
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.Random;
 
 /**
@@ -39,6 +38,24 @@ public class QuestService {
         }
 
         return QuestDAO.GetQuestForLabourId(labourId);
+    }
+
+    /**
+     * Looks up the display name of an archetype.
+     * @param archetypeId The archetype to look up
+     * @return The archetype name, or "Unknown archetype" if none matches
+     * @throws SQLException Database Access Failure
+     */
+    public static String GetArchetypeName(int archetypeId) throws SQLException {
+        if (archetypeId == 0) {
+            throw new IllegalArgumentException("Bad archetypeId of 0");
+        }
+
+        String name = QuestDAO.GetArchetypeName(archetypeId);
+        if (name == null || name.isBlank()) {
+            return "Unknown archetype";
+        }
+        return name;
     }
 
     /**
