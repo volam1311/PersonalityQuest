@@ -4,12 +4,9 @@ import com.example.personalityquest.DAO.UserQuestDAO;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.SQLite;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * This class managers everything to do with UserQuests and has utility functions to retrieve
@@ -30,6 +27,22 @@ public class UserQuestService {
         }
 
         return UserQuestDAO.GetCurrentActiveUserQuestForEmail(email);
+    }
+
+    /**
+     * Gets every UserQuest assigned to the given account.
+     * @param email The email of the account to load quests for
+     * @return A list of UserQuests, empty if the account has none
+     * @throws IllegalArgumentException If the given email is empty
+     * @throws SQLException Database Access Failure
+     */
+    public static List<UserQuest> GetUserQuestsForEmail(String email)
+            throws IllegalArgumentException, SQLException {
+        if (ApplicationManager.isEmpty(email)) {
+            throw new IllegalArgumentException("Checking for quests with null email");
+        }
+
+        return UserQuestDAO.GetUserQuestsForEmail(email);
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.example.personalityquest.DAO;
 
-import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.SQLite;
@@ -9,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserQuestDAO {
     /**
@@ -39,6 +40,41 @@ public class UserQuestDAO {
         }
 
         return quest;
+    }
+
+    /**
+     * Gets every UserQuest assigned to the given account.
+     * Active quests are returned first, then not started, then complete.
+     * @param email The email of the account to load quests for
+     * @return A list of UserQuests, empty if the account has none
+     * @throws SQLException Database Access Failure
+     */
+    public static List<UserQuest> GetUserQuestsForEmail(String email) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    SELECT * FROM UserQuests
+                    WHERE accountEmail = ?
+                    ORDER BY CASE status
+                        WHEN 'Active' THEN 0
+                        WHEN 'Not Started' THEN 1
+                        ELSE 2
+                    END, labourId
+                    """)) {
+            statement.setString(1, email);
+
+            ResultSet rs = statement.executeQuery();
+            List<UserQuest> quests = new ArrayList<>();
+            while (rs.next()) {
+                quests.add(new UserQuest(
+                        rs.getInt("labourId"),
+                        rs.getString("accountEmail"),
+                        rs.getFloat("percentageComplete"),
+                        rs.getString("status")
+                ));
+            }
+            return quests;
+        }
     }
 
     /**
