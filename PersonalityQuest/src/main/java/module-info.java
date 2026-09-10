@@ -21,4 +21,6 @@ module com.example.personalityquest {
     opens com.example.personalityquest.DAO to javafx.fxml;
     exports com.example.personalityquest.Model;
     opens com.example.personalityquest.Model to javafx.fxml;
+    exports com.example.personalityquest.Validators;
+    opens com.example.personalityquest.Validators to javafx.fxml;
 }

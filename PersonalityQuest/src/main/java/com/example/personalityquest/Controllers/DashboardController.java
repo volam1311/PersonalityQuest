@@ -119,7 +119,7 @@ public class DashboardController implements Initializable {
     private void SetWelcome() throws Exception {
         // Load the signed-in user's name for the header and profile button.
         EmailDetails emailDetails = EmailManager.GetDetailsForEmail(
-                SystemManager.CurrentAccount.currentEmail);
+                SystemManager.CurrentAccount.getCurrentEmail());
 
         if (emailDetails == null) {
             welcomeMessage.setText("Welcome back!");
@@ -137,7 +137,7 @@ public class DashboardController implements Initializable {
         // Display the saved streak without preventing the dashboard from loading.
         try {
             int streak = StreakManager.GetCurrentStreak(
-                    SystemManager.CurrentAccount.currentEmail);
+                    SystemManager.CurrentAccount.getCurrentEmail());
             streakLabel.setText("Day " + streak);
         } catch (Exception exception) {
             streakLabel.setText("Day 0");
@@ -146,7 +146,7 @@ public class DashboardController implements Initializable {
 
     private void PopulateQuestline() {
         try{
-            UserQuest userQuest = UserQuestManager.GetCurrentActiveUserQuestForEmail(SystemManager.CurrentAccount.currentEmail);
+            UserQuest userQuest = UserQuestManager.GetCurrentActiveUserQuestForEmail(SystemManager.CurrentAccount.getCurrentEmail());
             Quest trueQuest = QuestManager.GetQuestForLabourId(userQuest.getLabourId());
 
             float truePercentageComplete = userQuest.getPercentageComplete() * 100;
@@ -164,11 +164,11 @@ public class DashboardController implements Initializable {
     private void PopulateWeeklyTasks() throws Exception {
         // Load this week's tasks or create them when none exist
         WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek(
-                SystemManager.CurrentAccount.currentEmail);
+                SystemManager.CurrentAccount.getCurrentEmail());
 
         if (tasks == null) {
             tasks = WeeklyTaskManager.GenerateTasksForThisWeek(
-                    SystemManager.CurrentAccount.currentEmail);
+                    SystemManager.CurrentAccount.getCurrentEmail());
         }
 
         weeklyTasks.getItems().clear();

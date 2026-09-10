@@ -79,7 +79,7 @@ public class SettingsController implements Initializable {
     private void SetProfileLabel() {
         try {
             EmailDetails emailDetails = EmailManager.GetDetailsForEmail(
-                    SystemManager.CurrentAccount.currentEmail);
+                    SystemManager.CurrentAccount.getCurrentEmail());
 
             if (emailDetails == null) {
                 profileText = "Profile";

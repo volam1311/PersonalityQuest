@@ -3,7 +3,6 @@ package com.example.personalityquest.Managers;
 import com.example.personalityquest.DataClasses.Task;
 import com.example.personalityquest.DataClasses.UserQuest;
 import com.example.personalityquest.DataClasses.WeeklyTask;
-import com.example.personalityquest.Model.User;
 import com.example.personalityquest.SQLite;
 
 import java.sql.*;
@@ -19,35 +18,29 @@ import java.util.*;
  */
 public class WeeklyTaskManager {
 
-    private final static int AMOUNTOFTASKS = 3;
+    private final static int AMOUNT_OF_TASKS = SystemManager.TaskConfig.getAmountOfTasks();
+    private final static String SQL_UPDATE_DRAFT = """
+            UPDATE WeeklyTasks
+            SET reflection = ?, status = 'Started'
+            WHERE accountEmail = ? AND taskId = ?
+        """;
 
+    private final static String SQL_FINISH_TASK = """
+            UPDATE WeeklyTasks
+            SET reflection = ?, status = 'Finished'
+            WHERE accountEmail = ? AND taskId = ?
+        """;
 
-    private final static String SQL_UPDATE_DRAFT = "UPDATE WeeklyTasks" +
-            " SET reflection = ?, status = " + "'Started'" +
-            " WHERE accountEmail = ? AND taskId = ?";
-
-    private final static String SQL_FINISH_TASK = "UPDATE WeeklyTasks" +
-            " SET reflection = ?, status = " + "'Finished'" +
-            " WHERE accountEmail = ? AND taskId = ?";
-
-    private final static String TASK_FOR_EMAIL = """
+    private final static String TASK_FOR_EMAIL = """ 
             SELECT * FROM WeeklyTasks
             WHERE accountEmail = ?
             AND weekStart = ?
             """;
 
-    private final static String FIND_TASK_INFO = """
-            SELECT * FROM Tasks
-            WHERE taskId = ?;
-            """;
-
-    private final static String GET_TASKS_FOR_LABOURID = """
-            SELECT * FROM Tasks
-            WHERE labourId = ?;
-            """;
-
     private final static String GET_WEEKLY_TASK = """ 
-            SELECT * FROM WeeklyTasks WHERE taskId = ? AND accountEmail = ? AND weekStart = ?
+            SELECT * FROM WeeklyTasks 
+            WHERE taskId = ? AND 
+            accountEmail = ? AND weekStart = ?
             """;
 
     private static int defaultTaskSearchNum = 1;
@@ -60,7 +53,7 @@ public class WeeklyTaskManager {
         defaultTaskSearchNum = num;
     }
 
-    /// RETRIVING
+    /// RETRIEVING
     /**
      * Gets an Array of this current weeks WeeklyTasks for an email
      * @param email The email of the account of the WeeklyTasks you want to retrieve
@@ -81,7 +74,7 @@ public class WeeklyTaskManager {
         LocalDate localDate = LocalDate.now();
         LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
-        int[] taskIds = GetTaskIds(email, weekStart);
+        int[] taskIds = GetTaskIdsAssignedForWeek(email, weekStart);
 
         // checks to see if tasks are empty e.g. all 0's
         // if so return null (Means we need to generate some)
@@ -101,48 +94,8 @@ public class WeeklyTaskManager {
         // returns tasks for given week
         return tasks;
     }
-
     /**
-     * Gets a Task from the database that matches the given id
-     * @param taskId The taskId you of the Task you want to retrieve
-     * @return A Task objecting containing the given taskId's information of the
-     * taskId, name, description and labourId(QuestId)
-     * @throws IllegalArgumentException If the given taskId is equal to 0
-     * @throws Exception If there is a Database Access Failure OR user doesn't have seperate tasks
-     */
-    public static Task GetTaskForId(int taskId) throws Exception {
-        if (IsTaskIdNull(taskId)){
-            throw new IllegalArgumentException("TaskId is null");
-        }
-        // appends all task ids to FindTaskInfo Query and then
-        // executes it find all task info
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);
-        // assign parameters
-        // assigns all task info to an array
-        Task task = null;
-
-        statement.setInt(1, taskId);
-        ResultSet rs = statement.executeQuery();
-        while (rs.next()) {
-            System.out.println("Makes new task");
-            task = new Task(
-                    rs.getInt("taskId"),
-                    rs.getString("name"),
-                    rs.getString("description"),
-                    rs.getInt("labourId")
-            );
-        }
-
-
-        if (task == null){
-            throw new Exception("User does not have separate Tasks. Check Db To See Why.");
-        }
-        return task;
-    }
-
-    /**
-     * Gets a Weekly Task for a given taskId, email and weekStar
+     * Gets a Weekly Task for a given taskId, email and weekStart
      * @param email The email of the acccount you want to get the WeeklyTask from
      * @param taskId The taskId of the WeeklyTask you want
      * @param weekStart The weekStart of when the task occured
@@ -178,7 +131,6 @@ public class WeeklyTaskManager {
         System.out.println("GetWeeklyTask Returned Null");
         return null;
     }
-
     /**
      * Gets all the taskId's for the WeeklyTasks assigned this week
      * @param email The email of the account you want to get the taskId's for
@@ -187,7 +139,7 @@ public class WeeklyTaskManager {
      * @throws IllegalArgumentException If Week start or Email is null or empty
      * @throws SQLException Database Access Failure
      */
-    private static int[] GetTaskIds(String email, LocalDate weekStart) throws Exception {
+    private static int[] GetTaskIdsAssignedForWeek(String email, LocalDate weekStart) throws Exception {
         if (IsWeekStartNull(weekStart) || IsEmailNull(email)){
             throw new IllegalArgumentException("Week start or email is null");
         }
@@ -200,7 +152,7 @@ public class WeeklyTaskManager {
 
         // appends all taskId's from the query to an array
         // to be used in next query
-        int[] taskIds = new int[AMOUNTOFTASKS];
+        int[] taskIds = new int[AMOUNT_OF_TASKS];
         ResultSet rs = statement.executeQuery();
         int count = 0;
         while (rs.next()) {
@@ -210,19 +162,19 @@ public class WeeklyTaskManager {
 
         // if its counted least one task then the user has a set this week
         // if it hasn't must return null
-        if (count < AMOUNTOFTASKS && count != 0){
+        if (count < AMOUNT_OF_TASKS && count != 0){
             return Arrays.copyOf(taskIds, count);
         }
         return taskIds;
     }
-    /// GENERATING
 
+    /// GENERATING
     /**
      * Gernerates an Array of Weekly Tasks, Inserts them into the database and returns it
      * @param email The email for the account you want to generate tasks for
      * @return An Array of WeeklyTasks that have been generated this week
      * @throws IllegalArgumentException If email is null or there is no account for an email
-     * @throws Exception For Database Access and Update Failures and for when retrieving tasks with GetTaskIds
+     * @throws Exception For Database Access and Update Failures and for when retrieving tasks with GetTaskIdsAssignedForWeek
      */
     public static WeeklyTask[] GenerateTasksForThisWeek(String email) throws Exception {
         if (IsEmailNull(email) || !EmailManager.DoesAccountWithEmailExist(email)) {
@@ -236,18 +188,17 @@ public class WeeklyTaskManager {
         LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
         InsertTasks(email, weekStart);
-        int[] taskIds = GetTaskIds(email, weekStart);
+        int[] taskIds = GetTaskIdsAssignedForWeek(email, weekStart);
 
         WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
         for (int i = 0; i < taskIds.length; i++) {
-            Task task = GetTaskForId(taskIds[i]);
+            Task task = TaskManager.GetTaskForId(taskIds[i]);
             tasks[i] = new WeeklyTask(email, task.getTaskId(), "Not Started", "", String.valueOf(weekStart));
 
         }
 
         return tasks;
     }
-
     /**
      * Inserts new Tasks into the database for the given email and weekStart by randomly choosing
      * from the list of available tasks for your quest
@@ -270,27 +221,27 @@ public class WeeklyTaskManager {
         if (tasks != null){
             throw new Exception("Tried to generate tasks when they already exist");
         }
-        for (int i = 0; i < AMOUNTOFTASKS; i++){
+        for (int i = 0; i < AMOUNT_OF_TASKS; i++){
 
             INSERT_NEW_TASKS += (" (?, ?, ?, ?)");
-            if (i + 1 != AMOUNTOFTASKS){
+            if (i + 1 != AMOUNT_OF_TASKS){
                 INSERT_NEW_TASKS +=", ";
             }
         }
 
         try{
             UserQuest currentActiveQuest = UserQuestManager.GetCurrentActiveUserQuestForEmail
-                    (SystemManager.CurrentAccount.currentEmail);
+                    (SystemManager.CurrentAccount.getCurrentEmail());
 
             System.out.println("Current Quest labourId is" + currentActiveQuest.getLabourId());
 
-            int[] taskIds = GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
+            int[] taskIds = TaskManager.GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
 
             // checks for successful retrieval of all the different tasks and none were null
             for (int i = 0; i < taskIds.length; i++){
                 if (taskIds[i] == 0){
                     throw new Exception("Not Full Amount of Tasks where generated instead only "
-                            + taskIds.length + " where generated when the expecting was " + AMOUNTOFTASKS);
+                            + taskIds.length + " where generated when the expecting was " + AMOUNT_OF_TASKS);
                 }
             }
 
@@ -299,7 +250,7 @@ public class WeeklyTaskManager {
             Connection connection = SQLite.getConnection();
             PreparedStatement statement = connection.prepareStatement(INSERT_NEW_TASKS);
             // assign parameters
-            for (int i = 0; i < AMOUNTOFTASKS; i++){
+            for (int i = 0; i < AMOUNT_OF_TASKS; i++){
                 int start = i * 4;
                 statement.setString(start + 1, email);
                 statement.setInt(start + 2, taskIds[i]);
@@ -316,7 +267,7 @@ public class WeeklyTaskManager {
             Connection connection = SQLite.getConnection();
             PreparedStatement statement = connection.prepareStatement(INSERT_NEW_TASKS);
             // assign parameters
-            for (int i = 0; i < AMOUNTOFTASKS; i++){
+            for (int i = 0; i < AMOUNT_OF_TASKS; i++){
                 int start = i * 4;
                 statement.setString(start + 1, email);
                 statement.setInt(start + 2, defaultTaskSearchNum);
@@ -327,46 +278,7 @@ public class WeeklyTaskManager {
         }
     }
 
-    /**
-     * Gets an array of taskIds that link to a given labourId
-     * @param labourId The labourId that you will get taskId's for
-     * @return A populated Array of taskId's that have a matching labourId to the one given
-     * @throws Exception If the labourId is null OR a Database Access Failure
-     */
-    private static int[] GetRandomAmountOfTaskIdsForLabourId(int labourId) throws Exception {
-        if (IsLabourIdNull(labourId)){
-            throw new IllegalArgumentException("Labour Id is null");
-        }
-        // appends all task ids to FindTaskInfo Query and then
-        // executes it find all task info
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(GET_TASKS_FOR_LABOURID);
-        // assign parameters
-        // assigns all task info to an array
-        List<Integer> taskIds = new ArrayList<Integer>();
-
-        statement.setInt(1, labourId);
-        ResultSet rs = statement.executeQuery();
-
-        while (rs.next()) {
-            taskIds.add(rs.getInt(1));
-        }
-
-        Collections.shuffle(taskIds);
-
-
-        int[] returnedTaskIds = new int[AMOUNTOFTASKS];
-        for (int i = 0; i < AMOUNTOFTASKS; i++){
-            if (i == taskIds.size()) {
-                System.out.println("Early returned");
-                return returnedTaskIds;
-            }
-            returnedTaskIds[i] = taskIds.get(i);
-        }
-        return returnedTaskIds;
-    }
-
-    /// UPDATING WEEKLY TASKS
+    /// UPDATING
     /**
      * Updates the given Weekly Tasks to a draft
      * @param task The task you want to update to draft
@@ -389,8 +301,6 @@ public class WeeklyTaskManager {
 
         return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));
     }
-
-    /// FINISHING WEEKLY TASKS
     /**
      * Updates the given Weekly Tasks to be finished
      * @param task The task you want to update to be finished
@@ -456,13 +366,5 @@ public class WeeklyTaskManager {
      */
     private static boolean IsTaskIdNull(int taskId){
         return taskId == 0;
-    }
-    /**
-     * Checks if the given labourId is equal to 0
-     * @param labourId The labourId you want checked
-     * @return Whether the labourId is equal to 0
-     */
-    private static boolean IsLabourIdNull(int labourId){
-        return labourId == 0;
     }
 }

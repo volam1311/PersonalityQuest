@@ -1,7 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.AccountRepository;
-import com.example.personalityquest.AccountSignUpValidator;
+import com.example.personalityquest.Validators.AccountSignUpValidator;
 import com.example.personalityquest.Applications.AccountSignInApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.DataClasses.Quest;
@@ -208,13 +208,13 @@ public class AccountCreationController {
             return;
         }
 
-        SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
+        SystemManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
 
         // DUMMY ARCHETYPE IMPLEMENTATION FOR NOW
         // Inserts the testLabour for each account
         Quest quest = QuestManager.GetQuestForLabourId(1);
-        UserQuest userQuest = UserQuestManager.InsertNewQuestForEmail(quest, SystemManager.CurrentAccount.currentEmail);
-        UserQuestManager.SetUserQuesStatusAsActive(userQuest, SystemManager.CurrentAccount.currentEmail);
+        UserQuest userQuest = UserQuestManager.InsertNewQuestForEmail(quest, SystemManager.CurrentAccount.getCurrentEmail() );
+        UserQuestManager.SetUserQuesStatusAsActive(userQuest, SystemManager.CurrentAccount.getCurrentEmail());
 
         DashboardApplication.launch((Stage) emailEntry.getScene().getWindow());
         System.out.println("Account created");

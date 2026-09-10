@@ -36,7 +36,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        oldEmail = SystemManager.CurrentAccount.currentEmail;
+        oldEmail = SystemManager.CurrentAccount.getCurrentEmail();
 
         // attempt to populate the entry fields with the users current account details
         try {

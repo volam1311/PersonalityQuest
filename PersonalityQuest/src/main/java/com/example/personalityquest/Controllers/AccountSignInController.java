@@ -122,7 +122,7 @@ public class AccountSignInController {
         /*
          * Set currently logged in account
          * */
-        SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
+        SystemManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
 
         DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
 

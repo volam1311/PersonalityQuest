@@ -42,7 +42,7 @@ public class WeeklyTaskReflectionController {
 
 
         System.out.println(reflection.getText());
-        WeeklyTaskManager.UpdateGivenTaskToDraft(currentTask, reflection.getText(), SystemManager.CurrentAccount.currentEmail);
+        WeeklyTaskManager.UpdateGivenTaskToDraft(currentTask, reflection.getText(), SystemManager.CurrentAccount.getCurrentEmail());
         GoToDashboard();
     }
 
@@ -52,7 +52,7 @@ public class WeeklyTaskReflectionController {
 
         // Use this to mark a task as Finished
         System.out.println(reflection.getText());
-        WeeklyTaskManager.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), SystemManager.CurrentAccount.currentEmail);
+        WeeklyTaskManager.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), SystemManager.CurrentAccount.getCurrentEmail());
 
         GoToDashboard();
     }
