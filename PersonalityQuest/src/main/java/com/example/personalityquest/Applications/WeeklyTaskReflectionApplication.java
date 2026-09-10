@@ -1,5 +1,6 @@
 package com.example.personalityquest.Applications;
 
+import com.example.personalityquest.AppFonts;
 import com.example.personalityquest.Controllers.WeeklyTaskReflectionController;
 import com.example.personalityquest.Model.WeeklyTask;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEWID
 
 public class WeeklyTaskReflectionApplication {
     public static void launch(Stage stage, WeeklyTask taskLoookingAt) throws IOException {
+        AppFonts.load();
         FXMLLoader fxmlLoader = new FXMLLoader(WeeklyTaskReflectionApplication.class.getResource(fxmlPrefix + "WeeklyTaskReflection.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
         stage.setTitle("Task Reflection");

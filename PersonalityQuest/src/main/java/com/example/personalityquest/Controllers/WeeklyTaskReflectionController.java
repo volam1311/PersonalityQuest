@@ -5,16 +5,26 @@ import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Services.WeeklyTaskService;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class WeeklyTaskReflectionController {
+public class WeeklyTaskReflectionController implements Initializable {
+    @FXML
+    private NavBarController navBarController;
     @FXML
     private TextArea reflection;
 
     private WeeklyTask currentTask;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
+    }
 
     public void setTask(WeeklyTask task){
         this.currentTask = task;
