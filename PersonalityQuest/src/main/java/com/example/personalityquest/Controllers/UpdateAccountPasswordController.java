@@ -1,6 +1,6 @@
 package com.example.personalityquest.Controllers;
 
-import com.example.personalityquest.DAO.EmailDAO;
+import com.example.personalityquest.Services.EmailService;
 import com.example.personalityquest.Services.PasswordService;
 import com.example.personalityquest.ApplicationManager;
 import javafx.fxml.FXML;
@@ -23,7 +23,7 @@ public class UpdateAccountPasswordController {
     @FXML
     private void OnUpdatePassword() throws SQLException {
         // email doesnt exist
-        if (!EmailDAO.DoesAccountWithEmailExist(ApplicationManager.CurrentAccount.getCurrentEmail())){
+        if (!EmailService.DoesAccountWithEmailExist(ApplicationManager.CurrentAccount.getCurrentEmail())){
             Message.setText("Wow you reached something you should not have.");
             return;
         }

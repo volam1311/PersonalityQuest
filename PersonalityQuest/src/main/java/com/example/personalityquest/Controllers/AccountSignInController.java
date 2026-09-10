@@ -1,7 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.*;
-import com.example.personalityquest.DAO.EmailDAO;
+import com.example.personalityquest.Services.EmailService;
 import com.example.personalityquest.Services.PasswordService;
 import com.example.personalityquest.ApplicationManager;
 import javafx.application.Platform;
@@ -153,7 +153,7 @@ public class AccountSignInController {
         }
 
         // Does the email exist and does the password match the email
-        if (!EmailDAO.DoesAccountWithEmailExist(emailEntry.getText())
+        if (!EmailService.DoesAccountWithEmailExist(emailEntry.getText())
         || !PasswordService.isPasswordForEmail(emailEntry.getText(), passwordEntry.getText())){
             markFieldError(emailEntry);
             markFieldError(passwordEntry);

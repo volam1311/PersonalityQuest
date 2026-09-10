@@ -2,12 +2,12 @@ package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.SettingsApplication;
 import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
-import com.example.personalityquest.DAO.*;
 import com.example.personalityquest.Model.EmailDetails;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Services.EmailService;
 import com.example.personalityquest.Services.QuestService;
 import com.example.personalityquest.Services.UserQuestService;
 import com.example.personalityquest.Services.WeeklyTaskService;
@@ -123,7 +123,7 @@ public class DashboardController implements Initializable {
 
     private void SetWelcome() throws Exception {
         // Load the signed-in user's name for the header and profile button.
-        EmailDetails emailDetails = EmailDAO.GetDetailsForEmail(
+        EmailDetails emailDetails = EmailService.GetDetailsForEmail(
                 ApplicationManager.CurrentAccount.getCurrentEmail());
 
         if (emailDetails == null) {

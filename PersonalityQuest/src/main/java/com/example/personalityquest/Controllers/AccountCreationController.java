@@ -6,7 +6,7 @@ import com.example.personalityquest.Applications.AccountSignInApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
-import com.example.personalityquest.DAO.EmailDAO;
+import com.example.personalityquest.Services.EmailService;
 import com.example.personalityquest.Services.QuestService;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Services.UserQuestService;
@@ -188,7 +188,7 @@ public class AccountCreationController {
             return;
         }
 
-        if (EmailDAO.DoesAccountWithEmailExist(emailEntry.getText())) {
+        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText())) {
             markFieldError(emailEntry);
             Message.setText("An account with this email already exists");
             return;

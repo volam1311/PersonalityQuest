@@ -1,6 +1,5 @@
 package com.example.personalityquest.Services;
 
-import com.example.personalityquest.DAO.EmailDAO;
 import com.example.personalityquest.DAO.WeeklyTaskDAO;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.Model.WeeklyTask;
@@ -30,7 +29,7 @@ public class WeeklyTaskService {
      * @throws Exception From GetTaskId's SQL Exception to Database Access Failure.
      */
     public static WeeklyTask[] GetTasksForEmailForThisWeek(String email) throws Exception {
-        if (IsEmailNull(email) || !EmailDAO.DoesAccountWithEmailExist(email)) {
+        if (IsEmailNull(email) || !EmailService.DoesAccountWithEmailExist(email)) {
             throw new IllegalArgumentException("Null Email or this account does not exist");
         }
 
@@ -100,7 +99,7 @@ public class WeeklyTaskService {
      * @throws Exception For Database Access and Update Failures and for when retrieving tasks with GetTaskIdsAssignedForWeek
      */
     public static WeeklyTask[] GenerateTasksForThisWeek(String email) throws Exception {
-        if (IsEmailNull(email) || !EmailDAO.DoesAccountWithEmailExist(email)) {
+        if (IsEmailNull(email) || !EmailService.DoesAccountWithEmailExist(email)) {
             throw new IllegalArgumentException("Email is null or this account does not exist");
         }
 

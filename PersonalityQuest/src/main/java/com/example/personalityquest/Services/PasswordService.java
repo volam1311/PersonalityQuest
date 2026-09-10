@@ -1,13 +1,8 @@
 package com.example.personalityquest.Services;
 
-import com.example.personalityquest.DAO.EmailDAO;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.PasswordDAO;
-import com.example.personalityquest.SQLite;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -35,7 +30,7 @@ public class PasswordService {
         }
 
         // email doesn't exist so no the password doesn't match
-        if (!EmailDAO.DoesAccountWithEmailExist(email)){
+        if (!EmailService.DoesAccountWithEmailExist(email)){
             return false;
         }
 
@@ -63,7 +58,7 @@ public class PasswordService {
         }
 
         // email doesn't exist so no the password doesn't match
-        if (!EmailDAO.DoesAccountWithEmailExist(email)){
+        if (!EmailService.DoesAccountWithEmailExist(email)){
             return false;
         }
 
