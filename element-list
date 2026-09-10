@@ -2,6 +2,6 @@ com.example.personalityquest
 com.example.personalityquest.Applications
 com.example.personalityquest.Controllers
 com.example.personalityquest.DAO
-com.example.personalityquest.DataClasses
-com.example.personalityquest.Managers
 com.example.personalityquest.Model
+com.example.personalityquest.Services
+com.example.personalityquest.Validators
