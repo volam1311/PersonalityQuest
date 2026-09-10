@@ -1,6 +1,5 @@
 package com.example.personalityquest.DAO;
 
-import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.SQLite;
 
@@ -81,5 +80,29 @@ public class TaskDAO {
         }
 
         return  taskIds;
+    }
+
+    /**
+     * Gets every Task that belongs to a labour.
+     * @param labourId The labourId you want the tasks for
+     * @return A list of Task objects, empty if none exist
+     * @throws Exception If a row cannot be mapped to a Task, or Database Access Failure
+     */
+    public static List<Task> GetTasksForLabourId(int labourId) throws Exception {
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(GET_TASKS_FOR_LABOURID)) {
+            statement.setInt(1, labourId);
+            ResultSet rs = statement.executeQuery();
+            List<Task> tasks = new ArrayList<>();
+            while (rs.next()) {
+                tasks.add(new Task(
+                        rs.getInt("taskId"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("labourId")
+                ));
+            }
+            return tasks;
+        }
     }
 }
