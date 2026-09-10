@@ -1,6 +1,7 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.DashboardApplication;
+import com.example.personalityquest.Applications.QuestApplication;
 import com.example.personalityquest.Model.EmailDetails;
 import com.example.personalityquest.Services.EmailService;
 import com.example.personalityquest.ApplicationManager;
@@ -171,6 +172,11 @@ public class SettingsController implements Initializable {
 
         if (button == homeButton) {
             DashboardApplication.launch((Stage) settingsRoot.getScene().getWindow());
+            return;
+        }
+
+        if (button == questsButton) {
+            QuestApplication.launch((Stage) settingsRoot.getScene().getWindow());
             return;
         }
 

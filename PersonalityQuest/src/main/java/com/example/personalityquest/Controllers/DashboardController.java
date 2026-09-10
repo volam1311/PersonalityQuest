@@ -1,5 +1,6 @@
 package com.example.personalityquest.Controllers;
 
+import com.example.personalityquest.Applications.QuestApplication;
 import com.example.personalityquest.Applications.SettingsApplication;
 import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
 import com.example.personalityquest.Model.EmailDetails;
@@ -368,6 +369,11 @@ public class DashboardController implements Initializable {
     @FXML
     private void OnNavigationClick(ActionEvent event) throws IOException {
         Button button = (Button) event.getSource();
+
+        if (button == questsButton) {
+            QuestApplication.launch((Stage) dashboardRoot.getScene().getWindow());
+            return;
+        }
 
         if (button == settingsButton) {
             SettingsApplication.launch((Stage) dashboardRoot.getScene().getWindow());
