@@ -1,6 +1,6 @@
-package com.example.personalityquest.DataClasses;
+package com.example.personalityquest.Model;
 
-import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.ApplicationManager;
 
 /**
  * Holds the details pertaining to UserQuests that have been assigned in the database to users
@@ -21,13 +21,13 @@ public class UserQuest {
         if (labourId <= 0){
             throw new IllegalArgumentException("Labour Id is null");
         }
-        if (SystemManager.isEmpty(accountEmail)){
+        if (ApplicationManager.isEmpty(accountEmail)){
             throw new IllegalArgumentException("Email is null");
         }
         if (percentageComplete < 0 || percentageComplete > 1){
             throw new IllegalArgumentException("Percentage complete is out of range of 0 - 1");
         }
-        if (SystemManager.isEmpty(status)){
+        if (ApplicationManager.isEmpty(status)){
             throw new IllegalArgumentException("Status is null");
         }
 

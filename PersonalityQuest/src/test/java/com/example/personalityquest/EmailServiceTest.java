@@ -1,7 +1,7 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.DataClasses.EmailDetails;
-import com.example.personalityquest.Managers.EmailManager;
+import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.Services.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import java.sql.Statement;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EmailManagerTest {
+public class EmailServiceTest {
     private Connection connection;
 
     private EmailDetails fakeEmailDetails = new EmailDetails(
@@ -49,46 +49,46 @@ public class EmailManagerTest {
 
     @Test
     public void EmailDoesntExist() throws Exception {
-        assertFalse(EmailManager.DoesAccountWithEmailExist("This email doesnt exist"));
+        assertFalse(EmailService.DoesAccountWithEmailExist("This email doesnt exist"));
     }
 
     @Test
     public void EmailDoesExist() throws Exception {
-        assertTrue(EmailManager.DoesAccountWithEmailExist("test"));
+        assertTrue(EmailService.DoesAccountWithEmailExist("test"));
     }
 
     @Test
     public void NullEmailForDoesExist() throws Exception {
-        assertFalse(EmailManager.DoesAccountWithEmailExist(null));
+        assertFalse(EmailService.DoesAccountWithEmailExist(null));
     }
 
     @Test
     public void GetDetailsForAnEmailThatDoesntExist() throws Exception {
-        assertNull(EmailManager.GetDetailsForEmail("This email doesnt exist"));
+        assertNull(EmailService.GetDetailsForEmail("This email doesnt exist"));
     }
 
     @Test
     public void GetDetailsForAnEmailThatNull() throws Exception {
-        assertNull(EmailManager.GetDetailsForEmail(null));
+        assertNull(EmailService.GetDetailsForEmail(null));
     }
 
     @Test
     public void GetEmailViaDetails() throws Exception {
-        assertEquals(fakeEmailDetails.getFirstName(), EmailManager.GetDetailsForEmail("test").getEmail());
+        assertEquals(fakeEmailDetails.getFirstName(), EmailService.GetDetailsForEmail("test").getEmail());
     }
 
     @Test
     public void GetUserNameViaDetails() throws Exception {
-        assertEquals(fakeEmailDetails.getFirstName(), EmailManager.GetDetailsForEmail("test").getUserName());
+        assertEquals(fakeEmailDetails.getFirstName(), EmailService.GetDetailsForEmail("test").getUserName());
     }
 
     @Test
     public void GetFirstNameViaDetails() throws Exception {
-        assertEquals(fakeEmailDetails.getFirstName(), EmailManager.GetDetailsForEmail("test").getFirstName());
+        assertEquals(fakeEmailDetails.getFirstName(), EmailService.GetDetailsForEmail("test").getFirstName());
     }
 
     @Test
     public void GetLastNameViaDetails() throws Exception {
-        assertEquals(fakeEmailDetails.getFirstName(), EmailManager.GetDetailsForEmail("test").getLastName());
+        assertEquals(fakeEmailDetails.getFirstName(), EmailService.GetDetailsForEmail("test").getLastName());
     }
 }

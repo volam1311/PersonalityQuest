@@ -1,10 +1,8 @@
 package com.example.personalityquest.Controllers;
 
-import com.example.personalityquest.AccountSignUpValidator;
-import com.example.personalityquest.Managers.EmailManager;
-import com.example.personalityquest.Managers.HashingManager;
-import com.example.personalityquest.Managers.PasswordManager;
-import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.Services.EmailService;
+import com.example.personalityquest.Services.PasswordService;
+import com.example.personalityquest.ApplicationManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -25,13 +23,13 @@ public class UpdateAccountPasswordController {
     @FXML
     private void OnUpdatePassword() throws SQLException {
         // email doesnt exist
-        if (!EmailManager.DoesAccountWithEmailExist(SystemManager.CurrentAccount.currentEmail)){
+        if (!EmailService.DoesAccountWithEmailExist(ApplicationManager.CurrentAccount.getCurrentEmail())){
             Message.setText("Wow you reached something you should not have.");
             return;
         }
 
         // current password entered does not match account
-        if (!PasswordManager.isPasswordForEmail(SystemManager.CurrentAccount.currentEmail, currentPasswordEntry.getText())){
+        if (!PasswordService.isPasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), currentPasswordEntry.getText())){
             Message.setText("Current Password does not match account");
             return;
         }
@@ -42,7 +40,7 @@ public class UpdateAccountPasswordController {
             return;
         }
 
-        PasswordManager.UpdatePasswordForEmail(SystemManager.CurrentAccount.currentEmail, newPasswordEntry.getText());
+        PasswordService.UpdatePasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), newPasswordEntry.getText());
         Message.setText("Password Updated for account");
 
         OnExit();

@@ -1,11 +1,11 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.Services;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 /**
  * This class managers everything to do with hashing and has utility functions to hash
  * a string or check whether a given hashed string and a plaintext string match
  */
-public class HashingManager {
+public class HashingService {
     /**
      * Hashes the given string
      * @param text "The text you wish to hash"

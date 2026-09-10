@@ -8,8 +8,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static com.example.personalityquest.MainApplication.fxmlPrefix;
-import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEHEIGHT;
-import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEWIDTH;
 
 public class DashboardApplication {
     public static void launch(Stage stage) throws IOException {

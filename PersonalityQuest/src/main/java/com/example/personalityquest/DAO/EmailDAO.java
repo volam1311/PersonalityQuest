@@ -1,6 +1,7 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.DAO;
 
-import com.example.personalityquest.DataClasses.EmailDetails;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Model.EmailDetails;
 import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
@@ -8,16 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * This class managers everything to do with emails and has utility functions to check
- * if account exist for them or retrieve the EmailDetails matching the email
- */
-public class EmailManager {
-
-
+public class EmailDAO {
     protected final static String accountExists =
             "SELECT * FROM Accounts WHERE email = ?";
-
 
     /**
      * Checks to see whether an account exists in the database with the given email
@@ -26,11 +20,6 @@ public class EmailManager {
      * @throws SQLException "Database Access"
      */
     public static boolean DoesAccountWithEmailExist(String email) throws SQLException {
-        // check nulls
-        if (SystemManager.isEmpty(email)) {
-            System.out.println("Email is null therefor it does not exist");
-            return false;}
-
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
         // assign parameters
@@ -46,6 +35,7 @@ public class EmailManager {
         if (count == 0){
             System.out.println("Email doesnt exist");
         }
+
         return count == 1;
     }
 
@@ -56,10 +46,6 @@ public class EmailManager {
      * @throws Exception "Database Access Failure"
      */
     public static EmailDetails GetDetailsForEmail(String email) throws Exception {
-        // check nulls
-        if (SystemManager.isEmpty(email)) {
-            System.out.println("Email is null therefor details can not be gotten");
-            return null;}
 
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
@@ -72,10 +58,10 @@ public class EmailManager {
 
         while (rs.next()){
             emailDetails = new EmailDetails(
-                rs.getString("email"),
-                rs.getString("userName"),
-                rs.getString("firstName"),
-                rs.getString("lastName")
+                    rs.getString("email"),
+                    rs.getString("userName"),
+                    rs.getString("firstName"),
+                    rs.getString("lastName")
             );
         }
 
@@ -85,5 +71,4 @@ public class EmailManager {
 
         return emailDetails;
     }
-
 }

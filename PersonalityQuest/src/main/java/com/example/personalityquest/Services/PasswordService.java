@@ -1,22 +1,15 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.Services;
 
-import com.example.personalityquest.SQLite;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.PasswordDAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * This class managers everything to do with password and has utility functions to check
  * weather a password matches an email in the database or to update the password in the database
  */
-public class PasswordManager {
-    protected final static String accountExists =
-            "SELECT * FROM Accounts WHERE email = ?";
-
-    protected final static String updatePassword =
-            "UPDATE Accounts SET password = ? WHERE email = ?";
+public class PasswordService {
 
     /**
      * Checks to see if the given password is for the given email's account
@@ -27,28 +20,23 @@ public class PasswordManager {
      */
     public static boolean isPasswordForEmail(String email, String password) throws SQLException {
         // check nulls
-        if (SystemManager.isEmpty(email)) {
+        if (ApplicationManager.isEmpty(email)) {
             System.out.println("Email is null and therefore the password wont match");
             return false;
         }
-        if (SystemManager.isEmpty(password)) {
+        if (ApplicationManager.isEmpty(password)) {
             System.out.println("Can not check a null password");
             return false;
         }
 
         // email doesn't exist so no the password doesn't match
-        if (!EmailManager.DoesAccountWithEmailExist(email)){
+        if (!EmailService.DoesAccountWithEmailExist(email)){
             return false;
         }
 
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(accountExists);
-        // assign parameters
-        statement.setString(1, email);
+        String hashedPassword = PasswordDAO.GetPasswordHash(email);
 
-        ResultSet rs = statement.executeQuery();
-
-        return HashingManager.VerifyHash(rs.getString("password"), password);
+        return HashingService.VerifyHash(hashedPassword, password);
     }
 
     /**
@@ -60,28 +48,28 @@ public class PasswordManager {
      */
     public static boolean UpdatePasswordForEmail(String email, String newPassword) throws SQLException {
         // check nulls
-        if (SystemManager.isEmpty(email)) {
+        if (ApplicationManager.isEmpty(email)) {
             System.out.println("Email is null and therefore password can not be updated for account");
             return false;
         }
-        if (SystemManager.isEmpty(newPassword)) {
+        if (ApplicationManager.isEmpty(newPassword)) {
             System.out.println("Can not have a null password for new account");
             return false;
         }
 
         // email doesn't exist so no the password doesn't match
-        if (!EmailManager.DoesAccountWithEmailExist(email)){
+        if (!EmailService.DoesAccountWithEmailExist(email)){
             return false;
         }
 
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(updatePassword);
-        // assign parameters
-        statement.setString(1, HashingManager.Hash(newPassword));
-        statement.setString(2, email);
-
-        statement.executeUpdate();
-        return true;
+        try{
+            PasswordDAO.UpdatePasswordForEmail(email, newPassword);
+            return true;
+        }
+        catch (SQLException e){
+            System.out.println(e.getStackTrace());
+            return false;
+        }
     }
 
 }

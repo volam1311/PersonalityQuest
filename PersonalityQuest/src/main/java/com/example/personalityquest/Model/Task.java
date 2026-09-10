@@ -1,8 +1,6 @@
-package com.example.personalityquest.DataClasses;
+package com.example.personalityquest.Model;
 
-import com.example.personalityquest.Managers.SystemManager;
-
-import java.util.Objects;
+import com.example.personalityquest.ApplicationManager;
 
 /**
  * Holds the details pertaining to Tasks that have not yet been assigned
@@ -12,12 +10,12 @@ public class Task {
         if (taskId == 0){
             throw new Exception("Task Id is == 0 or is null");
         }
-        if (SystemManager.isEmpty(name)){
+        if (ApplicationManager.isEmpty(name)){
             System.out.println("UserName is null");
             name = "";
         }
 
-        if (SystemManager.isEmpty(description)){
+        if (ApplicationManager.isEmpty(description)){
             System.out.println("FirstName is null");
             description = "";
         }

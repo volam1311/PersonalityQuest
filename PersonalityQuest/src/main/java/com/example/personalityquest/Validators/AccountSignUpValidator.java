@@ -1,4 +1,4 @@
-package com.example.personalityquest;
+package com.example.personalityquest.Validators;
 
 import java.util.Objects;
 

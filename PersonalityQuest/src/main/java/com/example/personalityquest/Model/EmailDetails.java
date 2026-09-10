@@ -1,26 +1,26 @@
-package com.example.personalityquest.DataClasses;
+package com.example.personalityquest.Model;
 
-import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.ApplicationManager;
 
 /**
  * Holds the details pertaining to an account
  */
 public class EmailDetails {
     public EmailDetails(String email, String userName, String firstName, String lastName){
-        if (SystemManager.isEmpty(email)){
+        if (ApplicationManager.isEmpty(email)){
             System.out.println("Email is null");
             email = "";
         }
-        if (SystemManager.isEmpty(userName)){
+        if (ApplicationManager.isEmpty(userName)){
             System.out.println("UserName is null");
             userName = "";
         }
 
-        if (SystemManager.isEmpty(firstName)){
+        if (ApplicationManager.isEmpty(firstName)){
             System.out.println("FirstName is null");
             firstName = "";
         }
-        if (SystemManager.isEmpty(lastName)){
+        if (ApplicationManager.isEmpty(lastName)){
             System.out.println("LastName is null");
             lastName = "";
         }

@@ -2,11 +2,16 @@ package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.SettingsApplication;
 import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
-import com.example.personalityquest.DataClasses.EmailDetails;
-import com.example.personalityquest.DataClasses.Quest;
-import com.example.personalityquest.DataClasses.UserQuest;
-import com.example.personalityquest.DataClasses.WeeklyTask;
-import com.example.personalityquest.Managers.*;
+import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.Model.Quest;
+import com.example.personalityquest.Model.UserQuest;
+import com.example.personalityquest.Model.WeeklyTask;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Services.EmailService;
+import com.example.personalityquest.Services.QuestService;
+import com.example.personalityquest.Services.UserQuestService;
+import com.example.personalityquest.Services.WeeklyTaskService;
+import com.example.personalityquest.StreakManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -118,8 +123,8 @@ public class DashboardController implements Initializable {
 
     private void SetWelcome() throws Exception {
         // Load the signed-in user's name for the header and profile button.
-        EmailDetails emailDetails = EmailManager.GetDetailsForEmail(
-                SystemManager.CurrentAccount.currentEmail);
+        EmailDetails emailDetails = EmailService.GetDetailsForEmail(
+                ApplicationManager.CurrentAccount.getCurrentEmail());
 
         if (emailDetails == null) {
             welcomeMessage.setText("Welcome back!");
@@ -137,7 +142,7 @@ public class DashboardController implements Initializable {
         // Display the saved streak without preventing the dashboard from loading.
         try {
             int streak = StreakManager.GetCurrentStreak(
-                    SystemManager.CurrentAccount.currentEmail);
+                    ApplicationManager.CurrentAccount.getCurrentEmail());
             streakLabel.setText("Day " + streak);
         } catch (Exception exception) {
             streakLabel.setText("Day 0");
@@ -146,8 +151,8 @@ public class DashboardController implements Initializable {
 
     private void PopulateQuestline() {
         try{
-            UserQuest userQuest = UserQuestManager.GetCurrentActiveUserQuestForEmail(SystemManager.CurrentAccount.currentEmail);
-            Quest trueQuest = QuestManager.GetQuestForLabourId(userQuest.getLabourId());
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
+            Quest trueQuest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
 
             float truePercentageComplete = userQuest.getPercentageComplete() * 100;
             String formatedPercentageString = String.format("%.0f", truePercentageComplete);
@@ -163,12 +168,12 @@ public class DashboardController implements Initializable {
 
     private void PopulateWeeklyTasks() throws Exception {
         // Load this week's tasks or create them when none exist
-        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek(
-                SystemManager.CurrentAccount.currentEmail);
+        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek(
+                ApplicationManager.CurrentAccount.getCurrentEmail());
 
         if (tasks == null) {
-            tasks = WeeklyTaskManager.GenerateTasksForThisWeek(
-                    SystemManager.CurrentAccount.currentEmail);
+            tasks = WeeklyTaskService.GenerateTasksForThisWeek(
+                    ApplicationManager.CurrentAccount.getCurrentEmail());
         }
 
         weeklyTasks.getItems().clear();

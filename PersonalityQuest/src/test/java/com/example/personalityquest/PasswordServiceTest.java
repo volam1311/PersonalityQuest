@@ -1,8 +1,8 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.DataClasses.EmailDetails;
-import com.example.personalityquest.Managers.HashingManager;
-import com.example.personalityquest.Managers.PasswordManager;
+import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.Services.HashingService;
+import com.example.personalityquest.Services.PasswordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PasswordManagerTest {
+public class PasswordServiceTest {
     private Connection connection;
 
     private EmailDetails fakeEmailDetails = new EmailDetails(
@@ -42,7 +42,7 @@ public class PasswordManagerTest {
                     VALUES ("test", "test", "test", "test", ?)
                     """))
         {
-            String hashedPassword = HashingManager.Hash("test");
+            String hashedPassword = HashingService.Hash("test");
             statement.setString(1, hashedPassword);
 
             statement.executeUpdate();
@@ -53,52 +53,52 @@ public class PasswordManagerTest {
 
     @Test
     public void PasswordDoesntMatch() throws Exception {
-        assertFalse(PasswordManager.isPasswordForEmail("test", "not-test"));
+        assertFalse(PasswordService.isPasswordForEmail("test", "not-test"));
     }
 
     @Test
     public void PasswordDoesMatch() throws Exception {
-        assertTrue(PasswordManager.isPasswordForEmail("test", "test"));
+        assertTrue(PasswordService.isPasswordForEmail("test", "test"));
     }
 
     @Test
     public void NewPasswordIsInDB() throws Exception {
-        PasswordManager.UpdatePasswordForEmail("test", "newPassword");
+        PasswordService.UpdatePasswordForEmail("test", "newPassword");
 
-        assertTrue(PasswordManager.isPasswordForEmail("test", "newPassword"));
+        assertTrue(PasswordService.isPasswordForEmail("test", "newPassword"));
     }
     @Test
     public void OldPasswordIsNotInDb() throws Exception {
-        PasswordManager.UpdatePasswordForEmail("test", "newPassword");
+        PasswordService.UpdatePasswordForEmail("test", "newPassword");
 
-        assertFalse(PasswordManager.isPasswordForEmail("test", "test"));
+        assertFalse(PasswordService.isPasswordForEmail("test", "test"));
     }
 
     @Test
     public void PasswordCheckWithNullEmail() throws Exception {
-        assertFalse(PasswordManager.isPasswordForEmail(null, "test"));
+        assertFalse(PasswordService.isPasswordForEmail(null, "test"));
     }
 
     @Test
     public void PasswordCheckWithNullPassword() throws Exception {
-        assertFalse(PasswordManager.isPasswordForEmail("test", null));
+        assertFalse(PasswordService.isPasswordForEmail("test", null));
     }
     @Test
     public void PasswordCheckWithBothNull() throws Exception {
-        assertFalse(PasswordManager.isPasswordForEmail(null, null));
+        assertFalse(PasswordService.isPasswordForEmail(null, null));
     }
 
     @Test
     public void UpdatePasswordWithNullEmail() throws Exception {
-        assertFalse(PasswordManager.UpdatePasswordForEmail(null, "test"));
+        assertFalse(PasswordService.UpdatePasswordForEmail(null, "test"));
     }
 
     @Test
     public void UpdatePasswordWithNullPassword() throws Exception {
-        assertFalse(PasswordManager.UpdatePasswordForEmail("test", null));
+        assertFalse(PasswordService.UpdatePasswordForEmail("test", null));
     }
     @Test
     public void UpdatePasswordWithBothNull() throws Exception {
-        assertFalse(PasswordManager.UpdatePasswordForEmail(null, null));
+        assertFalse(PasswordService.UpdatePasswordForEmail(null, null));
     }
 }

@@ -1,9 +1,9 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.*;
-import com.example.personalityquest.DataClasses.EmailDetails;
-import com.example.personalityquest.Managers.EmailManager;
-import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.Services.EmailService;
+import com.example.personalityquest.ApplicationManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -36,7 +36,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        oldEmail = SystemManager.CurrentAccount.currentEmail;
+        oldEmail = ApplicationManager.CurrentAccount.getCurrentEmail();
 
         // attempt to populate the entry fields with the users current account details
         try {
@@ -94,7 +94,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
         /*
         * Does the new email already exist and is the email being updated
         * */
-        if (EmailManager.DoesAccountWithEmailExist(emailEntry.getText()) && !Objects.equals(oldEmail, emailEntry.getText())){
+        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText()) && !Objects.equals(oldEmail, emailEntry.getText())){
             Message.setText("Email of " + emailEntry.getText() + " Already exists. Please Use Another");
             System.out.println("Email of " + emailEntry.getText() + " Already exists");
             return false;
@@ -107,7 +107,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     * Populates the entry fields with their current values
     * */
     private boolean PopulateEntryFields() throws Exception {
-        EmailDetails emailDetails = EmailManager.GetDetailsForEmail(oldEmail);
+        EmailDetails emailDetails = EmailService.GetDetailsForEmail(oldEmail);
 
         if (Objects.equals(emailDetails, null)){
             System.out.println("Account doesnt exist with the given email " + oldEmail);

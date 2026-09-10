@@ -1,6 +1,6 @@
-package com.example.personalityquest.DataClasses;
+package com.example.personalityquest.Model;
 
-import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
@@ -18,19 +18,19 @@ public class WeeklyTask {
         if (taskId == 0){
             throw new Exception("Task Id is == 0 or is null");
         }
-        if (SystemManager.isEmpty(email)){
+        if (ApplicationManager.isEmpty(email)){
             System.out.println("Email is null");
             email = "";
         }
-        if (SystemManager.isEmpty(status)){
+        if (ApplicationManager.isEmpty(status)){
             System.out.println("Status is null");
             status = "";
         }
-        if (SystemManager.isEmpty(reflection)){
+        if (ApplicationManager.isEmpty(reflection)){
             System.out.println("Reflection is null");
             reflection = "";
         }
-        if (SystemManager.isEmpty(weekStarted)){
+        if (ApplicationManager.isEmpty(weekStarted)){
             System.out.println("WeekStarted is null");
             weekStarted = "";
         }

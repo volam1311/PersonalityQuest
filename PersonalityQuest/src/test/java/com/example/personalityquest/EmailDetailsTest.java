@@ -1,6 +1,6 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.DataClasses.EmailDetails;
+import com.example.personalityquest.Model.EmailDetails;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;

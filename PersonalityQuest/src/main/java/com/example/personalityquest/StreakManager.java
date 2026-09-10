@@ -1,6 +1,4 @@
-package com.example.personalityquest.Managers;
-
-import com.example.personalityquest.SQLite;
+package com.example.personalityquest;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +30,7 @@ public class StreakManager {
 
     public static int RecordCompletion(String email, LocalDate completionDate) throws SQLException {
         // Calculate and save the streak for a completion date
-        if (SystemManager.isEmpty(email) || completionDate == null) {
+        if (ApplicationManager.isEmpty(email) || completionDate == null) {
             return NO_STREAK;
         }
 
@@ -57,7 +55,7 @@ public class StreakManager {
 
                 String savedDate = resultSet.getString("lastCompletionDate");
 
-                if (!SystemManager.isEmpty(savedDate)) {
+                if (!ApplicationManager.isEmpty(savedDate)) {
                     lastCompletionDate = LocalDate.parse(savedDate);
                 }
             }
@@ -97,7 +95,7 @@ public class StreakManager {
 
     public static int GetCurrentStreak(String email) throws SQLException {
         // Read the current streak for an account
-        if (SystemManager.isEmpty(email)) {
+        if (ApplicationManager.isEmpty(email)) {
             return NO_STREAK;
         }
         Connection connection = SQLite.getConnection();

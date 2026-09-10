@@ -1,5 +1,6 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.Validators.AccountSignUpValidator;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;

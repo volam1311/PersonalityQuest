@@ -1,9 +1,9 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.DataClasses.Quest;
-import com.example.personalityquest.DataClasses.UserQuest;
-import com.example.personalityquest.Managers.HashingManager;
-import com.example.personalityquest.Managers.UserQuestManager;
+import com.example.personalityquest.Model.Quest;
+import com.example.personalityquest.Model.UserQuest;
+import com.example.personalityquest.Services.HashingService;
+import com.example.personalityquest.Services.UserQuestService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserQuestManagerTest {
+public class UserQuestServiceTest {
 
     private Connection connection;
 
@@ -74,7 +74,7 @@ public class UserQuestManagerTest {
                     VALUES ("test", "test", "test", "test", ?)
                     """))
         {
-            String hashedPassword = HashingManager.Hash("test");
+            String hashedPassword = HashingService.Hash("test");
             statement.setString(1, hashedPassword);
 
             statement.executeUpdate();
@@ -125,7 +125,7 @@ public class UserQuestManagerTest {
 
         statement.setInt(1, labourId);
         statement.execute();
-        UserQuest quest = UserQuestManager.GetCurrentActiveUserQuestForEmail("test");
+        UserQuest quest = UserQuestService.GetCurrentActiveUserQuestForEmail("test");
 
         assertEquals(labourId, quest.getLabourId());
     }
@@ -139,7 +139,7 @@ public class UserQuestManagerTest {
                     """);
 
         statement.executeUpdate();
-        UserQuest quest = UserQuestManager.GetCurrentActiveUserQuestForEmail("test");
+        UserQuest quest = UserQuestService.GetCurrentActiveUserQuestForEmail("test");
 
         assertNull(quest);
     }
@@ -153,7 +153,7 @@ public class UserQuestManagerTest {
                     """);
 
         statement.execute();
-        UserQuest quest = UserQuestManager.GetCurrentActiveUserQuestForEmail("realEmail");
+        UserQuest quest = UserQuestService.GetCurrentActiveUserQuestForEmail("realEmail");
 
         assertNull(quest);
     }
@@ -167,7 +167,7 @@ public class UserQuestManagerTest {
                     """);
 
         statement.execute();
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.GetCurrentActiveUserQuestForEmail(null));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.GetCurrentActiveUserQuestForEmail(null));
     }
     /// SET QUEST AS ACTIVE
     @Test
@@ -200,7 +200,7 @@ public class UserQuestManagerTest {
             );
         }
 
-        UserQuest userQuest = UserQuestManager.SetUserQuesStatusAsActive(quest, "test");
+        UserQuest userQuest = UserQuestService.SetUserQuesStatusAsActive(quest, "test");
 
         assertEquals(quest.getLabourId(), userQuest.getLabourId());
         assertEquals(quest.getAccountEmail(), userQuest.getAccountEmail());
@@ -247,13 +247,13 @@ public class UserQuestManagerTest {
             quest = null;
         }
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuesStatusAsActive(quest, "test"));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuesStatusAsActive(quest, "test"));
     }
     @Test
     public void SetNullQuestToActive() throws Exception {
         UserQuest quest = null;
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuesStatusAsActive(quest, "test"));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuesStatusAsActive(quest, "test"));
     }
 
     @Test
@@ -296,7 +296,7 @@ public class UserQuestManagerTest {
             quest = null;
         }
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuesStatusAsActive(quest, null));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuesStatusAsActive(quest, null));
     }
 
     /// SET QUEST TO PERCENTAGE COMPLETE
@@ -328,7 +328,7 @@ public class UserQuestManagerTest {
             );
         }
 
-        UserQuest updatedQuest = UserQuestManager.SetUserQuestToPercentageComplete(quest, "test", 0.5f);
+        UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(quest, "test", 0.5f);
 
         assertEquals(quest.getLabourId(), updatedQuest.getLabourId());
         assertEquals(quest.getAccountEmail(), updatedQuest.getAccountEmail());
@@ -365,7 +365,7 @@ public class UserQuestManagerTest {
             quest = null;
         }
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(quest, "test", 1.2f));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuestToPercentageComplete(quest, "test", 1.2f));
     }
     @Test
     public void SetUserQuestToPercentageCompleteBelow0() throws SQLException {
@@ -397,7 +397,7 @@ public class UserQuestManagerTest {
             quest = null;
         }
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(quest, "test", -0.5f));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuestToPercentageComplete(quest, "test", -0.5f));
     }
     @Test
     public void SetUserQuestToPercentageCompleteWithNullEmail() throws SQLException {
@@ -429,7 +429,7 @@ public class UserQuestManagerTest {
             quest = null;
         }
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(quest, null, 0.5f));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuestToPercentageComplete(quest, null, 0.5f));
     }
     @Test
     public void SetUserQuestToPercentageCompleteWithNulQuest() throws SQLException {
@@ -461,7 +461,7 @@ public class UserQuestManagerTest {
             quest = null;
         }
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestToPercentageComplete(null, "test", 0.5f));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuestToPercentageComplete(null, "test", 0.5f));
     }
     /// SET QUEST TO STATUS COMPLETE
     @Test
@@ -492,7 +492,7 @@ public class UserQuestManagerTest {
             );
         }
 
-        UserQuest userQuest = UserQuestManager.SetUserQuestStatusAsComplete(quest, "test");
+        UserQuest userQuest = UserQuestService.SetUserQuestStatusAsComplete(quest, "test");
 
         assertEquals(quest.getLabourId(), userQuest.getLabourId());
         assertEquals(quest.getAccountEmail(), userQuest.getAccountEmail());
@@ -503,7 +503,7 @@ public class UserQuestManagerTest {
     public void SetNullQuestToStatusComplete() throws SQLException {
         UserQuest quest = null;
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestStatusAsComplete(quest, "realEmail"));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuestStatusAsComplete(quest, "realEmail"));
     }
     @Test
     public void SetQuestToStatusCompleteWithNullEmail() throws SQLException {
@@ -536,7 +536,7 @@ public class UserQuestManagerTest {
         }
 
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.SetUserQuestStatusAsComplete(quest, null));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.SetUserQuestStatusAsComplete(quest, null));
     }
     /// INSERT QUEST FOR EMAIL
     @Test
@@ -559,7 +559,7 @@ public class UserQuestManagerTest {
         }
 
         System.out.println(quest.getName());
-        UserQuest userQuest = UserQuestManager.InsertNewQuestForEmail(quest, "test");
+        UserQuest userQuest = UserQuestService.InsertNewQuestForEmail(quest, "test");
 
         assertEquals(quest.getLabourId(), userQuest.getLabourId());
         assertEquals("test", userQuest.getAccountEmail());
@@ -570,7 +570,7 @@ public class UserQuestManagerTest {
     public void InsertNewNullQuestForEmail() throws SQLException {
         Quest quest = null;
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.InsertNewQuestForEmail(quest, "test"));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.InsertNewQuestForEmail(quest, "test"));
     }
 
     @Test
@@ -595,6 +595,6 @@ public class UserQuestManagerTest {
             quest = null;
         }
         
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestManager.InsertNewQuestForEmail(quest, null));
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.InsertNewQuestForEmail(quest, null));
     }
 }

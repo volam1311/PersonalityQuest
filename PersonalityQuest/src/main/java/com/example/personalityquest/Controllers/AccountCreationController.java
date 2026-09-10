@@ -1,15 +1,15 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.AccountRepository;
-import com.example.personalityquest.AccountSignUpValidator;
+import com.example.personalityquest.Validators.AccountSignUpValidator;
 import com.example.personalityquest.Applications.AccountSignInApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
-import com.example.personalityquest.DataClasses.Quest;
-import com.example.personalityquest.DataClasses.UserQuest;
-import com.example.personalityquest.Managers.EmailManager;
-import com.example.personalityquest.Managers.QuestManager;
-import com.example.personalityquest.Managers.SystemManager;
-import com.example.personalityquest.Managers.UserQuestManager;
+import com.example.personalityquest.Model.Quest;
+import com.example.personalityquest.Model.UserQuest;
+import com.example.personalityquest.Services.EmailService;
+import com.example.personalityquest.Services.QuestService;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Services.UserQuestService;
 import com.example.personalityquest.SQLite;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -188,7 +188,7 @@ public class AccountCreationController {
             return;
         }
 
-        if (EmailManager.DoesAccountWithEmailExist(emailEntry.getText())) {
+        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText())) {
             markFieldError(emailEntry);
             Message.setText("An account with this email already exists");
             return;
@@ -208,13 +208,13 @@ public class AccountCreationController {
             return;
         }
 
-        SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
+        ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
 
         // DUMMY ARCHETYPE IMPLEMENTATION FOR NOW
         // Inserts the testLabour for each account
-        Quest quest = QuestManager.GetQuestForLabourId(1);
-        UserQuest userQuest = UserQuestManager.InsertNewQuestForEmail(quest, SystemManager.CurrentAccount.currentEmail);
-        UserQuestManager.SetUserQuesStatusAsActive(userQuest, SystemManager.CurrentAccount.currentEmail);
+        Quest quest = QuestService.GetQuestForLabourId(1);
+        UserQuest userQuest = UserQuestService.InsertNewQuestForEmail(quest, ApplicationManager.CurrentAccount.getCurrentEmail() );
+        UserQuestService.SetUserQuesStatusAsActive(userQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
 
         DashboardApplication.launch((Stage) emailEntry.getScene().getWindow());
         System.out.println("Account created");

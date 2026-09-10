@@ -1,6 +1,6 @@
-package com.example.personalityquest.DataClasses;
+package com.example.personalityquest.Model;
 
-import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.ApplicationManager;
 
 /**
  * Holds the details pertaining to Quests that have not yet been assigned
@@ -16,7 +16,7 @@ public class Quest {
     private final String name;
 
     public Quest(int labourId, int archetypeId, String name){
-        if (SystemManager.isEmpty(name)){
+        if (ApplicationManager.isEmpty(name)){
             throw new IllegalArgumentException("Name is null");
         }
         if (labourId <= 0){

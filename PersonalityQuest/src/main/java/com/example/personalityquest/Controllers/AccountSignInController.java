@@ -1,8 +1,9 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.*;
-import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
-import com.example.personalityquest.Managers.*;
+import com.example.personalityquest.Services.EmailService;
+import com.example.personalityquest.Services.PasswordService;
+import com.example.personalityquest.ApplicationManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -122,7 +123,7 @@ public class AccountSignInController {
         /*
          * Set currently logged in account
          * */
-        SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
+        ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
 
         DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
 
@@ -152,8 +153,8 @@ public class AccountSignInController {
         }
 
         // Does the email exist and does the password match the email
-        if (!EmailManager.DoesAccountWithEmailExist(emailEntry.getText())
-        || !PasswordManager.isPasswordForEmail(emailEntry.getText(), passwordEntry.getText())){
+        if (!EmailService.DoesAccountWithEmailExist(emailEntry.getText())
+        || !PasswordService.isPasswordForEmail(emailEntry.getText(), passwordEntry.getText())){
             markFieldError(emailEntry);
             markFieldError(passwordEntry);
             Message.setText("Email or Password Was entered incorrectly");
