@@ -1,6 +1,7 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.DAO;
 
-import com.example.personalityquest.DataClasses.EmailDetails;
+import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
@@ -12,7 +13,7 @@ import java.sql.SQLException;
  * This class managers everything to do with emails and has utility functions to check
  * if account exist for them or retrieve the EmailDetails matching the email
  */
-public class EmailManager {
+public class EmailDAO {
 
 
     protected final static String accountExists =
@@ -27,7 +28,7 @@ public class EmailManager {
      */
     public static boolean DoesAccountWithEmailExist(String email) throws SQLException {
         // check nulls
-        if (SystemManager.isEmpty(email)) {
+        if (ApplicationManager.isEmpty(email)) {
             System.out.println("Email is null therefor it does not exist");
             return false;}
 
@@ -46,6 +47,7 @@ public class EmailManager {
         if (count == 0){
             System.out.println("Email doesnt exist");
         }
+
         return count == 1;
     }
 
@@ -57,8 +59,8 @@ public class EmailManager {
      */
     public static EmailDetails GetDetailsForEmail(String email) throws Exception {
         // check nulls
-        if (SystemManager.isEmpty(email)) {
-            System.out.println("Email is null therefor details can not be gotten");
+        if (ApplicationManager.isEmpty(email)) {
+            System.out.println("Email is null therefore details can not be gotten");
             return null;}
 
         Connection connection = SQLite.getConnection();

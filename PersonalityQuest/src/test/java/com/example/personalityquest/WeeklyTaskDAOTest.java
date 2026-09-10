@@ -1,9 +1,10 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.DataClasses.Task;
-import com.example.personalityquest.DataClasses.WeeklyTask;
-import com.example.personalityquest.Managers.HashingManager;
-import com.example.personalityquest.Managers.WeeklyTaskManager;
+import com.example.personalityquest.DAO.WeeklyTaskDAO;
+import com.example.personalityquest.Model.Task;
+import com.example.personalityquest.Model.WeeklyTask;
+import com.example.personalityquest.Services.HashingService;
+import com.example.personalityquest.Services.WeeklyTaskService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WeeklyTaskManagerTest {
+public class WeeklyTaskDAOTest {
     private Connection connection;
 
     private Task[] dummyTasks;
@@ -64,7 +65,7 @@ public class WeeklyTaskManagerTest {
                     VALUES ("test", "test", "test", "test", ?)
                     """))
         {
-            String hashedPassword = HashingManager.Hash("test");
+            String hashedPassword = HashingService.Hash("test");
             statement.setString(1, hashedPassword);
 
             statement.executeUpdate();
@@ -98,7 +99,7 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek("test");
+        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek("test");
 
         assertTrue(Objects.equals(dummyTasks[0].getTaskId(), tasks[0].getTaskId()));
     }
@@ -108,12 +109,12 @@ public class WeeklyTaskManagerTest {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
 
-        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek("test");
+        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek("test");
         assertNull(tasks);
     }
     @Test
     public void GettingTasksForThisWeekWithNullEmail() throws Exception {
-        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.GetTasksForEmailForThisWeek(null));
+        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.GetTasksForEmailForThisWeek(null));
     }
 
     /// GENERATING
@@ -123,12 +124,12 @@ public class WeeklyTaskManagerTest {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
 
-        WeeklyTaskManager.SetDefaultTaskSearchNum(9999);
-        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek("test");
+        WeeklyTaskDAO.SetDefaultTaskSearchNum(9999);
+        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek("test");
 
         if (Objects.equals(tasks, null)){
             System.out.println("Generating New Tasks");
-            tasks = WeeklyTaskManager.GenerateTasksForThisWeek("test");
+            tasks = WeeklyTaskService.GenerateTasksForThisWeek("test");
         }
         assertTrue(Objects.equals(dummyTasks[0].getTaskId(), tasks[0].getTaskId()));
     }
@@ -138,12 +139,12 @@ public class WeeklyTaskManagerTest {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
 
-        WeeklyTaskManager.SetDefaultTaskSearchNum(9999);
-        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek("test");
+        WeeklyTaskDAO.SetDefaultTaskSearchNum(9999);
+        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek("test");
 
         if (Objects.equals(tasks, null)){
             System.out.println("Generating New Tasks");
-            assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.GenerateTasksForThisWeek("doesnt exisgjbfjsdahjsd"));
+            assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.GenerateTasksForThisWeek("doesnt exisgjbfjsdahjsd"));
         }
     }
     @Test
@@ -152,18 +153,18 @@ public class WeeklyTaskManagerTest {
                 new Task(9999, "TestTask", "This is a Test Task", 1)
         };
 
-        WeeklyTaskManager.SetDefaultTaskSearchNum(17982331);
-        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek("test");
+        WeeklyTaskDAO.SetDefaultTaskSearchNum(17982331);
+        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek("test");
 
         if (Objects.equals(tasks, null)){
             System.out.println("Generating New Tasks");
-            assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.GenerateTasksForThisWeek("doesnt exisgjbfjsdahjsd"));
+            assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.GenerateTasksForThisWeek("doesnt exisgjbfjsdahjsd"));
         }
         assertNull(tasks);
     }
     @Test
     public void GeneratingWeeklyTasksWithWeeklyStartInTheFuture() throws Exception {
-        assertNull(WeeklyTaskManager.GetWeeklyTask("test", 9999, LocalDate.MAX));
+        assertNull(WeeklyTaskService.GetWeeklyTask("test", 9999, LocalDate.MAX));
     }
 
     /// RETRIEVING WEEKLY TASKS
@@ -184,7 +185,7 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
         assertEquals(task.getEmail(), "test");
 
@@ -207,7 +208,7 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("wrong email", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("wrong email", 9999, weekStart);
 
         assertNull(task);
 
@@ -215,24 +216,24 @@ public class WeeklyTaskManagerTest {
     }
     @Test
     public void GettingWeeklyTaskWithNullEmail() {
-        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.GetWeeklyTask(null, 1, LocalDate.now()));
+        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.GetWeeklyTask(null, 1, LocalDate.now()));
     }
     @Test
     public void GettingWeeklyTaskWithNullWeekStart() throws Exception {
-        assertNull(WeeklyTaskManager.GetWeeklyTask("test", 9999, null));
+        assertNull(WeeklyTaskService.GetWeeklyTask("test", 9999, null));
     }
     @Test
     public void GettingWeeklyTaskWithTaskIdThatDoesntExist() throws Exception {
-        assertNull(WeeklyTaskManager.GetWeeklyTask("test", -217371237, LocalDate.now()));
+        assertNull(WeeklyTaskService.GetWeeklyTask("test", -217371237, LocalDate.now()));
     }
     @Test
     public void GettingWeeklyTaskWithEmailThatDoesntExist() throws Exception {
-        assertNull(WeeklyTaskManager.GetWeeklyTask("random email ashdahsdhas", 9999, null));
+        assertNull(WeeklyTaskService.GetWeeklyTask("random email ashdahsdhas", 9999, null));
     }
 
     @Test
     public void GettingWeeklyTaskWithWeeklyStartInTheFuture() throws Exception {
-        assertNull(WeeklyTaskManager.GetWeeklyTask("test", 9999, LocalDate.MAX));
+        assertNull(WeeklyTaskService.GetWeeklyTask("test", 9999, LocalDate.MAX));
     }
 
 
@@ -254,17 +255,17 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
-        WeeklyTaskManager.UpdateGivenTaskToDraft(task, "New Reflection", "test");
+        WeeklyTaskService.UpdateGivenTaskToDraft(task, "New Reflection", "test");
 
-        task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
         assertEquals("New Reflection", task.getReflection());
     }
     @Test
     public void UpdateWeeklyTaskToDraftThatIsNull() throws Exception {
-        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.UpdateGivenTaskToDraft(null, "New Reflection", "test"));
+        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.UpdateGivenTaskToDraft(null, "New Reflection", "test"));
     }
     @Test
     public void UpdatingWeeklyTaskToDraftWithNullEmail() throws Exception {
@@ -283,9 +284,9 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.UpdateGivenTaskToDraft(task, "New Reflection", null));
+        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.UpdateGivenTaskToDraft(task, "New Reflection", null));
     }
     @Test
     public void UpdatingWeeklyTaskToDraftWithNullReflection() throws Exception {
@@ -304,9 +305,9 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.UpdateGivenTaskToDraft(task, null, "test"));
+        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.UpdateGivenTaskToDraft(task, null, "test"));
     }
 
     /// FINISHING WEEKLY TASKS
@@ -327,17 +328,17 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
-        WeeklyTaskManager.UpdateGivenTaskToBeFinished(task, "New Reflection", "test");
+        WeeklyTaskService.UpdateGivenTaskToBeFinished(task, "New Reflection", "test");
 
-        task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
         assertEquals("New Reflection", task.getReflection());
     }
     @Test
     public void UpdateWeeklyTaskToBeFinishedThatIsNull() throws Exception {
-        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.UpdateGivenTaskToBeFinished(null, "New Reflection", "test"));
+        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.UpdateGivenTaskToBeFinished(null, "New Reflection", "test"));
     }
     @Test
     public void UpdatingWeeklyTaskToBeFinishedWithNullEmail() throws Exception {
@@ -356,9 +357,9 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.UpdateGivenTaskToBeFinished(task, "New Reflection", null));
+        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.UpdateGivenTaskToBeFinished(task, "New Reflection", null));
     }
     @Test
     public void UpdatingWeeklyTaskToBeFinishedWithEmailThatDoesntExist() throws Exception {
@@ -377,9 +378,9 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
-        assertNull( WeeklyTaskManager.UpdateGivenTaskToBeFinished(task, "New Reflection", "asdhjgfbhasjdahjsd"));
+        assertNull( WeeklyTaskService.UpdateGivenTaskToBeFinished(task, "New Reflection", "asdhjgfbhasjdahjsd"));
     }
     @Test
     public void UpdatingWeeklyTaskToBeFinishedWithNullReflection() throws Exception {
@@ -398,9 +399,9 @@ public class WeeklyTaskManagerTest {
         statement.setString(1, String.valueOf(weekStart));
         statement.executeUpdate();
 
-        WeeklyTask task = WeeklyTaskManager.GetWeeklyTask("test", 9999, weekStart);
+        WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
-        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskManager.UpdateGivenTaskToBeFinished(task, null, "test"));
+        assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.UpdateGivenTaskToBeFinished(task, null, "test"));
     }
 
 

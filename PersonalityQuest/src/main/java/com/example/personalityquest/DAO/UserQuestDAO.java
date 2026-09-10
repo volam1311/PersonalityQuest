@@ -1,7 +1,8 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.DAO;
 
-import com.example.personalityquest.DataClasses.Quest;
-import com.example.personalityquest.DataClasses.UserQuest;
+import com.example.personalityquest.Model.Quest;
+import com.example.personalityquest.Model.UserQuest;
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
  * userQuests matching email, whether there's an active userQuest, to update userQuests in the database
  * and to insert new ones
  */
-public class UserQuestManager {
+public class UserQuestDAO {
     /**
      * Retrives the current active quest for the user matching the account
      * @param email The email of the account you want to check
@@ -23,7 +24,7 @@ public class UserQuestManager {
      * @throws SQLException Database Access Failure
      */
     public static UserQuest GetCurrentActiveUserQuestForEmail(String email) throws IllegalArgumentException, SQLException {
-        if (SystemManager.isEmpty(email)){
+        if (ApplicationManager.isEmpty(email)){
             throw new IllegalArgumentException("Checking for active quest with null email");
         }
 
@@ -59,7 +60,7 @@ public class UserQuestManager {
      * @throws SQLException Database Update Failure
      */
     public static UserQuest SetUserQuesStatusAsActive(UserQuest userQuest, String email) throws IllegalArgumentException, SQLException {
-        if (userQuest == null || SystemManager.isEmpty(email)){
+        if (userQuest == null || ApplicationManager.isEmpty(email)){
             throw new IllegalArgumentException("Checking for active quest with null email");
         }
         if (DoesUserHaveActiveQuest(email)){
@@ -90,7 +91,7 @@ public class UserQuestManager {
      * @throws SQLException If A constraint on foreign keys fails or Database Update Failure
      */
     public static UserQuest InsertNewQuestForEmail(Quest quest, String email) throws SQLException {
-        if (quest == null || SystemManager.isEmpty(email)){
+        if (quest == null || ApplicationManager.isEmpty(email)){
             throw new IllegalArgumentException("Quest you wanted to set or email is null");
         }
 
@@ -123,7 +124,7 @@ public class UserQuestManager {
      * @throws SQLException Database Access and Update Failure
      */
     public static UserQuest SetUserQuestStatusAsComplete(UserQuest quest, String email) throws SQLException {
-        if (quest == null || SystemManager.isEmpty(email)){
+        if (quest == null || ApplicationManager.isEmpty(email)){
             throw new IllegalArgumentException("Quest you wanted to set or email is null");
         }
 
@@ -154,7 +155,7 @@ public class UserQuestManager {
      * @throws SQLException Database Access or Update Failure
      */
     public static UserQuest SetUserQuestToPercentageComplete(UserQuest quest, String email, float percentage) throws SQLException {
-        if (quest == null || SystemManager.isEmpty(email)){
+        if (quest == null || ApplicationManager.isEmpty(email)){
             throw new IllegalArgumentException("Quest you wanted to set or email is null");
         }
 

@@ -1,6 +1,6 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.Managers.HashingManager;
+import com.example.personalityquest.Services.HashingService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +20,7 @@ public final class AccountRepository {
             statement.setString(2, userName);
             statement.setString(3, firstName);
             statement.setString(4, lastName);
-            statement.setString(5, HashingManager.Hash(password));
+            statement.setString(5, HashingService.Hash(password));
             statement.executeUpdate();
         }
     }

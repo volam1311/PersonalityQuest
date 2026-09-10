@@ -1,6 +1,7 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.DAO;
 
 import com.example.personalityquest.SQLite;
+import com.example.personalityquest.ApplicationManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class StreakManager {
+public class StreakDAO {
 
     private static final int NO_STREAK = 0;
     private static final int FIRST_STREAK = 1;
@@ -27,12 +28,12 @@ public class StreakManager {
             WHERE accountEmail = ?
             """;
 
-    private StreakManager() {
+    private StreakDAO() {
     }
 
     public static int RecordCompletion(String email, LocalDate completionDate) throws SQLException {
         // Calculate and save the streak for a completion date
-        if (SystemManager.isEmpty(email) || completionDate == null) {
+        if (ApplicationManager.isEmpty(email) || completionDate == null) {
             return NO_STREAK;
         }
 
@@ -57,7 +58,7 @@ public class StreakManager {
 
                 String savedDate = resultSet.getString("lastCompletionDate");
 
-                if (!SystemManager.isEmpty(savedDate)) {
+                if (!ApplicationManager.isEmpty(savedDate)) {
                     lastCompletionDate = LocalDate.parse(savedDate);
                 }
             }
@@ -97,7 +98,7 @@ public class StreakManager {
 
     public static int GetCurrentStreak(String email) throws SQLException {
         // Read the current streak for an account
-        if (SystemManager.isEmpty(email)) {
+        if (ApplicationManager.isEmpty(email)) {
             return NO_STREAK;
         }
         Connection connection = SQLite.getConnection();

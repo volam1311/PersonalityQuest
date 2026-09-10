@@ -1,12 +1,11 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.DashboardApplication;
-import com.example.personalityquest.DataClasses.WeeklyTask;
-import com.example.personalityquest.Managers.SystemManager;
-import com.example.personalityquest.Managers.WeeklyTaskManager;
+import com.example.personalityquest.Model.WeeklyTask;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Services.WeeklyTaskService;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class WeeklyTaskReflectionController {
 
 
         System.out.println(reflection.getText());
-        WeeklyTaskManager.UpdateGivenTaskToDraft(currentTask, reflection.getText(), SystemManager.CurrentAccount.getCurrentEmail());
+        WeeklyTaskService.UpdateGivenTaskToDraft(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());
         GoToDashboard();
     }
 
@@ -52,7 +51,7 @@ public class WeeklyTaskReflectionController {
 
         // Use this to mark a task as Finished
         System.out.println(reflection.getText());
-        WeeklyTaskManager.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), SystemManager.CurrentAccount.getCurrentEmail());
+        WeeklyTaskService.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());
 
         GoToDashboard();
     }

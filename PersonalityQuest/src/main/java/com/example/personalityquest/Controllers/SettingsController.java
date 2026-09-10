@@ -1,9 +1,9 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.DashboardApplication;
-import com.example.personalityquest.DataClasses.EmailDetails;
-import com.example.personalityquest.Managers.EmailManager;
-import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.DAO.EmailDAO;
+import com.example.personalityquest.ApplicationManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -78,8 +78,8 @@ public class SettingsController implements Initializable {
 
     private void SetProfileLabel() {
         try {
-            EmailDetails emailDetails = EmailManager.GetDetailsForEmail(
-                    SystemManager.CurrentAccount.getCurrentEmail());
+            EmailDetails emailDetails = EmailDAO.GetDetailsForEmail(
+                    ApplicationManager.CurrentAccount.getCurrentEmail());
 
             if (emailDetails == null) {
                 profileText = "Profile";

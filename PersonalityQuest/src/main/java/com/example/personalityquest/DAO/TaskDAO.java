@@ -1,6 +1,7 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.DAO;
 
-import com.example.personalityquest.DataClasses.Task;
+import com.example.personalityquest.Model.Task;
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
@@ -10,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TaskManager {
-    private final static int AMOUNT_OF_TASKS = SystemManager.TaskConfig.getAmountOfTasks();
+public class TaskDAO {
+    private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
 
     private final static String FIND_TASK_INFO = """
             SELECT * FROM Tasks

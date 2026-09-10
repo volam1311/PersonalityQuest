@@ -1,21 +1,17 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.DAO;
 
-import com.example.personalityquest.DataClasses.Quest;
+import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.SQLite;
-import javafx.collections.ObservableArray;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.sql.*;
-import java.text.ParseException;
 import java.util.Random;
-import java.util.jar.JarEntry;
 
 /**
  * This class managers everything to do with quests and has utility functions to retrieve
  * quests matching archetypeId's or a labourId or get the count of how many quests
  * match an archetypeId
  */
-public class QuestManager {
+public class QuestDAO {
     /**
      * Gets an Array of Quests for the given archetypeId
      * @param archetypeId The archetypeId you want to get quests for

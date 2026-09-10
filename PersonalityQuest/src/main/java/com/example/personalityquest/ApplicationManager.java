@@ -1,11 +1,11 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest;
 
 /**
  * This class managers everything to do with the overall system of the program
  * holding static data such as the current logged in account or screen dimensions
  * as well as global utility functions
  */
-public class SystemManager {
+public class ApplicationManager {
     public static class SceneInfo {
         public static final int SCENEWIDTH = 1100;
         public static final int SCENEHEIGHT = 720;

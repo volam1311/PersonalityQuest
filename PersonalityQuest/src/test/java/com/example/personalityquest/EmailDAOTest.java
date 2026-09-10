@@ -1,7 +1,7 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.DataClasses.EmailDetails;
-import com.example.personalityquest.Managers.EmailManager;
+import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.DAO.EmailDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import java.sql.Statement;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EmailManagerTest {
+public class EmailDAOTest {
     private Connection connection;
 
     private EmailDetails fakeEmailDetails = new EmailDetails(
@@ -49,46 +49,46 @@ public class EmailManagerTest {
 
     @Test
     public void EmailDoesntExist() throws Exception {
-        assertFalse(EmailManager.DoesAccountWithEmailExist("This email doesnt exist"));
+        assertFalse(EmailDAO.DoesAccountWithEmailExist("This email doesnt exist"));
     }
 
     @Test
     public void EmailDoesExist() throws Exception {
-        assertTrue(EmailManager.DoesAccountWithEmailExist("test"));
+        assertTrue(EmailDAO.DoesAccountWithEmailExist("test"));
     }
 
     @Test
     public void NullEmailForDoesExist() throws Exception {
-        assertFalse(EmailManager.DoesAccountWithEmailExist(null));
+        assertFalse(EmailDAO.DoesAccountWithEmailExist(null));
     }
 
     @Test
     public void GetDetailsForAnEmailThatDoesntExist() throws Exception {
-        assertNull(EmailManager.GetDetailsForEmail("This email doesnt exist"));
+        assertNull(EmailDAO.GetDetailsForEmail("This email doesnt exist"));
     }
 
     @Test
     public void GetDetailsForAnEmailThatNull() throws Exception {
-        assertNull(EmailManager.GetDetailsForEmail(null));
+        assertNull(EmailDAO.GetDetailsForEmail(null));
     }
 
     @Test
     public void GetEmailViaDetails() throws Exception {
-        assertEquals(fakeEmailDetails.getFirstName(), EmailManager.GetDetailsForEmail("test").getEmail());
+        assertEquals(fakeEmailDetails.getFirstName(), EmailDAO.GetDetailsForEmail("test").getEmail());
     }
 
     @Test
     public void GetUserNameViaDetails() throws Exception {
-        assertEquals(fakeEmailDetails.getFirstName(), EmailManager.GetDetailsForEmail("test").getUserName());
+        assertEquals(fakeEmailDetails.getFirstName(), EmailDAO.GetDetailsForEmail("test").getUserName());
     }
 
     @Test
     public void GetFirstNameViaDetails() throws Exception {
-        assertEquals(fakeEmailDetails.getFirstName(), EmailManager.GetDetailsForEmail("test").getFirstName());
+        assertEquals(fakeEmailDetails.getFirstName(), EmailDAO.GetDetailsForEmail("test").getFirstName());
     }
 
     @Test
     public void GetLastNameViaDetails() throws Exception {
-        assertEquals(fakeEmailDetails.getFirstName(), EmailManager.GetDetailsForEmail("test").getLastName());
+        assertEquals(fakeEmailDetails.getFirstName(), EmailDAO.GetDetailsForEmail("test").getLastName());
     }
 }

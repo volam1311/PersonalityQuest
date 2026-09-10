@@ -1,8 +1,13 @@
-package com.example.personalityquest.Managers;
+package com.example.personalityquest.Services;
 
-import com.example.personalityquest.DataClasses.Task;
-import com.example.personalityquest.DataClasses.UserQuest;
-import com.example.personalityquest.DataClasses.WeeklyTask;
+import com.example.personalityquest.DAO.EmailDAO;
+import com.example.personalityquest.DAO.TaskDAO;
+import com.example.personalityquest.DAO.UserQuestDAO;
+import com.example.personalityquest.DAO.WeeklyTaskDAO;
+import com.example.personalityquest.Model.Task;
+import com.example.personalityquest.Model.UserQuest;
+import com.example.personalityquest.Model.WeeklyTask;
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.SQLite;
 
 import java.sql.*;
@@ -16,42 +21,8 @@ import java.util.*;
  * weeks tasks for a user, get their taskId's, generate new tasks for this week or update existing
  * tasks
  */
-public class WeeklyTaskManager {
+public class WeeklyTaskService {
 
-    private final static int AMOUNT_OF_TASKS = SystemManager.TaskConfig.getAmountOfTasks();
-    private final static String SQL_UPDATE_DRAFT = """
-            UPDATE WeeklyTasks
-            SET reflection = ?, status = 'Started'
-            WHERE accountEmail = ? AND taskId = ?
-        """;
-
-    private final static String SQL_FINISH_TASK = """
-            UPDATE WeeklyTasks
-            SET reflection = ?, status = 'Finished'
-            WHERE accountEmail = ? AND taskId = ?
-        """;
-
-    private final static String TASK_FOR_EMAIL = """ 
-            SELECT * FROM WeeklyTasks
-            WHERE accountEmail = ?
-            AND weekStart = ?
-            """;
-
-    private final static String GET_WEEKLY_TASK = """ 
-            SELECT * FROM WeeklyTasks 
-            WHERE taskId = ? AND 
-            accountEmail = ? AND weekStart = ?
-            """;
-
-    private static int defaultTaskSearchNum = 1;
-
-    /**
-     * Sets the default task num to insert into the database if no quest is active
-     * @param num The number you want to set
-     */
-    public static void SetDefaultTaskSearchNum(int num){
-        defaultTaskSearchNum = num;
-    }
 
     /// RETRIEVING
     /**
@@ -64,8 +35,7 @@ public class WeeklyTaskManager {
      * @throws Exception From GetTaskId's SQL Exception to Database Access Failure.
      */
     public static WeeklyTask[] GetTasksForEmailForThisWeek(String email) throws Exception {
-
-        if (IsEmailNull(email) || !EmailManager.DoesAccountWithEmailExist(email)) {
+        if (IsEmailNull(email) || !EmailDAO.DoesAccountWithEmailExist(email)) {
             throw new IllegalArgumentException("Null Email or this account does not exist");
         }
 
@@ -85,15 +55,13 @@ public class WeeklyTaskManager {
                 return null;}
         }
 
-
         WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
         for (int i = 0; i < taskIds.length; i++) {
             tasks[i] = GetWeeklyTask(email, taskIds[i], weekStart);
         }
-
-        // returns tasks for given week
         return tasks;
     }
+
     /**
      * Gets a Weekly Task for a given taskId, email and weekStart
      * @param email The email of the acccount you want to get the WeeklyTask from
@@ -108,29 +76,10 @@ public class WeeklyTaskManager {
         if (IsWeekStartNull(weekStart) || IsTaskIdNull(taskId) || IsEmailNull(email)){
             throw new IllegalArgumentException("WeekStart, TaskId or Email is Null");
         }
-        // executes the query to find the given taskId, email and weekStart date
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK);
-        // assign parameters
-        statement.setInt(1, taskId);
-        statement.setString(2, email);
-        statement.setString(3, String.valueOf(weekStart));
 
-        ResultSet rs = statement.executeQuery();
-
-        if (rs.next()){
-            return new WeeklyTask(
-                    rs.getString("accountEmail"),
-                    rs.getInt("taskId"),
-                    rs.getString("status"),
-                    rs.getString("reflection"),
-                    rs.getString("weekStart")
-            );
-        }
-
-        System.out.println("GetWeeklyTask Returned Null");
-        return null;
+        return WeeklyTaskDAO.GetWeeklyTaskMatchingId(email, taskId, weekStart);
     }
+
     /**
      * Gets all the taskId's for the WeeklyTasks assigned this week
      * @param email The email of the account you want to get the taskId's for
@@ -143,29 +92,8 @@ public class WeeklyTaskManager {
         if (IsWeekStartNull(weekStart) || IsEmailNull(email)){
             throw new IllegalArgumentException("Week start or email is null");
         }
-        // executes the query to find all tasks that were assigned this week
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(TASK_FOR_EMAIL);
-        // assign parameters
-        statement.setString(1, email);
-        statement.setString(2, String.valueOf(weekStart));
 
-        // appends all taskId's from the query to an array
-        // to be used in next query
-        int[] taskIds = new int[AMOUNT_OF_TASKS];
-        ResultSet rs = statement.executeQuery();
-        int count = 0;
-        while (rs.next()) {
-            taskIds[count] = rs.getInt("taskId");
-            count++;
-        }
-
-        // if its counted least one task then the user has a set this week
-        // if it hasn't must return null
-        if (count < AMOUNT_OF_TASKS && count != 0){
-            return Arrays.copyOf(taskIds, count);
-        }
-        return taskIds;
+        return WeeklyTaskDAO.GetTaskIdsAssignedForWeek(email, weekStart);
     }
 
     /// GENERATING
@@ -177,7 +105,7 @@ public class WeeklyTaskManager {
      * @throws Exception For Database Access and Update Failures and for when retrieving tasks with GetTaskIdsAssignedForWeek
      */
     public static WeeklyTask[] GenerateTasksForThisWeek(String email) throws Exception {
-        if (IsEmailNull(email) || !EmailManager.DoesAccountWithEmailExist(email)) {
+        if (IsEmailNull(email) || !EmailDAO.DoesAccountWithEmailExist(email)) {
             throw new IllegalArgumentException("Email is null or this account does not exist");
         }
 
@@ -192,7 +120,7 @@ public class WeeklyTaskManager {
 
         WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
         for (int i = 0; i < taskIds.length; i++) {
-            Task task = TaskManager.GetTaskForId(taskIds[i]);
+            Task task = TaskDAO.GetTaskForId(taskIds[i]);
             tasks[i] = new WeeklyTask(email, task.getTaskId(), "Not Started", "", String.valueOf(weekStart));
 
         }
@@ -210,72 +138,15 @@ public class WeeklyTaskManager {
         if (IsWeekStartNull(weekStart) || IsEmailNull(email)){
             throw new IllegalArgumentException("Week start or email is null");
         }
-
-        /// HAVE A WAY TO CHOOSE WHICH TASKS GET ASSIGNED FOR NOW JUST TEST TASK
-        String INSERT_NEW_TASKS = " INSERT INTO WeeklyTasks " +
-                "(accountEmail, taskId, status, weekStart) VALUES";
+        
 
         WeeklyTask[] tasks = GetTasksForEmailForThisWeek(email);
-
 
         if (tasks != null){
             throw new Exception("Tried to generate tasks when they already exist");
         }
-        for (int i = 0; i < AMOUNT_OF_TASKS; i++){
 
-            INSERT_NEW_TASKS += (" (?, ?, ?, ?)");
-            if (i + 1 != AMOUNT_OF_TASKS){
-                INSERT_NEW_TASKS +=", ";
-            }
-        }
-
-        try{
-            UserQuest currentActiveQuest = UserQuestManager.GetCurrentActiveUserQuestForEmail
-                    (SystemManager.CurrentAccount.getCurrentEmail());
-
-            System.out.println("Current Quest labourId is" + currentActiveQuest.getLabourId());
-
-            int[] taskIds = TaskManager.GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
-
-            // checks for successful retrieval of all the different tasks and none were null
-            for (int i = 0; i < taskIds.length; i++){
-                if (taskIds[i] == 0){
-                    throw new Exception("Not Full Amount of Tasks where generated instead only "
-                            + taskIds.length + " where generated when the expecting was " + AMOUNT_OF_TASKS);
-                }
-            }
-
-            // appends all task ids to FindTaskInfo Query and then
-            // executes it find all task info
-            Connection connection = SQLite.getConnection();
-            PreparedStatement statement = connection.prepareStatement(INSERT_NEW_TASKS);
-            // assign parameters
-            for (int i = 0; i < AMOUNT_OF_TASKS; i++){
-                int start = i * 4;
-                statement.setString(start + 1, email);
-                statement.setInt(start + 2, taskIds[i]);
-                statement.setString(start + 3, "NotStarted");
-                statement.setString(start + 4, String.valueOf(weekStart));
-            }
-            statement.executeUpdate();
-        }
-        catch (Exception exception){
-            System.out.println(exception.getMessage());
-
-            // appends all task ids to FindTaskInfo Query and then
-            // executes it find all task info
-            Connection connection = SQLite.getConnection();
-            PreparedStatement statement = connection.prepareStatement(INSERT_NEW_TASKS);
-            // assign parameters
-            for (int i = 0; i < AMOUNT_OF_TASKS; i++){
-                int start = i * 4;
-                statement.setString(start + 1, email);
-                statement.setInt(start + 2, defaultTaskSearchNum);
-                statement.setString(start + 3, "NotStarted");
-                statement.setString(start + 4, String.valueOf(weekStart));
-            }
-            statement.executeUpdate();
-        }
+        WeeklyTaskDAO.InsertTasks(email, weekStart);
     }
 
     /// UPDATING
@@ -291,14 +162,11 @@ public class WeeklyTaskManager {
         if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){
             throw new IllegalArgumentException("Null weekly task, reflection or email");
         }
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_DRAFT);
-        statement.setString(1, reflection);
-        statement.setString(2, email);
-        statement.setInt(3, task.getTaskId());
 
-        statement.executeUpdate();
+        // update the task
+        WeeklyTaskDAO.UpdateGivenTaskToDraft(task, reflection, email);
 
+        // find it and return it
         return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));
     }
     /**
@@ -313,13 +181,8 @@ public class WeeklyTaskManager {
         if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){
             throw new IllegalArgumentException("Null weekly task, reflection or email");
         }
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(SQL_FINISH_TASK);
-        statement.setString(1, reflection);
-        statement.setString(2, email);
-        statement.setInt(3, task.getTaskId());
 
-        statement.executeUpdate();
+        WeeklyTaskDAO.UpdateGivenTaskToBeFinished(task, reflection, email);
 
         return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));
     }
@@ -331,7 +194,7 @@ public class WeeklyTaskManager {
      * @return Whether the email is Empty or Null
      */
     private static boolean IsEmailNull(String email){
-        return SystemManager.isEmpty(email);
+        return ApplicationManager.isEmpty(email);
     }
     /**
      * Checks if the given weeklyTask is null
@@ -357,7 +220,7 @@ public class WeeklyTaskManager {
      * @return Whether the reflection is null or empty
      */
     private static boolean IsReflectionNull(String reflection){
-        return SystemManager.isEmpty(reflection);
+        return ApplicationManager.isEmpty(reflection);
     }
     /**
      * Checks if the given taskId is equal to 0
