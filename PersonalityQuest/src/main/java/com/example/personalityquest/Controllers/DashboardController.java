@@ -6,11 +6,7 @@ import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.Services.EmailService;
-import com.example.personalityquest.Services.QuestService;
-import com.example.personalityquest.Services.UserQuestService;
-import com.example.personalityquest.Services.WeeklyTaskService;
-import com.example.personalityquest.StreakManager;
+import com.example.personalityquest.Services.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -114,7 +110,7 @@ public class DashboardController implements Initializable {
 
     private void UpdateStreakLabel() {
         try {
-            int streak = StreakManager.GetCurrentStreak(
+            int streak = StreakService.GetCurrentStreak(
                     ApplicationManager.CurrentAccount.getCurrentEmail());
             streakLabel.setText("Day " + streak);
         } catch (Exception exception) {

@@ -39,28 +39,28 @@ public class StreakService {
             return NO_STREAK;
         }
 
-        LocalDate lastCompletionDate = progress.getLastCompletionDate();
+        LocalDate lastCompletionDate = progress.GetLastCompletionDate();
 
         // Do not increase the streak more than once on the same date
         if (completionDate.equals(lastCompletionDate)) {
-            return progress.getCurrentStreak();
+            return progress.GetCurrentStreak();
         }
 
         // Do not replace saved progress with an older completion date
         if (lastCompletionDate != null
                 && completionDate.isBefore(lastCompletionDate)) {
-            return progress.getCurrentStreak();
+            return progress.GetCurrentStreak();
         }
 
         int updatedStreak = FIRST_STREAK;
 
         if (lastCompletionDate != null
                 && lastCompletionDate.plusDays(1).equals(completionDate)) {
-            updatedStreak = progress.getCurrentStreak() + 1;
+            updatedStreak = progress.GetCurrentStreak() + 1;
         }
 
         int updatedBestStreak = Math.max(
-                progress.getBestStreak(),
+                progress.GetBestStreak(),
                 updatedStreak
         );
 
@@ -105,14 +105,14 @@ public class StreakService {
             return NO_STREAK;
         }
 
-        LocalDate lastCompletionDate = progress.getLastCompletionDate();
+        LocalDate lastCompletionDate = progress.GetLastCompletionDate();
 
         if (lastCompletionDate != null
                 && lastCompletionDate.isBefore(today.minusDays(1))) {
             return NO_STREAK;
         }
 
-        return progress.getCurrentStreak();
+        return progress.GetCurrentStreak();
     }
 
     /**
@@ -133,6 +133,6 @@ public class StreakService {
             return NO_STREAK;
         }
 
-        return progress.getBestStreak();
+        return progress.GetBestStreak();
     }
 }
