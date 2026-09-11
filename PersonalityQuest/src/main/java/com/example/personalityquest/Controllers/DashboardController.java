@@ -1,6 +1,6 @@
 package com.example.personalityquest.Controllers;
 
-import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
+import com.example.personalityquest.Applications.TasksApplication;
 import com.example.personalityquest.Model.EmailDetails;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
@@ -269,11 +269,12 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void OnTaskClick(MouseEvent event) throws IOException {
-        WeeklyTask selectedTask = dailiesList.getSelectionModel().getSelectedItem();
+        @SuppressWarnings("unchecked")
+        ListView<WeeklyTask> source = (ListView<WeeklyTask>) event.getSource();
+        WeeklyTask selectedTask = source.getSelectionModel().getSelectedItem();
 
         if (selectedTask != null) {
-            WeeklyTaskReflectionApplication.launch(
-                    (Stage) dailiesList.getScene().getWindow(), selectedTask);
+            TasksApplication.launch((Stage) source.getScene().getWindow(), selectedTask);
         }
     }
 }

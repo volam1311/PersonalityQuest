@@ -4,6 +4,7 @@ import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Applications.QuestApplication;
 import com.example.personalityquest.Applications.SettingsApplication;
+import com.example.personalityquest.Applications.TasksApplication;
 import com.example.personalityquest.Model.EmailDetails;
 import com.example.personalityquest.Services.EmailService;
 import javafx.application.Platform;
@@ -201,8 +202,9 @@ public class NavBarController implements Initializable {
         switch (destination) {
             case HOME -> DashboardApplication.launch(stage);
             case QUESTS -> QuestApplication.launch(stage);
+            case TASKS -> TasksApplication.launch(stage);
             case SETTINGS -> SettingsApplication.launch(stage);
-            case TASKS, ARCHETYPE -> {
+            case ARCHETYPE -> {
             }
         }
     }
