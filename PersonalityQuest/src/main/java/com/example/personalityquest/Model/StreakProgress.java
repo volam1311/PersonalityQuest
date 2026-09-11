@@ -17,15 +17,15 @@ public final class StreakProgress {
         this.lastCompletionDate = lastCompletionDate;
     }
 
-    public int getCurrentStreak() {
+    public int GetCurrentStreak() {
         return currentStreak;
     }
 
-    public int getBestStreak() {
+    public int GetBestStreak() {
         return bestStreak;
     }
 
-    public LocalDate getLastCompletionDate() {
+    public LocalDate GetLastCompletionDate() {
         return lastCompletionDate;
     }
 }
