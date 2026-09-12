@@ -20,6 +20,8 @@ public class PasswordServiceTest {
             "test"
     );
 
+    private String currentPassword;
+
     @BeforeEach
     public void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
@@ -46,6 +48,8 @@ public class PasswordServiceTest {
             statement.setString(1, hashedPassword);
 
             statement.executeUpdate();
+
+            currentPassword = "test";
         }
 
         SQLite.setConnection(connection);
@@ -63,13 +67,13 @@ public class PasswordServiceTest {
 
     @Test
     public void NewPasswordIsInDB() throws Exception {
-        PasswordService.UpdatePasswordForEmail("test", "newPassword");
+        PasswordService.UpdatePasswordForEmail("test", currentPassword, "newPassword");
 
         assertTrue(PasswordService.isPasswordForEmail("test", "newPassword"));
     }
     @Test
     public void OldPasswordIsNotInDb() throws Exception {
-        PasswordService.UpdatePasswordForEmail("test", "newPassword");
+        PasswordService.UpdatePasswordForEmail("test", currentPassword, "newPassword");
 
         assertFalse(PasswordService.isPasswordForEmail("test", "test"));
     }
@@ -90,15 +94,15 @@ public class PasswordServiceTest {
 
     @Test
     public void UpdatePasswordWithNullEmail() throws Exception {
-        assertFalse(PasswordService.UpdatePasswordForEmail(null, "test"));
+        assertFalse(PasswordService.UpdatePasswordForEmail(null, currentPassword,"test"));
     }
 
     @Test
     public void UpdatePasswordWithNullPassword() throws Exception {
-        assertFalse(PasswordService.UpdatePasswordForEmail("test", null));
+        assertFalse(PasswordService.UpdatePasswordForEmail("test", currentPassword,null));
     }
     @Test
     public void UpdatePasswordWithBothNull() throws Exception {
-        assertFalse(PasswordService.UpdatePasswordForEmail(null, null));
+        assertFalse(PasswordService.UpdatePasswordForEmail(null, currentPassword, null));
     }
 }

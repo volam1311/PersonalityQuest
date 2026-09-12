@@ -1,7 +1,9 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.*;
+import com.example.personalityquest.DAO.AccountDAO;
 import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.Services.AccountService;
 import com.example.personalityquest.Services.EmailService;
 import com.example.personalityquest.ApplicationManager;
 import javafx.fxml.FXML;
@@ -51,12 +53,6 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     * */
     @FXML
     public void OnSaveAndExit() throws SQLException {
-        if (!isValidUpdate()){
-            Message.setText("Account update Invalid");
-            System.out.println("Account update Invalid");
-            return;
-        }
-
         /*
         * Failsafe for if somehow this variable does not become set
         * */
@@ -64,20 +60,24 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
             System.out.println("Old email is null");
             return;
         }
-        Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(saveQuery);
+        EmailDetails newDetails = new EmailDetails(
+            emailEntry.getText(),
+            userNameEntry.getText(),
+            firstNameEntry.getText(),
+            lastNameEntry.getText());
 
-        // assign parameters
-        statement.setString(1, emailEntry.getText());
-        statement.setString(2, userNameEntry.getText());
-        statement.setString(3, firstNameEntry.getText());
-        statement.setString(4, lastNameEntry.getText());
-        statement.setString(5, oldEmail);
-        // execute statement
-        statement.executeUpdate();
-
-        Message.setText("Updated Details");
-        System.out.println("Updated Details");
+        try{
+            AccountService.UpdateEmailDetailsForAccount(newDetails, oldEmail);
+            Message.setText("Updated Details");
+            System.out.println("Updated Details");
+        }
+        catch (IllegalArgumentException e){
+            Message.setText(e.getMessage());
+        }
+        catch (SQLException e){
+            Message.setText("Something went wrong. Please Try Again");
+            System.out.println(e.getStackTrace());
+        }
     }
 
     /*
