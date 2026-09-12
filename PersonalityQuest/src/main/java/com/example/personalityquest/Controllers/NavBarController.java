@@ -6,7 +6,9 @@ import com.example.personalityquest.Applications.QuestApplication;
 import com.example.personalityquest.Applications.SettingsApplication;
 import com.example.personalityquest.Applications.TasksApplication;
 import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.EmailService;
+import com.example.personalityquest.Services.NavigationService;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -200,10 +202,10 @@ public class NavBarController implements Initializable {
 
         Stage stage = (Stage) sidebar.getScene().getWindow();
         switch (destination) {
-            case HOME -> DashboardApplication.launch(stage);
-            case QUESTS -> QuestApplication.launch(stage);
-            case TASKS -> TasksApplication.launch(stage);
-            case SETTINGS -> SettingsApplication.launch(stage);
+            case HOME -> NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
+            case QUESTS -> NavigationService.LoadScreen(ScreenEnum.QUESTS);
+            case TASKS -> NavigationService.LoadScreen(ScreenEnum.TASKS);
+            case SETTINGS -> NavigationService.LoadScreen(ScreenEnum.SETTINGS);
             case ARCHETYPE -> {
             }
         }

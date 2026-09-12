@@ -1,6 +1,9 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.AccountRepository;
+import com.example.personalityquest.Applications.AccountCreationApplication;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.NavigationService;
 import com.example.personalityquest.Validators.AccountSignUpValidator;
 import com.example.personalityquest.Applications.AccountSignInApplication;
 import com.example.personalityquest.Applications.DashboardApplication;
@@ -216,14 +219,14 @@ public class AccountCreationController {
         UserQuest userQuest = UserQuestService.InsertNewQuestForEmail(quest, ApplicationManager.CurrentAccount.getCurrentEmail() );
         UserQuestService.SetUserQuesStatusAsActive(userQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
 
-        DashboardApplication.launch((Stage) emailEntry.getScene().getWindow());
+        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
         System.out.println("Account created");
     }
 
     @FXML
     private void OnSignIn(MouseEvent event) throws IOException {
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        AccountSignInApplication.launch(currentStage);
+        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);
     }
 
     private TextField[] allFields() {

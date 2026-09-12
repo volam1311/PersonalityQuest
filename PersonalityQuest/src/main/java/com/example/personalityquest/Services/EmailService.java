@@ -1,13 +1,9 @@
 package com.example.personalityquest.Services;
 
-import com.example.personalityquest.DAO.EmailDAO;
+import com.example.personalityquest.DAO.AccountDAO;
 import com.example.personalityquest.Model.EmailDetails;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.SQLite;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -27,7 +23,7 @@ public class EmailService {
             System.out.println("Email is null therefor it does not exist");
             return false;}
 
-        return EmailDAO.DoesAccountWithEmailExist(email);
+        return AccountDAO.DoesAccountWithEmailExist(email);
     }
 
     /**
@@ -42,7 +38,7 @@ public class EmailService {
             System.out.println("Email is null therefore details can not be gotten");
             return null;}
 
-        return EmailDAO.GetDetailsForEmail(email);
+        return AccountDAO.GetDetailsForEmail(email);
     }
 
 }

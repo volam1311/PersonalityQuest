@@ -1,7 +1,7 @@
 package com.example.personalityquest.Services;
 
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.DAO.PasswordDAO;
+import com.example.personalityquest.DAO.AccountDAO;
 
 import java.sql.SQLException;
 
@@ -34,7 +34,7 @@ public class PasswordService {
             return false;
         }
 
-        String hashedPassword = PasswordDAO.GetPasswordHash(email);
+        String hashedPassword = AccountDAO.GetHashedPasswordForEmail(email);
 
         return HashingService.VerifyHash(hashedPassword, password);
     }
@@ -46,7 +46,7 @@ public class PasswordService {
      * @return "Whether the update to the database was successful"
      * @throws SQLException "Database Access Failure"
      */
-    public static boolean UpdatePasswordForEmail(String email, String newPassword) throws SQLException {
+    public static boolean UpdatePasswordForEmail(String email, String currentPassword, String newPassword) throws SQLException {
         // check nulls
         if (ApplicationManager.isEmpty(email)) {
             System.out.println("Email is null and therefore password can not be updated for account");
@@ -57,13 +57,18 @@ public class PasswordService {
             return false;
         }
 
+        // current password entered does not match account
+        if (!PasswordService.isPasswordForEmail(email, currentPassword)){
+            System.out.println("Current Password is incorrect");
+            return false;
+        }
         // email doesn't exist so no the password doesn't match
         if (!EmailService.DoesAccountWithEmailExist(email)){
             return false;
         }
 
         try{
-            PasswordDAO.UpdatePasswordForEmail(email, newPassword);
+            AccountDAO.UpdatePasswordForEmail(email,  newPassword);
             return true;
         }
         catch (SQLException e){

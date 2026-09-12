@@ -22,25 +22,13 @@ public class UpdateAccountPasswordController {
 
     @FXML
     private void OnUpdatePassword() throws SQLException {
-        // email doesnt exist
-        if (!EmailService.DoesAccountWithEmailExist(ApplicationManager.CurrentAccount.getCurrentEmail())){
-            Message.setText("Wow you reached something you should not have.");
-            return;
-        }
-
-        // current password entered does not match account
-        if (!PasswordService.isPasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), currentPasswordEntry.getText())){
-            Message.setText("Current Password does not match account");
-            return;
-        }
-
-        // new password does not match with rentry
+        // new password does not match with reentry
         if (!Objects.equals(newPasswordEntry.getText(), newPasswordReEntry.getText())){
             Message.setText("New Password does not match Re-Enter field");
             return;
         }
 
-        PasswordService.UpdatePasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), newPasswordEntry.getText());
+        PasswordService.UpdatePasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), currentPasswordEntry.getText(), newPasswordEntry.getText());
         Message.setText("Password Updated for account");
 
         OnExit();

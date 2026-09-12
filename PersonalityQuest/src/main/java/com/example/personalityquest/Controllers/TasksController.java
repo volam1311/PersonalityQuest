@@ -5,6 +5,8 @@ import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.Model.WeeklyTask;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.NavigationService;
 import com.example.personalityquest.Services.QuestService;
 import com.example.personalityquest.Services.TaskService;
 import com.example.personalityquest.Services.WeeklyTaskService;
@@ -235,7 +237,7 @@ public class TasksController implements Initializable {
 
     @FXML
     private void OnBack() throws IOException {
-        DashboardApplication.launch((Stage) tasksRoot.getScene().getWindow());
+        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
     }
 
     @FXML
