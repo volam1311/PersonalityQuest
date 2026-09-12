@@ -3,6 +3,8 @@ package com.example.personalityquest.Controllers;
 import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.NavigationService;
 import com.example.personalityquest.Services.WeeklyTaskService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -67,7 +69,7 @@ public class WeeklyTaskReflectionController implements Initializable {
     }
 
     private void GoToDashboard() throws IOException {
-        DashboardApplication.launch((Stage)reflection.getScene().getWindow());
+        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.*;
+import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.EmailService;
+import com.example.personalityquest.Services.NavigationService;
 import com.example.personalityquest.Services.PasswordService;
 import com.example.personalityquest.ApplicationManager;
 import javafx.application.Platform;
@@ -125,7 +127,7 @@ public class AccountSignInController {
          * */
         ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
 
-        DashboardApplication.launch((Stage)emailEntry.getScene().getWindow());
+        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
 
 
         System.out.println("Sign in complete");
@@ -185,6 +187,6 @@ public class AccountSignInController {
     @FXML
     private void OnSignUp(MouseEvent event) throws IOException {
         Stage currentStage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        AccountCreationApplication.launch(currentStage);
+        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
     }
 }

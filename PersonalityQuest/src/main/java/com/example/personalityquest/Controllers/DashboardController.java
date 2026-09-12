@@ -6,6 +6,7 @@ import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -270,7 +271,7 @@ public class DashboardController implements Initializable {
         WeeklyTask selectedTask = source.getSelectionModel().getSelectedItem();
 
         if (selectedTask != null) {
-            TasksApplication.launch((Stage) source.getScene().getWindow(), selectedTask);
+            NavigationService.LoadScreen(ScreenEnum.TASKS);
         }
     }
 }
