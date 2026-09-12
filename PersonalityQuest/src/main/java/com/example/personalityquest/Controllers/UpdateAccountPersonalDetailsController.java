@@ -20,10 +20,6 @@ import java.util.ResourceBundle;
 
 public class UpdateAccountPersonalDetailsController implements Initializable {
 
-    protected final static String saveQuery =
-            "UPDATE Accounts" +
-            " SET email = ?, userName = ?, firstName = ?, lastName = ?" +
-            "WHERE email = ?";
 
 
     @FXML
@@ -52,7 +48,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     * Attempts to save updated changes made to the users account details
     * */
     @FXML
-    public void OnSaveAndExit() throws SQLException {
+    public void OnSaveAndExit() {
         /*
         * Failsafe for if somehow this variable does not become set
         * */

@@ -22,6 +22,12 @@ public class AccountDAO {
     protected final static String updatePassword =
             "UPDATE Accounts SET password = ? WHERE email = ?";
 
+    protected final static String saveQuery = """
+                        UPDATE Accounts
+                        SET email = ?, userName = ?, firstName = ?, lastName = ?
+                        WHERE email = ?
+            """;
+
     // EMAIL
     /**
      * Checks to see whether an account exists in the database with the given email
@@ -121,5 +127,15 @@ public class AccountDAO {
 
     public static void UpdateAccountDetails(EmailDetails emailDetails, String currentEmail) throws SQLException {
 
+        Connection connection = SQLite.getConnection();
+        PreparedStatement statement = connection.prepareStatement(saveQuery);
+        // assign parameters
+        statement.setString(1, emailDetails.getEmail());
+        statement.setString(2, emailDetails.getUserName());
+        statement.setString(3, emailDetails.getFirstName());
+        statement.setString(4, emailDetails.getLastName());
+        statement.setString(5, currentEmail);
+
+        statement.executeUpdate();
     }
 }
