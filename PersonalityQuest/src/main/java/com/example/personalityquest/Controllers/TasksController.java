@@ -4,12 +4,10 @@ import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.Task;
+import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ScreenEnum;
-import com.example.personalityquest.Services.NavigationService;
-import com.example.personalityquest.Services.QuestService;
-import com.example.personalityquest.Services.TaskService;
-import com.example.personalityquest.Services.WeeklyTaskService;
+import com.example.personalityquest.Services.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -279,6 +277,7 @@ public class TasksController implements Initializable {
             return;
         }
 
+        // Update task to be finished
         try {
             WeeklyTask updated = WeeklyTaskService.UpdateGivenTaskToBeFinished(
                     selected.weeklyTask(),
@@ -289,6 +288,42 @@ public class TasksController implements Initializable {
             feedbackLabel.setText("Task submitted.");
         } catch (Exception exception) {
             feedbackLabel.setText("Could not submit this task right now.");
+        }
+
+        // see if week is finished
+        try{
+            int amountOfTasksAssigned = weekTasks.getItems().size();
+            int count = 0;
+            for(TaskListItem taskListItem : weekTasks.getItems()){
+                if (IsFinished(taskListItem.weeklyTask.getStatus())){
+                    count++;
+                }
+            }
+
+            // week is not finished
+            if (count != amountOfTasksAssigned){
+                throw new Exception("Week not finished");
+            }
+
+            // update streak
+            StreakService.RecordCompletion(ApplicationManager.CurrentAccount.getCurrentEmail(), LocalDate.now());
+            // is finished, update percentage
+            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
+
+            // update percentage
+           UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(
+                    currentActiveQuest,
+                    ApplicationManager.CurrentAccount.getCurrentEmail(),
+                    currentActiveQuest.getPercentageComplete() + 0.1f);
+
+            // quest is completed
+            if (updatedQuest.getPercentageComplete() >= 1.0f){
+                UserQuestService.SetUserQuestStatusAsComplete(updatedQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
+
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
 
