@@ -1,7 +1,6 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.Applications.DashboardApplication;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.Model.UserQuest;
@@ -23,13 +22,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -48,12 +46,14 @@ public class TasksController implements Initializable {
     @FXML
     private GridPane tasksGrid;
     @FXML
-    private VBox detailCard;
+    private VBox listsColumn, detailCard;
     @FXML
-    private Label weekSummaryLabel, weekRangeLabel, taskTitleLabel, questLabel,
+    private Label weekSummaryLabel, weekRangeLabel, questTasksLabel, taskTitleLabel, questLabel,
             descriptionLabel, feedbackLabel;
     @FXML
     private ListView<TaskListItem> weekTasks;
+    @FXML
+    private ListView<Task> questTasks;
     @FXML
     private CheckBox progressBox;
     @FXML
@@ -62,12 +62,14 @@ public class TasksController implements Initializable {
     private Button draftButton, submitButton;
 
     private WeeklyTask taskToSelect;
+    private boolean updatingSelection;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
-        ConfigureTaskList();
-        LoadWeeklyTasks();
+        ConfigureWeeklyTaskList();
+        ConfigureQuestTaskList();
+        LoadTasks();
 
         tasksRoot.widthProperty().addListener((observable, oldWidth, newWidth) ->
                 ApplyResponsiveLayout(newWidth.doubleValue()));
@@ -80,13 +82,19 @@ public class TasksController implements Initializable {
         SelectMatchingTask();
     }
 
+    private void LoadTasks() {
+        LoadWeeklyTasks();
+        LoadQuestTasks();
+        SelectInitialTask();
+    }
+
     private void LoadWeeklyTasks() {
         weekTasks.getItems().clear();
         String email = ApplicationManager.CurrentAccount.getCurrentEmail();
 
         if (ApplicationManager.isEmpty(email)) {
             weekSummaryLabel.setText("Sign in to see this week's tasks.");
-            ShowEmptyDetail("Sign in to write a reflection.");
+            weekRangeLabel.setText("Your weekly assignments will appear here.");
             return;
         }
 
@@ -99,14 +107,12 @@ public class TasksController implements Initializable {
             if (weekly == null || weekly.length == 0) {
                 weekSummaryLabel.setText("No weekly tasks have been assigned yet.");
                 weekRangeLabel.setText("Tasks are generated from your active quest.");
-                ShowEmptyDetail("No weekly tasks have been assigned yet.");
                 return;
             }
 
             int finished = 0;
             for (WeeklyTask weeklyTask : weekly) {
-                TaskListItem item = ToListItem(weeklyTask);
-                weekTasks.getItems().add(item);
+                weekTasks.getItems().add(ToListItem(weeklyTask));
                 if (IsFinished(weeklyTask.getStatus())) {
                     finished++;
                 }
@@ -114,14 +120,51 @@ public class TasksController implements Initializable {
 
             weekSummaryLabel.setText(finished + " of " + weekly.length + " finished this week.");
             weekRangeLabel.setText("Week of " + FormatWeek(weekly[0].getWeekStarted()));
-
-            if (!SelectMatchingTask() && !weekTasks.getItems().isEmpty()) {
-                weekTasks.getSelectionModel().selectFirst();
-            }
         } catch (Exception exception) {
             weekSummaryLabel.setText("Could not load this week's tasks right now.");
-            ShowEmptyDetail("Could not load this week's tasks right now.");
         }
+    }
+
+    private void LoadQuestTasks() {
+        questTasks.getItems().clear();
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+
+        if (ApplicationManager.isEmpty(email)) {
+            questTasksLabel.setText("Sign in to see your current labour.");
+            return;
+        }
+
+        try {
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            if (userQuest == null) {
+                questTasksLabel.setText("No active labour has been assigned yet.");
+                return;
+            }
+
+            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            List<Task> tasks = TaskService.GetTasksForLabourId(userQuest.getLabourId());
+            questTasks.getItems().addAll(tasks);
+
+            String questName = quest == null ? "your current labour" : quest.getName();
+            questTasksLabel.setText(tasks.size() + " tasks in " + questName + ".");
+        } catch (Exception exception) {
+            questTasksLabel.setText("Could not load this labour's tasks right now.");
+        }
+    }
+
+    private void SelectInitialTask() {
+        if (SelectMatchingTask()) {
+            return;
+        }
+        if (!weekTasks.getItems().isEmpty()) {
+            weekTasks.getSelectionModel().selectFirst();
+            return;
+        }
+        if (!questTasks.getItems().isEmpty()) {
+            questTasks.getSelectionModel().selectFirst();
+            return;
+        }
+        ShowEmptyDetail("Choose a weekly or quest task to read its details.");
     }
 
     private TaskListItem ToListItem(WeeklyTask weeklyTask) {
@@ -155,7 +198,7 @@ public class TasksController implements Initializable {
         return false;
     }
 
-    private void ShowTask(TaskListItem item) {
+    private void ShowWeeklyTask(TaskListItem item) {
         if (item == null) {
             ShowEmptyDetail("Choose a weekly task to read its details and write a reflection.");
             return;
@@ -166,7 +209,7 @@ public class TasksController implements Initializable {
         boolean finished = IsFinished(weeklyTask.getStatus());
 
         taskTitleLabel.setText(item.displayName());
-        questLabel.setText("This task belongs to " + item.questName());
+        questLabel.setText("Weekly task · " + item.questName());
         descriptionLabel.setText(task == null || ApplicationManager.isEmpty(task.getDescription())
                 ? "Complete this week's challenge, then write an honest reflection."
                 : task.getDescription());
@@ -179,19 +222,50 @@ public class TasksController implements Initializable {
         feedbackLabel.setText(finished ? "This task is already finished." : "");
     }
 
+    private void ShowQuestTask(Task task) {
+        if (task == null) {
+            ShowEmptyDetail("Choose a quest task to read its details.");
+            return;
+        }
+
+        String questName = "your current labour";
+        try {
+            Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());
+            if (quest != null && !ApplicationManager.isEmpty(quest.getName())) {
+                questName = quest.getName();
+            }
+        } catch (Exception exception) {
+            questName = "your current labour";
+        }
+
+        taskTitleLabel.setText(task.getName());
+        questLabel.setText("Quest task · " + questName);
+        descriptionLabel.setText(ApplicationManager.isEmpty(task.getDescription())
+                ? "This task belongs to your current labour."
+                : task.getDescription());
+        progressBox.setSelected(false);
+        reflectionArea.clear();
+        reflectionArea.setDisable(true);
+        draftButton.setDisable(true);
+        submitButton.setDisable(true);
+        submitButton.setText("Submit");
+        feedbackLabel.setText("Reflections are submitted from the weekly tasks above.");
+    }
+
     private void ShowEmptyDetail(String message) {
         taskTitleLabel.setText("Select a task");
         questLabel.setText(message);
         descriptionLabel.setText("");
         progressBox.setSelected(false);
         reflectionArea.clear();
+        reflectionArea.setDisable(true);
         draftButton.setDisable(true);
         submitButton.setDisable(true);
         submitButton.setText("Submit");
         feedbackLabel.setText("");
     }
 
-    private void ConfigureTaskList() {
+    private void ConfigureWeeklyTaskList() {
         weekTasks.setPlaceholder(new Label("No weekly tasks assigned yet."));
         weekTasks.setCellFactory(list -> new ListCell<>() {
             private final CheckBox completedBox = new CheckBox();
@@ -231,7 +305,54 @@ public class TasksController implements Initializable {
         });
 
         weekTasks.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldItem, newItem) -> ShowTask(newItem));
+                (observable, oldItem, newItem) -> {
+                    if (updatingSelection || newItem == null) {
+                        return;
+                    }
+                    updatingSelection = true;
+                    questTasks.getSelectionModel().clearSelection();
+                    updatingSelection = false;
+                    ShowWeeklyTask(newItem);
+                });
+    }
+
+    private void ConfigureQuestTaskList() {
+        questTasks.setPlaceholder(new Label("No quest tasks assigned yet."));
+        questTasks.setCellFactory(list -> new ListCell<>() {
+            private final Label nameLabel = new Label();
+            private final HBox row = new HBox(10, nameLabel);
+
+            {
+                row.getStyleClass().add("week-task-row");
+                nameLabel.getStyleClass().add("week-task-name");
+            }
+
+            @Override
+            protected void updateItem(Task task, boolean empty) {
+                super.updateItem(task, empty);
+
+                if (empty || task == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+
+                nameLabel.setText(task.getName());
+                setText(null);
+                setGraphic(row);
+            }
+        });
+
+        questTasks.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldItem, newItem) -> {
+                    if (updatingSelection || newItem == null) {
+                        return;
+                    }
+                    updatingSelection = true;
+                    weekTasks.getSelectionModel().clearSelection();
+                    updatingSelection = false;
+                    ShowQuestTask(newItem);
+                });
     }
 
     @FXML
@@ -259,7 +380,7 @@ public class TasksController implements Initializable {
                     ApplicationManager.CurrentAccount.getCurrentEmail());
             taskToSelect = updated;
             feedbackLabel.setText("Draft saved.");
-            LoadWeeklyTasks();
+            LoadTasks();
         } catch (Exception exception) {
             feedbackLabel.setText("Could not save this draft right now.");
         }
@@ -278,54 +399,46 @@ public class TasksController implements Initializable {
             return;
         }
 
-        // Update task to be finished
         try {
             WeeklyTask updated = WeeklyTaskService.UpdateGivenTaskToBeFinished(
                     selected.weeklyTask(),
                     reflection,
                     ApplicationManager.CurrentAccount.getCurrentEmail());
             taskToSelect = updated;
-            LoadWeeklyTasks();
+            LoadTasks();
             feedbackLabel.setText("Task submitted.");
         } catch (Exception exception) {
             feedbackLabel.setText("Could not submit this task right now.");
         }
 
-        // see if week is finished
-        try{
+        try {
             int amountOfTasksAssigned = weekTasks.getItems().size();
             int count = 0;
-            for(TaskListItem taskListItem : weekTasks.getItems()){
-                if (IsFinished(taskListItem.weeklyTask.getStatus())){
+            for (TaskListItem taskListItem : weekTasks.getItems()) {
+                if (IsFinished(taskListItem.weeklyTask().getStatus())) {
                     count++;
                 }
             }
 
-            // week is not finished
-            if (count != amountOfTasksAssigned){
+            if (count != amountOfTasksAssigned) {
                 throw new Exception("Week not finished");
             }
 
-            // update streak
             StreakService.RecordCompletion(ApplicationManager.CurrentAccount.getCurrentEmail(), LocalDate.now());
-            // is finished, update percentage
-            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
+            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(
+                    ApplicationManager.CurrentAccount.getCurrentEmail());
 
-            // update percentage
-           UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(
+            UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(
                     currentActiveQuest,
                     ApplicationManager.CurrentAccount.getCurrentEmail(),
                     currentActiveQuest.getPercentageComplete() + 0.1f);
 
-            // quest is completed
-            if (updatedQuest.getPercentageComplete() >= 1.0f){
-                UserQuestService.SetUserQuestStatusAsComplete(updatedQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
-
-                // increase total amount completed
+            if (updatedQuest.getPercentageComplete() >= 1.0f) {
+                UserQuestService.SetUserQuestStatusAsComplete(
+                        updatedQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
                 StreakService.IncreaseTotalQuestsCompleted(ApplicationManager.CurrentAccount.getCurrentEmail());
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -342,11 +455,15 @@ public class TasksController implements Initializable {
 
         boolean stacked = width < STACKED_BREAKPOINT;
         if (stacked) {
+            GridPane.setColumnIndex(listsColumn, 0);
+            GridPane.setRowIndex(listsColumn, 0);
             GridPane.setColumnIndex(detailCard, 0);
             GridPane.setRowIndex(detailCard, 1);
             tasksGrid.getColumnConstraints().get(0).setPercentWidth(FULL_PERCENT);
             tasksGrid.getColumnConstraints().get(1).setPercentWidth(HIDDEN_PERCENT);
         } else {
+            GridPane.setColumnIndex(listsColumn, 0);
+            GridPane.setRowIndex(listsColumn, 0);
             GridPane.setColumnIndex(detailCard, 1);
             GridPane.setRowIndex(detailCard, 0);
             tasksGrid.getColumnConstraints().get(0).setPercentWidth(38);

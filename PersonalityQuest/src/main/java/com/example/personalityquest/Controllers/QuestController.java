@@ -2,7 +2,6 @@ package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.Quest;
-import com.example.personalityquest.Model.QuestLore;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Services.QuestService;
@@ -111,20 +110,37 @@ public class QuestController implements Initializable {
 
         UserQuest userQuest = item.userQuest();
         Quest quest = item.quest();
-        QuestLore lore = QuestLore.forQuest(quest.getName(), item.archetypeName());
+        List<Task> tasks;
+        try {
+            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
+        } catch (Exception exception) {
+            tasks = List.of();
+        }
 
-        questTitleLabel.setText(lore.labourTitle());
-        questArchetypeLabel.setText(item.archetypeName() + " · " + quest.getName());
-        questStoryLabel.setText(lore.story());
-        challengeLabel.setText(lore.challenge());
-        traitLabel.setText(lore.traitFocus());
-        reflectionPromptLabel.setText(lore.reflectionPrompt());
+        String story = "";
+        try {
+            story = QuestService.GetArchetypeDescription(quest.getArchetypeId());
+        } catch (Exception exception) {
+            story = "";
+        }
+        String taskDetails = TaskService.JoinTaskDetails(tasks);
+
+        questTitleLabel.setText(quest.getName());
+        questArchetypeLabel.setText(item.archetypeName());
+        questStoryLabel.setText(ApplicationManager.isEmpty(story)
+                ? "Complete the stored tasks for this labour to continue the questline."
+                : story);
+        challengeLabel.setText(taskDetails.isEmpty()
+                ? "No tasks are stored for this labour yet."
+                : taskDetails);
+        traitLabel.setText(item.archetypeName());
+        reflectionPromptLabel.setText("Write your weekly reflection on the Tasks page after finishing this labour's assigned work.");
 
         float progress = userQuest.getPercentageComplete();
         questProgress.setProgress(progress);
         questProgressLabel.setText(String.format("%.0f%% Complete", progress * 100));
         SetStatusChip(userQuest.getStatus());
-        LoadLabourTasks(quest.getLabourId());
+        labourTasks.getItems().setAll(tasks);
     }
 
     private void ShowEmptyQuest(String message) {
@@ -138,15 +154,6 @@ public class QuestController implements Initializable {
         questProgressLabel.setText("0% Complete");
         SetStatusChip("None");
         labourTasks.getItems().clear();
-    }
-
-    private void LoadLabourTasks(int labourId) {
-        labourTasks.getItems().clear();
-        try {
-            labourTasks.getItems().addAll(TaskService.GetTasksForLabourId(labourId));
-        } catch (Exception exception) {
-            labourTasks.getItems().clear();
-        }
     }
 
     private void SetStatusChip(String status) {

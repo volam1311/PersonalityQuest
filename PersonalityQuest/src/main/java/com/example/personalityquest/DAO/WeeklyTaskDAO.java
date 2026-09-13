@@ -134,7 +134,16 @@ public class WeeklyTaskDAO {
 
             System.out.println("Current Quest labourId is" + currentActiveQuest.getLabourId());
 
-            int[] taskIds = TaskService.GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
+            int weekNumber = CountAssignedWeeks(email) + 1;
+            int[] taskIds = TaskService.GetTaskIdsForLabourWeek(currentActiveQuest.getLabourId(), weekNumber);
+            if (taskIds.length == 0) {
+                taskIds = TaskService.GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
+            }
+
+            if (taskIds.length != AMOUNT_OF_TASKS) {
+                throw new Exception("Not Full Amount of Tasks where generated instead only "
+                        + taskIds.length + " where generated when the expecting was " + AMOUNT_OF_TASKS);
+            }
 
             // checks for successful retrieval of all the different tasks and none were null
             for (int i = 0; i < taskIds.length; i++){
@@ -174,6 +183,25 @@ public class WeeklyTaskDAO {
                 statement.setString(start + 4, String.valueOf(weekStart));
             }
             statement.executeUpdate();
+        }
+    }
+
+    /**
+     * How many distinct weeks this account already has weekly tasks for.
+     */
+    public static int CountAssignedWeeks(String email) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    SELECT COUNT(DISTINCT weekStart) FROM WeeklyTasks
+                    WHERE accountEmail = ?
+                    """)) {
+            statement.setString(1, email);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
         }
     }
 

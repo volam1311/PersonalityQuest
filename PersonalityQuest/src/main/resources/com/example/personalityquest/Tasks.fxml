@@ -29,7 +29,7 @@
 
                     <VBox spacing="6">
                         <Label styleClass="page-title" text="Tasks" />
-                        <Label fx:id="weekSummaryLabel" styleClass="page-subtitle" text="This week's assigned challenges from your quest." />
+                        <Label fx:id="weekSummaryLabel" styleClass="page-subtitle" text="This week's assignments, then every task in your current labour." />
                     </VBox>
 
                     <GridPane fx:id="tasksGrid" hgap="12" vgap="12">
@@ -38,15 +38,23 @@
                             <ColumnConstraints hgrow="ALWAYS" percentWidth="62" />
                         </columnConstraints>
 
-                        <VBox fx:id="weekCard" spacing="10" styleClass="card" GridPane.columnIndex="0">
-                            <Label styleClass="card-title" text="This week" />
-                            <Label fx:id="weekRangeLabel" styleClass="page-subtitle" text="Your weekly assignments will appear here." />
-                            <ListView fx:id="weekTasks" focusTraversable="false" prefHeight="420" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        <VBox fx:id="listsColumn" spacing="12" GridPane.columnIndex="0">
+                            <VBox fx:id="weekCard" spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
+                                <Label styleClass="card-title" text="Weekly Tasks" />
+                                <Label fx:id="weekRangeLabel" styleClass="page-subtitle" text="Your weekly assignments will appear here." />
+                                <ListView fx:id="weekTasks" focusTraversable="false" prefHeight="210" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                            </VBox>
+
+                            <VBox fx:id="questTasksCard" spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
+                                <Label styleClass="card-title" text="Quest Tasks" />
+                                <Label fx:id="questTasksLabel" styleClass="page-subtitle" text="Every task that belongs to your current labour." />
+                                <ListView fx:id="questTasks" focusTraversable="false" prefHeight="210" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                            </VBox>
                         </VBox>
 
                         <VBox fx:id="detailCard" spacing="14" styleClass="card" GridPane.columnIndex="1">
                             <Label fx:id="taskTitleLabel" styleClass="page-title" text="Select a task" wrapText="true" />
-                            <Label fx:id="questLabel" styleClass="quest-meta" text="Choose a weekly task to read its details and write a reflection." wrapText="true" />
+                            <Label fx:id="questLabel" styleClass="quest-meta" text="Choose a weekly or quest task to read its details." wrapText="true" />
                             <Label fx:id="descriptionLabel" styleClass="lore-body" wrapText="true" text="" />
 
                             <VBox spacing="8">
