@@ -139,3 +139,19 @@
     -fx-font-size: 14px;
     -fx-text-fill: #a884ff;
 }
+
+.ai-feedback-card {
+    -fx-background-color: #1d1533;
+    -fx-background-radius: 16;
+    -fx-padding: 14 16 14 16;
+    -fx-border-color: #6d4cc4;
+    -fx-border-radius: 16;
+    -fx-border-width: 1.5;
+}
+
+.ai-feedback-body {
+    -fx-font-family: Poppins;
+    -fx-font-size: 15px;
+    -fx-text-fill: #f4f0ff;
+    -fx-line-spacing: 3px;
+}
