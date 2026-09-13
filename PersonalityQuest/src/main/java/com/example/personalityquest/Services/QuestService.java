@@ -59,6 +59,24 @@ public class QuestService {
     }
 
     /**
+     * Looks up the stored description of an archetype.
+     * @param archetypeId The archetype to look up
+     * @return The description, or an empty string if none is stored
+     * @throws SQLException Database Access Failure
+     */
+    public static String GetArchetypeDescription(int archetypeId) throws SQLException {
+        if (archetypeId == 0) {
+            throw new IllegalArgumentException("Bad archetypeId of 0");
+        }
+
+        String description = QuestDAO.GetArchetypeDescription(archetypeId);
+        if (description == null || description.isBlank()) {
+            return "";
+        }
+        return description;
+    }
+
+    /**
      * Retrives a Random Quest from the database that matches the archetypeId
      * @param archetypeId The archetypeId of the quest you want to retrieve
      * @return The Random Quests information
