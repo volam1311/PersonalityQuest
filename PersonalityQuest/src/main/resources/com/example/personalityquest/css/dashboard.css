@@ -1,7 +1,5 @@
 .material-symbol {
-    -fx-font: normal 24px "Material Symbols Rounded";
-    -fx-text-fill: #a884ff;
-    -fx-alignment: CENTER;
+    -fx-fill: #c4a7ff;
     -fx-translate-y: 2px;
 }
 
@@ -10,7 +8,8 @@
 .logout-button .material-symbol,
 .menu-button .material-symbol,
 .settings-button .material-symbol {
-    -fx-font: normal 24px "Material Symbols Rounded";
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
 }
 
 .dashboard-root {
@@ -140,8 +139,12 @@
 }
 
 .nav-button.selected-nav-button .material-symbol,
-.nav-button.selected-nav-button .nav-label,
 .profile-button.selected-nav-button .material-symbol,
+.profile-button.selected-nav-button .material-symbol {
+    -fx-fill: #140e25;
+}
+
+.nav-button.selected-nav-button .nav-label,
 .profile-button.selected-nav-button .nav-label {
     -fx-text-fill: #140e25;
 }
@@ -181,7 +184,7 @@
 }
 
 .settings-button.selected-settings-button .material-symbol {
-    -fx-text-fill: #140e25;
+    -fx-fill: #140e25;
 }
 
 .sidebar-collapsed .nav-button,
@@ -230,12 +233,10 @@
 }
 
 .streak-icon {
-    -fx-font: normal 30px "Material Symbols Rounded";
-    -fx-min-width: 30px;
-    -fx-pref-width: 30px;
-    -fx-alignment: CENTER;
+    -fx-scale-x: 1.25;
+    -fx-scale-y: 1.25;
     -fx-translate-y: 2px;
-    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
 }
 
 .streak-text {

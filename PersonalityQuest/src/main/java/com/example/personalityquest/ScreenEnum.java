@@ -5,6 +5,7 @@ public enum ScreenEnum {
     ACCOUNT_SIGN_IN,
     DASHBOARD,
     PROFILE,
+    ARCHETYPE,
     QUESTS,
     SETTINGS,
     TASKS,

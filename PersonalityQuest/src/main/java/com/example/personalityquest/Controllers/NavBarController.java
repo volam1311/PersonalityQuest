@@ -211,8 +211,7 @@ public class NavBarController implements Initializable {
             case TASKS -> NavigationService.LoadScreen(ScreenEnum.TASKS);
             case SETTINGS -> NavigationService.LoadScreen(ScreenEnum.SETTINGS);
             case PROFILE -> NavigationService.LoadScreen(ScreenEnum.PROFILE);
-            case ARCHETYPE -> {
-            }
+            case ARCHETYPE -> NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);
         }
     }
 

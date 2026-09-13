@@ -101,13 +101,14 @@
 }
 
 .achievement-star {
-    -fx-font: normal 44px "Material Symbols Rounded";
-    -fx-text-fill: #ff8a3d;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-fill: #ff8a3d;
     -fx-effect: dropshadow(gaussian, rgba(255, 140, 50, 0.85), 16, 0.4, 0, 0);
 }
 
 .achievement-badge.locked .achievement-star {
-    -fx-text-fill: #6b4a32;
+    -fx-fill: #6b4a32;
     -fx-effect: dropshadow(gaussian, rgba(255, 140, 50, 0.18), 8, 0.2, 0, 0);
     -fx-opacity: 0.4;
 }

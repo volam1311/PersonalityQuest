@@ -7,7 +7,7 @@ package com.example.personalityquest;
  */
 public class ApplicationManager {
     public static class SceneInfo {
-        public static final int SCENEWIDTH = 1100;
+        public static final int SCENEWIDTH = 1200;
         public static final int SCENEHEIGHT = 720;
     }
 
