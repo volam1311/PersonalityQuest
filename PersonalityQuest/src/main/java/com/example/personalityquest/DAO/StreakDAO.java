@@ -30,6 +30,17 @@ public class StreakDAO {
             WHERE accountEmail = ?
             """;
 
+    private static final String GET_TOTAL_QUESTS_COMPLETED = """
+            SELECT totalQuestsCompleted
+            FROM UserProgress
+            WHERE accountEmail = ?
+            """;
+    private static final String UPDATE_TOTAL_QUESTS_COMPLETED = """
+            UPDATE UserProgress
+            SET totalQuestsCompleted = ?
+            WHERE accountEmail = ?
+            """;
+
     private StreakDAO() {
     }
 
@@ -116,5 +127,39 @@ public class StreakDAO {
             statement.setString(4, email);
             statement.executeUpdate();
         }
+    }
+
+    /**
+     * Gets the total amount of quests completed
+     * @param email The account email you want the total quests completed for
+     * @return total quests for that account
+     * @throws SQLException Database Access Failure
+     */
+    public static int GetTotalQuestsCompleted(String email) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        PreparedStatement statement = connection.prepareStatement(GET_TOTAL_QUESTS_COMPLETED);
+        statement.setString(1, email);
+
+        ResultSet rs = statement.executeQuery();
+
+        if (rs.next()){
+            return rs.getInt("totalQuestsCompleted");
+        }
+        return 0;
+    }
+
+    /**
+     * Sets the total amount of quests completed for an email
+     * @param email The account email you want the total quests completed for
+     * @param totalQuestsCompleted The new total quests completed
+     * @throws SQLException Database Update Failure
+     */
+    public static void SetTotalQuestsCompleted(String email, int totalQuestsCompleted) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        PreparedStatement statement = connection.prepareStatement(UPDATE_TOTAL_QUESTS_COMPLETED);
+        statement.setInt(1, totalQuestsCompleted);
+        statement.setString(2, email);
+
+        statement.executeUpdate();
     }
 }
