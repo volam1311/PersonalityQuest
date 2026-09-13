@@ -1,0 +1,113 @@
+.profile-header {
+    -fx-padding: 18 22 18 22;
+}
+
+.profile-name {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.profile-type {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5eead4;
+}
+
+.archetype-link {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-font-family: Poppins;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #c4b5fd;
+    -fx-underline: true;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.archetype-link:hover {
+    -fx-text-fill: #e8ddff;
+}
+
+.identity-stack {
+    -fx-fill-width: true;
+}
+
+.identity-badge {
+    -fx-background-radius: 14;
+    -fx-padding: 16 18 16 18;
+    -fx-alignment: CENTER_LEFT;
+    -fx-max-width: Infinity;
+    -fx-max-height: Infinity;
+    -fx-min-height: 72px;
+}
+
+.identity-badge-text,
+.button.identity-badge,
+.label.type-identity {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.streak-identity {
+    -fx-background-color: linear-gradient(to right, #ff9c00, #ffc400);
+}
+
+.button.archetype-identity {
+    -fx-background-color: linear-gradient(to right, #9a72ff, #c4b5fd);
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.button.archetype-identity:hover {
+    -fx-background-color: linear-gradient(to right, #8b5cf6, #ddd6fe);
+}
+
+.type-identity {
+    -fx-background-color: linear-gradient(to right, #3b9eff, #7ec8ff);
+}
+
+#achievementsTitle {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+}
+
+.achievement-badge {
+    -fx-min-height: 92px;
+    -fx-pref-height: 104px;
+    -fx-background-color: #141414;
+    -fx-background-radius: 14;
+    -fx-border-color: #3a2a20;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-alignment: CENTER;
+}
+
+.achievement-badge.unlocked {
+    -fx-effect: dropshadow(gaussian, rgba(255, 140, 50, 0.45), 18, 0.35, 0, 0);
+}
+
+.achievement-star {
+    -fx-font: normal 44px "Material Symbols Rounded";
+    -fx-text-fill: #ff8a3d;
+    -fx-effect: dropshadow(gaussian, rgba(255, 140, 50, 0.85), 16, 0.4, 0, 0);
+}
+
+.achievement-badge.locked .achievement-star {
+    -fx-text-fill: #6b4a32;
+    -fx-effect: dropshadow(gaussian, rgba(255, 140, 50, 0.18), 8, 0.2, 0, 0);
+    -fx-opacity: 0.4;
+}
