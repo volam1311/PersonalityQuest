@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="profileRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/profile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.ProfileController">
+    <left>
+        <fx:include fx:id="navBar" source="NavBar.fxml" />
+    </left>
+
+    <center>
+        <ScrollPane fx:id="contentScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
+            <content>
+                <VBox fx:id="contentContainer" spacing="18" styleClass="content-container">
+                    <padding>
+                        <Insets bottom="24" left="24" right="24" top="24" />
+                    </padding>
+
+                    <HBox alignment="CENTER_LEFT" spacing="20" styleClass="card profile-header">
+                        <VBox spacing="4">
+                            <Label fx:id="displayNameLabel" styleClass="profile-name" text="Adventurer" />
+                            <Label fx:id="personalityTypeLabel" styleClass="profile-type" text="—" />
+                            <Button fx:id="archetypeLink" mnemonicParsing="false" onAction="#OnArchetypeClick" styleClass="archetype-link" text="Unassigned (Click to view)" />
+                        </VBox>
+                    </HBox>
+
+                    <GridPane fx:id="statsGrid" hgap="12" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="32" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="68" />
+                        </columnConstraints>
+
+                        <VBox fx:id="identityCard" spacing="12" styleClass="identity-stack" GridPane.columnIndex="0">
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="identity-badge streak-identity" VBox.vgrow="ALWAYS">
+                                <Label styleClass="material-symbol streak-icon" text="&#xEF55;" />
+                                <Label fx:id="streakLabel" styleClass="identity-badge-text" text="Day 0" />
+                            </HBox>
+                            <Button fx:id="archetypeBadge" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnArchetypeClick" styleClass="identity-badge archetype-identity" text="Unassigned" VBox.vgrow="ALWAYS" />
+                            <Label fx:id="typeBadge" maxWidth="Infinity" styleClass="identity-badge type-identity" text="—" VBox.vgrow="ALWAYS" />
+                        </VBox>
+
+                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="1">
+                            <Label id="progressTitle" styleClass="card-title centered-title" text="Your Progress" />
+                            <Canvas fx:id="progressChart" height="280" width="480" />
+                        </VBox>
+                    </GridPane>
+
+                    <VBox spacing="16" styleClass="card achievements-card">
+                        <Label id="achievementsTitle" styleClass="card-title centered-title" text="Achievements" />
+                        <GridPane fx:id="achievementsGrid" hgap="12" vgap="12" />
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
