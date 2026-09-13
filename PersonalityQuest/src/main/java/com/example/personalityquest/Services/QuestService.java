@@ -59,6 +59,20 @@ public class QuestService {
     }
 
     /**
+     * Looks up an archetype id from a display name.
+     * @param name The archetype name to match
+     * @return The archetypeId, or null if none matches
+     * @throws SQLException Database Access Failure
+     */
+    public static Integer GetArchetypeIdForName(String name) throws SQLException {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Archetype name is empty");
+        }
+
+        return QuestDAO.GetArchetypeIdForName(name);
+    }
+
+    /**
      * Looks up the stored description of an archetype.
      * @param archetypeId The archetype to look up
      * @return The description, or an empty string if none is stored
