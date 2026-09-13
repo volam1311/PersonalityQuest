@@ -135,4 +135,35 @@ public class StreakService {
 
         return progress.GetBestStreak();
     }
+
+    /**
+     * Increases the amount of quests the user has completed
+     * @param email The email matching the account you want to update
+     * @return What the total quest completion is at for the email
+     */
+    public static int IncreaseTotalQuestsCompleted(String email) throws SQLException {
+        if (ApplicationManager.isEmpty(email)){
+            throw new IllegalArgumentException("Email is null");
+        }
+
+        int totalQuests = StreakDAO.GetTotalQuestsCompleted(email);
+        totalQuests++;
+        StreakDAO.SetTotalQuestsCompleted(email, totalQuests);
+
+        return totalQuests;
+    }
+
+    /**
+     * Gets the amount of quests the user has completed
+     * @param email The email matching the account you want to update
+     * @return What the total quest completion is for the email
+     */
+    public static int GetTotalQuestsCompleted(String email) throws SQLException {
+        if (ApplicationManager.isEmpty(email)){
+            throw new IllegalArgumentException("Email is null");
+        }
+
+        return StreakDAO.GetTotalQuestsCompleted(email);
+    }
+
 }

@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -320,6 +321,8 @@ public class TasksController implements Initializable {
             if (updatedQuest.getPercentageComplete() >= 1.0f){
                 UserQuestService.SetUserQuestStatusAsComplete(updatedQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
 
+                // increase total amount completed
+                StreakService.IncreaseTotalQuestsCompleted(ApplicationManager.CurrentAccount.getCurrentEmail());
             }
         }
         catch (Exception e){
