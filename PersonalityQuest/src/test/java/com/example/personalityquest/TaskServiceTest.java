@@ -173,4 +173,26 @@ public class TaskServiceTest {
         assertEquals(0, tasks.length);
 
     }
+
+    @Test
+    public void GetTaskIdsForLabourWeekWrapsWhenTheLastWeekIsShort() throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO Tasks
+                        (taskId, name, description, labourID)
+                    VALUES (?, ?, ?, 20)
+                    """)) {
+            int[] ids = { 101, 102, 103, 104 };
+            for (int id : ids) {
+                statement.setInt(1, id);
+                statement.setString(2, "Task " + id);
+                statement.setString(3, "Description " + id);
+                statement.executeUpdate();
+            }
+        }
+
+        assertArrayEquals(new int[] { 101, 102, 103 }, TaskService.GetTaskIdsForLabourWeek(20, 1));
+        assertArrayEquals(new int[] { 104, 101, 102 }, TaskService.GetTaskIdsForLabourWeek(20, 2));
+        assertArrayEquals(new int[] { 101, 102, 103 }, TaskService.GetTaskIdsForLabourWeek(20, 3));
+    }
 }

@@ -133,14 +133,10 @@ public class TaskService {
         int weeks = Math.max(1, (int) Math.ceil(taskIds.size() / (double) AMOUNT_OF_TASKS));
         int week = ((weekNumber - 1) % weeks) + 1;
         int start = (week - 1) * AMOUNT_OF_TASKS;
-        if (start >= taskIds.size()) {
-            start = 0;
-        }
-
-        int count = Math.min(AMOUNT_OF_TASKS, taskIds.size() - start);
+        int count = Math.min(AMOUNT_OF_TASKS, taskIds.size());
         int[] returnedTaskIds = new int[count];
         for (int index = 0; index < count; index++) {
-            returnedTaskIds[index] = taskIds.get(start + index);
+            returnedTaskIds[index] = taskIds.get((start + index) % taskIds.size());
         }
         return returnedTaskIds;
     }
