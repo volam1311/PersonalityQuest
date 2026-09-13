@@ -37,6 +37,7 @@ public class StreakDAOTest {
                         currentStreak INTEGER NOT NULL DEFAULT 0,
                         bestStreak INTEGER NOT NULL DEFAULT 0,
                         lastCompletionDate TEXT,
+                        totalQuestsCompleted INTEGER NOT NULL DEFAULT 0,
                         FOREIGN KEY (accountEmail) REFERENCES Accounts(email)
                     )
                     """);
@@ -155,6 +156,30 @@ public class StreakDAOTest {
                         LocalDate.of(2000, 1, 1)
                 )
         );
+    }
+
+    @Test
+    void GetTotalQuestsCompleted() throws SQLException {
+        StreakDAO.SaveProgress(
+                "test",
+                1,
+                1,
+                LocalDate.of(2000, 1, 1)
+        );
+        int amount = StreakDAO.GetTotalQuestsCompleted("test");
+        assertEquals(0, amount);
+    }
+
+    @Test
+    void IncreaseTotalQuestsCompleted() throws SQLException {
+        StreakDAO.SaveProgress(
+                "test",
+                1,
+                1,
+                LocalDate.of(2000, 1, 1)
+        );
+        StreakDAO.SetTotalQuestsCompleted("test", 2);
+        assertEquals(2, StreakDAO.GetTotalQuestsCompleted("test"));
     }
 }
 

@@ -142,7 +142,10 @@ public class StreakDAO {
 
         ResultSet rs = statement.executeQuery();
 
-        return rs.getInt("totalQuestsCompleted");
+        if (rs.next()){
+            return rs.getInt("totalQuestsCompleted");
+        }
+        return 0;
     }
 
     /**

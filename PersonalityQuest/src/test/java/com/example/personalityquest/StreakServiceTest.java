@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 public class StreakServiceTest {
     private Connection connection;
@@ -36,6 +37,7 @@ public class StreakServiceTest {
                         currentStreak INTEGER NOT NULL DEFAULT 0,
                         bestStreak INTEGER NOT NULL DEFAULT 0,
                         lastCompletionDate TEXT,
+                        totalQuestsCompleted INTEGER NOT NULL DEFAULT 0,
                         FOREIGN KEY (accountEmail) REFERENCES Accounts(email)
                     )
                     """);
@@ -170,6 +172,53 @@ public class StreakServiceTest {
         );
 
         assertEquals(0, streak);
+    }
+
+    @Test
+    void GetTotalQuestsCompletedWithNullEmail() throws SQLException {
+        assertThrowsExactly(IllegalArgumentException.class, () -> StreakService.GetTotalQuestsCompleted(null));
+    }
+
+    @Test
+    void GetTotalQuestsCompletedWithBadEmail() throws SQLException {
+        StreakService.RecordCompletion(
+                "test",
+                LocalDate.of(2000, 1, 1)
+        );
+
+        int amount = StreakService.GetTotalQuestsCompleted("bad");
+        assertEquals(0, amount);
+    }
+
+    @Test
+    void IncreaseTotalQuestsCompleted() throws SQLException {
+        StreakService.RecordCompletion(
+                "test",
+                LocalDate.of(2000, 1, 1)
+        );
+
+
+        int currentTotal = StreakService.GetTotalQuestsCompleted("test");
+        int totalQuests = StreakService.IncreaseTotalQuestsCompleted("test");
+
+        assertEquals(currentTotal + 1, totalQuests);
+    }
+
+    @Test
+    void IncreaseTotalQuestsCompletedWithBadEmail() throws SQLException {
+        StreakService.RecordCompletion(
+                "test",
+                LocalDate.of(2000, 1, 1)
+        );
+
+        int totalQuests = StreakService.IncreaseTotalQuestsCompleted("bad");
+
+        assertEquals(0, totalQuests);
+    }
+
+    @Test
+    void IncreaseTotalQuestsCompletedWithNullEmail() throws SQLException {
+        assertThrowsExactly(IllegalArgumentException.class, () -> StreakService.GetTotalQuestsCompleted(null));
     }
 }
 

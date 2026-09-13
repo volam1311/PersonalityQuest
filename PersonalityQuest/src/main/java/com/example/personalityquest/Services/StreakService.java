@@ -150,7 +150,7 @@ public class StreakService {
         totalQuests++;
         StreakDAO.SetTotalQuestsCompleted(email, totalQuests);
 
-        return totalQuests;
+        return StreakDAO.GetTotalQuestsCompleted(email);
     }
 
     /**
