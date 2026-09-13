@@ -106,6 +106,28 @@ public class QuestDAO {
     }
 
     /**
+     * Looks up the stored description of an archetype.
+     * @param archetypeId The archetype to look up
+     * @return The description, or null if no row matches
+     * @throws SQLException Database Access Failure
+     */
+    public static String GetArchetypeDescription(int archetypeId) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    SELECT smallDescription FROM Archetype
+                    WHERE archetypeId = ?
+                    """)) {
+            statement.setInt(1, archetypeId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getString("smallDescription");
+            }
+            return null;
+        }
+    }
+
+    /**
      * The amount of quests that match the archetypeId
      * @param archetypeId The archetypeId that matches quests you want to retrieve the counts for
      * @return the amount of quests in the database for the archetypeId
