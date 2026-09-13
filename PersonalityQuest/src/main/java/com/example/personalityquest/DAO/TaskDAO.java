@@ -31,12 +31,11 @@ public class TaskDAO {
      * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
      */
     public static Task GetTaskForId(int taskId) throws Exception {
-        // appends all task ids to FindTaskInfo Query and then
+        // gets the taskId to FindTaskInfo Query and then
         // executes it find all task info
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);
         // assign parameters
-        // assigns all task info to an array
         Task task = null;
 
         statement.setInt(1, taskId);
@@ -52,7 +51,7 @@ public class TaskDAO {
         }
 
         if (task == null){
-            throw new Exception("User does not have separate Tasks. Check Db To See Why.");
+            throw new Exception("No task matching the givenId");
         }
         return task;
     }

@@ -4,6 +4,8 @@ import com.example.personalityquest.DAO.TaskDAO;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.ApplicationManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class TaskService {
      * Gets a Task from the database that matches the given id
      * @param taskId The taskId you of the Task you want to retrieve
      * @return A Task objecting containing the given taskId's information of the
-     * taskId, name, description and labourId(QuestId)
+     * taskId, name, description and labourId(QuestId) or Null if that taskID doesn't exist
      * @throws IllegalArgumentException If the given taskId is equal to 0
      * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
      */
@@ -53,17 +55,21 @@ public class TaskService {
         }
 
         List<Integer> taskIds = TaskDAO.GetTaskIdsForLabourID(labourId);
+
+
         Collections.shuffle(taskIds);
 
 
         int[] returnedTaskIds = new int[AMOUNT_OF_TASKS];
+
         for (int i = 0; i < AMOUNT_OF_TASKS; i++){
             if (i == taskIds.size()) {
                 System.out.println("Early returned");
-                return returnedTaskIds;
+                return Arrays.copyOf(returnedTaskIds, i);
             }
             returnedTaskIds[i] = taskIds.get(i);
         }
+
         return returnedTaskIds;
     }
 
