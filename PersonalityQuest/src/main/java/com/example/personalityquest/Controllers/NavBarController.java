@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 
 public class NavBarController implements Initializable {
     public enum NavDestination {
-        HOME, QUESTS, TASKS, ARCHETYPE, SETTINGS
+        HOME, QUESTS, TASKS, ARCHETYPE, PROFILE, SETTINGS
     }
 
     private static final double SIDEBAR_BREAKPOINT = 900;
@@ -171,6 +171,7 @@ public class NavBarController implements Initializable {
         questsButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         tasksButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         archetypeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
+        profileButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         settingsButton.getStyleClass().remove(SELECTED_SETTINGS_BUTTON);
 
         if (currentDestination == null) {
@@ -182,6 +183,7 @@ public class NavBarController implements Initializable {
             case QUESTS -> questsButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case TASKS -> tasksButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case ARCHETYPE -> archetypeButton.getStyleClass().add(SELECTED_NAV_BUTTON);
+            case PROFILE -> profileButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case SETTINGS -> settingsButton.getStyleClass().add(SELECTED_SETTINGS_BUTTON);
         }
     }
@@ -208,6 +210,7 @@ public class NavBarController implements Initializable {
             case QUESTS -> NavigationService.LoadScreen(ScreenEnum.QUESTS);
             case TASKS -> NavigationService.LoadScreen(ScreenEnum.TASKS);
             case SETTINGS -> NavigationService.LoadScreen(ScreenEnum.SETTINGS);
+            case PROFILE -> NavigationService.LoadScreen(ScreenEnum.PROFILE);
             case ARCHETYPE -> {
             }
         }
@@ -234,6 +237,9 @@ public class NavBarController implements Initializable {
         }
         if (button == settingsButton) {
             return NavDestination.SETTINGS;
+        }
+        if (button == profileButton) {
+            return NavDestination.PROFILE;
         }
         return null;
     }

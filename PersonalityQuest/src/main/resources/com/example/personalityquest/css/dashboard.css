@@ -140,7 +140,19 @@
 }
 
 .nav-button.selected-nav-button .material-symbol,
-.nav-button.selected-nav-button .nav-label {
+.nav-button.selected-nav-button .nav-label,
+.profile-button.selected-nav-button .material-symbol,
+.profile-button.selected-nav-button .nav-label {
+    -fx-text-fill: #140e25;
+}
+
+.profile-button.selected-nav-button,
+.profile-button.selected-nav-button:hover,
+.profile-button.selected-nav-button:focused {
+    -fx-background-color: #9a72ff;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
     -fx-text-fill: #140e25;
 }
 
