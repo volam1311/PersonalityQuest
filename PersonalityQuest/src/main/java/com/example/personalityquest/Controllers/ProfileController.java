@@ -28,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -173,7 +174,9 @@ public class ProfileController implements Initializable {
                 badge.getStyleClass().add("locked");
             }
 
-            Label star = new Label("\uE838");
+            SVGPath star = new SVGPath();
+            star.setContent("M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z");
+            star.setStyle("-fx-fill: #ff8a3d;");
             star.getStyleClass().add("achievement-star");
             badge.getChildren().add(star);
             StackPane.setAlignment(star, Pos.CENTER);
@@ -290,6 +293,6 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void OnArchetypeClick() throws IOException {
-        NavigationService.LoadScreen(ScreenEnum.QUESTS);
+        NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);
     }
 }

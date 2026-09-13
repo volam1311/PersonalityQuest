@@ -36,6 +36,7 @@ public class NavigationService {
             case ScreenEnum.ACCOUNT_SIGN_IN -> "AccountSignIn.fxml";
             case ScreenEnum.DASHBOARD -> "Dashboard.fxml";
             case ScreenEnum.PROFILE -> "Profile.fxml";
+            case ScreenEnum.ARCHETYPE -> "Archetype.fxml";
             case ScreenEnum.QUESTS -> "Quest.fxml";
             case ScreenEnum.SETTINGS -> "Settings.fxml";
             case ScreenEnum.TASKS -> "Tasks.fxml";
@@ -51,6 +52,7 @@ public class NavigationService {
             case ACCOUNT_SIGN_IN -> "Account Login";
             case DASHBOARD -> "Dashboard";
             case PROFILE -> "Profile";
+            case ARCHETYPE -> "Archetype";
             case QUESTS -> "Questline";
             case SETTINGS -> "Settings";
             case TASKS -> "Tasks";

@@ -1,0 +1,128 @@
+.page-title {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.page-subtitle {
+    -fx-font-family: Poppins;
+    -fx-font-size: 14px;
+    -fx-text-fill: #c4b5fd;
+}
+
+.archetype-card {
+    -fx-background-color: linear-gradient(to bottom right, #33275c, #21183c);
+    -fx-background-radius: 14;
+    -fx-border-color: #7650d6;
+    -fx-border-radius: 14;
+    -fx-border-width: 1.5;
+    -fx-padding: 0;
+}
+
+.archetype-image-panel {
+    -fx-background-color: linear-gradient(to bottom, #7250c9, #4a347f);
+    -fx-background-radius: 13 0 0 13;
+    -fx-border-color: #b79cff;
+    -fx-border-width: 0 1 0 0;
+}
+
+.image-placeholder {
+    -fx-font-family: Poppins;
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.55);
+}
+
+.archetype-details {
+    -fx-padding: 22;
+}
+
+.archetype-rank {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffc400;
+}
+
+.archetype-name {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 31px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.section-icon {
+    -fx-scale-x: 0.92;
+    -fx-scale-y: 0.92;
+    -fx-fill: #e0d2ff;
+}
+
+.section-heading-label {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b794ff;
+}
+
+.lore-body {
+    -fx-font-family: Poppins;
+    -fx-font-size: 14px;
+    -fx-text-fill: #f4f0ff;
+    -fx-line-spacing: 2px;
+}
+
+.strengths-list {
+    -fx-font-family: Poppins;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5eead4;
+}
+
+.radar-section {
+    -fx-background-color: rgba(10, 8, 18, 0.35);
+    -fx-background-radius: 10;
+    -fx-padding: 8 10 4 10;
+    -fx-min-height: 220px;
+    -fx-pref-height: 220px;
+    -fx-max-height: 220px;
+}
+
+.radar-title {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b794ff;
+}
+
+.archetype-selector {
+    -fx-padding: 0;
+}
+
+.archetype-option-button {
+    -fx-pref-width: 9999;
+    -fx-min-height: 92px;
+    -fx-background-color: linear-gradient(to right, #30284a, #25203a);
+    -fx-background-radius: 13;
+    -fx-border-color: #4c3c72;
+    -fx-border-radius: 13;
+    -fx-border-width: 1.5;
+    -fx-padding: 16;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-family: Montserrat;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #d8ccff;
+    -fx-cursor: hand;
+}
+
+.archetype-option-button:hover {
+    -fx-background-color: #423761;
+    -fx-border-color: #a884ff;
+}
+
+.archetype-option-button.selected-archetype {
+    -fx-background-color: #f5aa16;
+    -fx-border-color: #ffe79a;
+    -fx-text-fill: #191326;
+    -fx-effect: dropshadow(gaussian, rgba(255, 170, 22, 0.28), 10, 0.18, 0, 0);
+}
