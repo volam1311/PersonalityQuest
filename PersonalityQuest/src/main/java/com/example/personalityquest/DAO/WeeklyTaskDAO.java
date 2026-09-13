@@ -12,7 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class WeeklyTaskDAO {
     private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
@@ -29,10 +32,12 @@ public class WeeklyTaskDAO {
             WHERE accountEmail = ? AND taskId = ?
         """;
 
-    private final static String TASK_FOR_EMAIL = """ 
-            SELECT * FROM WeeklyTasks
+    private final static String TASK_FOR_EMAIL = """
+            SELECT taskId FROM WeeklyTasks
             WHERE accountEmail = ?
             AND weekStart = ?
+            GROUP BY taskId
+            ORDER BY MIN(id)
             """;
 
     private final static String GET_WEEKLY_TASK = """ 
@@ -91,22 +96,16 @@ public class WeeklyTaskDAO {
         statement.setString(1, email);
         statement.setString(2, String.valueOf(weekStart));
 
-        // appends all taskId's from the query to an array
-        // to be used in next query
-        int[] taskIds = new int[AMOUNT_OF_TASKS];
+        List<Integer> taskIds = new ArrayList<>();
         ResultSet rs = statement.executeQuery();
-        int count = 0;
         while (rs.next()) {
-            taskIds[count] = rs.getInt("taskId");
-            count++;
+            taskIds.add(rs.getInt("taskId"));
         }
 
-        // if its counted least one task then the user has a set this week
-        // if it hasn't must return null
-        if (count < AMOUNT_OF_TASKS && count != 0){
-            return Arrays.copyOf(taskIds, count);
+        if (taskIds.isEmpty()) {
+            return new int[AMOUNT_OF_TASKS];
         }
-        return taskIds;
+        return toIntArray(taskIds);
     }
     /**
      * Inserts new Tasks into the database for the given email and weekStart by randomly choosing
@@ -116,18 +115,6 @@ public class WeeklyTaskDAO {
      * @throws Exception For Database Update Failures and if week start or email is null or empty
      */
     public static void InsertTasks(String email, LocalDate weekStart) throws Exception {
-        /// HAVE A WAY TO CHOOSE WHICH TASKS GET ASSIGNED FOR NOW JUST TEST TASK
-        String INSERT_NEW_TASKS = " INSERT INTO WeeklyTasks " +
-                "(accountEmail, taskId, status, weekStart) VALUES";
-
-        for (int i = 0; i < AMOUNT_OF_TASKS; i++){
-
-            INSERT_NEW_TASKS += (" (?, ?, ?, ?)");
-            if (i + 1 != AMOUNT_OF_TASKS){
-                INSERT_NEW_TASKS +=", ";
-            }
-        }
-
         try{
             UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail
                     (ApplicationManager.CurrentAccount.getCurrentEmail());
@@ -140,50 +127,64 @@ public class WeeklyTaskDAO {
                 taskIds = TaskService.GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
             }
 
-            if (taskIds.length != AMOUNT_OF_TASKS) {
+            int[] uniqueTaskIds = uniquePositiveIds(taskIds);
+            if (uniqueTaskIds.length == 0) {
                 throw new Exception("Not Full Amount of Tasks where generated instead only "
                         + taskIds.length + " where generated when the expecting was " + AMOUNT_OF_TASKS);
             }
 
-            // checks for successful retrieval of all the different tasks and none were null
-            for (int i = 0; i < taskIds.length; i++){
-                if (taskIds[i] == 0){
-                    throw new Exception("Not Full Amount of Tasks where generated instead only "
-                            + taskIds.length + " where generated when the expecting was " + AMOUNT_OF_TASKS);
-                }
-            }
-
-            // appends all task ids to FindTaskInfo Query and then
-            // executes it find all task info
-            Connection connection = SQLite.getConnection();
-            PreparedStatement statement = connection.prepareStatement(INSERT_NEW_TASKS);
-            // assign parameters
-            for (int i = 0; i < AMOUNT_OF_TASKS; i++){
-                int start = i * 4;
-                statement.setString(start + 1, email);
-                statement.setInt(start + 2, taskIds[i]);
-                statement.setString(start + 3, "NotStarted");
-                statement.setString(start + 4, String.valueOf(weekStart));
-            }
-            statement.executeUpdate();
+            InsertWeeklyTaskRows(email, uniqueTaskIds, weekStart);
         }
         catch (Exception exception){
             System.out.println(exception.getMessage());
-
-            // appends all task ids to FindTaskInfo Query and then
-            // executes it find all task info
-            Connection connection = SQLite.getConnection();
-            PreparedStatement statement = connection.prepareStatement(INSERT_NEW_TASKS);
-            // assign parameters
-            for (int i = 0; i < AMOUNT_OF_TASKS; i++){
-                int start = i * 4;
-                statement.setString(start + 1, email);
-                statement.setInt(start + 2, ApplicationManager.TaskConfig.getDefaultSearchNum());
-                statement.setString(start + 3, "NotStarted");
-                statement.setString(start + 4, String.valueOf(weekStart));
-            }
-            statement.executeUpdate();
+            InsertWeeklyTaskRows(email, new int[] { ApplicationManager.TaskConfig.getDefaultSearchNum() }, weekStart);
         }
+    }
+
+    private static void InsertWeeklyTaskRows(String email, int[] taskIds, LocalDate weekStart) throws SQLException {
+        StringBuilder insertSql = new StringBuilder(
+                "INSERT INTO WeeklyTasks (accountEmail, taskId, status, weekStart) VALUES ");
+        for (int i = 0; i < taskIds.length; i++) {
+            if (i > 0) {
+                insertSql.append(", ");
+            }
+            insertSql.append("(?, ?, ?, ?)");
+        }
+
+        Connection connection = SQLite.getConnection();
+        PreparedStatement statement = connection.prepareStatement(insertSql.toString());
+        for (int i = 0; i < taskIds.length; i++) {
+            int start = i * 4;
+            statement.setString(start + 1, email);
+            statement.setInt(start + 2, taskIds[i]);
+            statement.setString(start + 3, "NotStarted");
+            statement.setString(start + 4, String.valueOf(weekStart));
+        }
+        statement.executeUpdate();
+    }
+
+    private static int[] uniquePositiveIds(int[] taskIds) {
+        Set<Integer> uniqueIds = new LinkedHashSet<>();
+        if (taskIds != null) {
+            for (int taskId : taskIds) {
+                if (taskId != 0) {
+                    uniqueIds.add(taskId);
+                }
+            }
+        }
+        return toIntArray(uniqueIds);
+    }
+
+    private static int[] toIntArray(Iterable<Integer> values) {
+        List<Integer> list = new ArrayList<>();
+        for (Integer value : values) {
+            list.add(value);
+        }
+        int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+        return result;
     }
 
     /**
