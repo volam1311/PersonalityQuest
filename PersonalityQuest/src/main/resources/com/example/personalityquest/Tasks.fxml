@@ -64,14 +64,20 @@
 
                             <VBox spacing="8" VBox.vgrow="ALWAYS">
                                 <Label styleClass="section-label" text="Reflection" />
-                                <TextArea fx:id="reflectionArea" prefHeight="220" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
+                                <TextArea fx:id="reflectionArea" prefHeight="180" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
                             </VBox>
 
-                            <Label fx:id="feedbackLabel" styleClass="settings-feedback" />
+                            <VBox fx:id="aiFeedbackCard" spacing="8" styleClass="ai-feedback-card" visible="false" managed="false">
+                                <Label styleClass="section-label" text="AI Feedback" />
+                                <Label fx:id="aiFeedbackLabel" styleClass="ai-feedback-body" wrapText="true" text="" />
+                            </VBox>
+
+                            <Label fx:id="feedbackLabel" styleClass="settings-feedback" wrapText="true" />
 
                             <HBox alignment="CENTER_LEFT" spacing="12">
                                 <Button mnemonicParsing="false" onAction="#OnBack" styleClass="pill-button" text="Back" />
                                 <Region HBox.hgrow="ALWAYS" />
+                                <Button fx:id="feedbackButton" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get AI Feedback" />
                                 <Button fx:id="draftButton" mnemonicParsing="false" onAction="#OnSaveDraft" styleClass="draft-button" text="Save Draft" />
                                 <Button fx:id="submitButton" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" />
                             </HBox>

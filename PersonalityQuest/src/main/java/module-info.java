@@ -4,6 +4,7 @@ module com.example.personalityquest {
     requires java.xml;
     requires java.desktop;
     requires java.sql;
+    requires java.net.http;
     requires bcrypt;
     requires jdk.jshell;
 

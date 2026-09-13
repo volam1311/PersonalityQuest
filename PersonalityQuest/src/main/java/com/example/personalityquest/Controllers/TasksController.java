@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 
 public class TasksController implements Initializable {
     private static final double STACKED_BREAKPOINT = 760;
@@ -49,7 +50,7 @@ public class TasksController implements Initializable {
     private VBox listsColumn, detailCard;
     @FXML
     private Label weekSummaryLabel, weekRangeLabel, questTasksLabel, taskTitleLabel, questLabel,
-            descriptionLabel, feedbackLabel;
+            descriptionLabel, feedbackLabel, aiFeedbackLabel;
     @FXML
     private ListView<TaskListItem> weekTasks;
     @FXML
@@ -59,10 +60,14 @@ public class TasksController implements Initializable {
     @FXML
     private TextArea reflectionArea;
     @FXML
-    private Button draftButton, submitButton;
+    private VBox aiFeedbackCard;
+    @FXML
+    private Button draftButton, submitButton, feedbackButton;
 
     private WeeklyTask taskToSelect;
     private boolean updatingSelection;
+    private boolean generatingFeedback;
+    private int feedbackRequestId;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -219,7 +224,18 @@ public class TasksController implements Initializable {
         draftButton.setDisable(finished);
         submitButton.setDisable(finished);
         submitButton.setText(finished ? "Submitted" : "Submit");
-        feedbackLabel.setText(finished ? "This task is already finished." : "");
+
+        boolean keepGenerating = generatingFeedback
+                && taskToSelect != null
+                && SameTask(weeklyTask, taskToSelect);
+        feedbackButton.setDisable(keepGenerating);
+        if (keepGenerating) {
+            feedbackLabel.setText("Generating AI feedback...");
+            ShowAiFeedback("Writing feedback from your reflection...");
+        } else {
+            feedbackLabel.setText(finished ? "This task is already finished." : "");
+            ShowStoredFeedback(weeklyTask);
+        }
     }
 
     private void ShowQuestTask(Task task) {
@@ -249,7 +265,9 @@ public class TasksController implements Initializable {
         draftButton.setDisable(true);
         submitButton.setDisable(true);
         submitButton.setText("Submit");
+        feedbackButton.setDisable(true);
         feedbackLabel.setText("Reflections are submitted from the weekly tasks above.");
+        HideAiFeedback();
     }
 
     private void ShowEmptyDetail(String message) {
@@ -262,7 +280,9 @@ public class TasksController implements Initializable {
         draftButton.setDisable(true);
         submitButton.setDisable(true);
         submitButton.setText("Submit");
+        feedbackButton.setDisable(true);
         feedbackLabel.setText("");
+        HideAiFeedback();
     }
 
     private void ConfigureWeeklyTaskList() {
@@ -309,6 +329,9 @@ public class TasksController implements Initializable {
                     if (updatingSelection || newItem == null) {
                         return;
                     }
+                    if (oldItem != null && !SameTask(oldItem.weeklyTask(), newItem.weeklyTask())) {
+                        CancelPendingFeedback();
+                    }
                     updatingSelection = true;
                     questTasks.getSelectionModel().clearSelection();
                     updatingSelection = false;
@@ -351,6 +374,7 @@ public class TasksController implements Initializable {
                     updatingSelection = true;
                     weekTasks.getSelectionModel().clearSelection();
                     updatingSelection = false;
+                    CancelPendingFeedback();
                     ShowQuestTask(newItem);
                 });
     }
@@ -405,8 +429,8 @@ public class TasksController implements Initializable {
                     reflection,
                     ApplicationManager.CurrentAccount.getCurrentEmail());
             taskToSelect = updated;
+            RequestAiFeedback(selected, reflection, "Task submitted. Generating AI feedback...");
             LoadTasks();
-            feedbackLabel.setText("Task submitted.");
         } catch (Exception exception) {
             feedbackLabel.setText("Could not submit this task right now.");
         }
@@ -441,6 +465,108 @@ public class TasksController implements Initializable {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @FXML
+    private void OnGetFeedback() {
+        TaskListItem selected = weekTasks.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return;
+        }
+
+        String reflection = CurrentReflection();
+        if (ApplicationManager.isEmpty(reflection)) {
+            feedbackLabel.setText("Write a reflection before requesting AI feedback.");
+            return;
+        }
+
+        taskToSelect = selected.weeklyTask();
+        RequestAiFeedback(selected, reflection, "Generating AI feedback...");
+    }
+
+    private void RequestAiFeedback(TaskListItem item, String reflection, String statusMessage) {
+        int requestId = ++feedbackRequestId;
+        generatingFeedback = true;
+        feedbackButton.setDisable(true);
+        feedbackLabel.setText(statusMessage);
+        ShowAiFeedback("Writing feedback from your reflection...");
+
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                return ReflectionFeedbackService.FeedbackFor(
+                        ReflectionFeedbackService.ContextFor(item.task(), item.questName(), reflection));
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
+        }).whenComplete((text, error) -> Platform.runLater(() -> {
+            if (requestId != feedbackRequestId) {
+                return;
+            }
+
+            generatingFeedback = false;
+            TaskListItem current = weekTasks.getSelectionModel().getSelectedItem();
+            if (current == null || !SameTask(current.weeklyTask(), item.weeklyTask())) {
+                feedbackButton.setDisable(current == null);
+                return;
+            }
+
+            if (error != null) {
+                feedbackLabel.setText(FriendlyFeedbackError(error));
+                feedbackButton.setDisable(false);
+                return;
+            }
+
+            try {
+                ReflectionFeedbackService.Save(current.weeklyTask(), text);
+            } catch (Exception ignored) {
+                // Showing the reply still helps even if it cannot be stored.
+            }
+            ShowAiFeedback(text);
+            feedbackLabel.setText("AI feedback is ready.");
+            feedbackButton.setDisable(false);
+        }));
+    }
+
+    private void ShowStoredFeedback(WeeklyTask weeklyTask) {
+        try {
+            String stored = ReflectionFeedbackService.Find(weeklyTask);
+            if (ApplicationManager.isEmpty(stored)) {
+                HideAiFeedback();
+                return;
+            }
+            ShowAiFeedback(stored);
+        } catch (Exception exception) {
+            HideAiFeedback();
+        }
+    }
+
+    private void ShowAiFeedback(String text) {
+        aiFeedbackLabel.setText(text);
+        aiFeedbackCard.setVisible(true);
+        aiFeedbackCard.setManaged(true);
+    }
+
+    private void HideAiFeedback() {
+        aiFeedbackLabel.setText("");
+        aiFeedbackCard.setVisible(false);
+        aiFeedbackCard.setManaged(false);
+    }
+
+    private void CancelPendingFeedback() {
+        feedbackRequestId++;
+        generatingFeedback = false;
+    }
+
+    private static String FriendlyFeedbackError(Throwable error) {
+        Throwable cause = error;
+        while (cause.getCause() != null && cause.getCause() != cause) {
+            cause = cause.getCause();
+        }
+        String message = cause.getMessage();
+        if (!ApplicationManager.isEmpty(message)) {
+            return message;
+        }
+        return "Could not get AI feedback right now.";
     }
 
     private String CurrentReflection() {
