@@ -1,12 +1,15 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Model.Archetype;
 import com.example.personalityquest.Model.Quest;
 import com.example.personalityquest.Model.QuestLore;
+import com.example.personalityquest.Model.QuizResult;
 import com.example.personalityquest.Model.UserProfile;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Services.AchievementService;
 import com.example.personalityquest.Services.QuestService;
+import com.example.personalityquest.Services.QuizService;
 import com.example.personalityquest.Services.UserProfileService;
 import com.example.personalityquest.Services.UserQuestService;
 import javafx.application.Platform;
@@ -67,6 +70,13 @@ public class ArchetypeController implements Initializable {
         }
 
         try {
+            QuizResult quizResult = QuizService.GetResult();
+            if (quizResult != null) {
+                ShowQuizResult(quizResult);
+                LoadJourneyProfile(email);
+                return;
+            }
+
             UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
             if (userQuest == null) {
                 ShowEmptyArchetype("Complete the onboarding quiz to discover your archetype.");
@@ -79,20 +89,57 @@ public class ArchetypeController implements Initializable {
                 return;
             }
 
-            String archetypeName = UserProfileService.FormatArchetypeName(
-                    QuestService.GetArchetypeName(quest.getArchetypeId()));
-            String description = QuestService.GetArchetypeDescription(quest.getArchetypeId());
-            QuestLore lore = QuestLore.forQuest(quest.getName(), archetypeName);
-            ArchetypeOption option = new ArchetypeOption(archetypeName, description, lore);
+            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
+            ArchetypeOption option = OptionFromName(archetypeName, quest.getName());
+            if (option == null) {
+                ShowEmptyArchetype("Your current quest does not have an archetype yet.");
+                return;
+            }
 
-            archetypeOptions = List.of(option, option, option);
-
+            archetypeOptions = List.of(option);
             ConfigureArchetypeButtons();
             DisplayArchetype(option, firstArchetypeButton);
             LoadJourneyProfile(email);
         } catch (Exception exception) {
             ShowEmptyArchetype("Could not load your archetypes right now.");
         }
+    }
+
+    private void ShowQuizResult(QuizResult quizResult) {
+        List<Archetype> ranked = QuizService.RankedArchetypes(quizResult);
+        int shown = Math.min(3, ranked.size());
+        List<ArchetypeOption> options = new ArrayList<>();
+        String assignedQuestName = quizResult.assignedQuest() == null
+                ? null
+                : quizResult.assignedQuest().getName();
+
+        for (int index = 0; index < shown; index++) {
+            Archetype archetype = ranked.get(index);
+            String questName = index == 0 ? assignedQuestName : null;
+            options.add(new ArchetypeOption(archetype, QuestLore.forQuest(questName, archetype.getDisplayName())));
+        }
+
+        archetypeOptions = List.copyOf(options);
+        ConfigureArchetypeButtons();
+        DisplayArchetype(archetypeOptions.get(0), firstArchetypeButton);
+    }
+
+    private ArchetypeOption OptionFromName(String archetypeName, String questName) {
+        if (ApplicationManager.isEmpty(archetypeName)) {
+            return null;
+        }
+
+        String needle = archetypeName.trim().toLowerCase();
+        if (needle.startsWith("the ")) {
+            needle = needle.substring(4).trim();
+        }
+
+        for (Archetype archetype : Archetype.values()) {
+            if (archetype.getDisplayName().equalsIgnoreCase(needle)) {
+                return new ArchetypeOption(archetype, QuestLore.forQuest(questName, archetype.getDisplayName()));
+            }
+        }
+        return null;
     }
 
     private void ConfigureArchetypeButtons() {
@@ -103,7 +150,7 @@ public class ArchetypeController implements Initializable {
             button.setManaged(available);
             if (available) {
                 ArchetypeOption option = archetypeOptions.get(index);
-                button.setText("#" + (index + 1) + "  " + option.name());
+                button.setText("#" + (index + 1) + "  " + option.displayName());
                 button.setUserData(option);
             }
         }
@@ -119,11 +166,9 @@ public class ArchetypeController implements Initializable {
 
     private void DisplayArchetype(ArchetypeOption option, Button selectedButton) {
         archetypeRankLabel.setText("#" + (archetypeButtons.indexOf(selectedButton) + 1));
-        archetypeNameLabel.setText(option.name());
-        overviewLabel.setText(ApplicationManager.isEmpty(option.description())
-                ? "No description is available for this archetype yet."
-                : option.description());
-        strengthsLabel.setText(option.lore().traitFocus());
+        archetypeNameLabel.setText(option.displayName());
+        overviewLabel.setText(option.archetype().getOverview());
+        strengthsLabel.setText(option.archetype().getStrengths());
         questFocusLabel.setText(option.lore().labourTitle() + "\n" + option.lore().challenge());
 
         for (int index = 0; index < archetypeButtons.size(); index++) {
@@ -243,9 +288,9 @@ public class ArchetypeController implements Initializable {
         return Math.min(value, 1);
     }
 
-    private record ArchetypeOption(
-            String name,
-            String description,
-            QuestLore lore) {
+    private record ArchetypeOption(Archetype archetype, QuestLore lore) {
+        String displayName() {
+            return UserProfileService.FormatArchetypeName(archetype.getDisplayName());
+        }
     }
 }

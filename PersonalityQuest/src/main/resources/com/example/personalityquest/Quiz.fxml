@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="quizRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css, @css/tasks.css, @css/quiz.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.QuizController">
+    <left>
+        <fx:include fx:id="navBar" source="NavBar.fxml" />
+    </left>
+
+    <center>
+        <ScrollPane fx:id="contentScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
+            <content>
+                <VBox fx:id="contentContainer" spacing="18" styleClass="content-container">
+                    <padding>
+                        <Insets bottom="24" left="24" right="24" top="24" />
+                    </padding>
+
+                    <VBox spacing="6">
+                        <Label styleClass="page-title" text="Discover Your Archetype" />
+                        <Label styleClass="page-subtitle" text="Five questions. Pick the answer that feels most like you." />
+                    </VBox>
+
+                    <VBox spacing="16" styleClass="card quiz-card">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label fx:id="questionNumberLabel" styleClass="section-label" text="Question 1 of 5" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="progressLabel" styleClass="progress-label" text="20%" />
+                        </HBox>
+                        <ProgressBar fx:id="quizProgress" maxWidth="1.7976931348623157E308" progress="0.2" />
+                        <Label fx:id="questionLabel" styleClass="quiz-question" wrapText="true" text="Question" />
+                        <VBox fx:id="optionsBox" spacing="12" />
+                        <Label fx:id="feedbackLabel" styleClass="quiz-feedback" wrapText="true" />
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Button fx:id="backButton" mnemonicParsing="false" onAction="#OnBack" styleClass="draft-button" text="Back" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button fx:id="nextButton" mnemonicParsing="false" onAction="#OnNext" styleClass="pill-button" text="Next" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
