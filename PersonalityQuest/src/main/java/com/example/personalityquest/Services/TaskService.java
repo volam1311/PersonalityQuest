@@ -4,7 +4,6 @@ import com.example.personalityquest.DAO.TaskDAO;
 import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.ApplicationManager;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -42,6 +41,45 @@ public class TaskService {
         return TaskDAO.GetTasksForLabourId(labourId);
     }
 
+    /**
+     * Joins task names for compact UI labels.
+     */
+    public static String JoinTaskNames(List<Task> tasks) {
+        if (tasks == null || tasks.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder names = new StringBuilder();
+        for (Task task : tasks) {
+            if (!names.isEmpty()) {
+                names.append(" · ");
+            }
+            names.append(task.getName());
+        }
+        return names.toString();
+    }
+
+    /**
+     * Joins task names and descriptions for labour detail copy.
+     */
+    public static String JoinTaskDetails(List<Task> tasks) {
+        if (tasks == null || tasks.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder details = new StringBuilder();
+        for (Task task : tasks) {
+            if (!details.isEmpty()) {
+                details.append("\n\n");
+            }
+            details.append(task.getName());
+            if (!ApplicationManager.isEmpty(task.getDescription())) {
+                details.append("\n").append(task.getDescription());
+            }
+        }
+        return details.toString();
+    }
+
 
     /**
      * Gets an array of taskIds that link to a given labourId
@@ -70,6 +108,40 @@ public class TaskService {
             returnedTaskIds[i] = taskIds.get(i);
         }
 
+        return returnedTaskIds;
+    }
+
+    /**
+     * Gets the three task ids for a labour week. Week 1 is the first three tasks, week 2 the next three, and so on.
+     * @param labourId The labour whose task pool to read
+     * @param weekNumber The 1-based week of the labour
+     * @return Task ids for that week, empty if none exist
+     */
+    public static int[] GetTaskIdsForLabourWeek(int labourId, int weekNumber) throws Exception {
+        if (IsLabourIdNull(labourId)) {
+            throw new IllegalArgumentException("Labour Id is null");
+        }
+        if (weekNumber <= 0) {
+            throw new IllegalArgumentException("Week number is invalid");
+        }
+
+        List<Integer> taskIds = TaskDAO.GetTaskIdsForLabourID(labourId);
+        if (taskIds.isEmpty()) {
+            return new int[0];
+        }
+
+        int weeks = Math.max(1, (int) Math.ceil(taskIds.size() / (double) AMOUNT_OF_TASKS));
+        int week = ((weekNumber - 1) % weeks) + 1;
+        int start = (week - 1) * AMOUNT_OF_TASKS;
+        if (start >= taskIds.size()) {
+            start = 0;
+        }
+
+        int count = Math.min(AMOUNT_OF_TASKS, taskIds.size() - start);
+        int[] returnedTaskIds = new int[count];
+        for (int index = 0; index < count; index++) {
+            returnedTaskIds[index] = taskIds.get(start + index);
+        }
         return returnedTaskIds;
     }
 

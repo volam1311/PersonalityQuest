@@ -3,13 +3,14 @@ package com.example.personalityquest.Controllers;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.Archetype;
 import com.example.personalityquest.Model.Quest;
-import com.example.personalityquest.Model.QuestLore;
 import com.example.personalityquest.Model.QuizResult;
+import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.Model.UserProfile;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Services.AchievementService;
 import com.example.personalityquest.Services.QuestService;
 import com.example.personalityquest.Services.QuizService;
+import com.example.personalityquest.Services.TaskService;
 import com.example.personalityquest.Services.UserProfileService;
 import com.example.personalityquest.Services.UserQuestService;
 import javafx.application.Platform;
@@ -90,7 +91,7 @@ public class ArchetypeController implements Initializable {
             }
 
             String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
-            ArchetypeOption option = OptionFromName(archetypeName, quest.getName());
+            ArchetypeOption option = OptionFromName(archetypeName, quest);
             if (option == null) {
                 ShowEmptyArchetype("Your current quest does not have an archetype yet.");
                 return;
@@ -109,14 +110,12 @@ public class ArchetypeController implements Initializable {
         List<Archetype> ranked = QuizService.RankedArchetypes(quizResult);
         int shown = Math.min(3, ranked.size());
         List<ArchetypeOption> options = new ArrayList<>();
-        String assignedQuestName = quizResult.assignedQuest() == null
-                ? null
-                : quizResult.assignedQuest().getName();
+        Quest assignedQuest = quizResult.assignedQuest();
 
         for (int index = 0; index < shown; index++) {
             Archetype archetype = ranked.get(index);
-            String questName = index == 0 ? assignedQuestName : null;
-            options.add(new ArchetypeOption(archetype, QuestLore.forQuest(questName, archetype.getDisplayName())));
+            Quest quest = index == 0 ? assignedQuest : null;
+            options.add(new ArchetypeOption(archetype, QuestFocusFromDatabase(archetype, quest)));
         }
 
         archetypeOptions = List.copyOf(options);
@@ -124,7 +123,7 @@ public class ArchetypeController implements Initializable {
         DisplayArchetype(archetypeOptions.get(0), firstArchetypeButton);
     }
 
-    private ArchetypeOption OptionFromName(String archetypeName, String questName) {
+    private ArchetypeOption OptionFromName(String archetypeName, Quest quest) {
         if (ApplicationManager.isEmpty(archetypeName)) {
             return null;
         }
@@ -136,10 +135,37 @@ public class ArchetypeController implements Initializable {
 
         for (Archetype archetype : Archetype.values()) {
             if (archetype.getDisplayName().equalsIgnoreCase(needle)) {
-                return new ArchetypeOption(archetype, QuestLore.forQuest(questName, archetype.getDisplayName()));
+                return new ArchetypeOption(archetype, QuestFocusFromDatabase(archetype, quest));
             }
         }
         return null;
+    }
+
+    private String QuestFocusFromDatabase(Archetype archetype, Quest assignedQuest) {
+        try {
+            Quest quest = assignedQuest;
+            if (quest == null) {
+                Integer archetypeId = QuestService.GetArchetypeIdForName(archetype.getDisplayName());
+                if (archetypeId == null) {
+                    return "No labour is stored for this archetype yet.";
+                }
+
+                Quest[] quests = QuestService.GetQuestsForArchetypeId(archetypeId);
+                if (quests == null || quests.length == 0) {
+                    return "No labour is stored for this archetype yet.";
+                }
+                quest = quests[0];
+            }
+
+            List<Task> tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
+            String names = TaskService.JoinTaskNames(tasks);
+            if (names.isEmpty()) {
+                return quest.getName();
+            }
+            return quest.getName() + "\n" + names;
+        } catch (Exception exception) {
+            return "Could not load this archetype's labour from the database.";
+        }
     }
 
     private void ConfigureArchetypeButtons() {
@@ -169,7 +195,7 @@ public class ArchetypeController implements Initializable {
         archetypeNameLabel.setText(option.displayName());
         overviewLabel.setText(option.archetype().getOverview());
         strengthsLabel.setText(option.archetype().getStrengths());
-        questFocusLabel.setText(option.lore().labourTitle() + "\n" + option.lore().challenge());
+        questFocusLabel.setText(option.questFocus());
 
         for (int index = 0; index < archetypeButtons.size(); index++) {
             Button button = archetypeButtons.get(index);
@@ -288,7 +314,7 @@ public class ArchetypeController implements Initializable {
         return Math.min(value, 1);
     }
 
-    private record ArchetypeOption(Archetype archetype, QuestLore lore) {
+    private record ArchetypeOption(Archetype archetype, String questFocus) {
         String displayName() {
             return UserProfileService.FormatArchetypeName(archetype.getDisplayName());
         }

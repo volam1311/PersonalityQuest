@@ -55,8 +55,8 @@
                         </VBox>
 
                         <VBox fx:id="dailiesCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
-                            <Label id="dailiesTitle" styleClass="card-title centered-title" text="Dailies" />
-                            <ListView onMouseClicked="#OnTaskClick" fx:id="dailiesList" focusTraversable="false" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                            <Label id="dailiesTitle" styleClass="card-title centered-title" text="Weekly Tasks" />
+                            <ListView fx:id="weeklyTasks" focusTraversable="false" onMouseClicked="#OnWeeklyTaskClick" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
                     </GridPane>
 
@@ -67,8 +67,8 @@
                         </columnConstraints>
 
                         <VBox fx:id="tasksCard" spacing="10" styleClass="card" GridPane.columnIndex="0">
-                            <Label id="tasksTitle" styleClass="card-title centered-title" text="Today's Tasks" />
-                            <ListView fx:id="weeklyTasks" focusTraversable="false" onMouseClicked="#OnTaskClick" prefHeight="270" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                            <Label id="tasksTitle" styleClass="card-title centered-title" text="Quest Tasks" />
+                            <ListView fx:id="questTasks" focusTraversable="false" onMouseClicked="#OnQuestTaskClick" prefHeight="270" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
 
                         <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="1">

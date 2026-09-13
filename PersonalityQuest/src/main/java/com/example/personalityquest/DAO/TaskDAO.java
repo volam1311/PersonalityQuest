@@ -19,7 +19,8 @@ public class TaskDAO {
 
     private final static String GET_TASKS_FOR_LABOURID = """
             SELECT * FROM Tasks
-            WHERE labourId = ?;
+            WHERE labourId = ?
+            ORDER BY taskId
             """;
 
     /**

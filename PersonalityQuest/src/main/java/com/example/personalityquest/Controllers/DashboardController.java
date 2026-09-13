@@ -1,8 +1,8 @@
 package com.example.personalityquest.Controllers;
 
-import com.example.personalityquest.Applications.TasksApplication;
 import com.example.personalityquest.Model.EmailDetails;
 import com.example.personalityquest.Model.Quest;
+import com.example.personalityquest.Model.Task;
 import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Model.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
@@ -24,10 +24,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -57,20 +57,21 @@ public class DashboardController implements Initializable {
     @FXML
     private VBox dailiesCard, progressCard;
     @FXML
-    private ListView<WeeklyTask> weeklyTasks, dailiesList;
+    private ListView<WeeklyTask> weeklyTasks;
+    @FXML
+    private ListView<Task> questTasks;
     @FXML
     private ProgressBar questProgress;
     @FXML
-    private Label questTitleLabel, questProgressLabel;
+    private Label questTitleLabel, questProgressLabel, questDescriptionLabel;
     @FXML
     private Canvas progressChart;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
-        ConfigureTaskList(weeklyTasks);
-        ConfigureTaskList(dailiesList);
-        dailiesList.setItems(weeklyTasks.getItems());
+        ConfigureWeeklyTaskList(weeklyTasks);
+        ConfigureQuestTaskList(questTasks);
 
         dashboardRoot.widthProperty().addListener((observable, oldWidth, newWidth) ->
                 ApplyResponsiveLayout(newWidth.doubleValue()));
@@ -90,6 +91,8 @@ public class DashboardController implements Initializable {
         } catch (Exception exception) {
             System.err.println("Could not load weekly tasks: " + exception.getMessage());
         }
+
+        PopulateQuestTasks();
 
         Platform.runLater(() -> {
             ApplyResponsiveLayout(dashboardRoot.getWidth());
@@ -123,14 +126,21 @@ public class DashboardController implements Initializable {
         try{
             UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
             Quest trueQuest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            List<Task> labourTasks = TaskService.GetTasksForLabourId(trueQuest.getLabourId());
+            String taskSummary = TaskService.JoinTaskNames(labourTasks);
 
             float truePercentageComplete = userQuest.getPercentageComplete() * 100;
             String formatedPercentageString = String.format("%.0f", truePercentageComplete);
             questTitleLabel.setText(trueQuest.getName());
+            questDescriptionLabel.setText(taskSummary.isEmpty()
+                    ? QuestService.GetArchetypeDescription(trueQuest.getArchetypeId())
+                    : taskSummary);
             questProgress.setProgress(userQuest.getPercentageComplete());
             questProgressLabel.setText(formatedPercentageString + "% Complete");
         }
         catch (Exception e){
+            questTitleLabel.setText("No active quest");
+            questDescriptionLabel.setText("Complete the quiz to begin a labour.");
             questProgress.setProgress(DEFAULT_QUEST_PROGRESS);
             questProgressLabel.setText(DEFAULT_QUEST_PROGRESS_LABEL);
         }
@@ -152,7 +162,22 @@ public class DashboardController implements Initializable {
         }
     }
 
-    private void ConfigureTaskList(ListView<WeeklyTask> taskList) {
+    private void PopulateQuestTasks() {
+        questTasks.getItems().clear();
+        try {
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(
+                    ApplicationManager.CurrentAccount.getCurrentEmail());
+            if (userQuest == null) {
+                return;
+            }
+            List<Task> tasks = TaskService.GetTasksForLabourId(userQuest.getLabourId());
+            questTasks.getItems().addAll(tasks);
+        } catch (Exception exception) {
+            System.err.println("Could not load quest tasks: " + exception.getMessage());
+        }
+    }
+
+    private void ConfigureWeeklyTaskList(ListView<WeeklyTask> taskList) {
         taskList.setCellFactory(list -> new ListCell<>() {
             private final CheckBox completedBox = new CheckBox();
             private final Label taskLabel = new Label();
@@ -176,6 +201,32 @@ public class DashboardController implements Initializable {
 
                 taskLabel.setText(task.toString());
                 completedBox.setSelected("Finished".equalsIgnoreCase(task.getStatus()));
+                setText(null);
+                setGraphic(row);
+            }
+        });
+    }
+
+    private void ConfigureQuestTaskList(ListView<Task> taskList) {
+        taskList.setCellFactory(list -> new ListCell<>() {
+            private final Label taskLabel = new Label();
+            private final HBox row = new HBox(10, taskLabel);
+
+            {
+                row.getStyleClass().add("task-row");
+            }
+
+            @Override
+            protected void updateItem(Task task, boolean empty) {
+                super.updateItem(task, empty);
+
+                if (empty || task == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+
+                taskLabel.setText(task.getName());
                 setText(null);
                 setGraphic(row);
             }
@@ -265,11 +316,16 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    private void OnTaskClick(MouseEvent event) throws IOException {
-        @SuppressWarnings("unchecked")
-        ListView<WeeklyTask> source = (ListView<WeeklyTask>) event.getSource();
-        WeeklyTask selectedTask = source.getSelectionModel().getSelectedItem();
+    private void OnWeeklyTaskClick(MouseEvent event) throws IOException {
+        WeeklyTask selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
+        if (selectedTask != null) {
+            NavigationService.LoadScreen(ScreenEnum.TASKS);
+        }
+    }
 
+    @FXML
+    private void OnQuestTaskClick(MouseEvent event) throws IOException {
+        Task selectedTask = questTasks.getSelectionModel().getSelectedItem();
         if (selectedTask != null) {
             NavigationService.LoadScreen(ScreenEnum.TASKS);
         }
