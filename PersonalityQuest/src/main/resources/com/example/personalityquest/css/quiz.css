@@ -1,0 +1,57 @@
+.quiz-card {
+    -fx-padding: 22 24 22 24;
+}
+
+.quiz-question {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.quiz-result-name {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e8ddff;
+}
+
+.quiz-feedback {
+    -fx-font-family: Poppins;
+    -fx-font-size: 14px;
+    -fx-text-fill: #f0a8a8;
+    -fx-min-height: 20;
+}
+
+.quiz-option {
+    -fx-max-width: Infinity;
+    -fx-alignment: CENTER_LEFT;
+    -fx-wrap-text: true;
+    -fx-min-height: 58px;
+    -fx-background-color: #2d2745;
+    -fx-background-radius: 10;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 10;
+    -fx-border-width: 1.5;
+    -fx-font-family: Poppins;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e8ddff;
+    -fx-padding: 12 18 12 18;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.quiz-option:hover {
+    -fx-background-color: #423761;
+}
+
+.quiz-option.selected,
+.quiz-option.selected:hover,
+.quiz-option.selected:focused {
+    -fx-background-color: #9a72ff;
+    -fx-text-fill: #140e25;
+    -fx-border-color: #c4b5fd;
+}
