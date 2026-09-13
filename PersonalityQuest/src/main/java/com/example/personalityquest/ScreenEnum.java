@@ -7,6 +7,8 @@ public enum ScreenEnum {
     PROFILE,
     ARCHETYPE,
     QUESTS,
+    QUIZ,
+    QUIZ_RESULT,
     SETTINGS,
     TASKS,
     UPDATE_ACCOUNT_PASSWORD,

@@ -1,18 +1,12 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.AccountRepository;
-import com.example.personalityquest.Applications.AccountCreationApplication;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.NavigationService;
 import com.example.personalityquest.Validators.AccountSignUpValidator;
-import com.example.personalityquest.Applications.AccountSignInApplication;
-import com.example.personalityquest.Applications.DashboardApplication;
-import com.example.personalityquest.Model.Quest;
-import com.example.personalityquest.Model.UserQuest;
 import com.example.personalityquest.Services.EmailService;
-import com.example.personalityquest.Services.QuestService;
+import com.example.personalityquest.Services.QuizService;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.Services.UserQuestService;
 import com.example.personalityquest.SQLite;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -212,14 +206,8 @@ public class AccountCreationController {
         }
 
         ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
-
-        // DUMMY ARCHETYPE IMPLEMENTATION FOR NOW
-        // Inserts the testLabour for each account
-        Quest quest = QuestService.GetQuestForLabourId(1);
-        UserQuest userQuest = UserQuestService.InsertNewQuestForEmail(quest, ApplicationManager.CurrentAccount.getCurrentEmail() );
-        UserQuestService.SetUserQuesStatusAsActive(userQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
-
-        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
+        QuizService.StartQuiz();
+        NavigationService.LoadScreen(ScreenEnum.QUIZ);
         System.out.println("Account created");
     }
 

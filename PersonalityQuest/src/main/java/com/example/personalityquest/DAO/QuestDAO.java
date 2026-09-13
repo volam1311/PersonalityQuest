@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 public class QuestDAO {
     /**
@@ -102,6 +103,47 @@ public class QuestDAO {
                 return rs.getString("name");
             }
             return null;
+        }
+    }
+
+    /**
+     * Looks up an archetype id from a display name such as "Explorer" or "The Innocent".
+     * @param name The archetype name to match
+     * @return The archetypeId, or null if none matches
+     * @throws SQLException Database Access Failure
+     */
+    public static Integer GetArchetypeIdForName(String name) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        String needle = name.trim().toLowerCase(Locale.ROOT);
+        if (needle.startsWith("the ")) {
+            needle = needle.substring(4).trim();
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    SELECT archetypeId, name FROM Archetype
+                    """)) {
+            ResultSet rs = statement.executeQuery();
+            Integer fallback = null;
+            while (rs.next()) {
+                String stored = rs.getString("name");
+                if (stored == null || stored.isBlank()) {
+                    continue;
+                }
+
+                String storedName = stored.trim().toLowerCase(Locale.ROOT);
+                if (storedName.startsWith("the ")) {
+                    storedName = storedName.substring(4).trim();
+                }
+
+                if (storedName.equals(needle)) {
+                    return rs.getInt("archetypeId");
+                }
+                if (fallback == null && (storedName.contains(needle) || needle.contains(storedName))) {
+                    fallback = rs.getInt("archetypeId");
+                }
+            }
+            return fallback;
         }
     }
 
