@@ -38,6 +38,8 @@ public class NavigationService {
             case ScreenEnum.PROFILE -> "Profile.fxml";
             case ScreenEnum.ARCHETYPE -> "Archetype.fxml";
             case ScreenEnum.QUESTS -> "Quest.fxml";
+            case ScreenEnum.QUIZ -> "Quiz.fxml";
+            case ScreenEnum.QUIZ_RESULT -> "QuizResult.fxml";
             case ScreenEnum.SETTINGS -> "Settings.fxml";
             case ScreenEnum.TASKS -> "Tasks.fxml";
             case ScreenEnum.UPDATE_ACCOUNT_PASSWORD -> "UpdateAccountPassword.fxml";
@@ -54,6 +56,8 @@ public class NavigationService {
             case PROFILE -> "Profile";
             case ARCHETYPE -> "Archetype";
             case QUESTS -> "Questline";
+            case QUIZ -> "Archetype Quiz";
+            case QUIZ_RESULT -> "Your Archetype";
             case SETTINGS -> "Settings";
             case TASKS -> "Tasks";
             case UPDATE_ACCOUNT_PASSWORD -> "Update Password";
