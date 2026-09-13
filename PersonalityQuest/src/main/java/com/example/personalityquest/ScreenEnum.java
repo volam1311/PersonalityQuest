@@ -4,6 +4,7 @@ public enum ScreenEnum {
     ACCOUNT_CREATION,
     ACCOUNT_SIGN_IN,
     DASHBOARD,
+    PROFILE,
     QUESTS,
     SETTINGS,
     TASKS,
