@@ -53,19 +53,29 @@
 
     <Region VBox.vgrow="ALWAYS" />
 
-    <HBox alignment="CENTER" spacing="8" styleClass="sidebar-footer">
-        <Button fx:id="profileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="profile-button" HBox.hgrow="ALWAYS">
+    <VBox spacing="8" styleClass="sidebar-footer-stack">
+        <HBox alignment="CENTER" spacing="8" styleClass="sidebar-footer">
+            <Button fx:id="profileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="profile-button" HBox.hgrow="ALWAYS">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="button-graphic">
+                        <Label styleClass="material-symbol" text="&#xF20B;" />
+                        <Label fx:id="profileNameLabel" styleClass="nav-label" text="Profile" />
+                    </HBox>
+                </graphic>
+            </Button>
+            <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="settings-button">
+                <graphic>
+                    <Label styleClass="material-symbol" text="&#xE8B8;" />
+                </graphic>
+            </Button>
+        </HBox>
+        <Button fx:id="logoutButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnLogout" styleClass="logout-button">
             <graphic>
-                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="button-graphic">
-                    <Label styleClass="material-symbol" text="&#xF20B;" />
-                    <Label fx:id="profileNameLabel" styleClass="nav-label" text="Profile" />
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                    <Label styleClass="material-symbol" text="&#xE9BA;" />
+                    <Label fx:id="logoutNavLabel" styleClass="nav-label" text="Log out" />
                 </HBox>
             </graphic>
         </Button>
-        <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="settings-button">
-            <graphic>
-                <Label styleClass="material-symbol" text="&#xE8B8;" />
-            </graphic>
-        </Button>
-    </HBox>
+    </VBox>
 </VBox>
