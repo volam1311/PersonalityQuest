@@ -44,12 +44,12 @@ public class NavBarController implements Initializable {
     @FXML
     private VBox sidebar;
     @FXML
-    private Label brandLabel, profileNameLabel;
+    private Label brandLabel, profileNameLabel, logoutNavLabel;
     @FXML
     private Label homeNavLabel, questsNavLabel, tasksNavLabel, archetypeNavLabel;
     @FXML
     private Button menuButton, homeButton, questsButton,
-            tasksButton, archetypeButton, profileButton, settingsButton;
+            tasksButton, archetypeButton, profileButton, settingsButton, logoutButton;
 
     private boolean sidebarExpanded = true;
     private boolean sidebarOverride;
@@ -134,12 +134,14 @@ public class NavBarController implements Initializable {
         SetLabelVisible(tasksNavLabel, expanded);
         SetLabelVisible(archetypeNavLabel, expanded);
         SetLabelVisible(profileNameLabel, expanded);
+        SetLabelVisible(logoutNavLabel, expanded);
 
         SetButtonDimensions(homeButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(questsButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(tasksButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(archetypeButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(profileButton, expanded, PROFILE_BUTTON_HEIGHT);
+        SetButtonDimensions(logoutButton, expanded, PROFILE_BUTTON_HEIGHT);
         SetButtonDimensions(menuButton, false, COMPACT_BUTTON_SIZE);
         SetButtonDimensions(settingsButton, false, COMPACT_BUTTON_SIZE);
     }
@@ -209,6 +211,12 @@ public class NavBarController implements Initializable {
             case ARCHETYPE -> {
             }
         }
+    }
+
+    @FXML
+    private void OnLogout() throws IOException {
+        ApplicationManager.CurrentAccount.setCurrentEmail("");
+        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);
     }
 
     private NavDestination DestinationFor(Button button) {
