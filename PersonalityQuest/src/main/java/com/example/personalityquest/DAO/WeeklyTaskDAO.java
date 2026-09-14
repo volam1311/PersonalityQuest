@@ -108,8 +108,8 @@ public class WeeklyTaskDAO {
         return toIntArray(taskIds);
     }
     /**
-     * Inserts new Tasks into the database for the given email and weekStart by randomly choosing
-     * from the list of available tasks for your quest
+     * Inserts this week's weekly practices for the given email.
+     * These are chosen from the weekly-task pool, not from the labour's storyline quest tasks.
      * @param email The email of the account you want to insert tasks for
      * @param weekStart The weekStart you want to insertTasks for
      * @throws Exception For Database Update Failures and if week start or email is null or empty
