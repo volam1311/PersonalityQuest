@@ -71,35 +71,51 @@ public class StreakServiceTest {
     }
 
     @Test
-    void completionOnNextDayIncreasesStreak() throws SQLException {
+    void completionInNextWeekIncreasesStreak() throws SQLException {
         StreakService.RecordCompletion(
                 "test",
-                LocalDate.of(2000,1,1)
+                LocalDate.of(2000, 1, 3)
         );
 
         int streak = StreakService.RecordCompletion(
                 "test",
-                LocalDate.of(2000,1,2)
+                LocalDate.of(2000, 1, 10)
         );
 
         assertEquals(2, streak);
     }
 
     @Test
-    void missingDayResetsStreak() throws SQLException {
+    void completingTwiceInTheSameWeekDoesNotIncreaseStreak()
+            throws SQLException {
         StreakService.RecordCompletion(
                 "test",
-                LocalDate.of(2000,1,1)
-        );
-
-        StreakService.RecordCompletion(
-                "test",
-                LocalDate.of(2000,1,2)
+                LocalDate.of(2000, 1, 3)
         );
 
         int streak = StreakService.RecordCompletion(
                 "test",
-                LocalDate.of(2000,1,4)
+                LocalDate.of(2000, 1, 9)
+        );
+
+        assertEquals(1, streak);
+    }
+
+    @Test
+    void missingWeekResetsStreak() throws SQLException {
+        StreakService.RecordCompletion(
+                "test",
+                LocalDate.of(2000, 1, 3)
+        );
+
+        StreakService.RecordCompletion(
+                "test",
+                LocalDate.of(2000, 1, 10)
+        );
+
+        int streak = StreakService.RecordCompletion(
+                "test",
+                LocalDate.of(2000, 1, 24)
         );
 
         assertEquals(1, streak);
@@ -109,17 +125,17 @@ public class StreakServiceTest {
     void bestStreakKeptAfterCurrentStreakResets() throws SQLException {
         StreakService.RecordCompletion(
                 "test",
-                LocalDate.of(2000,1,1)
+                LocalDate.of(2000, 1, 3)
         );
 
         StreakService.RecordCompletion(
                 "test",
-                LocalDate.of(2000,1,2)
+                LocalDate.of(2000, 1, 10)
         );
 
         int streak = StreakService.RecordCompletion(
                 "test",
-                LocalDate.of(2000,1,4)
+                LocalDate.of(2000, 1, 24)
         );
 
         int bestStreak = StreakService.GetBestStreak(
@@ -130,15 +146,15 @@ public class StreakServiceTest {
     }
 
     @Test
-    void currentStreakBecomesZeroAfterMissedDay() throws SQLException {
+    void currentStreakBecomesZeroAfterMissedWeek() throws SQLException {
         StreakService.RecordCompletion(
                 "test",
-                LocalDate.of(2000, 1, 1)
+                LocalDate.of(2000, 1, 3)
         );
 
         int streak = StreakService.GetCurrentStreak(
                 "test",
-                LocalDate.of(2000, 1, 3)
+                LocalDate.of(2000, 1, 24)
         );
 
         assertEquals(0, streak);
