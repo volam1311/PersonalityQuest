@@ -111,7 +111,7 @@ public class ProfileController implements Initializable {
                 progress = UserProfile.empty();
             }
         }
-        streakLabel.setText("Day " + progress.currentStreak());
+        streakLabel.setText("Week " + progress.currentStreak());
         radarValues = UserProfileService.RadarValues(progress);
 
         String archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;

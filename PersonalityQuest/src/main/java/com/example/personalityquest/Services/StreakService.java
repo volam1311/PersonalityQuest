@@ -6,6 +6,8 @@ import com.example.personalityquest.Model.StreakProgress;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.DayOfWeek;
+import java.time.temporal.TemporalAdjusters;
 
 /**
  * Manages streak calculations and delegates progress persistence to StreakDAO
@@ -19,15 +21,25 @@ public class StreakService {
     }
 
     /**
+     * @param date The date of current day
+     * Helper function to get the start of the week for streaks
+     * @return The date of the Monday of the current week
+     */
+    private static LocalDate WeekStart(LocalDate date) {
+        LocalDate today = LocalDate.now(); // Gets the current date
+
+        return today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+    }
+
+    /**
      * Records a completion and returns the updated current streak
      * @param email The account email
      * @param completionDate The date of the completion
      * @return The updated current streak
      * @throws SQLException If the progress cannot be read or saved
      */
-    public static int RecordCompletion(
-            String email,
-            LocalDate completionDate) throws SQLException {
+    public static int RecordCompletion(String email, LocalDate completionDate)
+            throws SQLException {
 
         if (ApplicationManager.isEmpty(email) || completionDate == null) {
             return NO_STREAK;
@@ -39,23 +51,31 @@ public class StreakService {
             return NO_STREAK;
         }
 
+        LocalDate completionWeek = completionDate.with(
+                TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)
+        );
         LocalDate lastCompletionDate = progress.GetLastCompletionDate();
+        LocalDate lastCompletionWeek = lastCompletionDate == null
+                ? null
+                : lastCompletionDate.with(
+                        TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)
+                );
 
-        // Do not increase the streak more than once on the same date
-        if (completionDate.equals(lastCompletionDate)) {
+        // Do not increase the streak more than once in the same week
+        if (completionWeek.equals(lastCompletionWeek)) {
             return progress.GetCurrentStreak();
         }
 
-        // Do not replace saved progress with an older completion date
-        if (lastCompletionDate != null
-                && completionDate.isBefore(lastCompletionDate)) {
+        // Do not replace saved progress with an older completion week
+        if (lastCompletionWeek != null
+                && completionWeek.isBefore(lastCompletionWeek)) {
             return progress.GetCurrentStreak();
         }
 
         int updatedStreak = FIRST_STREAK;
 
-        if (lastCompletionDate != null
-                && lastCompletionDate.plusDays(1).equals(completionDate)) {
+        if (lastCompletionWeek != null
+                && lastCompletionWeek.plusWeeks(1).equals(completionWeek)) {
             updatedStreak = progress.GetCurrentStreak() + 1;
         }
 
@@ -91,9 +111,7 @@ public class StreakService {
      * @return The current streak, or zero after a missed day
      * @throws SQLException If the progress cannot be read
      */
-    public static int GetCurrentStreak(
-            String email,
-            LocalDate today) throws SQLException {
+    public static int GetCurrentStreak(String email, LocalDate today) throws SQLException {
 
         if (ApplicationManager.isEmpty(email) || today == null) {
             return NO_STREAK;
@@ -105,11 +123,14 @@ public class StreakService {
             return NO_STREAK;
         }
 
+        LocalDate currentWeek = WeekStart(today);
         LocalDate lastCompletionDate = progress.GetLastCompletionDate();
 
-        if (lastCompletionDate != null
-                && lastCompletionDate.isBefore(today.minusDays(1))) {
-            return NO_STREAK;
+        if (lastCompletionDate != null) {
+            LocalDate lastCompletionWeek = WeekStart(lastCompletionDate);
+            if (lastCompletionWeek.isBefore(currentWeek.minusWeeks(1))) {
+                return NO_STREAK;
+            }
         }
 
         return progress.GetCurrentStreak();
