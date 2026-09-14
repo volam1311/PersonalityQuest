@@ -54,7 +54,9 @@ public enum Archetype {
             "Magician",
             "You transform ideas and perspectives to make meaningful change possible.",
             "Visionary, imaginative, persuasive, and skilled at creating transformation.",
-            "Can become manipulative, unrealistic, or overly secretive."
+            "Can become manipulative, unrealistic, or overly secretive.",
+            "Transform",
+            "Vision"
     ),
 
     SAGE(
@@ -125,7 +127,7 @@ public enum Archetype {
             String strengths,
             String weaknesses,
             String value,
-            String skill
+            String attribute
     ) {
         this.displayName = displayName;
         this.overview = overview;
