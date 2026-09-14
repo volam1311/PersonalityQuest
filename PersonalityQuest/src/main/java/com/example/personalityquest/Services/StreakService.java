@@ -28,7 +28,7 @@ public class StreakService {
     private static LocalDate WeekStart(LocalDate date) {
         LocalDate today = LocalDate.now(); // Gets the current date
 
-        return today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     }
 
     /**
