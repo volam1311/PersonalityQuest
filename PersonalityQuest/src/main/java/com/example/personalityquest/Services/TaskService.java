@@ -28,8 +28,9 @@ public class TaskService {
     }
 
     /**
-     * Gets every Task that belongs to a labour.
-     * @param labourId The labourId you want the tasks for
+     * Gets every storyline quest task that belongs to a labour.
+     * Weekly practices are stored separately and are not returned here.
+     * @param labourId The labourId you want the quest tasks for
      * @return A list of Task objects, empty if none exist
      * @throws Exception If the labourId is invalid or a Database Access Failure occurs
      */
@@ -82,9 +83,10 @@ public class TaskService {
 
 
     /**
-     * Gets an array of taskIds that link to a given labourId
-     * @param labourId The labourId that you will get taskId's for
-     * @return A populated Array of taskId's that have a matching labourId to the one given
+     * Gets random weekly-practice task ids for a labour.
+     * These come from the weekly pool, not the storyline quest tasks.
+     * @param labourId The labourId that you will get weekly taskId's for
+     * @return A populated Array of weekly taskId's that have a matching labourId to the one given
      * @throws Exception If the labourId is null OR a Database Access Failure
      */
     public static int[] GetRandomAmountOfTaskIdsForLabourId(int labourId) throws Exception {
@@ -92,7 +94,7 @@ public class TaskService {
             throw new IllegalArgumentException("Labour Id is null");
         }
 
-        List<Integer> taskIds = TaskDAO.GetTaskIdsForLabourID(labourId);
+        List<Integer> taskIds = TaskDAO.GetWeeklyTaskIdsForLabourId(labourId);
 
 
         Collections.shuffle(taskIds);
@@ -112,10 +114,11 @@ public class TaskService {
     }
 
     /**
-     * Gets the three task ids for a labour week. Week 1 is the first three tasks, week 2 the next three, and so on.
-     * @param labourId The labour whose task pool to read
+     * Gets the three weekly-practice ids for a labour week. Week 1 is the first three weekly tasks,
+     * week 2 the next three, and so on. Storyline quest tasks are never included.
+     * @param labourId The labour whose weekly pool to read
      * @param weekNumber The 1-based week of the labour
-     * @return Task ids for that week, empty if none exist
+     * @return Weekly task ids for that week, empty if none exist
      */
     public static int[] GetTaskIdsForLabourWeek(int labourId, int weekNumber) throws Exception {
         if (IsLabourIdNull(labourId)) {
@@ -125,7 +128,7 @@ public class TaskService {
             throw new IllegalArgumentException("Week number is invalid");
         }
 
-        List<Integer> taskIds = TaskDAO.GetTaskIdsForLabourID(labourId);
+        List<Integer> taskIds = TaskDAO.GetWeeklyTaskIdsForLabourId(labourId);
         if (taskIds.isEmpty()) {
             return new int[0];
         }

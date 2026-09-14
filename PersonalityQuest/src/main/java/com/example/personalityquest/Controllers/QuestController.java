@@ -128,13 +128,13 @@ public class QuestController implements Initializable {
         questTitleLabel.setText(quest.getName());
         questArchetypeLabel.setText(item.archetypeName());
         questStoryLabel.setText(ApplicationManager.isEmpty(story)
-                ? "Complete the stored tasks for this labour to continue the questline."
+                ? "Complete this labour's storyline tasks to continue the questline."
                 : story);
         challengeLabel.setText(taskDetails.isEmpty()
                 ? "No tasks are stored for this labour yet."
                 : taskDetails);
         traitLabel.setText(item.archetypeName());
-        reflectionPromptLabel.setText("Write your weekly reflection on the Tasks page after finishing this labour's assigned work.");
+        reflectionPromptLabel.setText("Weekly practices are on the Tasks page. These storyline tasks belong to the labour itself.");
 
         float progress = userQuest.getPercentageComplete();
         questProgress.setProgress(progress);

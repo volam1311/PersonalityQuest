@@ -122,8 +122,7 @@ public class WeeklyTaskService {
         return tasks;
     }
     /**
-     * Inserts new Tasks into the database for the given email and weekStart by randomly choosing
-     * from the list of available tasks for your quest
+     * Inserts this week's weekly practices. These are not storyline quest tasks.
      * @param email The email of the account you want to insert tasks for
      * @param weekStart The weekStart you want to insertTasks for
      * @throws Exception For Database Update Failures and if week start or email is null or empty

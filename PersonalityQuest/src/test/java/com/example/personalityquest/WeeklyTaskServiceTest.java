@@ -42,7 +42,8 @@ public class WeeklyTaskServiceTest {
                         taskID INT PRIMARY KEY,
                         name TEXT NOT NULL,
                         description TEXT NOT NULL,
-                        labourID INT NOT NULL
+                        labourID INT NOT NULL,
+                        taskType TEXT NOT NULL DEFAULT 'QUEST'
                     )
                     """);
 
