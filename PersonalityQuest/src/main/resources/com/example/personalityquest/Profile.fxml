@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<BorderPane fx:id="profileRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/profile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.ProfileController">
+<BorderPane fx:id="profileRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/profile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.profile.ProfileController">
     <left>
         <fx:include fx:id="navBar" source="NavBar.fxml" />
     </left>

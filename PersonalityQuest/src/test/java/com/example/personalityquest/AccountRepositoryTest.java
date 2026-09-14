@@ -1,6 +1,6 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.Services.HashingService;
+import com.example.personalityquest.Services.auth.HashingService;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;

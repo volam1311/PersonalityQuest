@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<BorderPane styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/archetype.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.ArchetypeController">
+<BorderPane styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/archetype.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.quiz.ArchetypeController">
     <left>
         <fx:include fx:id="navBar" source="NavBar.fxml" />
     </left>

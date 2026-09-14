@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.DashboardController">
+<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.navigation.DashboardController">
     <left>
         <fx:include fx:id="navBar" source="NavBar.fxml" />
     </left>
