@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="settingsRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/settings.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.SettingsController">
+<BorderPane fx:id="settingsRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/settings.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.navigation.SettingsController">
     <fx:define>
         <ToggleGroup fx:id="backgroundColorGroup" />
         <ToggleGroup fx:id="languageGroup" />
