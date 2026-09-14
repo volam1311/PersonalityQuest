@@ -1,8 +1,8 @@
 package com.example.personalityquest;
 
-import com.example.personalityquest.Applications.AccountCreationApplication;
-import com.example.personalityquest.Applications.UpdateAccountPersonalDetailsApplication;
-import com.example.personalityquest.Services.NavigationService;
+import com.example.personalityquest.Applications.auth.AccountCreationApplication;
+import com.example.personalityquest.Applications.auth.UpdateAccountPersonalDetailsApplication;
+import com.example.personalityquest.Services.navigation.NavigationService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
