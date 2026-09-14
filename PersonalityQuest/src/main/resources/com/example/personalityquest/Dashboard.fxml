@@ -47,7 +47,7 @@
                             <Label styleClass="quest-divider" text="━━━━━━━━━━━━━━━━━━━━" />
                             <Label styleClass="quest-divider" text="━━━━━━━━━━━━━━━━━━━━" />
                             <Region VBox.vgrow="ALWAYS" />
-                            <Label fx:id="questDescriptionLabel" styleClass="quest-description" text="Complete today's daily quests to continue the story" wrapText="true" />
+                            <Label fx:id="questDescriptionLabel" styleClass="quest-description" text="Complete the storyline quest tasks to continue the labour" wrapText="true" />
                             <HBox alignment="CENTER_LEFT" spacing="12">
                                 <ProgressBar fx:id="questProgress" maxWidth="1.7976931348623157E308" progress="0.2" HBox.hgrow="ALWAYS" />
                                 <Label fx:id="questProgressLabel" styleClass="progress-label" text="20% Complete" />
