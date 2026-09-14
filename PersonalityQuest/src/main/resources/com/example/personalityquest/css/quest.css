@@ -1,0 +1,93 @@
+.page-title {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.page-subtitle {
+    -fx-font-family: Poppins;
+    -fx-font-size: 15px;
+    -fx-text-fill: #c4b5fd;
+}
+
+.section-label {
+    -fx-font-family: Poppins;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a884ff;
+}
+
+.quest-meta {
+    -fx-font-family: Poppins;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e8ddff;
+}
+
+.quest-story,
+.lore-body {
+    -fx-font-family: Poppins;
+    -fx-font-size: 15px;
+    -fx-text-fill: #f4f0ff;
+    -fx-line-spacing: 3px;
+}
+
+.status-chip {
+    -fx-font-family: Poppins;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #140e25;
+    -fx-background-color: #c4b5fd;
+    -fx-background-radius: 999;
+    -fx-padding: 6 14 6 14;
+}
+
+.status-chip.status-active {
+    -fx-background-color: #9a72ff;
+    -fx-text-fill: #140e25;
+}
+
+.status-chip.status-complete {
+    -fx-background-color: #72a34d;
+    -fx-text-fill: #ffffff;
+}
+
+.status-chip.status-other {
+    -fx-background-color: #2d2745;
+    -fx-text-fill: #c4b5fd;
+}
+
+.history-row,
+.labour-task-row {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 8;
+    -fx-padding: 4 2 4 2;
+}
+
+.history-name,
+.labour-task-name {
+    -fx-font-family: Poppins;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #aa86ff;
+}
+
+.history-detail,
+.labour-task-detail {
+    -fx-font-family: Poppins;
+    -fx-font-size: 13px;
+    -fx-text-fill: #c4b5fd;
+}
+
+.task-list .list-cell:filled:selected .history-name,
+.task-list .list-cell:filled:selected .labour-task-name,
+.task-list .list-cell:filled:selected .history-detail,
+.task-list .list-cell:filled:selected .labour-task-detail {
+    -fx-text-fill: #e8ddff;
+}
+
+.task-list .placeholder .label {
+    -fx-font-family: Poppins;
+    -fx-text-fill: #c4b5fd;
+}

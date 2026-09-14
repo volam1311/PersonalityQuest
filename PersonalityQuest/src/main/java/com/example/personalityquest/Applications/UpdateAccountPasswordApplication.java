@@ -1,21 +1,17 @@
 package com.example.personalityquest.Applications;
 
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static com.example.personalityquest.MainApplication.fxmlPrefix;
-import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEHEIGHT;
-import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEWIDTH;
 
-public class UpdateAccountPasswordApplication {
-    public static void launch(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(UpdateAccountPersonalDetailsApplication.class.getResource(fxmlPrefix + "UpdateAccountPassword.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
+public class UpdateAccountPasswordApplication extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
         stage.setTitle("Update Password");
-        stage.setScene(scene);
         stage.show();
     }
 }

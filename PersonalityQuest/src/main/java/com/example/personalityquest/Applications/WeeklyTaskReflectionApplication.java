@@ -1,28 +1,16 @@
 package com.example.personalityquest.Applications;
 
-import com.example.personalityquest.Controllers.WeeklyTaskReflectionController;
-import com.example.personalityquest.DataClasses.WeeklyTask;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import com.example.personalityquest.Model.WeeklyTask;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.NavigationService;
+import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static com.example.personalityquest.MainApplication.fxmlPrefix;
-import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEHEIGHT;
-import static com.example.personalityquest.Managers.SystemManager.SceneInfo.SCENEWIDTH;
-
-public class WeeklyTaskReflectionApplication {
-    public static void launch(Stage stage, WeeklyTask taskLoookingAt) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(WeeklyTaskReflectionApplication.class.getResource(fxmlPrefix + "WeeklyTaskReflection.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
-        stage.setTitle("Task Reflection");
-
-        // Set Task
-        WeeklyTaskReflectionController controller = fxmlLoader.getController();
-        controller.setTask(taskLoookingAt);
-
-        stage.setScene(scene);
-        stage.show();
+public class WeeklyTaskReflectionApplication extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
+        NavigationService.LoadScreen(ScreenEnum.TASKS);
     }
 }

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="tasksRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css, @css/tasks.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.TasksController">
+    <left>
+        <fx:include fx:id="navBar" source="NavBar.fxml" />
+    </left>
+
+    <center>
+        <ScrollPane fx:id="contentScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
+            <content>
+                <VBox fx:id="contentContainer" spacing="18" styleClass="content-container">
+                    <padding>
+                        <Insets bottom="24" left="24" right="24" top="24" />
+                    </padding>
+
+                    <VBox spacing="6">
+                        <Label styleClass="page-title" text="Tasks" />
+                        <Label fx:id="weekSummaryLabel" styleClass="page-subtitle" text="This week's assignments, then every task in your current labour." />
+                    </VBox>
+
+                    <GridPane fx:id="tasksGrid" hgap="12" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="38" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="62" />
+                        </columnConstraints>
+
+                        <VBox fx:id="listsColumn" spacing="12" GridPane.columnIndex="0">
+                            <VBox fx:id="weekCard" spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
+                                <Label styleClass="card-title" text="Weekly Tasks" />
+                                <Label fx:id="weekRangeLabel" styleClass="page-subtitle" text="Your weekly assignments will appear here." />
+                                <ListView fx:id="weekTasks" focusTraversable="false" prefHeight="210" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                            </VBox>
+
+                            <VBox fx:id="questTasksCard" spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
+                                <Label styleClass="card-title" text="Quest Tasks" />
+                                <Label fx:id="questTasksLabel" styleClass="page-subtitle" text="Every task that belongs to your current labour." />
+                                <ListView fx:id="questTasks" focusTraversable="false" prefHeight="210" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                            </VBox>
+                        </VBox>
+
+                        <VBox fx:id="detailCard" spacing="14" styleClass="card" GridPane.columnIndex="1">
+                            <Label fx:id="taskTitleLabel" styleClass="page-title" text="Select a task" wrapText="true" />
+                            <Label fx:id="questLabel" styleClass="quest-meta" text="Choose a weekly or quest task to read its details." wrapText="true" />
+                            <Label fx:id="descriptionLabel" styleClass="lore-body" wrapText="true" text="" />
+
+                            <VBox spacing="8">
+                                <Label styleClass="section-label" text="Progress" />
+                                <CheckBox fx:id="progressBox" disable="true" focusTraversable="false" mouseTransparent="true" styleClass="progress-check" />
+                            </VBox>
+
+                            <VBox spacing="8" VBox.vgrow="ALWAYS">
+                                <Label styleClass="section-label" text="Reflection" />
+                                <TextArea fx:id="reflectionArea" prefHeight="180" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
+                            </VBox>
+
+                            <VBox fx:id="aiFeedbackCard" spacing="8" styleClass="ai-feedback-card" visible="false" managed="false">
+                                <Label styleClass="section-label" text="AI Feedback" />
+                                <Label fx:id="aiFeedbackLabel" styleClass="ai-feedback-body" wrapText="true" text="" />
+                            </VBox>
+
+                            <Label fx:id="feedbackLabel" styleClass="settings-feedback" wrapText="true" />
+
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <Button mnemonicParsing="false" onAction="#OnBack" styleClass="pill-button" text="Back" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button fx:id="feedbackButton" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get AI Feedback" />
+                                <Button fx:id="draftButton" mnemonicParsing="false" onAction="#OnSaveDraft" styleClass="draft-button" text="Save Draft" />
+                                <Button fx:id="submitButton" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" />
+                            </HBox>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

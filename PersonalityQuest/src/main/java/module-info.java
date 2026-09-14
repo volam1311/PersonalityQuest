@@ -4,6 +4,7 @@ module com.example.personalityquest {
     requires java.xml;
     requires java.desktop;
     requires java.sql;
+    requires java.net.http;
     requires bcrypt;
     requires jdk.jshell;
 
@@ -13,8 +14,12 @@ module com.example.personalityquest {
     opens com.example.personalityquest.Controllers to javafx.fxml;
     exports com.example.personalityquest.Applications;
     opens com.example.personalityquest.Applications to javafx.fxml;
-    exports com.example.personalityquest.Managers;
-    opens com.example.personalityquest.Managers to javafx.fxml;
-    exports com.example.personalityquest.DataClasses;
-    opens com.example.personalityquest.DataClasses to javafx.fxml;
+    exports com.example.personalityquest.Services;
+    opens com.example.personalityquest.Services to javafx.fxml;
+    exports com.example.personalityquest.DAO;
+    opens com.example.personalityquest.DAO to javafx.fxml;
+    exports com.example.personalityquest.Model;
+    opens com.example.personalityquest.Model to javafx.fxml;
+    exports com.example.personalityquest.Validators;
+    opens com.example.personalityquest.Validators to javafx.fxml;
 }

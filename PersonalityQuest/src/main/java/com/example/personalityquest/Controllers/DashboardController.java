@@ -1,21 +1,18 @@
 package com.example.personalityquest.Controllers;
 
-import com.example.personalityquest.Applications.SettingsApplication;
-import com.example.personalityquest.Applications.WeeklyTaskReflectionApplication;
-import com.example.personalityquest.DataClasses.EmailDetails;
-import com.example.personalityquest.DataClasses.Quest;
-import com.example.personalityquest.DataClasses.UserQuest;
-import com.example.personalityquest.DataClasses.WeeklyTask;
-import com.example.personalityquest.Managers.*;
+import com.example.personalityquest.Model.EmailDetails;
+import com.example.personalityquest.Model.Quest;
+import com.example.personalityquest.Model.Task;
+import com.example.personalityquest.Model.UserQuest;
+import com.example.personalityquest.Model.WeeklyTask;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -27,22 +24,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
-    private static final double SIDEBAR_BREAKPOINT = 900;
     private static final double STACKED_BREAKPOINT = 760;
-    private static final double EXPANDED_SIDEBAR_WIDTH = 250;
-    private static final double COLLAPSED_SIDEBAR_WIDTH = 72;
-    private static final double NAV_BUTTON_HEIGHT = 52;
-    private static final double PROFILE_BUTTON_HEIGHT = 44;
-    private static final double COMPACT_BUTTON_SIZE = 44;
-    private static final double EXPANDED_BUTTON_PREF_WIDTH = 9999;
     private static final double FULL_PERCENT = 100;
     private static final double HIDDEN_PERCENT = 0;
     private static final double QUEST_CARD_PERCENT = 65;
@@ -58,50 +47,31 @@ public class DashboardController implements Initializable {
     private static final double[] DEFAULT_RADAR_VALUES = {0.76, 0.52, 0.38, 0.65, 0.48};
 
     @FXML
+    private NavBarController navBarController;
+    @FXML
     private BorderPane dashboardRoot;
     @FXML
-    private VBox sidebar;
-    @FXML
-    private Label brandLabel, welcomeMessage, streakLabel;
-    @FXML
-    private Label homeNavLabel, questsNavLabel, tasksNavLabel, archetypeNavLabel,
-            profileNameLabel;
-    @FXML
-    private Button menuButton, homeButton, questsButton,
-            tasksButton, archetypeButton, profileButton, settingsButton;
+    private Label welcomeMessage, streakLabel;
     @FXML
     private GridPane topGrid, lowerGrid;
     @FXML
     private VBox dailiesCard, progressCard;
     @FXML
-    private ListView<WeeklyTask> weeklyTasks, dailiesList;
+    private ListView<WeeklyTask> weeklyTasks;
+    @FXML
+    private ListView<Task> questTasks;
     @FXML
     private ProgressBar questProgress;
     @FXML
-    private Label questTitleLabel, questProgressLabel;
+    private Label questTitleLabel, questProgressLabel, questDescriptionLabel;
     @FXML
     private Canvas progressChart;
 
-    private boolean sidebarExpanded = true;
-    private boolean sidebarOverride;
-    private String profileText = "Profile";
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        URL materialFont = getClass().getResource(
-                "/com/example/personalityquest/fonts/MaterialSymbolsRounded.ttf");
-
-        if (materialFont != null) {
-            Font.loadFont(materialFont.toExternalForm(), 24);
-        } else {
-            System.err.println("Material Symbols font not found. Add "
-                    + "MaterialSymbolsRounded.ttf to the fonts resource folder.");
-        }
-
-
-        ConfigureTaskList(weeklyTasks);
-        ConfigureTaskList(dailiesList);
-        dailiesList.setItems(weeklyTasks.getItems());
+        navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
+        ConfigureWeeklyTaskList(weeklyTasks);
+        ConfigureQuestTaskList(questTasks);
 
         dashboardRoot.widthProperty().addListener((observable, oldWidth, newWidth) ->
                 ApplyResponsiveLayout(newWidth.doubleValue()));
@@ -122,6 +92,8 @@ public class DashboardController implements Initializable {
             System.err.println("Could not load weekly tasks: " + exception.getMessage());
         }
 
+        PopulateQuestTasks();
+
         Platform.runLater(() -> {
             ApplyResponsiveLayout(dashboardRoot.getWidth());
             DrawProgressGraph();
@@ -129,27 +101,21 @@ public class DashboardController implements Initializable {
     }
 
     private void SetWelcome() throws Exception {
-        // Load the signed-in user's name for the header and profile button.
-        EmailDetails emailDetails = EmailManager.GetDetailsForEmail(
-                SystemManager.CurrentAccount.currentEmail);
+        EmailDetails emailDetails = EmailService.GetDetailsForEmail(
+                ApplicationManager.CurrentAccount.getCurrentEmail());
 
         if (emailDetails == null) {
             welcomeMessage.setText("Welcome back!");
-            profileText = "Profile";
-            profileNameLabel.setText(profileText);
             return;
         }
 
         welcomeMessage.setText("Welcome back, " + emailDetails.getFirstName() + "!");
-        profileText = emailDetails.getUserName();
-        profileNameLabel.setText(profileText);
     }
 
     private void UpdateStreakLabel() {
-        // Display the saved streak without preventing the dashboard from loading.
         try {
-            int streak = StreakManager.GetCurrentStreak(
-                    SystemManager.CurrentAccount.currentEmail);
+            int streak = StreakService.GetCurrentStreak(
+                    ApplicationManager.CurrentAccount.getCurrentEmail());
             streakLabel.setText("Day " + streak);
         } catch (Exception exception) {
             streakLabel.setText("Day 0");
@@ -158,29 +124,35 @@ public class DashboardController implements Initializable {
 
     private void PopulateQuestline() {
         try{
-            UserQuest userQuest = UserQuestManager.GetCurrentActiveUserQuestForEmail(SystemManager.CurrentAccount.currentEmail);
-            Quest trueQuest = QuestManager.GetQuestForLabourId(userQuest.getLabourId());
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
+            Quest trueQuest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            List<Task> labourTasks = TaskService.GetTasksForLabourId(trueQuest.getLabourId());
+            String taskSummary = TaskService.JoinTaskNames(labourTasks);
 
             float truePercentageComplete = userQuest.getPercentageComplete() * 100;
             String formatedPercentageString = String.format("%.0f", truePercentageComplete);
             questTitleLabel.setText(trueQuest.getName());
+            questDescriptionLabel.setText(taskSummary.isEmpty()
+                    ? QuestService.GetArchetypeDescription(trueQuest.getArchetypeId())
+                    : taskSummary);
             questProgress.setProgress(userQuest.getPercentageComplete());
             questProgressLabel.setText(formatedPercentageString + "% Complete");
         }
         catch (Exception e){
+            questTitleLabel.setText("No active quest");
+            questDescriptionLabel.setText("Complete the quiz to begin a labour.");
             questProgress.setProgress(DEFAULT_QUEST_PROGRESS);
             questProgressLabel.setText(DEFAULT_QUEST_PROGRESS_LABEL);
         }
     }
 
     private void PopulateWeeklyTasks() throws Exception {
-        // Load this week's tasks or create them when none exist
-        WeeklyTask[] tasks = WeeklyTaskManager.GetTasksForEmailForThisWeek(
-                SystemManager.CurrentAccount.currentEmail);
+        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek(
+                ApplicationManager.CurrentAccount.getCurrentEmail());
 
         if (tasks == null) {
-            tasks = WeeklyTaskManager.GenerateTasksForThisWeek(
-                    SystemManager.CurrentAccount.currentEmail);
+            tasks = WeeklyTaskService.GenerateTasksForThisWeek(
+                    ApplicationManager.CurrentAccount.getCurrentEmail());
         }
 
         weeklyTasks.getItems().clear();
@@ -190,8 +162,22 @@ public class DashboardController implements Initializable {
         }
     }
 
-    private void ConfigureTaskList(ListView<WeeklyTask> taskList) {
-        // Render each task with a checkbox and a text label.
+    private void PopulateQuestTasks() {
+        questTasks.getItems().clear();
+        try {
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(
+                    ApplicationManager.CurrentAccount.getCurrentEmail());
+            if (userQuest == null) {
+                return;
+            }
+            List<Task> tasks = TaskService.GetTasksForLabourId(userQuest.getLabourId());
+            questTasks.getItems().addAll(tasks);
+        } catch (Exception exception) {
+            System.err.println("Could not load quest tasks: " + exception.getMessage());
+        }
+    }
+
+    private void ConfigureWeeklyTaskList(ListView<WeeklyTask> taskList) {
         taskList.setCellFactory(list -> new ListCell<>() {
             private final CheckBox completedBox = new CheckBox();
             private final Label taskLabel = new Label();
@@ -221,75 +207,40 @@ public class DashboardController implements Initializable {
         });
     }
 
+    private void ConfigureQuestTaskList(ListView<Task> taskList) {
+        taskList.setCellFactory(list -> new ListCell<>() {
+            private final Label taskLabel = new Label();
+            private final HBox row = new HBox(10, taskLabel);
+
+            {
+                row.getStyleClass().add("task-row");
+            }
+
+            @Override
+            protected void updateItem(Task task, boolean empty) {
+                super.updateItem(task, empty);
+
+                if (empty || task == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+
+                taskLabel.setText(task.getName());
+                setText(null);
+                setGraphic(row);
+            }
+        });
+    }
+
     private void ApplyResponsiveLayout(double width) {
-        // Change the sidebar and card arrangement as the window width changes.
         if (width <= 0) {
             return;
         }
 
-        if (width >= SIDEBAR_BREAKPOINT) {
-            sidebarOverride = false;
-        }
-
-        if (!sidebarOverride) {
-            sidebarExpanded = width >= SIDEBAR_BREAKPOINT;
-        }
-
-        SetSidebarExpanded(sidebarExpanded);
-
         boolean stacked = width < STACKED_BREAKPOINT;
         SetGridCardLayout(topGrid, dailiesCard, stacked);
         SetGridCardLayout(lowerGrid, progressCard, stacked);
-    }
-
-    private void SetSidebarExpanded(boolean expanded) {
-        // Apply the expanded or collapsed sidebar state.
-        double width = expanded ? EXPANDED_SIDEBAR_WIDTH : COLLAPSED_SIDEBAR_WIDTH;
-        sidebar.setMinWidth(width);
-        sidebar.setPrefWidth(width);
-        sidebar.setMaxWidth(width);
-
-        sidebar.getStyleClass().remove("sidebar-collapsed");
-        if (!expanded) {
-            sidebar.getStyleClass().add("sidebar-collapsed");
-        }
-
-        brandLabel.setManaged(expanded);
-        brandLabel.setVisible(expanded);
-
-        SetLabelVisible(homeNavLabel, expanded);
-        SetLabelVisible(questsNavLabel, expanded);
-        SetLabelVisible(tasksNavLabel, expanded);
-        SetLabelVisible(archetypeNavLabel, expanded);
-        SetLabelVisible(profileNameLabel, expanded);
-
-        SetButtonDimensions(homeButton, expanded, NAV_BUTTON_HEIGHT);
-        SetButtonDimensions(questsButton, expanded, NAV_BUTTON_HEIGHT);
-        SetButtonDimensions(tasksButton, expanded, NAV_BUTTON_HEIGHT);
-        SetButtonDimensions(archetypeButton, expanded, NAV_BUTTON_HEIGHT);
-        SetButtonDimensions(profileButton, expanded, PROFILE_BUTTON_HEIGHT);
-        SetButtonDimensions(menuButton, false, COMPACT_BUTTON_SIZE);
-        SetButtonDimensions(settingsButton, false, COMPACT_BUTTON_SIZE);
-    }
-
-    private void SetButtonDimensions(Button button, boolean expanded, double expandedHeight) {
-        boolean square = !expanded;
-        double width = square ? COMPACT_BUTTON_SIZE : EXPANDED_BUTTON_PREF_WIDTH;
-        double height = square ? COMPACT_BUTTON_SIZE : expandedHeight;
-
-        button.setMinWidth(square ? COMPACT_BUTTON_SIZE : 0);
-        button.setPrefWidth(width);
-        button.setMaxWidth(square ? COMPACT_BUTTON_SIZE : Double.MAX_VALUE);
-        button.setMinHeight(height);
-        button.setPrefHeight(height);
-        button.setMaxHeight(height);
-        button.setPadding(square ? Insets.EMPTY : new Insets(0, 12, 0, 12));
-        button.setAlignment(square ? Pos.CENTER : Pos.CENTER_LEFT);
-    }
-
-    private void SetLabelVisible(Label label, boolean visible) {
-        label.setManaged(visible);
-        label.setVisible(visible);
     }
 
     private void SetGridCardLayout(GridPane grid, VBox secondaryCard, boolean stacked) {
@@ -309,7 +260,6 @@ public class DashboardController implements Initializable {
     }
 
     private void DrawProgressGraph() {
-        // Draw the radar chart PLACEHOLDER RIGHT NOW
         GraphicsContext graphics = progressChart.getGraphicsContext2D();
         double width = progressChart.getWidth();
         double height = progressChart.getHeight();
@@ -366,31 +316,18 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    private void OnMenuToggle() {
-        sidebarOverride = true;
-        sidebarExpanded = !sidebarExpanded;
-        SetSidebarExpanded(sidebarExpanded);
-    }
-
-    @FXML
-    private void OnNavigationClick(ActionEvent event) throws IOException {
-        Button button = (Button) event.getSource();
-
-        if (button == settingsButton) {
-            SettingsApplication.launch((Stage) dashboardRoot.getScene().getWindow());
-            return;
-        }
-
-        System.out.println("Selected dashboard navigation: " + button.getId());
-    }
-
-    @FXML
-    private void OnTaskClick(MouseEvent event) throws IOException {
-        WeeklyTask selectedTask = dailiesList.getSelectionModel().getSelectedItem();
-
+    private void OnWeeklyTaskClick(MouseEvent event) throws IOException {
+        WeeklyTask selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
         if (selectedTask != null) {
-            WeeklyTaskReflectionApplication.launch(
-                    (Stage) dailiesList.getScene().getWindow(), selectedTask);
+            NavigationService.LoadScreen(ScreenEnum.TASKS);
+        }
+    }
+
+    @FXML
+    private void OnQuestTaskClick(MouseEvent event) throws IOException {
+        Task selectedTask = questTasks.getSelectionModel().getSelectedItem();
+        if (selectedTask != null) {
+            NavigationService.LoadScreen(ScreenEnum.TASKS);
         }
     }
 }

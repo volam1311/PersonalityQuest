@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="questRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.QuestController">
+    <left>
+        <fx:include fx:id="navBar" source="NavBar.fxml" />
+    </left>
+
+    <center>
+        <ScrollPane fx:id="contentScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
+            <content>
+                <VBox fx:id="contentContainer" spacing="18" styleClass="content-container">
+                    <padding>
+                        <Insets bottom="24" left="24" right="24" top="24" />
+                    </padding>
+
+                    <HBox alignment="CENTER_LEFT" spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label styleClass="page-title" text="Questline" />
+                            <Label styleClass="page-subtitle" text="Your current labour, the story behind it, and the path still ahead." />
+                        </VBox>
+                    </HBox>
+
+                    <VBox fx:id="questHeroCard" spacing="12" styleClass="card quest-card">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label fx:id="questTitleLabel" styleClass="card-title" text="No active quest" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                            <Label fx:id="questStatusLabel" styleClass="status-chip" text="None" />
+                        </HBox>
+                        <Label fx:id="questArchetypeLabel" styleClass="quest-meta" text="Complete the quiz to begin a labour." />
+                        <Label fx:id="questStoryLabel" styleClass="quest-story" wrapText="true" text="When a quest is assigned, its story will appear here." />
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <ProgressBar fx:id="questProgress" maxWidth="1.7976931348623157E308" progress="0" HBox.hgrow="ALWAYS" />
+                            <Label fx:id="questProgressLabel" styleClass="progress-label" text="0% Complete" />
+                        </HBox>
+                    </VBox>
+
+                    <GridPane fx:id="detailGrid" hgap="12" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="55" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="45" />
+                        </columnConstraints>
+
+                        <VBox fx:id="challengeCard" spacing="10" styleClass="card" GridPane.columnIndex="0">
+                            <Label styleClass="card-title" text="This week's challenge" />
+                            <Label fx:id="challengeLabel" styleClass="lore-body" wrapText="true" text="Your challenge will appear here once a quest is active." />
+                        </VBox>
+
+                        <VBox fx:id="traitCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
+                            <Label styleClass="card-title" text="Why this labour" />
+                            <Label styleClass="section-label" text="Trait focus" />
+                            <Label fx:id="traitLabel" styleClass="lore-body" wrapText="true" text="—" />
+                            <Label styleClass="section-label" text="Reflection" />
+                            <Label fx:id="reflectionPromptLabel" styleClass="lore-body" wrapText="true" text="—" />
+                        </VBox>
+                    </GridPane>
+
+                    <GridPane fx:id="listsGrid" hgap="12" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="55" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="45" />
+                        </columnConstraints>
+
+                        <VBox fx:id="tasksCard" spacing="10" styleClass="card" GridPane.columnIndex="0">
+                            <Label styleClass="card-title" text="Labour tasks" />
+                            <Label styleClass="page-subtitle" text="Tasks that belong to this quest. Weekly assignments are on Home." />
+                            <ListView fx:id="labourTasks" focusTraversable="false" prefHeight="280" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        </VBox>
+
+                        <VBox fx:id="historyCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
+                            <Label styleClass="card-title" text="Your quests" />
+                            <Label styleClass="page-subtitle" text="Select a quest to read its story." />
+                            <ListView fx:id="questHistory" focusTraversable="false" prefHeight="280" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        </VBox>
+                    </GridPane>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

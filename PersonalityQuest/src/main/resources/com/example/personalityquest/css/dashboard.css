@@ -1,9 +1,15 @@
 .material-symbol {
-    -fx-font-family: "Material Symbols Rounded";
-    -fx-font-size: 24px;
-    -fx-text-fill: #a884ff;
-    -fx-alignment: CENTER;
+    -fx-fill: #c4a7ff;
     -fx-translate-y: 2px;
+}
+
+.nav-button .material-symbol,
+.profile-button .material-symbol,
+.logout-button .material-symbol,
+.menu-button .material-symbol,
+.settings-button .material-symbol {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
 }
 
 .dashboard-root {
@@ -74,7 +80,8 @@
 }
 
 .nav-button,
-.profile-button {
+.profile-button,
+.logout-button {
     -fx-pref-width: 9999;
     -fx-max-width: 9999;
     -fx-min-height: 44px;
@@ -101,7 +108,8 @@
     -fx-max-height: 52px;
 }
 
-.profile-button {
+.profile-button,
+.logout-button {
     -fx-min-height: 44px;
     -fx-pref-height: 44px;
     -fx-max-height: 44px;
@@ -115,7 +123,8 @@
 }
 
 .nav-button:hover,
-.profile-button:hover {
+.profile-button:hover,
+.logout-button:hover {
     -fx-background-color: #423761;
 }
 
@@ -130,12 +139,36 @@
 }
 
 .nav-button.selected-nav-button .material-symbol,
-.nav-button.selected-nav-button .nav-label {
+.profile-button.selected-nav-button .material-symbol,
+.profile-button.selected-nav-button .material-symbol {
+    -fx-fill: #140e25;
+}
+
+.nav-button.selected-nav-button .nav-label,
+.profile-button.selected-nav-button .nav-label {
     -fx-text-fill: #140e25;
 }
 
-.sidebar-footer {
+.profile-button.selected-nav-button,
+.profile-button.selected-nav-button:hover,
+.profile-button.selected-nav-button:focused {
+    -fx-background-color: #9a72ff;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: #140e25;
+}
+
+.sidebar-footer-stack {
     -fx-padding: 8 0 0 0;
+}
+
+.sidebar-collapsed .sidebar-footer-stack {
+    -fx-alignment: CENTER;
+}
+
+.sidebar-footer {
+    -fx-padding: 0;
 }
 
 .settings-button {
@@ -151,11 +184,12 @@
 }
 
 .settings-button.selected-settings-button .material-symbol {
-    -fx-text-fill: #140e25;
+    -fx-fill: #140e25;
 }
 
 .sidebar-collapsed .nav-button,
-.sidebar-collapsed .profile-button {
+.sidebar-collapsed .profile-button,
+.sidebar-collapsed .logout-button {
     -fx-min-width: 44px;
     -fx-pref-width: 44px;
     -fx-max-width: 44px;
@@ -199,13 +233,10 @@
 }
 
 .streak-icon {
-    -fx-font-family: "Material Symbols Rounded";
-    -fx-font-size: 30px;
-    -fx-min-width: 30px;
-    -fx-pref-width: 30px;
-    -fx-alignment: CENTER;
+    -fx-scale-x: 1.25;
+    -fx-scale-y: 1.25;
     -fx-translate-y: 2px;
-    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
 }
 
 .streak-text {

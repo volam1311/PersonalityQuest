@@ -1,22 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
 
-<VBox alignment="TOP_CENTER" prefHeight="480" prefWidth="138.0" spacing="20.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.NavBarController">
-        <Button mnemonicParsing="false" onAction="#OnDashboard" prefWidth="180" style="-fx-font-weight: bold;" text="Dashboard" />
-        <Button mnemonicParsing="false" onAction="#OnQuests" prefWidth="180" style="-fx-font-weight: bold;" text="Quests" />
-        <Button mnemonicParsing="false" onAction="#OnTasks" prefWidth="180" style="-fx-font-weight: bold;" text="Tasks" />
-        <Button mnemonicParsing="false" onAction="#OnArchetype" prefWidth="180" style="-fx-font-weight: bold;" text="Arehetype" />
-   <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="117.0">
-      <children>
-         <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
-            <children>
-               <Button mnemonicParsing="false" onAction="#OnAccount" prefWidth="180" style="-fx-font-weight: bold;" text="Account" />
-               <Button mnemonicParsing="false" onAction="#OnSettings" prefWidth="180" style="-fx-font-weight: bold;" text="Settings" />
-            </children>
-         </HBox>
-      </children>
-   </VBox>
+<VBox fx:id="sidebar" styleClass="sidebar" stylesheets="@css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.NavBarController">
+    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="sidebar-header">
+        <Button fx:id="menuButton" mnemonicParsing="false" onAction="#OnMenuToggle" styleClass="menu-button">
+            <graphic>
+                <SVGPath styleClass="material-symbol" content="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+            </graphic>
+        </Button>
+        <Label fx:id="brandLabel" styleClass="brand-label" text="PersonalityQuest" />
+    </HBox>
+
+    <VBox spacing="8" styleClass="navigation-list">
+        <Button fx:id="homeButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button">
+            <graphic>
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                    <SVGPath styleClass="material-symbol" content="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                    <Label fx:id="homeNavLabel" styleClass="nav-label" text="Home" />
+                </HBox>
+            </graphic>
+        </Button>
+        <Button fx:id="questsButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button">
+            <graphic>
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                    <SVGPath styleClass="material-symbol" content="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3h5v2h-5V6zm0 4h5v2h-5v-2zm0 4h5v2h-5v-2zM7 6h3v3H7V6zm0 4h3v3H7v-3zm0 4h3v3H7v-3z" />
+                    <Label fx:id="questsNavLabel" styleClass="nav-label" text="Quests" />
+                </HBox>
+            </graphic>
+        </Button>
+        <Button fx:id="tasksButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button">
+            <graphic>
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                    <SVGPath styleClass="material-symbol" content="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+                    <Label fx:id="tasksNavLabel" styleClass="nav-label" text="Tasks" />
+                </HBox>
+            </graphic>
+        </Button>
+        <Button fx:id="archetypeButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="nav-button">
+            <graphic>
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                    <SVGPath styleClass="material-symbol" content="M5 16 2 7l5 3 5-7 5 7 5-3-3 9H5zm0 2h14v2H5v-2z" />
+                    <Label fx:id="archetypeNavLabel" styleClass="nav-label" text="Archetype" />
+                </HBox>
+            </graphic>
+        </Button>
     </VBox>
+
+    <Region VBox.vgrow="ALWAYS" />
+
+    <VBox spacing="8" styleClass="sidebar-footer-stack">
+        <HBox alignment="CENTER" spacing="8" styleClass="sidebar-footer">
+            <Button fx:id="profileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="profile-button" HBox.hgrow="ALWAYS">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="button-graphic">
+                        <SVGPath styleClass="material-symbol" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        <Label fx:id="profileNameLabel" styleClass="nav-label" text="Profile" />
+                    </HBox>
+                </graphic>
+            </Button>
+            <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#OnNavigationClick" styleClass="settings-button">
+                <graphic>
+                    <SVGPath styleClass="material-symbol" content="M19.43 12.98c.04-.32.07-.65.07-.98s-.02-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.37-.31-.6-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98L14.5 2.42C14.47 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.5.42L9.12 5.07c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.08-.48 0-.6.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.08.65-.08.98s.03.66.08.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.37.31.6.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1c.23.08.48 0 .6-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z" />
+                </graphic>
+            </Button>
+        </HBox>
+        <Button fx:id="logoutButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnLogout" styleClass="logout-button">
+            <graphic>
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="button-graphic">
+                    <SVGPath styleClass="material-symbol" content="M10.09 15.59 11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3h-6v2h6v14h-6v2h6c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" />
+                    <Label fx:id="logoutNavLabel" styleClass="nav-label" text="Log out" />
+                </HBox>
+            </graphic>
+        </Button>
+    </VBox>
+</VBox>

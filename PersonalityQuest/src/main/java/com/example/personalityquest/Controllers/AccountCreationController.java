@@ -1,11 +1,12 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.AccountRepository;
-import com.example.personalityquest.AccountSignUpValidator;
-import com.example.personalityquest.Applications.AccountSignInApplication;
-import com.example.personalityquest.Applications.DashboardApplication;
-import com.example.personalityquest.Managers.EmailManager;
-import com.example.personalityquest.Managers.SystemManager;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.NavigationService;
+import com.example.personalityquest.Validators.AccountSignUpValidator;
+import com.example.personalityquest.Services.EmailService;
+import com.example.personalityquest.Services.QuizService;
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.SQLite;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -184,7 +185,7 @@ public class AccountCreationController {
             return;
         }
 
-        if (EmailManager.DoesAccountWithEmailExist(emailEntry.getText())) {
+        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText())) {
             markFieldError(emailEntry);
             Message.setText("An account with this email already exists");
             return;
@@ -204,15 +205,16 @@ public class AccountCreationController {
             return;
         }
 
-        SystemManager.CurrentAccount.currentEmail = emailEntry.getText();
-        DashboardApplication.launch((Stage) emailEntry.getScene().getWindow());
+        ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
+        QuizService.StartQuiz();
+        NavigationService.LoadScreen(ScreenEnum.QUIZ);
         System.out.println("Account created");
     }
 
     @FXML
     private void OnSignIn(MouseEvent event) throws IOException {
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        AccountSignInApplication.launch(currentStage);
+        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);
     }
 
     private TextField[] allFields() {

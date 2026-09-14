@@ -1,21 +1,32 @@
 package com.example.personalityquest.Controllers;
 
 import com.example.personalityquest.Applications.DashboardApplication;
-import com.example.personalityquest.DataClasses.WeeklyTask;
-import com.example.personalityquest.Managers.SystemManager;
-import com.example.personalityquest.Managers.WeeklyTaskManager;
+import com.example.personalityquest.Model.WeeklyTask;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.NavigationService;
+import com.example.personalityquest.Services.WeeklyTaskService;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class WeeklyTaskReflectionController {
+public class WeeklyTaskReflectionController implements Initializable {
+    @FXML
+    private NavBarController navBarController;
     @FXML
     private TextArea reflection;
 
     private WeeklyTask currentTask;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
+    }
 
     public void setTask(WeeklyTask task){
         this.currentTask = task;
@@ -42,7 +53,7 @@ public class WeeklyTaskReflectionController {
 
 
         System.out.println(reflection.getText());
-        WeeklyTaskManager.UpdateGivenTaskToDraft(currentTask, reflection.getText(), SystemManager.CurrentAccount.currentEmail);
+        WeeklyTaskService.UpdateGivenTaskToDraft(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());
         GoToDashboard();
     }
 
@@ -52,13 +63,13 @@ public class WeeklyTaskReflectionController {
 
         // Use this to mark a task as Finished
         System.out.println(reflection.getText());
-        WeeklyTaskManager.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), SystemManager.CurrentAccount.currentEmail);
+        WeeklyTaskService.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());
 
         GoToDashboard();
     }
 
     private void GoToDashboard() throws IOException {
-        DashboardApplication.launch((Stage)reflection.getScene().getWindow());
+        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
     }
 
 }
