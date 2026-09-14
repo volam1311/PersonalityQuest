@@ -3,7 +3,8 @@ package com.example.personalityquest.Model;
 import com.example.personalityquest.ApplicationManager;
 
 /**
- * Holds the details pertaining to Tasks that have not yet been assigned
+ * A task definition from the Tasks table.
+ * Quest tasks are storyline steps on a labour. 
  */
 public class Task {
     public Task(int taskId, String name, String description, int labourId) throws Exception {

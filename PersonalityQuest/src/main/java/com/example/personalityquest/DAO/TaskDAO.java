@@ -11,15 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDAO {
-
-    private final static String FIND_TASK_INFO = """
+    private static final String FIND_TASK_INFO = """
             SELECT * FROM Tasks
             WHERE taskId = ?;
             """;
 
-    private final static String GET_TASKS_FOR_LABOURID = """
+    private static final String GET_QUEST_TASKS_FOR_LABOURID = """
             SELECT * FROM Tasks
             WHERE labourId = ?
+            AND IFNULL(taskType, 'QUEST') = 'QUEST'
+            ORDER BY taskId
+            """;
+
+    private static final String GET_WEEKLY_TASK_IDS_FOR_LABOURID = """
+            SELECT taskId FROM Tasks
+            WHERE labourId = ?
+            AND IFNULL(taskType, 'QUEST') = 'WEEKLY'
             ORDER BY taskId
             """;
 
@@ -32,11 +39,8 @@ public class TaskDAO {
      * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
      */
     public static Task GetTaskForId(int taskId) throws Exception {
-        // gets the taskId to FindTaskInfo Query and then
-        // executes it find all task info
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);
-        // assign parameters
         Task task = null;
 
         statement.setInt(1, taskId);
@@ -58,39 +62,36 @@ public class TaskDAO {
     }
 
     /**
-     * Gets all the TaskId's that match a given labourId
-     * @param labourId The labourId you want to get the taskIds for
-     * @return A List Interger of the taskId's
+     * Gets the weekly-practice task ids for a labour. These are not storyline quest tasks.
+     * @param labourId The labourId you want to get the weekly taskIds for
+     * @return A list of weekly task ids
      * @throws SQLException Database Access Failure
      */
-    public static List<Integer> GetTaskIdsForLabourID(int labourId) throws SQLException {
-        // appends all task ids to FindTaskInfo Query and then
-        // executes it find all task info
+    public static List<Integer> GetWeeklyTaskIdsForLabourId(int labourId) throws SQLException {
         Connection connection = SQLite.getConnection();
-        PreparedStatement statement = connection.prepareStatement(GET_TASKS_FOR_LABOURID);
-        // assign parameters
-        // assigns all task info to an array
+        PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK_IDS_FOR_LABOURID);
         List<Integer> taskIds = new ArrayList<Integer>();
 
         statement.setInt(1, labourId);
         ResultSet rs = statement.executeQuery();
 
         while (rs.next()) {
-            taskIds.add(rs.getInt(1));
+            taskIds.add(rs.getInt("taskId"));
         }
 
-        return  taskIds;
+        return taskIds;
     }
 
     /**
-     * Gets every Task that belongs to a labour.
-     * @param labourId The labourId you want the tasks for
+     * Gets every storyline quest task that belongs to a labour.
+     * Weekly practices are stored separately and are not included.
+     * @param labourId The labourId you want the quest tasks for
      * @return A list of Task objects, empty if none exist
      * @throws Exception If a row cannot be mapped to a Task, or Database Access Failure
      */
     public static List<Task> GetTasksForLabourId(int labourId) throws Exception {
         Connection connection = SQLite.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(GET_TASKS_FOR_LABOURID)) {
+        try (PreparedStatement statement = connection.prepareStatement(GET_QUEST_TASKS_FOR_LABOURID)) {
             statement.setInt(1, labourId);
             ResultSet rs = statement.executeQuery();
             List<Task> tasks = new ArrayList<>();

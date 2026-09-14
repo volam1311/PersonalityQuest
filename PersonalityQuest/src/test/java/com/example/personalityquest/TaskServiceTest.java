@@ -40,7 +40,8 @@ public class TaskServiceTest {
                         taskID INT PRIMARY KEY,
                         name TEXT NOT NULL,
                         description TEXT NOT NULL,
-                        labourID INT NOT NULL
+                        labourID INT NOT NULL,
+                        taskType TEXT NOT NULL DEFAULT 'QUEST'
                     )
                     """);
 
@@ -155,11 +156,25 @@ public class TaskServiceTest {
 
     @Test
     public void GetRandomTasksForLabourId() throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO Tasks
+                        (taskId, name, description, labourID, taskType)
+                    VALUES (?, ?, ?, 2, 'WEEKLY')
+                    """)) {
+            int[] ids = { 8001, 8002 };
+            for (int id : ids) {
+                statement.setInt(1, id);
+                statement.setString(2, "Weekly " + id);
+                statement.setString(3, "Weekly description " + id);
+                statement.executeUpdate();
+            }
+        }
+
         int[] tasks = TaskService.GetRandomAmountOfTaskIdsForLabourId(2);
 
         for(int task: tasks){
-            // if this test fails you might have added more ta
-            if (task != 9999 && task != 8888){
+            if (task != 8001 && task != 8002){
                 throw new Exception("Didnt have correct Ids");
             }
         }
@@ -191,8 +206,40 @@ public class TaskServiceTest {
             }
         }
 
-        assertArrayEquals(new int[] { 101, 102, 103 }, TaskService.GetTaskIdsForLabourWeek(20, 1));
-        assertArrayEquals(new int[] { 104, 101, 102 }, TaskService.GetTaskIdsForLabourWeek(20, 2));
-        assertArrayEquals(new int[] { 101, 102, 103 }, TaskService.GetTaskIdsForLabourWeek(20, 3));
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO Tasks
+                        (taskId, name, description, labourID, taskType)
+                    VALUES (?, ?, ?, 20, 'WEEKLY')
+                    """)) {
+            int[] ids = { 201, 202, 203, 204 };
+            for (int id : ids) {
+                statement.setInt(1, id);
+                statement.setString(2, "Weekly " + id);
+                statement.setString(3, "Weekly description " + id);
+                statement.executeUpdate();
+            }
+        }
+
+        assertArrayEquals(new int[] { 201, 202, 203 }, TaskService.GetTaskIdsForLabourWeek(20, 1));
+        assertArrayEquals(new int[] { 204, 201, 202 }, TaskService.GetTaskIdsForLabourWeek(20, 2));
+        assertArrayEquals(new int[] { 201, 202, 203 }, TaskService.GetTaskIdsForLabourWeek(20, 3));
+    }
+
+    @Test
+    public void GetTasksForLabourIdIgnoresWeeklyPractices() throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO Tasks
+                        (taskId, name, description, labourID, taskType)
+                    VALUES (5001, "Weekly Practice", "Do this week", 1, 'WEEKLY')
+                    """)) {
+            statement.executeUpdate();
+        }
+
+        List<Task> questTasks = TaskService.GetTasksForLabourId(1);
+
+        assertEquals(1, questTasks.size());
+        assertEquals(dummyTasks[0].getTaskId(), questTasks.get(0).getTaskId());
     }
 }

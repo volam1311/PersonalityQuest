@@ -1,18 +1,18 @@
 package com.example.personalityquest.Model;
 
-import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.SQLite;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.SQLite;
+
 /**
- * Holds the details pertaining to WeeklyTasks that have been assigned in the database to users
+ * A weekly practice assigned to a user for one week.
+ * This is not a storyline quest task. The taskId points at a weekly practice in Tasks
+ * (taskType = WEEKLY). Quest storyline steps stay in Tasks with taskType = QUEST.
  */
-/// This is the class for the actual current running tasks that the user is able to complete
-/// Go check out Task if you want to see the class structure for the Tasks that turn into Weekly Tasks.
 public class WeeklyTask {
     public WeeklyTask(String email, int taskId, String status, String reflection, String weekStarted) throws Exception {
         if (taskId == 0){
