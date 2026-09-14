@@ -29,7 +29,7 @@
 
                     <VBox spacing="6">
                         <Label styleClass="page-title" text="Tasks" />
-                        <Label fx:id="weekSummaryLabel" styleClass="page-subtitle" text="This week's assignments, then every task in your current labour." />
+                        <Label fx:id="weekSummaryLabel" styleClass="page-subtitle" text="This week's practices, then the storyline tasks in your current labour." />
                     </VBox>
 
                     <GridPane fx:id="tasksGrid" hgap="12" vgap="12">
@@ -47,7 +47,7 @@
 
                             <VBox fx:id="questTasksCard" spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
                                 <Label styleClass="card-title" text="Quest Tasks" />
-                                <Label fx:id="questTasksLabel" styleClass="page-subtitle" text="Every task that belongs to your current labour." />
+                                <Label fx:id="questTasksLabel" styleClass="page-subtitle" text="Storyline tasks in your current labour." />
                                 <ListView fx:id="questTasks" focusTraversable="false" prefHeight="210" styleClass="task-list" VBox.vgrow="ALWAYS" />
                             </VBox>
                         </VBox>

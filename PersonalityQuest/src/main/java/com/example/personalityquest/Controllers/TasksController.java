@@ -111,7 +111,7 @@ public class TasksController implements Initializable {
 
             if (weekly == null || weekly.length == 0) {
                 weekSummaryLabel.setText("No weekly tasks have been assigned yet.");
-                weekRangeLabel.setText("Tasks are generated from your active quest.");
+                weekRangeLabel.setText("Weekly practices are assigned separately from the storyline.");
                 return;
             }
 
@@ -151,7 +151,7 @@ public class TasksController implements Initializable {
             questTasks.getItems().addAll(tasks);
 
             String questName = quest == null ? "your current labour" : quest.getName();
-            questTasksLabel.setText(tasks.size() + " tasks in " + questName + ".");
+            questTasksLabel.setText(tasks.size() + " storyline tasks in " + questName + ".");
         } catch (Exception exception) {
             questTasksLabel.setText("Could not load this labour's tasks right now.");
         }
@@ -257,7 +257,7 @@ public class TasksController implements Initializable {
         taskTitleLabel.setText(task.getName());
         questLabel.setText("Quest task · " + questName);
         descriptionLabel.setText(ApplicationManager.isEmpty(task.getDescription())
-                ? "This task belongs to your current labour."
+                ? "This storyline task belongs to your current labour."
                 : task.getDescription());
         progressBox.setSelected(false);
         reflectionArea.clear();
@@ -266,7 +266,7 @@ public class TasksController implements Initializable {
         submitButton.setDisable(true);
         submitButton.setText("Submit");
         feedbackButton.setDisable(true);
-        feedbackLabel.setText("Reflections are submitted from the weekly tasks above.");
+        feedbackLabel.setText("Reflections are submitted from weekly practices, not storyline quest tasks.");
         HideAiFeedback();
     }
 
