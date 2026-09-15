@@ -87,7 +87,7 @@ public class ArchetypeDAO {
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                         INSERT OR IGNORE INTO Archetypes
-                        (archetypeId, name, smallDescription, longDescription, strengths, weaknesses, valueMean, valueMeanDefinition, valueDeficit, valueDeficitDefenition, valueExcess, valueExcessDefinition)
+                        (archetypeId, name, smallDescription, longDescription, strengths, weaknesses, valueMean, valueMeanDefinition, valueDeficit, valueDeficitDefinition, valueExcess, valueExcessDefinition)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """)) {
             statement.setInt(1, archetypeID);
@@ -124,17 +124,18 @@ public class ArchetypeDAO {
                         rs.getString("longDescription"),
                         rs.getString("strengths"),
                         rs.getString("weaknesses"),
-                        rs.getString("meanValue"),
-                        rs.getString("meanValueDefinition"),
-                        rs.getString("deficitValue"),
-                        rs.getString("deficitValueDefinition"),
-                        rs.getString("excessValue"),
-                        rs.getString("excessValueDefinition")
+                        rs.getString("valueMean"),
+                        rs.getString("valueMeanDefinition"),
+                        rs.getString("valueDeficit"),
+                        rs.getString("valueDeficitDefinition"),
+                        rs.getString("valueExcess"),
+                        rs.getString("valueExcessDefinition")
                 ));
             }
             return archetypes;
         }
     }
+
 
 
 }

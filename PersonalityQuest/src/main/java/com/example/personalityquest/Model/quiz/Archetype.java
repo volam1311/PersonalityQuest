@@ -233,7 +233,7 @@ public enum Archetype {
         this.valueMean = valueMean;
         this.valueMeanDefinition = valueMeanDefinition;
         this.valueDeficit = valueDeficit;
-        this.valueDeficitDefinition = valueDeficit;
+        this.valueDeficitDefinition = valueDeficitDefinition;
         this.valueExcess = valueExcess;
         this.valueExcessDefinition = valueExcessDefinition;
     }
@@ -258,9 +258,9 @@ public enum Archetype {
 
 
     public String getValue() {return valueMean;}
-    public String getValueDefinition() {return valueDeficitDefinition;}
+    public String getValueDefinition() {return valueMeanDefinition;}
 
-    public String getValueDeficit() {return valueDeficitDefinition;}
+    public String getValueDeficit() {return valueDeficit;}
     public String getValueDeficitDefinition() {return valueDeficitDefinition;}
 
     public String getValueExcess() {return valueExcess;}

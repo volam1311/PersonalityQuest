@@ -2,6 +2,7 @@ package com.example.personalityquest.Controllers.quiz;
 
 import com.example.personalityquest.Controllers.navigation.NavBarController;
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.archetype.ArchetypeDAO;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quiz.QuizResult;
@@ -64,7 +65,22 @@ public class ArchetypeController implements Initializable {
         LoadArchetypes();
     }
 
+    private void EnsureCatalog() throws SQLException {
+        ArchetypeDAO.EnsureTables();
+        if (ArchetypeDAO.HasCatalog()) {
+            return;
+        }
+        ArchetypeDAO.SeedCatalog();
+    }
+
     private void LoadArchetypes() {
+        try { //Populate Archetype Enum
+            EnsureCatalog();
+            QuizResult quizResult = QuizService.GetResult();
+        } catch (Exception exception) {
+            ShowEmptyArchetype("Could not load your archetypes right now.");
+        }
+
         String email = ApplicationManager.CurrentAccount.getCurrentEmail();
         if (ApplicationManager.isEmpty(email)) {
             ShowEmptyArchetype("Sign in to discover your archetypes.");
@@ -135,7 +151,7 @@ public class ArchetypeController implements Initializable {
         }
 
         for (Archetype archetype : Archetype.values()) {
-            if (archetype.getDisplayName().equalsIgnoreCase(needle)) {
+            if (archetype.getName().equalsIgnoreCase(needle)) {
                 return new ArchetypeOption(archetype, QuestFocusFromDatabase(archetype, quest));
             }
         }
@@ -146,7 +162,7 @@ public class ArchetypeController implements Initializable {
         try {
             Quest quest = assignedQuest;
             if (quest == null) {
-                Integer archetypeId = QuestService.GetArchetypeIdForName(archetype.getDisplayName());
+                Integer archetypeId = QuestService.GetArchetypeIdForName(archetype.getName());
                 if (archetypeId == null) {
                     return "No labour is stored for this archetype yet.";
                 }
@@ -194,7 +210,7 @@ public class ArchetypeController implements Initializable {
     private void DisplayArchetype(ArchetypeOption option, Button selectedButton) {
         archetypeRankLabel.setText("#" + (archetypeButtons.indexOf(selectedButton) + 1));
         archetypeNameLabel.setText(option.displayName());
-        overviewLabel.setText(option.archetype().getOverview());
+        overviewLabel.setText(option.archetype().getSmallDescription());
         strengthsLabel.setText(option.archetype().getStrengths());
         questFocusLabel.setText(option.questFocus());
 
@@ -317,7 +333,7 @@ public class ArchetypeController implements Initializable {
 
     private record ArchetypeOption(Archetype archetype, String questFocus) {
         String displayName() {
-            return UserProfileService.FormatArchetypeName(archetype.getDisplayName());
+            return UserProfileService.FormatArchetypeName(archetype.getName());
         }
     }
 }

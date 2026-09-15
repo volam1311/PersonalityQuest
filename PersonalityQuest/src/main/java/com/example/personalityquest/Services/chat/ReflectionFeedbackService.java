@@ -111,7 +111,7 @@ public final class ReflectionFeedbackService {
                     Archetype matched = MatchArchetype(archetypeName);
                     if (matched != null) {
                         if (ApplicationManager.isEmpty(overview)) {
-                            overview = matched.getOverview();
+                            overview = matched.getSmallDescription();
                         }
                         strengths = matched.getStrengths();
                         weaknesses = matched.getWeaknesses();
@@ -172,7 +172,7 @@ public final class ReflectionFeedbackService {
         }
 
         for (Archetype archetype : Archetype.values()) {
-            if (archetype.getDisplayName().equalsIgnoreCase(normalised)
+            if (archetype.getName().equalsIgnoreCase(normalised)
                     || archetype.name().equalsIgnoreCase(normalised)) {
                 return archetype;
             }

@@ -182,7 +182,7 @@ public class QuizServiceTest {
     }
 
     private Option option(Archetype archetype) {
-        return new Option("Choose " + archetype.getDisplayName(), archetype);
+        return new Option("Choose " + archetype.getName(), archetype);
     }
 
     private void CreateArchetypeSchema() throws SQLException {

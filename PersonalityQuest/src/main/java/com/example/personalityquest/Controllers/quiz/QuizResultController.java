@@ -33,7 +33,7 @@ public class QuizResultController implements Initializable {
             return;
         }
 
-        String name = UserProfileService.FormatArchetypeName(result.archetype().getDisplayName());
+        String name = UserProfileService.FormatArchetypeName(result.archetype().getName());
         archetypeNameLabel.setText(name);
         archetypeDescriptionLabel.setText(DescriptionFor(result));
         strengthsLabel.setText(result.archetype().getStrengths());
@@ -48,7 +48,7 @@ public class QuizResultController implements Initializable {
 
     private String DescriptionFor(QuizResult result) {
         try {
-            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getDisplayName());
+            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());
             if (archetypeId != null) {
                 String stored = QuestService.GetArchetypeDescription(archetypeId);
                 if (!stored.isBlank()) {
@@ -58,7 +58,7 @@ public class QuizResultController implements Initializable {
         } catch (Exception ignored) {
             // Fall back to the in-memory copy when the database has no row.
         }
-        return result.archetype().getOverview();
+        return result.archetype().getSmallDescription();
     }
 
     @FXML
