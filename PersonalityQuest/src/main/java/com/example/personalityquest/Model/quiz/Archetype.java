@@ -220,7 +220,7 @@ public enum Archetype {
             String valueMean,
             String valueMeanDefinition,
             String valueDeficit,
-            String valueDefecitDefinition,
+            String valueDeficitDefinition,
             String valueExcess,
             String valueExcessDefinition
     ) {
