@@ -10,6 +10,7 @@ com.example.personalityquest.Controllers.profile
 com.example.personalityquest.Controllers.quest
 com.example.personalityquest.Controllers.quiz
 com.example.personalityquest.DAO
+com.example.personalityquest.DAO.archetype
 com.example.personalityquest.DAO.auth
 com.example.personalityquest.DAO.chat
 com.example.personalityquest.DAO.profile
