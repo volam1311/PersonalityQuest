@@ -14,6 +14,7 @@ import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.Services.quest.WeeklyTaskService;
+import com.example.personalityquest.Services.quiz.QuizService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,6 +31,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 import java.net.URL;
@@ -46,11 +49,10 @@ public class DashboardController implements Initializable {
     private static final double PROGRESS_CARD_PERCENT = 64;
     private static final double DEFAULT_QUEST_PROGRESS = 0.2;
     private static final String DEFAULT_QUEST_PROGRESS_LABEL = "20% Complete";
-    private static final int RADAR_AXIS_COUNT = 5;
+    private static final int RADAR_AXIS_COUNT = 4;
     private static final int RADAR_LEVEL_COUNT = 5;
     private static final double RADAR_CENTER_Y_OFFSET = 8;
-    private static final double RADAR_RADIUS_RATIO = 0.36;
-    private static final double[] DEFAULT_RADAR_VALUES = {0.76, 0.52, 0.38, 0.65, 0.48};
+    private static final double RADAR_RADIUS_RATIO = 0.34;
 
     @FXML
     private NavBarController navBarController;
@@ -73,11 +75,14 @@ public class DashboardController implements Initializable {
     @FXML
     private Canvas progressChart;
 
+    private double[] radarValues = new double[RADAR_AXIS_COUNT];
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
         ConfigureWeeklyTaskList(weeklyTasks);
         ConfigureQuestTaskList(questTasks);
+        radarValues = QuizService.RealmScores(QuizService.GetResult());
 
         dashboardRoot.widthProperty().addListener((observable, oldWidth, newWidth) ->
                 ApplyResponsiveLayout(newWidth.doubleValue()));
@@ -297,13 +302,12 @@ public class DashboardController implements Initializable {
                     PointY(centerY, radius, axis, axes));
         }
 
-        double[] values = DEFAULT_RADAR_VALUES;
         double[] xPoints = new double[axes];
         double[] yPoints = new double[axes];
 
         for (int axis = 0; axis < axes; axis++) {
-            xPoints[axis] = PointX(centerX, radius * values[axis], axis, axes);
-            yPoints[axis] = PointY(centerY, radius * values[axis], axis, axes);
+            xPoints[axis] = PointX(centerX, radius * radarValues[axis], axis, axes);
+            yPoints[axis] = PointY(centerY, radius * radarValues[axis], axis, axes);
         }
 
         graphics.setFill(Color.rgb(46, 135, 207, 0.45));
@@ -311,6 +315,38 @@ public class DashboardController implements Initializable {
         graphics.setStroke(Color.web("#43a9f2"));
         graphics.setLineWidth(2);
         graphics.strokePolygon(xPoints, yPoints, axes);
+
+        graphics.setFill(Color.web("#c4b5fd"));
+        graphics.setFont(Font.font("Poppins", 12));
+        graphics.setTextAlign(TextAlignment.CENTER);
+        for (int axis = 0; axis < axes; axis++) {
+            DrawAxisLabel(graphics, QuizService.REALM_LABELS[axis], centerX, centerY, radius, axis, axes);
+        }
+    }
+
+    private void DrawAxisLabel(
+            GraphicsContext graphics,
+            String label,
+            double centerX,
+            double centerY,
+            double radius,
+            int axis,
+            int axes) {
+        double labelRadius = radius + 22;
+        double x = PointX(centerX, labelRadius, axis, axes);
+        double y = PointY(centerY, labelRadius, axis, axes);
+
+        if (x < centerX - 8) {
+            graphics.setTextAlign(TextAlignment.RIGHT);
+            x -= 4;
+        } else if (x > centerX + 8) {
+            graphics.setTextAlign(TextAlignment.LEFT);
+            x += 4;
+        } else {
+            graphics.setTextAlign(TextAlignment.CENTER);
+        }
+
+        graphics.fillText(label, x, y);
     }
 
     private double PointX(double centerX, double radius, int axis, int axes) {

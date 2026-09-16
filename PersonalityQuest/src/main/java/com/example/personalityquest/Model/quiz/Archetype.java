@@ -5,18 +5,10 @@ package com.example.personalityquest.Model.quiz;
  */
 public enum Archetype {
 
-    // Innocent: Modesty
-    // Everyman: Friendly
-    // Hero: Courage
-    // Explorer: Ambition
-    // Caregiver: Protective
-    // Magician: Wittiness
-    // Sage: Truthful
-    // Outlaw: Justice
-    // Lover:
-
+    // Realm: Ego
     INNOCENT(
             1,
+            "Ego",
             "Innocent",
             "You approach life with optimism, simplicity, and trust in others.",
             "Filler",
@@ -32,6 +24,7 @@ public enum Archetype {
 
     EVERYMAN(
             2,
+            "Ego",
             "Everyman",
             "You value belonging, fairness, and building genuine connections with others.",
             "Filler",
@@ -47,6 +40,7 @@ public enum Archetype {
 
     HERO(
             3,
+            "Ego",
             "Hero",
             "You meet challenges directly and aim to prove yourself through courageous action.",
             "Filler",
@@ -60,8 +54,10 @@ public enum Archetype {
             "Feeling too little fear; rushing into danger without heeding the risk."
     ),
 
+    // Realm: Soul
     CAREGIVER(
             4,
+            "Soul",
             "Caregiver",
             "You protect and support others, especially when they are facing hardship.",
             "Filler",
@@ -77,6 +73,7 @@ public enum Archetype {
 
     MAGICIAN(
             5,
+            "Soul",
             "Magician",
             "You transform ideas and perspectives to make meaningful change possible.",
             "Filler",
@@ -92,6 +89,7 @@ public enum Archetype {
 
     SAGE(
             6,
+            "Soul",
             "Sage",
             "You seek truth, knowledge, and a deeper understanding of how things work.",
             "Filler",
@@ -105,8 +103,10 @@ public enum Archetype {
             "Retreating into pure thought; knowing much but never bringing it back to bear on life."
     ),
 
+    // Realm: Self
     LOVER(
             7,
+            "Self",
             "Lover",
             "You value emotional connection, honesty, beauty, and meaningful relationships.",
             "Filler",
@@ -122,6 +122,7 @@ public enum Archetype {
 
     JESTER(
             8,
+            "Self",
             "Jester",
             "You use humour, playfulness, and creativity to bring joy and challenge stale thinking.",
             "Filler",
@@ -137,6 +138,7 @@ public enum Archetype {
 
     EXPLORER(
             9,
+            "Self",
             "Explorer",
             "You seek freedom, discovery, and new experiences beyond familiar boundaries.",
             "Filler",
@@ -150,8 +152,10 @@ public enum Archetype {
             "Never able to settle or arrive; forever chasing the next thing before the last one is finished."
     ),
 
+    // Realm: Mark
     CREATOR(
             10,
+            "Mark",
             "Creator",
             "You turn original ideas into meaningful work and express yourself through what you build.",
             "Filler",
@@ -165,9 +169,9 @@ public enum Archetype {
             "Lost in visions that never become anything; ideas untethered from reality and never made real."
     ),
 
-
     RULER(
             11,
+            "Mark",
             "Ruler",
             "You create order, accept responsibility, and guide others towards shared goals.",
             "Filler",
@@ -183,6 +187,7 @@ public enum Archetype {
 
     OUTLAW(
             12,
+            "Mark",
             "Outlaw",
             "You challenge unfair systems and reject rules that prevent meaningful change.",
             "Filler",
@@ -196,9 +201,8 @@ public enum Archetype {
             "Tearing down for its own sake; destruction with no cause to serve and nothing built in its place."
     );
 
-
-
     private final int archetypeId;
+    private final String realm;
     private final String name;
     private final String smallDescription;
     private final String longDescription;
@@ -211,10 +215,9 @@ public enum Archetype {
     private final String valueExcess;
     private final String valueExcessDefinition;
 
-
-
     Archetype(
             int archetypeId,
+            String realm,
             String name,
             String smallDescription,
             String longDescription,
@@ -228,6 +231,7 @@ public enum Archetype {
             String valueExcessDefinition
     ) {
         this.archetypeId = archetypeId;
+        this.realm = realm;
         this.name = name;
         this.smallDescription = smallDescription;
         this.longDescription = longDescription;
@@ -241,10 +245,14 @@ public enum Archetype {
         this.valueExcessDefinition = valueExcessDefinition;
     }
 
-
     // Public Getters and Setters
 
     public int getArchetypeId() {return archetypeId;}
+
+    /**
+     * The realm this archetype belongs to: "Ego", "Soul", "Self", or "Mark".
+     */
+    public String getRealm() {return realm;}
 
     public String getName() {
         return name;
@@ -259,7 +267,6 @@ public enum Archetype {
         return weaknesses;
     }
 
-
     public String getValue() {return valueMean;}
     public String getValueDefinition() {return valueMeanDefinition;}
 
@@ -268,7 +275,5 @@ public enum Archetype {
 
     public String getValueExcess() {return valueExcess;}
     public String getValueExcessDefinition() {return valueExcessDefinition;}
-
-
 
 }
