@@ -2,7 +2,7 @@ package com.example.personalityquest.Controllers.quiz;
 
 import com.example.personalityquest.Controllers.navigation.NavBarController;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.DAO.archetype.ArchetypeDAO;
+import com.example.personalityquest.DAO.personalisation.ArchetypeDAO;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quiz.QuizResult;

@@ -1,8 +1,5 @@
-package com.example.personalityquest.DAO.archetype;
+package com.example.personalityquest.DAO.personalisation;
 
-import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.Model.profile.Achievement;
-import com.example.personalityquest.Model.profile.UserProfile;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.ArchetypeRecord;
 import com.example.personalityquest.SQLite;
@@ -12,13 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 public class ArchetypeDAO {

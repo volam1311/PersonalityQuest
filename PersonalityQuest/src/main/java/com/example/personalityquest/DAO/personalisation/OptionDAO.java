@@ -143,62 +143,62 @@ public class OptionDAO {
                 "Rally the group so it's handled fairly, by everyone together",
                 "Step up and confront it yourself, even if it's daunting");
 
-        InsertOptions(5, 5, 6, 7,
+        InsertOptions(5, 4, 5, 6,
                 "Support and protect the people who need it",
                 "Transform how people see what's possible",
                 "Seek out the truth and understand how things really work");
 
-        InsertOptions(6, 5, 6, 7,
+        InsertOptions(6, 4, 5, 6,
                 "Comfort them first and make sure they don't face it alone",
                 "Help them reframe the whole situation so a new way forward opens up",
                 "Work through it with them calmly until they understand it clearly");
 
-        InsertOptions(7, 5, 6, 7,
+        InsertOptions(7, 4, 5, 6,
                 "Meet them with warmth and give what they genuinely need",
                 "Shift their perspective so the whole picture changes",
                 "Offer clear understanding they can think with");
 
-        InsertOptions(8, 5, 6, 7,
+        InsertOptions(8, 4, 5, 6,
                 "Tend to the people affected and steady them first",
                 "Look for the deeper pattern and imagine what it could become",
                 "Step back, seek the facts, and keep an open mind until it's clear");
 
-        InsertOptions(9, 9, 10, 4,
+        InsertOptions(9, 7, 8, 9,
                 "Deep connection with the people and things I cherish",
                 "Lightness, play, and helping others enjoy the moment",
                 "Discovery and venturing beyond the familiar");
 
-        InsertOptions(10, 9, 10, 4,
+        InsertOptions(10, 7, 8, 9,
                 "Bring people close and reconnect them to why it matters",
                 "Break the tension with humour and remind everyone to enjoy the moment",
                 "Suggest a change of scene or something new to shake off the rut");
 
-        InsertOptions(11, 9, 10, 4,
+        InsertOptions(11, 7, 8, 9,
                 "Give myself fully to what and whom I love",
                 "Bring joy and keep things from getting heavy",
                 "Keep seeking, learning, and finding what's out there");
 
-        InsertOptions(12, 9, 10, 4,
+        InsertOptions(12, 7, 8, 9,
                 "Spend it fully present with someone who matters to me",
                 "Do something spontaneous and let the fun lead",
                 "Head somewhere unfamiliar just to see what's there");
 
-        InsertOptions(13, 12, 11, 8,
+        InsertOptions(13, 10, 11, 12,
                 "Create something new based on my own experiences",
                 "Bring structure and stability to a disordered environment",
                 "Stand up for what is right to combat injustice around me");
 
-        InsertOptions(14, 12, 11, 8,
+        InsertOptions(14, 10, 11, 12,
                 "Set the old approach aside and design a fresh process from the ground up",
                 "Find what's already working and bring everything else up to that standard",
                 "Identify the patterns and behaviours that caused this mess and focus on removing them");
 
-        InsertOptions(15, 12, 11, 8,
+        InsertOptions(15, 10, 11, 12,
                 "Make something original that carries my own mark",
                 "Build something dependable that others can rely on",
                 "Change what is broken so it serves people better");
 
-        InsertOptions(16, 12, 11, 8,
+        InsertOptions(16, 10, 11, 12,
                 "Build a better alternative and let its results make the case",
                 "Reform the rule properly through the system so the change holds",
                 "Pinpoint exactly why the rule fails people and push to strike it out");

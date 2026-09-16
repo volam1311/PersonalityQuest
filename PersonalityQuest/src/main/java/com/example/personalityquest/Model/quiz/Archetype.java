@@ -60,23 +60,8 @@ public enum Archetype {
             "Feeling too little fear; rushing into danger without heeding the risk."
     ),
 
-    EXPLORER(
-            4,
-            "Explorer",
-            "You seek freedom, discovery, and new experiences beyond familiar boundaries.",
-            "Filler",
-            "Independent, adventurous, curious, and willing to try new paths.",
-            "Can become restless, unreliable, or dissatisfied with stability.",
-            "Curiosity",
-            "The pull to seek, learn, and discover; venturing beyond the familiar to see what's there.",
-            "Sloth",
-            "Staying put and letting the world come to you; curiosity gone cold, comfort chosen over discovery.",
-           "Restlessness",
-           "Never able to settle or arrive; forever chasing the next thing before the last one is finished."
-    ),
-
     CAREGIVER(
-            5,
+            4,
             "Caregiver",
             "You protect and support others, especially when they are facing hardship.",
             "Filler",
@@ -91,7 +76,7 @@ public enum Archetype {
     ),
 
     MAGICIAN(
-            6,
+            5,
             "Magician",
             "You transform ideas and perspectives to make meaningful change possible.",
             "Filler",
@@ -106,7 +91,7 @@ public enum Archetype {
     ),
 
     SAGE(
-            7,
+            6,
             "Sage",
             "You seek truth, knowledge, and a deeper understanding of how things work.",
             "Filler",
@@ -120,23 +105,8 @@ public enum Archetype {
             "Retreating into pure thought; knowing much but never bringing it back to bear on life."
     ),
 
-    OUTLAW(
-            8,
-            "Outlaw",
-            "You challenge unfair systems and reject rules that prevent meaningful change.",
-            "Filler",
-            "Bold, independent, disruptive, and courageous enough to question authority.",
-            "Can become destructive, reckless, confrontational, or rebellious without purpose.",
-            "Liberation",
-            "Breaking what's unjust to free yourself and others; defying corrupt power for the sake of something better.",
-            "Submission",
-            "Going along with what's wrong; obeying a broken order rather than standing against it.",
-            "Vengeance",
-            "Tearing down for its own sake; destruction with no cause to serve and nothing built in its place."
-    ),
-
     LOVER(
-            9,
+            7,
             "Lover",
             "You value emotional connection, honesty, beauty, and meaningful relationships.",
             "Filler",
@@ -151,7 +121,7 @@ public enum Archetype {
     ),
 
     JESTER(
-            10,
+            8,
             "Jester",
             "You use humour, playfulness, and creativity to bring joy and challenge stale thinking.",
             "Filler",
@@ -164,6 +134,37 @@ public enum Archetype {
             "Belittling",
             "Humour turned into a weapon; getting the laugh by mocking and cutting others down."
     ),
+
+    EXPLORER(
+            9,
+            "Explorer",
+            "You seek freedom, discovery, and new experiences beyond familiar boundaries.",
+            "Filler",
+            "Independent, adventurous, curious, and willing to try new paths.",
+            "Can become restless, unreliable, or dissatisfied with stability.",
+            "Curiosity",
+            "The pull to seek, learn, and discover; venturing beyond the familiar to see what's there.",
+            "Sloth",
+            "Staying put and letting the world come to you; curiosity gone cold, comfort chosen over discovery.",
+            "Restlessness",
+            "Never able to settle or arrive; forever chasing the next thing before the last one is finished."
+    ),
+
+    CREATOR(
+            10,
+            "Creator",
+            "You turn original ideas into meaningful work and express yourself through what you build.",
+            "Filler",
+            "Creative, innovative, expressive, and committed to producing high-quality work.",
+            "Can become perfectionistic, impractical, self-critical, or afraid to finish.",
+            "Craftiness",
+            "Making something new and real, and shaping it with the skill and discipline to see it through.",
+            "Dullness",
+            "Nothing new takes shape; unable or unwilling to make, create, or bring ideas to life.",
+            "Delusion",
+            "Lost in visions that never become anything; ideas untethered from reality and never made real."
+    ),
+
 
     RULER(
             11,
@@ -180,20 +181,22 @@ public enum Archetype {
             "Control seized for its own sake; ruling over others to serve yourself rather than them."
     ),
 
-    CREATOR(
+    OUTLAW(
             12,
-            "Creator",
-            "You turn original ideas into meaningful work and express yourself through what you build.",
+            "Outlaw",
+            "You challenge unfair systems and reject rules that prevent meaningful change.",
             "Filler",
-            "Creative, innovative, expressive, and committed to producing high-quality work.",
-            "Can become perfectionistic, impractical, self-critical, or afraid to finish.",
-            "Craftiness",
-            "Making something new and real, and shaping it with the skill and discipline to see it through.",
-            "Dullness",
-            "Nothing new takes shape; unable or unwilling to make, create, or bring ideas to life.",
-            "Delusion",
-            "Lost in visions that never become anything; ideas untethered from reality and never made real."
+            "Bold, independent, disruptive, and courageous enough to question authority.",
+            "Can become destructive, reckless, confrontational, or rebellious without purpose.",
+            "Liberation",
+            "Breaking what's unjust to free yourself and others; defying corrupt power for the sake of something better.",
+            "Submission",
+            "Going along with what's wrong; obeying a broken order rather than standing against it.",
+            "Vengeance",
+            "Tearing down for its own sake; destruction with no cause to serve and nothing built in its place."
     );
+
+
 
     private final int archetypeId;
     private final String name;
