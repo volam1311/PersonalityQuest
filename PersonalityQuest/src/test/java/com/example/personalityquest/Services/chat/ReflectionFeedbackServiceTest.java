@@ -49,7 +49,7 @@ public class ReflectionFeedbackServiceTest {
                 "Start a short conversation",
                 "The Explorer's Path",
                 "Explorer",
-                Archetype.EXPLORER.getOverview(),
+                Archetype.EXPLORER.getSmallDescription(),
                 Archetype.EXPLORER.getStrengths(),
                 Archetype.EXPLORER.getWeaknesses(),
                 "I tried talking to a classmate"));

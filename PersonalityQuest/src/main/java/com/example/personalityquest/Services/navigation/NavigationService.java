@@ -1,15 +1,15 @@
 package com.example.personalityquest.Services.navigation;
 
-import com.example.personalityquest.Applications.auth.UpdateAccountPersonalDetailsApplication;
-import com.example.personalityquest.ScreenEnum;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEHEIGHT;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEWIDTH;
+import com.example.personalityquest.Applications.auth.UpdateAccountPersonalDetailsApplication;
+import com.example.personalityquest.ScreenEnum;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class NavigationService {
     public final static String fxmlPrefix = "/com/example/personalityquest/";
@@ -44,7 +44,7 @@ public class NavigationService {
             case ScreenEnum.TASKS -> "Tasks.fxml";
             case ScreenEnum.UPDATE_ACCOUNT_PASSWORD -> "UpdateAccountPassword.fxml";
             case ScreenEnum.UPDATE_PERSONAL_DETAILS -> "UpdateAccountPersonalDetails.fxml";
-            case ScreenEnum.WEEKLY_TASK_REFLECTION -> "abcd.fxml";
+            case ScreenEnum.WEEKLY_TASK_REFLECTION -> "WeeklyTaskReflection.fxml";
         };
     }
 

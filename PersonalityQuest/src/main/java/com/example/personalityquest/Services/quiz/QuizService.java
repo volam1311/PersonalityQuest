@@ -196,7 +196,7 @@ public class QuizService {
                 return result;
             }
 
-            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getDisplayName());
+            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());
             if (archetypeId == null) {
                 return result;
             }
