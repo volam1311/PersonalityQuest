@@ -6,7 +6,6 @@ import com.example.personalityquest.Model.quiz.Option;
 import com.example.personalityquest.Model.quiz.Question;
 import com.example.personalityquest.Model.quiz.QuizResult;
 import com.example.personalityquest.Services.auth.HashingService;
-import com.example.personalityquest.Services.quiz.QuizService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,7 @@ public class QuizServiceTest {
         QuizService.StartQuiz();
 
         assertEquals(5, QuizService.GetQuestionCount());
-        assertEquals(1, QuizService.GetCurrentQuestion().getId());
+        assertEquals(1, QuizService.GetCurrentQuestion().getQuestionID());
         assertEquals(4, QuizService.GetCurrentQuestion().getOptions().size());
         assertTrue(QuizService.HasActiveAttempt());
         assertNull(QuizService.GetResult());

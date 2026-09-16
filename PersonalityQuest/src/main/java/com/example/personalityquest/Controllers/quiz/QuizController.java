@@ -46,7 +46,7 @@ public class QuizController implements Initializable {
         int total = QuizService.GetQuestionCount();
 
         questionNumberLabel.setText("Question " + number + " of " + total);
-        questionLabel.setText(question.getPrompt());
+        questionLabel.setText(question.getQuestionPrompt());
         quizProgress.setProgress((double) number / total);
         progressLabel.setText(Math.round((number * 100.0) / total) + "%");
         feedbackLabel.setText("");

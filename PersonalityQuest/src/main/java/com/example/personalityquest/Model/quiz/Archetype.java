@@ -113,7 +113,7 @@ public enum Archetype {
             "Intelligent, thoughtful, analytical, and able to provide useful insight.",
             "Can overthink decisions, appear emotionally distant, or delay action.",
             "Wisdom",
-            "Analytical",
+            "Seeking truth for its own sake and holding it with an open mind; understanding the world clearly and letting that understanding grow.",
             "Credulity",
             "Believing too easily; taking things on faith without questioning them or looking closer.",
             "Detachment",
