@@ -2,6 +2,7 @@ package com.example.personalityquest;
 
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Services.auth.HashingService;
+import com.example.personalityquest.Services.profile.FriendsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -87,7 +88,7 @@ public class FriendsServiceTest {
     }
 
     @Test
-    public void GetFriendsForAccount(){
+    public void GetFriendsForAccount() throws Exception {
         List<EmailDetails> detailsForFriends = FriendsService.GetFriendsForAccount("test");
         assertEquals("test2", detailsForFriends.getFirst().getEmail());
         assertEquals("test2", detailsForFriends.getFirst().getFirstName());
@@ -96,7 +97,7 @@ public class FriendsServiceTest {
     }
 
     @Test
-    public void GetFriendsForAccountThatHasNoFriends(){
+    public void GetFriendsForAccountThatHasNoFriends() throws Exception {
         try (PreparedStatement statement = connection.prepareStatement("""
                     INSERT INTO Accounts
                         (email, userName, firstName, lastName, password)
@@ -116,7 +117,7 @@ public class FriendsServiceTest {
     }
 
     @Test
-    public void AddFriend(){
+    public void AddFriend() throws Exception {
         try (PreparedStatement statement = connection.prepareStatement("""
                     INSERT INTO Accounts
                         (email, userName, firstName, lastName, password)
@@ -159,7 +160,7 @@ public class FriendsServiceTest {
     }
 
     @Test
-    public void RemoveFriend(){
+    public void RemoveFriend() throws Exception {
         FriendsService.RemoveFriend("test", "test2");
 
         List<EmailDetails> detailsForFriends = FriendsService.GetFriendsForAccount("test");
