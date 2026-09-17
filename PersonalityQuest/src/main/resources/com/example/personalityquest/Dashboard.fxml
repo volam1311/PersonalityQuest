@@ -13,6 +13,9 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 
 <BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.navigation.DashboardController">
     <left>
@@ -44,37 +47,50 @@
 
                         <VBox fx:id="questCard" spacing="12" styleClass="card quest-card" GridPane.columnIndex="0">
                             <Label fx:id="questTitleLabel" styleClass="card-title" text="The Hydra Questline" />
-                            <Label styleClass="quest-divider" text="━━━━━━━━━━━━━━━━━━━━" />
-                            <Label styleClass="quest-divider" text="━━━━━━━━━━━━━━━━━━━━" />
-                            <Region VBox.vgrow="ALWAYS" />
-                            <Label fx:id="questDescriptionLabel" styleClass="quest-description" text="Complete the storyline quest tasks to continue the labour" wrapText="true" />
+                            <ScrollPane fx:id="questDescriptionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                                        styleClass="quest-description-scroll" VBox.vgrow="ALWAYS">
+                                <content>
+                                    <Label fx:id="questDescriptionLabel" styleClass="quest-description" text="Complete the storyline quest tasks to continue the labour" wrapText="true" />
+                                </content>
+                            </ScrollPane>
                             <HBox alignment="CENTER_LEFT" spacing="12">
                                 <ProgressBar fx:id="questProgress" maxWidth="1.7976931348623157E308" progress="0.2" HBox.hgrow="ALWAYS" />
                                 <Label fx:id="questProgressLabel" styleClass="progress-label" text="20% Complete" />
                             </HBox>
                         </VBox>
 
-                        <VBox fx:id="dailiesCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
-                            <Label id="dailiesTitle" styleClass="card-title centered-title" text="Weekly Tasks" />
-                            <ListView fx:id="weeklyTasks" focusTraversable="false" onMouseClicked="#OnWeeklyTaskClick" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        <VBox fx:id="tasksCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
+                            <Label id="tasksTitle" styleClass="card-title centered-title" text="Quest Challenges" />
+                            <ListView fx:id="questTasks" focusTraversable="false" onMouseClicked="#OnQuestTaskClick" prefHeight="270" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
+
+
                     </GridPane>
 
                     <GridPane fx:id="lowerGrid" hgap="12" vgap="12">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="36" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="64" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="65" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="35" />
                         </columnConstraints>
 
-                        <VBox fx:id="tasksCard" spacing="10" styleClass="card" GridPane.columnIndex="0">
-                            <Label id="tasksTitle" styleClass="card-title centered-title" text="Quest Tasks" />
-                            <ListView fx:id="questTasks" focusTraversable="false" onMouseClicked="#OnQuestTaskClick" prefHeight="270" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="0">
+                            <Label id="progressTitle" styleClass="card-title centered-title" text="Your Progress" />
+                            <BarChart fx:id="progressChart" legendVisible="false" animated ="false" styleClass="progress-chart" prefHeight="230">
+                                <xAxis>
+                                    <CategoryAxis side = "BOTTOM" tickLabelFill ="white"/>
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis side = "LEFT" lowerBound = "0" upperBound = "1" tickUnit="0.2"
+                                                tickLabelsVisible="false" tickMarkVisible="false" minorTickVisible="false"/>
+                                </yAxis>
+                            </BarChart>
                         </VBox>
 
-                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="1">
-                            <Label id="progressTitle" styleClass="card-title centered-title" text="Your Progress" />
-                            <Canvas fx:id="progressChart" height="260" width="420" />
+                        <VBox fx:id="dailiesCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
+                            <Label id="dailiesTitle" styleClass="card-title centered-title" text="Weekly Tasks" />
+                            <ListView fx:id="weeklyTasks" focusTraversable="false" onMouseClicked="#OnWeeklyTaskClick" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
+
                     </GridPane>
                 </VBox>
             </content>

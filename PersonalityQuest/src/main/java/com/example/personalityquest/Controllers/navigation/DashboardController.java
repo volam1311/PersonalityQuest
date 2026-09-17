@@ -22,6 +22,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -45,10 +47,8 @@ public class DashboardController implements Initializable {
     private static final double STACKED_BREAKPOINT = 760;
     private static final double FULL_PERCENT = 100;
     private static final double HIDDEN_PERCENT = 0;
-    private static final double QUEST_CARD_PERCENT = 65;
-    private static final double DAILIES_CARD_PERCENT = 35;
-    private static final double TASKS_CARD_PERCENT = 36;
-    private static final double PROGRESS_CARD_PERCENT = 64;
+    private static final double PRIMARY_CARD_PERCENT = 65;
+    private static final double SECONDARY_CARD_PERCENT = 35;
     private static final double DEFAULT_QUEST_PROGRESS = 0.2;
     private static final String DEFAULT_QUEST_PROGRESS_LABEL = "20% Complete";
     private static final int RADAR_AXIS_COUNT = 5;
@@ -72,7 +72,7 @@ public class DashboardController implements Initializable {
     @FXML
     private GridPane topGrid, lowerGrid;
     @FXML
-    private VBox dailiesCard, progressCard;
+    private VBox dailiesCard, progressCard, tasksCard;
     @FXML
     private ListView<WeeklyTask> weeklyTasks;
     @FXML
@@ -82,7 +82,7 @@ public class DashboardController implements Initializable {
     @FXML
     private Label questTitleLabel, questProgressLabel, questDescriptionLabel;
     @FXML
-    private Canvas progressChart;
+    private BarChart<String, Number> progressChart;
 
     private double[] radarValues = new double[RADAR_AXIS_COUNT];
 
@@ -114,10 +114,18 @@ public class DashboardController implements Initializable {
 
         PopulateQuestTasks();
 
-        Platform.runLater(() -> {
-            ApplyResponsiveLayout(dashboardRoot.getWidth());
-            DrawProgressGraph();
-        });
+        Platform.runLater(() -> ApplyResponsiveLayout(dashboardRoot.getWidth()));
+        PopulateProgressChart();
+    }
+
+    private void PopulateProgressChart() {
+        XYChart.Series<String,Number> series = new XYChart.Series<>();
+        for (int i = 0; i < RADAR_AXIS_COUNT; i++) {
+            series.getData().add(new XYChart.Data<>(RADAR_LABELS[i], radarValues[i]));
+        }
+
+        progressChart.getData().clear();
+        progressChart.getData().add(series);
     }
 
     private void SetWelcome() throws Exception {
@@ -159,15 +167,14 @@ public class DashboardController implements Initializable {
         try{
             UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
             Quest trueQuest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
-            List<Task> labourTasks = TaskService.GetTasksForLabourId(trueQuest.getLabourId());
-            String taskSummary = TaskService.JoinTaskNames(labourTasks);
+
+            //List<Task> labourTasks = TaskService.GetTasksForLabourId(trueQuest.getLabourId());
+            //String taskSummary = TaskService.JoinTaskNames(labourTasks);
 
             float truePercentageComplete = userQuest.getPercentageComplete() * 100;
             String formatedPercentageString = String.format("%.0f", truePercentageComplete);
-            questTitleLabel.setText(trueQuest.getName());
-            questDescriptionLabel.setText(taskSummary.isEmpty()
-                    ? QuestService.GetArchetypeDescription(trueQuest.getArchetypeId())
-                    : taskSummary);
+            questTitleLabel.setText("Active Quest: " + trueQuest.getName());
+            questDescriptionLabel.setText(trueQuest.getNarrative());
             questProgress.setProgress(userQuest.getPercentageComplete());
             questProgressLabel.setText(formatedPercentageString + "% Complete");
         }
@@ -272,8 +279,8 @@ public class DashboardController implements Initializable {
         }
 
         boolean stacked = width < STACKED_BREAKPOINT;
-        SetGridCardLayout(topGrid, dailiesCard, stacked);
-        SetGridCardLayout(lowerGrid, progressCard, stacked);
+        SetGridCardLayout(topGrid, tasksCard, stacked);
+        SetGridCardLayout(lowerGrid, dailiesCard, stacked);
     }
 
     private void SetGridCardLayout(GridPane grid, VBox secondaryCard, boolean stacked) {
@@ -285,99 +292,97 @@ public class DashboardController implements Initializable {
         } else {
             GridPane.setColumnIndex(secondaryCard, 1);
             GridPane.setRowIndex(secondaryCard, 0);
-            grid.getColumnConstraints().get(0).setPercentWidth(
-                    grid == topGrid ? QUEST_CARD_PERCENT : TASKS_CARD_PERCENT);
-            grid.getColumnConstraints().get(1).setPercentWidth(
-                    grid == topGrid ? DAILIES_CARD_PERCENT : PROGRESS_CARD_PERCENT);
+            grid.getColumnConstraints().get(0).setPercentWidth(PRIMARY_CARD_PERCENT);
+            grid.getColumnConstraints().get(1).setPercentWidth(SECONDARY_CARD_PERCENT);
         }
     }
-
-    private void DrawProgressGraph() {
-        GraphicsContext graphics = progressChart.getGraphicsContext2D();
-        double width = progressChart.getWidth();
-        double height = progressChart.getHeight();
-        double centerX = width / 2;
-        double centerY = height / 2 + RADAR_CENTER_Y_OFFSET;
-        double radius = Math.min(width, height) * RADAR_RADIUS_RATIO;
-        int axes = RADAR_AXIS_COUNT;
-
-        graphics.clearRect(0, 0, width, height);
-        graphics.setLineWidth(1);
-        graphics.setStroke(Color.web("#777777"));
-
-        for (int level = 1; level <= RADAR_LEVEL_COUNT; level++) {
-            double levelRadius = radius * level / RADAR_LEVEL_COUNT;
-            double[] xPoints = new double[axes];
-            double[] yPoints = new double[axes];
-
-            for (int axis = 0; axis < axes; axis++) {
-                xPoints[axis] = PointX(centerX, levelRadius, axis, axes);
-                yPoints[axis] = PointY(centerY, levelRadius, axis, axes);
-            }
-
-            graphics.strokePolygon(xPoints, yPoints, axes);
-        }
-
-        for (int axis = 0; axis < axes; axis++) {
-            graphics.strokeLine(centerX, centerY,
-                    PointX(centerX, radius, axis, axes),
-                    PointY(centerY, radius, axis, axes));
-        }
-
-        double[] xPoints = new double[axes];
-        double[] yPoints = new double[axes];
-
-        for (int axis = 0; axis < axes; axis++) {
-            xPoints[axis] = PointX(centerX, radius * radarValues[axis], axis, axes);
-            yPoints[axis] = PointY(centerY, radius * radarValues[axis], axis, axes);
-        }
-
-        graphics.setFill(Color.rgb(46, 135, 207, 0.45));
-        graphics.fillPolygon(xPoints, yPoints, axes);
-        graphics.setStroke(Color.web("#43a9f2"));
-        graphics.setLineWidth(2);
-        graphics.strokePolygon(xPoints, yPoints, axes);
-
-        graphics.setFill(Color.web("#c4b5fd"));
-        graphics.setFont(Font.font("Poppins", 12));
-        graphics.setTextAlign(TextAlignment.CENTER);
-        for (int axis = 0; axis < axes; axis++) {
-            DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);
-        }
-    }
-
-    private void DrawAxisLabel(
-            GraphicsContext graphics,
-            String label,
-            double centerX,
-            double centerY,
-            double radius,
-            int axis,
-            int axes) {
-        double labelRadius = radius + 22;
-        double x = PointX(centerX, labelRadius, axis, axes);
-        double y = PointY(centerY, labelRadius, axis, axes);
-
-        if (x < centerX - 8) {
-            graphics.setTextAlign(TextAlignment.RIGHT);
-            x -= 4;
-        } else if (x > centerX + 8) {
-            graphics.setTextAlign(TextAlignment.LEFT);
-            x += 4;
-        } else {
-            graphics.setTextAlign(TextAlignment.CENTER);
-        }
-
-        graphics.fillText(label, x, y);
-    }
-
-    private double PointX(double centerX, double radius, int axis, int axes) {
-        return centerX + radius * Math.cos(-Math.PI / 2 + axis * 2 * Math.PI / axes);
-    }
-
-    private double PointY(double centerY, double radius, int axis, int axes) {
-        return centerY + radius * Math.sin(-Math.PI / 2 + axis * 2 * Math.PI / axes);
-    }
+//
+//    private void DrawProgressGraph() {
+//        GraphicsContext graphics = progressChart.getGraphicsContext2D();
+//        double width = progressChart.getWidth();
+//        double height = progressChart.getHeight();
+//        double centerX = width / 2;
+//        double centerY = height / 2 + RADAR_CENTER_Y_OFFSET;
+//        double radius = Math.min(width, height) * RADAR_RADIUS_RATIO;
+//        int axes = RADAR_AXIS_COUNT;
+//
+//        graphics.clearRect(0, 0, width, height);
+//        graphics.setLineWidth(1);
+//        graphics.setStroke(Color.web("#777777"));
+//
+//        for (int level = 1; level <= RADAR_LEVEL_COUNT; level++) {
+//            double levelRadius = radius * level / RADAR_LEVEL_COUNT;
+//            double[] xPoints = new double[axes];
+//            double[] yPoints = new double[axes];
+//
+//            for (int axis = 0; axis < axes; axis++) {
+//                xPoints[axis] = PointX(centerX, levelRadius, axis, axes);
+//                yPoints[axis] = PointY(centerY, levelRadius, axis, axes);
+//            }
+//
+//            graphics.strokePolygon(xPoints, yPoints, axes);
+//        }
+//
+//        for (int axis = 0; axis < axes; axis++) {
+//            graphics.strokeLine(centerX, centerY,
+//                    PointX(centerX, radius, axis, axes),
+//                    PointY(centerY, radius, axis, axes));
+//        }
+//
+//        double[] xPoints = new double[axes];
+//        double[] yPoints = new double[axes];
+//
+//        for (int axis = 0; axis < axes; axis++) {
+//            xPoints[axis] = PointX(centerX, radius * radarValues[axis], axis, axes);
+//            yPoints[axis] = PointY(centerY, radius * radarValues[axis], axis, axes);
+//        }
+//
+//        graphics.setFill(Color.rgb(46, 135, 207, 0.45));
+//        graphics.fillPolygon(xPoints, yPoints, axes);
+//        graphics.setStroke(Color.web("#43a9f2"));
+//        graphics.setLineWidth(2);
+//        graphics.strokePolygon(xPoints, yPoints, axes);
+//
+//        graphics.setFill(Color.web("#c4b5fd"));
+//        graphics.setFont(Font.font("Poppins", 12));
+//        graphics.setTextAlign(TextAlignment.CENTER);
+//        for (int axis = 0; axis < axes; axis++) {
+//            DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);
+//        }
+//    }
+//
+//    private void DrawAxisLabel(
+//            GraphicsContext graphics,
+//            String label,
+//            double centerX,
+//            double centerY,
+//            double radius,
+//            int axis,
+//            int axes) {
+//        double labelRadius = radius + 22;
+//        double x = PointX(centerX, labelRadius, axis, axes);
+//        double y = PointY(centerY, labelRadius, axis, axes);
+//
+//        if (x < centerX - 8) {
+//            graphics.setTextAlign(TextAlignment.RIGHT);
+//            x -= 4;
+//        } else if (x > centerX + 8) {
+//            graphics.setTextAlign(TextAlignment.LEFT);
+//            x += 4;
+//        } else {
+//            graphics.setTextAlign(TextAlignment.CENTER);
+//        }
+//
+//        graphics.fillText(label, x, y);
+//    }
+//
+//    private double PointX(double centerX, double radius, int axis, int axes) {
+//        return centerX + radius * Math.cos(-Math.PI / 2 + axis * 2 * Math.PI / axes);
+//    }
+//
+//    private double PointY(double centerY, double radius, int axis, int axes) {
+//        return centerY + radius * Math.sin(-Math.PI / 2 + axis * 2 * Math.PI / axes);
+//    }
 
     @FXML
     private void OnWeeklyTaskClick(MouseEvent event) throws IOException {

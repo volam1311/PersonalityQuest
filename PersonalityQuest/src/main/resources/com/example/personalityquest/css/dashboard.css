@@ -215,6 +215,7 @@
     -fx-background-radius: 8;
 }
 
+
 .content-container {
     -fx-background-color: #050505;
 }
@@ -299,9 +300,26 @@
 
 .quest-description {
     -fx-font-size: 16px;
-    -fx-font-weight: bold;
+    -fx-font-weight: normal;
     -fx-text-fill: #ffffff;
-    -fx-text-alignment: CENTER;
+    -fx-text-alignment: LEFT;
+}
+
+.quest-description-scroll,
+.quest-description-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.quest-description-scroll {
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.quest-description-scroll .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+    -fx-padding: 0;
 }
 
 .progress-label {
@@ -323,6 +341,33 @@
     -fx-background-color: #a172ff;
     -fx-background-radius: 6;
     -fx-background-insets: 0;
+}
+
+.progress-chart,
+.progress-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.progress-chart .chart-vertical-grid-lines,
+.progress-chart .chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.progress-chart .axis {
+    -fx-tick-label-fill: #ffffff;
+    -fx-font-family: Poppins;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.progress-chart .axis-tick-mark,
+.progress-chart .axis-minor-tick-mark {
+    -fx-stroke: transparent;
+}
+
+.progress-chart .default-color0.chart-bar {
+    -fx-bar-fill: #a172ff;
+    -fx-background-radius: 4 4 0 0;
 }
 
 .task-list {
@@ -363,6 +408,13 @@
 .task-list .scroll-bar:vertical .thumb {
     -fx-background-color: #8460df;
     -fx-background-radius: 6;
+}
+
+.task-list .scroll-bar:horizontal{
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
 }
 
 .task-row {

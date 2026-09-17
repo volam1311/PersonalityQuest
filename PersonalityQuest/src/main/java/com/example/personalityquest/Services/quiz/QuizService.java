@@ -13,10 +13,7 @@ import com.example.personalityquest.Model.quiz.QuizResult;
 import com.example.personalityquest.Model.quest.UserQuest;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Runs the archetype quiz: dummy questions, answers, scoring, and quest assignment.
@@ -42,6 +39,8 @@ public class QuizService {
         result = null;
     }
 
+    private static final boolean DEMO_MODE = Boolean.getBoolean("quiz.demo");
+
     /**
      * Starts a new attempt with the dummy five-question bank.
      */
@@ -49,6 +48,9 @@ public class QuizService {
         try {
             EnsureCatalog();
             questions = QuestionDAO.GetQuestions();
+            if (DEMO_MODE){
+                questions = FirstQuestionPerRealm(questions);
+            }
         } catch (SQLException exception) {
             throw new IllegalStateException("Could not load quiz questions", exception);
         }
@@ -56,6 +58,17 @@ public class QuizService {
         currentIndex = 0;
         inProgress = true;
         result = null;
+    }
+
+    private static List<Question> FirstQuestionPerRealm(List<Question> all){
+        List<Question> shortList = new ArrayList<>();
+        Set<String> seenRealms = new LinkedHashSet<>();
+        for (Question question : all) {
+            if (seenRealms.add(question.getRealmType())) {
+                shortList.add(question);
+            }
+        }
+        return shortList;
     }
 
     public static void EnsureCatalog() throws SQLException {

@@ -4,14 +4,36 @@ import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.SQLite;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserQuestDAO {
+
+    private static final String CREATE_USER_QUESTS = """
+            CREATE TABLE IF NOT EXISTS UserQuests (
+            accountEmail TEXT NOT NULL,
+            labourId INTEGER NOT NULL,
+            percentageComplete REAL NOT NULL,
+            status TEXT NOT NULL,
+            PRIMARY KEY (accountEmail, labourId)
+            )
+            """;
+
+    public static void EnsureTables() throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(CREATE_USER_QUESTS);
+        }
+    }
+
+    public static void ClearAll()  throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("DELETE FROM UserQuests");
+        }
+    }
+
     /**
      * Retrives the current active quest for the user matching the account
      * @param email The email of the account you want to check
