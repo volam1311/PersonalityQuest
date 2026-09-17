@@ -20,6 +20,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QuizServiceTest {
+    private static final int QUIZ_QUESTION_COUNT = 16;
+
     private Connection connection;
 
     @BeforeEach
@@ -37,65 +39,69 @@ public class QuizServiceTest {
         }
     }
 
-//    @Test
-//    void StartQuizLoadsFiveQuestions() {
-//        QuizService.StartQuiz();
-//
-//        assertEquals(5, QuizService.GetQuestionCount());
-//        assertEquals(1, QuizService.GetCurrentQuestion().getQuestionID());
-//        assertEquals(4, QuizService.GetCurrentQuestion().getOptions().size());
-//        assertTrue(QuizService.HasActiveAttempt());
-//        assertNull(QuizService.GetResult());
-//    }
-//
-//    @Test
-//    void MethodsThrowWhenQuizHasNotStarted() {
-//        assertThrows(IllegalStateException.class, QuizService::GetCurrentQuestion);
-//        assertThrows(IllegalStateException.class, QuizService::CompleteQuiz);
-//    }
-//
-//    @Test
-//    void CompleteQuizScoresInnocentWhenChosenFourTimes() {
-//        QuizService.StartQuiz();
-//        AnswerEveryQuestionAtIndex(0);
-//
-//        QuizResult result = QuizService.CompleteQuiz();
-//
-//        assertEquals(Archetype.INNOCENT, result.archetype());
-//        assertEquals(4, result.scores().get(Archetype.INNOCENT));
-//        assertEquals(1, result.scores().get(Archetype.CAREGIVER));
-//        assertFalse(QuizService.HasActiveAttempt());
-//        assertEquals(result, QuizService.GetResult());
-//    }
-//
-//    @Test
-//    void CompleteQuizScoresExplorerWhenChosenEveryTime() {
-//        QuizService.StartQuiz();
-//        AnswerEveryQuestionAtIndex(3);
-//
-//        QuizResult result = QuizService.CompleteQuiz();
-//
-//        assertEquals(Archetype.EXPLORER, result.archetype());
-//        assertEquals(5, result.scores().get(Archetype.EXPLORER));
-//    }
-//
-//    @Test
-//    void ScoreBreaksTiesWithTheLaterAnswer() {
-//        QuizResult result = QuizService.Score(List.of(
-//                option(Archetype.INNOCENT),
-//                option(Archetype.INNOCENT),
-//                option(Archetype.HERO),
-//                option(Archetype.HERO),
-//                option(Archetype.SAGE)));
-//
-//        assertEquals(Archetype.HERO, result.archetype());
-//        assertEquals(2, result.scores().get(Archetype.INNOCENT));
-//        assertEquals(2, result.scores().get(Archetype.HERO));
-//        assertEquals(1, result.scores().get(Archetype.SAGE));
-//        assertEquals(
-//                List.of(Archetype.HERO, Archetype.INNOCENT, Archetype.SAGE),
-//                QuizService.RankedArchetypes(result));
-//    }
+    @Test
+    void StartQuizLoadsSixteenQuestions() {
+        QuizService.StartQuiz();
+
+        Question question = QuizService.GetCurrentQuestion();
+        Option options = question.getOptions();
+
+        assertEquals(QUIZ_QUESTION_COUNT, QuizService.GetQuestionCount());
+        assertEquals(1, question.getQuestionID());
+        assertFalse(options.getOption1().isBlank());
+        assertFalse(options.getOption2().isBlank());
+        assertFalse(options.getOption3().isBlank());
+        assertTrue(QuizService.HasActiveAttempt());
+        assertNull(QuizService.GetResult());
+    }
+
+    @Test
+    void MethodsThrowWhenQuizHasNotStarted() {
+        assertThrows(IllegalStateException.class, QuizService::GetCurrentQuestion);
+        assertThrows(IllegalStateException.class, QuizService::CompleteQuiz);
+    }
+
+    @Test
+    void CompleteQuizScoresInnocentWhenChosenOnEveryEgoQuestion() {
+        QuizService.StartQuiz();
+        AnswerAllQuestions(1, 1, 1, 1, 2, 2, 2, 3, 2, 2, 2, 3, 2, 2, 2, 3);
+
+        QuizResult result = QuizService.CompleteQuiz();
+
+        assertEquals(Archetype.INNOCENT, result.archetype());
+        assertEquals(4, result.scores().get(Archetype.INNOCENT));
+        assertFalse(QuizService.HasActiveAttempt());
+        assertEquals(result, QuizService.GetResult());
+    }
+
+    @Test
+    void CompleteQuizScoresExplorerWhenChosenOnEverySelfQuestion() {
+        QuizService.StartQuiz();
+        AnswerAllQuestions(1, 1, 1, 2, 1, 1, 1, 2, 3, 3, 3, 3, 1, 1, 1, 2);
+
+        QuizResult result = QuizService.CompleteQuiz();
+
+        assertEquals(Archetype.EXPLORER, result.archetype());
+        assertEquals(4, result.scores().get(Archetype.EXPLORER));
+    }
+
+    @Test
+    void ScoreBreaksTiesWithTheLaterAnswer() {
+        QuizResult result = QuizService.Score(List.of(
+                Archetype.INNOCENT.getArchetypeId(),
+                Archetype.INNOCENT.getArchetypeId(),
+                Archetype.HERO.getArchetypeId(),
+                Archetype.HERO.getArchetypeId(),
+                Archetype.SAGE.getArchetypeId()));
+
+        assertEquals(Archetype.HERO, result.archetype());
+        assertEquals(2, result.scores().get(Archetype.INNOCENT));
+        assertEquals(2, result.scores().get(Archetype.HERO));
+        assertEquals(1, result.scores().get(Archetype.SAGE));
+        assertEquals(
+                List.of(Archetype.HERO, Archetype.INNOCENT, Archetype.SAGE),
+                QuizService.RankedArchetypes(result));
+    }
 
     @Test
     void CannotAdvanceWithoutAnswering() {
@@ -105,86 +111,89 @@ public class QuizServiceTest {
         assertThrows(IllegalStateException.class, QuizService::CompleteQuiz);
     }
 
-//    @Test
-//    void GoingBackRestoresThePreviousAnswer() {
-//        QuizService.StartQuiz();
-//        Option first = QuizService.GetCurrentQuestion().getOptions().get(1);
-//        QuizService.AnswerCurrentQuestion(first);
-//        QuizService.GoToNextQuestion();
-//
-//        QuizService.GoToPreviousQuestion();
-//
-//        assertEquals(0, QuizService.GetCurrentQuestionIndex());
-//        assertEquals(first, QuizService.GetAnswerForCurrentQuestion());
-//    }
-//
-//    @Test
-//    void RejectsAnOptionFromADifferentQuestion() {
-//        QuizService.StartQuiz();
-//        Option current = QuizService.GetCurrentQuestion().getOptions().get(0);
-//        QuizService.AnswerCurrentQuestion(current);
-//        QuizService.GoToNextQuestion();
-//
-//        Option previous = current;
-//        assertThrows(IllegalArgumentException.class, () -> QuizService.AnswerCurrentQuestion(previous));
-//    }
+    @Test
+    void GoingBackRestoresThePreviousAnswer() {
+        QuizService.StartQuiz();
+        int first = QuizService.GetCurrentQuestion().getOptions().getOption2Archetype();
+        QuizService.AnswerCurrentQuestion(first);
+        QuizService.GoToNextQuestion();
 
-//    @Test
-//    void AssignQuestForCurrentResultCreatesAnActiveQuest() throws SQLException {
-//        CreateArchetypeSchema();
-//        QuizService.StartQuiz();
-//        AnswerEveryQuestionAtIndex(3);
-//        QuizService.CompleteQuiz();
-//
-//        QuizResult result = QuizService.AssignQuestForCurrentResult("test@example.com");
-//
-//        assertNotNull(result.assignedQuest());
-//        assertEquals("Explore the unknown", result.assignedQuest().getName());
-//        assertEquals(7, result.assignedQuest().getArchetypeId());
-//    }
-//
-//    @Test
-//    void AssignQuestForCurrentResultIsSafeWhenTheDatabaseHasNoMatch() {
-//        QuizService.StartQuiz();
-//        AnswerEveryQuestionAtIndex(0);
-//        QuizService.CompleteQuiz();
-//
-//        QuizResult result = QuizService.AssignQuestForCurrentResult("test@example.com");
-//
-//        assertNull(result.assignedQuest());
-//        assertEquals(Archetype.INNOCENT, result.archetype());
-//    }
+        QuizService.GoToPreviousQuestion();
 
-//    @Test
-//    void QuestionRequiresPromptAndOptions() {
-//        assertThrows(IllegalArgumentException.class, () ->
-//                new Question(0, "Prompt", List.of(option(Archetype.HERO), option(Archetype.SAGE))));
-//        assertThrows(IllegalArgumentException.class, () ->
-//                new Question(1, " ", List.of(option(Archetype.HERO), option(Archetype.SAGE))));
-//        assertThrows(IllegalArgumentException.class, () ->
-//                new Question(1, "Prompt", List.of(option(Archetype.HERO))));
-//        assertThrows(IllegalArgumentException.class, () ->
-//                new Option(" ", Archetype.HERO));
-//        assertThrows(IllegalArgumentException.class, () ->
-//                new Option("Stay hopeful", null));
-//    }
+        assertEquals(0, QuizService.GetCurrentQuestionIndex());
+        assertEquals(first, QuizService.GetAnswerForCurrentQuestion());
+    }
 
-//    private void AnswerEveryQuestionAtIndex(int optionIndex) {
-//        while (true) {
-//            Question question = QuizService.GetCurrentQuestion();
-//            QuizService.AnswerCurrentQuestion(question.getOptions().get(optionIndex));
-//            if (QuizService.IsLastQuestion()) {
-//                return;
-//            }
-//            QuizService.GoToNextQuestion();
-//        }
-//    }
+    @Test
+    void RejectsAnOptionFromADifferentRealm() {
+        QuizService.StartQuiz();
 
-//    private Option option(Archetype archetype) {
-//        return new Option("Choose " + archetype.getName(), archetype);
-//    }
+        assertThrows(IllegalStateException.class, () ->
+                QuizService.AnswerCurrentQuestion(Archetype.OUTLAW.getArchetypeId()));
+    }
 
-    private void CreateArchetypeSchema() throws SQLException {
+    @Test
+    void AssignQuestForCurrentResultCreatesAnActiveQuest() throws SQLException {
+        CreateQuestAssignmentSchema();
+        QuizService.StartQuiz();
+        AnswerAllQuestions(1, 1, 1, 2, 1, 1, 1, 2, 3, 3, 3, 3, 1, 1, 1, 2);
+        QuizService.CompleteQuiz();
+
+        QuizResult result = QuizService.AssignQuestForCurrentResult("test@example.com");
+
+        assertNotNull(result.assignedQuest());
+        assertEquals("Explore the unknown", result.assignedQuest().getName());
+        assertEquals(Archetype.EXPLORER.getArchetypeId(), result.assignedQuest().getArchetypeId());
+    }
+
+    @Test
+    void AssignQuestForCurrentResultIsSafeWhenTheDatabaseHasNoMatch() {
+        QuizService.StartQuiz();
+        AnswerAllQuestions(1, 1, 1, 1, 2, 2, 2, 3, 2, 2, 2, 3, 2, 2, 2, 3);
+        QuizService.CompleteQuiz();
+
+        QuizResult result = QuizService.AssignQuestForCurrentResult("test@example.com");
+
+        assertNull(result.assignedQuest());
+        assertEquals(Archetype.INNOCENT, result.archetype());
+    }
+
+    @Test
+    void QuestionRequiresPromptAndValidOptions() {
+        Option validOption = new Option(1, 3, 6, 9, "Stay hopeful", "Seek truth", "Explore");
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new Question(0, "Ego", "Direct", "Prompt", validOption));
+        assertThrows(IllegalArgumentException.class, () ->
+                new Question(1, "Ego", "Direct", " ", validOption));
+        assertThrows(IllegalArgumentException.class, () ->
+                new Option(1, 3, 6, 9, " ", "Seek truth", "Explore"));
+        assertThrows(IllegalArgumentException.class, () ->
+                new Option(1, 0, 6, 9, "Stay hopeful", "Seek truth", "Explore"));
+    }
+
+    private void AnswerAllQuestions(int... optionNumbers) {
+        assertEquals(QUIZ_QUESTION_COUNT, optionNumbers.length);
+        for (int index = 0; index < optionNumbers.length; index++) {
+            AnswerCurrentOption(optionNumbers[index]);
+            if (!QuizService.IsLastQuestion()) {
+                QuizService.GoToNextQuestion();
+            }
+        }
+    }
+
+    private void AnswerCurrentOption(int optionNumber) {
+        Option option = QuizService.GetCurrentQuestion().getOptions();
+        int archetypeId = switch (optionNumber) {
+            case 1 -> option.getOption1Archetype();
+            case 2 -> option.getOption2Archetype();
+            case 3 -> option.getOption3Archetype();
+            default -> throw new IllegalArgumentException("Option number must be 1, 2, or 3");
+        };
+        QuizService.AnswerCurrentQuestion(archetypeId);
+    }
+
+    private void CreateQuestAssignmentSchema() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (
@@ -197,18 +206,11 @@ public class QuizServiceTest {
                     )
                     """);
             statement.execute("""
-                    CREATE TABLE Archetype (
-                        archetypeId INT PRIMARY KEY,
-                        name TEXT NOT NULL,
-                        smallDescription TEXT NOT NULL
-                    )
-                    """);
-            statement.execute("""
                     CREATE TABLE Quests (
                         labourId INT PRIMARY KEY,
                         archetypeId INT NOT NULL,
                         name TEXT NOT NULL,
-                        FOREIGN KEY(archetypeId) REFERENCES Archetype(archetypeId)
+                        narrative TEXT NOT NULL DEFAULT ''
                     )
                     """);
             statement.execute("""
@@ -234,17 +236,10 @@ public class QuizServiceTest {
 
         try (PreparedStatement statement = connection.prepareStatement(
                 """
-                    INSERT INTO Archetype (archetypeId, name, smallDescription)
-                    VALUES (7, 'Explorer', 'Freedom and discovery')
+                    INSERT INTO Quests (labourId, archetypeId, name, narrative)
+                    VALUES (30, ?, 'Explore the unknown', '')
                     """)) {
-            statement.executeUpdate();
-        }
-
-        try (PreparedStatement statement = connection.prepareStatement(
-                """
-                    INSERT INTO Quests (labourId, archetypeId, name)
-                    VALUES (30, 7, 'Explore the unknown')
-                    """)) {
+            statement.setInt(1, Archetype.EXPLORER.getArchetypeId());
             statement.executeUpdate();
         }
     }
