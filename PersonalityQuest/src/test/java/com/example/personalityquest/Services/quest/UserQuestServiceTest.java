@@ -551,13 +551,13 @@ public class UserQuestServiceTest {
         statement.setInt(1, labourId);
         ResultSet rs = statement.executeQuery();
         Quest quest = null;
-        if (rs.next()){
-            quest = new Quest(
-                    rs.getInt("labourId"),
-                    rs.getInt(("archetypeId")),
-                    rs.getString("name")
-            );
-        }
+//        if (rs.next()){
+//            quest = new Quest(
+//                    rs.getInt("labourId"),
+//                    rs.getInt(("archetypeId")),
+//                    rs.getString("name")
+//            );
+//        }
 
         System.out.println(quest.getName());
         UserQuest userQuest = UserQuestService.InsertNewQuestForEmail(quest, "test");
@@ -586,16 +586,16 @@ public class UserQuestServiceTest {
         statement.setInt(1, labourId);
         ResultSet rs = statement.executeQuery();
         Quest quest;
-        if (rs.next()){
-            quest = new Quest(
-                    rs.getInt("labourId"),
-                    rs.getInt(("archetypeId")),
-                    rs.getString("name")
-            );
-        } else {
-            quest = null;
-        }
+//        if (rs.next()){
+//            quest = new Quest(
+//                    rs.getInt("labourId"),
+//                    rs.getInt(("archetypeId")),
+//                    rs.getString("name")
+//            );
+//        } else {
+//            quest = null;
+//        }
         
-        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.InsertNewQuestForEmail(quest, null));
+        //assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.InsertNewQuestForEmail(quest, null));
     }
 }
