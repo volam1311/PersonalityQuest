@@ -53,6 +53,27 @@
     -fx-border-color: #c4b5fd;
 }
 
+.reflection-area .scroll-pane,
+.reflection-area .viewport,
+.reflection-area .corner {
+    -fx-background-color: transparent;
+}
+
+.ai-feedback-scroll,
+.ai-feedback-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.ai-feedback-scroll {
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+.ai-feedback-scroll .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+    -fx-padding: 0;
+}
+
 .pill-button {
     -fx-min-width: 120;
     -fx-min-height: 46px;

@@ -1,5 +1,7 @@
 package com.example.personalityquest.Services.quiz;
 
+import com.example.personalityquest.DAO.personalisation.OptionDAO;
+import com.example.personalityquest.DAO.personalisation.QuestionDAO;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.ApplicationManager;
@@ -10,17 +12,15 @@ import com.example.personalityquest.Model.quiz.Question;
 import com.example.personalityquest.Model.quiz.QuizResult;
 import com.example.personalityquest.Model.quest.UserQuest;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Runs the archetype quiz: dummy questions, answers, scoring, and quest assignment.
  */
 public class QuizService {
     private static List<Question> questions = List.of();
-    private static Option[] answers = new Option[0];
+    private static Integer[] answers = new Integer[0];
     private static int currentIndex;
     private static boolean inProgress;
     private static QuizResult result;
@@ -33,21 +33,53 @@ public class QuizService {
      */
     public static void Reset() {
         questions = List.of();
-        answers = new Option[0];
+        answers = new Integer[0];
         currentIndex = 0;
         inProgress = false;
         result = null;
     }
 
+    private static final boolean DEMO_MODE = Boolean.getBoolean("quiz.demo");
+
     /**
      * Starts a new attempt with the dummy five-question bank.
      */
     public static void StartQuiz() {
-        questions = BuildQuestions();
-        answers = new Option[questions.size()];
+        try {
+            EnsureCatalog();
+            questions = QuestionDAO.GetQuestions();
+            if (DEMO_MODE){
+                questions = FirstQuestionPerRealm(questions);
+            }
+        } catch (SQLException exception) {
+            throw new IllegalStateException("Could not load quiz questions", exception);
+        }
+        answers = new Integer[questions.size()];
         currentIndex = 0;
         inProgress = true;
         result = null;
+    }
+
+    private static List<Question> FirstQuestionPerRealm(List<Question> all){
+        List<Question> shortList = new ArrayList<>();
+        Set<String> seenRealms = new LinkedHashSet<>();
+        for (Question question : all) {
+            if (seenRealms.add(question.getRealmType())) {
+                shortList.add(question);
+            }
+        }
+        return shortList;
+    }
+
+    public static void EnsureCatalog() throws SQLException {
+        QuestionDAO.EnsureTables();
+        if (!QuestionDAO.HasCatalog()){
+            QuestionDAO.SeedCatalog();
+        }
+        OptionDAO.EnsureTables();
+        if (!OptionDAO.HasCatalog()){
+            OptionDAO.SeedCatalog();
+        }
     }
 
     /**
@@ -112,26 +144,26 @@ public class QuizService {
     }
 
     /**
-     * Previously chosen option for the current question, or null if none yet.
+     * Archetype id chosen for the current question, or null if not yet answered
      */
-    public static Option GetAnswerForCurrentQuestion() {
+    public static Integer GetAnswerForCurrentQuestion() {
         EnsureInProgress();
         return answers[currentIndex];
     }
 
     /**
      * Stores the selected option for the current question.
-     * @param option The option the user picked
+     * @param archetypeId The archetypes corresponding with the selected question
      */
-    public static void AnswerCurrentQuestion(Option option) {
+    public static void AnswerCurrentQuestion(int archetypeId) {
         EnsureInProgress();
-        if (option == null) {
-            throw new IllegalArgumentException("Quiz option is null");
+        Option option = GetCurrentQuestion().getOptions();
+        if (archetypeId != option.getOption1Archetype()
+                && archetypeId != option.getOption2Archetype()
+                && archetypeId != option.getOption3Archetype()){
+            throw new IllegalStateException("Archetype id does not belong to this question");
         }
-        if (!GetCurrentQuestion().getOptions().contains(option)) {
-            throw new IllegalArgumentException("Option does not belong to the current question");
-        }
-        answers[currentIndex] = option;
+        answers[currentIndex] = archetypeId;
     }
 
     /**
@@ -218,19 +250,20 @@ public class QuizService {
     /**
      * Counts answers per archetype. Ties go to the later answer among the tied winners.
      */
-    public static QuizResult Score(List<Option> selectedOptions) {
-        if (selectedOptions == null || selectedOptions.isEmpty()) {
+    public static QuizResult Score(List<Integer> selectedArchetypeIds) {
+        if (selectedArchetypeIds == null || selectedArchetypeIds.isEmpty()) {
             throw new IllegalArgumentException("Quiz answers are empty");
         }
 
         Map<Archetype, Integer> scores = new EnumMap<>(Archetype.class);
         List<Archetype> order = new ArrayList<>();
-        for (Option option : selectedOptions) {
-            if (option == null) {
+        for (Integer archetypeID : selectedArchetypeIds) {
+            if (archetypeID == null) {
                 throw new IllegalArgumentException("Quiz answers contain a null option");
             }
-            scores.merge(option.archetype(), 1, Integer::sum);
-            order.add(option.archetype());
+            Archetype archetype = ArchetypeById(archetypeID);
+            scores.merge(archetype, 1, Integer::sum);
+            order.add(archetype);
         }
 
         Archetype winner = order.get(order.size() - 1);
@@ -244,6 +277,19 @@ public class QuizService {
         }
 
         return new QuizResult(winner, scores);
+    }
+
+    /**
+     * Resolves a stored archetype id back to its enum constant
+     */
+
+    private static Archetype ArchetypeById(int archetypeId) {
+        for (Archetype archetype : Archetype.values()){
+            if (archetype.getArchetypeId() == archetypeId){
+                return archetype;
+            }
+        }
+        throw new IllegalArgumentException("Archetype with id " + archetypeId + " not found");
     }
 
     /**
@@ -265,39 +311,41 @@ public class QuizService {
         return ranked;
     }
 
+    /**
+     * Each archetype's score, in {@link Archetype#values()} order, normalised so the
+     * highest-scoring archetype reaches 1.0. Used to plot the 12-axis archetype radar
+     * chart. Returns all zeros when there is no quiz result yet.
+     */
+    public static double[] ArchetypeScores(QuizResult quizResult) {
+        Archetype[] archetypes = Archetype.values();
+        double[] values = new double[archetypes.length];
+        if (quizResult == null) {
+            return values;
+        }
+
+        int max = 0;
+        for (int score : quizResult.scores().values()) {
+            if (score > max) {
+                max = score;
+            }
+        }
+        if (max == 0) {
+            return values;
+        }
+
+        for (int index = 0; index < archetypes.length; index++) {
+            Integer score = quizResult.scores().get(archetypes[index]);
+            values[index] = score == null ? 0 : (double) score / max;
+        }
+        return values;
+    }
+
     private static void EnsureInProgress() {
         if (!HasActiveAttempt()) {
             throw new IllegalStateException("Quiz has not been started");
         }
     }
 
-    private static List<Question> BuildQuestions() {
-        return List.of(
-                new Question(1, "When facing a new challenge, what's your instinct?", List.of(
-                        new Option("Trust that things will work out if I stay positive", Archetype.INNOCENT),
-                        new Option("Rally the people around me and pull together", Archetype.EVERYMAN),
-                        new Option("Take it on directly and prove I can win", Archetype.HERO),
-                        new Option("Explore different paths and see where they lead", Archetype.EXPLORER))),
-                new Question(2, "What do you most want people to feel around you?", List.of(
-                        new Option("Safe, hopeful, and at ease", Archetype.INNOCENT),
-                        new Option("Included and like they belong", Archetype.EVERYMAN),
-                        new Option("Inspired to push harder", Archetype.HERO),
-                        new Option("Free to be themselves and follow their own path", Archetype.EXPLORER))),
-                new Question(3, "What's your relationship to rules and the way things are?", List.of(
-                        new Option("I trust the system is basically good", Archetype.INNOCENT),
-                        new Option("I just want fair treatment for everyone", Archetype.EVERYMAN),
-                        new Option("I'll break them if it means winning the right fight", Archetype.HERO),
-                        new Option("I question rules that limit freedom or discovery", Archetype.EXPLORER))),
-                new Question(4, "What gets you through a hard day?", List.of(
-                        new Option("Believing tomorrow will be better", Archetype.INNOCENT),
-                        new Option("The people who have my back", Archetype.EVERYMAN),
-                        new Option("Refusing to be beaten", Archetype.HERO),
-                        new Option("Knowing there are still new possibilities ahead", Archetype.EXPLORER))),
-                new Question(5, "How do you most want to change the world?", List.of(
-                        new Option("By looking after people who need it", Archetype.CAREGIVER),
-                        new Option("By transforming how people see things", Archetype.MAGICIAN),
-                        new Option("By uncovering and sharing the truth", Archetype.SAGE),
-                        new Option("By opening new paths for people to explore", Archetype.EXPLORER)))
-        );
-    }
+
+
 }

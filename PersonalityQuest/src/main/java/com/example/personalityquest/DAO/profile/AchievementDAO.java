@@ -28,7 +28,8 @@ public class AchievementDAO {
                 name TEXT NOT NULL,
                 description TEXT NOT NULL,
                 criteriaType TEXT NOT NULL,
-                threshold REAL NOT NULL
+                threshold REAL NOT NULL,
+                level INTEGER NOT NULL DEFAULT 1
             )
             """;
 
@@ -54,7 +55,30 @@ public class AchievementDAO {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.execute(CREATE_ACHIEVEMENTS);
+            EnsureLevelColumn(connection);
             statement.execute(CREATE_USER_ACHIEVEMENTS);
+        }
+    }
+
+    private static void EnsureLevelColumn(Connection connection) throws SQLException {
+        boolean hasLevelColumn = false;
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("PRAGMA table_info(Achievements)")) {
+            while (resultSet.next()) {
+                if ("level".equalsIgnoreCase(resultSet.getString("name"))) {
+                    hasLevelColumn = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasLevelColumn) {
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(
+                        "ALTER TABLE Achievements ADD COLUMN level INTEGER NOT NULL DEFAULT 1"
+                );
+            }
         }
     }
 
@@ -73,27 +97,34 @@ public class AchievementDAO {
     }
 
     /**
-     * Inserts an achievement definition. Existing ids are left unchanged.
+     * Inserts or updates an achievement definition.
      */
     public static void InsertAchievement(
             int achievementId,
             String name,
             String description,
             String criteriaType,
-            double threshold) throws SQLException {
+            double threshold, int level) throws SQLException {
         EnsureTables();
         Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
-                    INSERT OR IGNORE INTO Achievements
-                        (achievementId, name, description, criteriaType, threshold)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO Achievements
+                        (achievementId, name, description, criteriaType, threshold, level)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(achievementId) DO UPDATE SET
+                        name = excluded.name,
+                        description = excluded.description,
+                        criteriaType = excluded.criteriaType,
+                        threshold = excluded.threshold,
+                        level = excluded.level
                     """)) {
             statement.setInt(1, achievementId);
             statement.setString(2, name);
             statement.setString(3, description);
             statement.setString(4, criteriaType);
             statement.setDouble(5, threshold);
+            statement.setInt(6, level);
             statement.executeUpdate();
         }
     }
@@ -107,7 +138,7 @@ public class AchievementDAO {
         Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
-                    SELECT achievementId, name, description, criteriaType, threshold
+                    SELECT achievementId, name, description, criteriaType, threshold, level
                     FROM Achievements
                     ORDER BY achievementId
                     """)) {
@@ -120,6 +151,7 @@ public class AchievementDAO {
                         rs.getString("description"),
                         rs.getString("criteriaType"),
                         rs.getDouble("threshold"),
+                        rs.getInt("level"),
                         false
                 ));
             }

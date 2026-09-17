@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="tasksRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css, @css/tasks.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.quest.TasksController">
@@ -53,33 +52,33 @@
                         </VBox>
 
                         <VBox fx:id="detailCard" spacing="14" styleClass="card" GridPane.columnIndex="1">
-                            <Label fx:id="taskTitleLabel" styleClass="page-title" text="Select a task" wrapText="true" />
+                        <HBox alignment="TOP_RIGHT" spacing="12">
+                            <Label fx:id="taskTitleLabel" styleClass="page-title" text="Select a task" wrapText="true" HBox.hgrow="ALWAYS" />
+                            <CheckBox fx:id="progressBox" disable="true" focusTraversable="false" mouseTransparent="true" styleClass="progress-check" />
+                        </HBox>
                             <Label fx:id="questLabel" styleClass="quest-meta" text="Choose a weekly or quest task to read its details." wrapText="true" />
                             <Label fx:id="descriptionLabel" styleClass="lore-body" wrapText="true" text="" />
-
-                            <VBox spacing="8">
-                                <Label styleClass="section-label" text="Progress" />
-                                <CheckBox fx:id="progressBox" disable="true" focusTraversable="false" mouseTransparent="true" styleClass="progress-check" />
-                            </VBox>
 
                             <VBox spacing="8" VBox.vgrow="ALWAYS">
                                 <Label styleClass="section-label" text="Reflection" />
                                 <TextArea fx:id="reflectionArea" prefHeight="180" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
                             </VBox>
-
+                            
                             <VBox fx:id="aiFeedbackCard" spacing="8" styleClass="ai-feedback-card" visible="false" managed="false">
                                 <Label styleClass="section-label" text="AI Feedback" />
-                                <Label fx:id="aiFeedbackLabel" styleClass="ai-feedback-body" wrapText="true" text="" />
+                                <ScrollPane fx:id="aiFeedbackScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" prefHeight="180" styleClass="ai-feedback-scroll">
+                                    <content>
+                                        <Label fx:id="aiFeedbackLabel" styleClass="ai-feedback-body" wrapText="true" text="" />
+                                </content>
+                            </ScrollPane>
                             </VBox>
 
                             <Label fx:id="feedbackLabel" styleClass="settings-feedback" wrapText="true" />
 
-                            <HBox alignment="CENTER_LEFT" spacing="12">
-                                <Button mnemonicParsing="false" onAction="#OnBack" styleClass="pill-button" text="Back" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Button fx:id="feedbackButton" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get AI Feedback" />
-                                <Button fx:id="draftButton" mnemonicParsing="false" onAction="#OnSaveDraft" styleClass="draft-button" text="Save Draft" />
-                                <Button fx:id="submitButton" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" />
+                            <HBox alignment="CENTER" spacing="12">
+                                <Button fx:id="feedbackButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get Feedback" HBox.hgrow="ALWAYS" />
+                                <Button fx:id="draftButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSaveDraft" styleClass="draft-button" text="Save Draft" HBox.hgrow="ALWAYS" />
+                                <Button fx:id="submitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" HBox.hgrow="ALWAYS" />
                             </HBox>
                         </VBox>
                     </GridPane>

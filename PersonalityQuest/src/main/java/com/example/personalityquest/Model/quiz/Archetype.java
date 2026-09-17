@@ -5,18 +5,10 @@ package com.example.personalityquest.Model.quiz;
  */
 public enum Archetype {
 
-    // Innocent: Modesty
-    // Everyman: Friendly
-    // Hero: Courage
-    // Explorer: Ambition
-    // Caregiver: Protective
-    // Magician: Wittiness
-    // Sage: Truthful
-    // Outlaw: Justice
-    // Lover:
-
+    // Realm: Ego
     INNOCENT(
             1,
+            "Ego",
             "Innocent",
             "You approach life with optimism, simplicity, and trust in others.",
             "Filler",
@@ -27,11 +19,13 @@ public enum Archetype {
             "Naive",
             "Trusting without discernment; believing what feels safe and ignoring the warning signs.",
             "Cynic",
-            "Trust withdrawn as armour; treating hope as foolish and expecting the worst."
+            "Trust withdrawn as armour; treating hope as foolish and expecting the worst.",
+            "\uD83D\uDD4A\uFE0F"
     ),
 
     EVERYMAN(
             2,
+            "Ego",
             "Everyman",
             "You value belonging, fairness, and building genuine connections with others.",
             "Filler",
@@ -42,11 +36,13 @@ public enum Archetype {
             "Elitism",
             "Holding yourself apart as superior; breaking the common bond to stand above the crowd.",
             "Conformity",
-            "Dissolving into the group; letting the crowd think for you and losing your own judgment."
+            "Dissolving into the group; letting the crowd think for you and losing your own judgment.",
+            "\uD83E\uDD1D"
     ),
 
     HERO(
             3,
+            "Ego",
             "Hero",
             "You meet challenges directly and aim to prove yourself through courageous action.",
             "Filler",
@@ -57,26 +53,14 @@ public enum Archetype {
             "Cowardice",
             "Letting fear govern; shrinking from what should be faced.",
             "Recklessness",
-            "Feeling too little fear; rushing into danger without heeding the risk."
+            "Feeling too little fear; rushing into danger without heeding the risk.",
+            "\u2694\uFE0F"
     ),
 
-    EXPLORER(
-            4,
-            "Explorer",
-            "You seek freedom, discovery, and new experiences beyond familiar boundaries.",
-            "Filler",
-            "Independent, adventurous, curious, and willing to try new paths.",
-            "Can become restless, unreliable, or dissatisfied with stability.",
-            "Curiosity",
-            "The pull to seek, learn, and discover; venturing beyond the familiar to see what's there.",
-            "Sloth",
-            "Staying put and letting the world come to you; curiosity gone cold, comfort chosen over discovery.",
-           "Restlessness",
-           "Never able to settle or arrive; forever chasing the next thing before the last one is finished."
-    ),
-
+    // Realm: Soul
     CAREGIVER(
-            5,
+            4,
+            "Soul",
             "Caregiver",
             "You protect and support others, especially when they are facing hardship.",
             "Filler",
@@ -87,11 +71,13 @@ public enum Archetype {
             "Submissive",
             "Leaving others to fend for themselves; care withheld out of coldness or self-interest.",
             "Smothering",
-            "Care that crowds and controls; help so constant it keeps others from standing on their own."
+            "Care that crowds and controls; help so constant it keeps others from standing on their own.",
+            "\uD83E\uDEC2"
     ),
 
     MAGICIAN(
-            6,
+            5,
+            "Soul",
             "Magician",
             "You transform ideas and perspectives to make meaningful change possible.",
             "Filler",
@@ -102,41 +88,31 @@ public enum Archetype {
             "Rigidity",
             "Stuck and unable to change or be moved; clinging to how things are even as they stop working.",
             "Manipulation",
-            "Using the power to shape reality for your own ends; bending people and truth rather than transforming them."
+            "Using the power to shape reality for your own ends; bending people and truth rather than transforming them.",
+            "\uD83D\uDD2E"
     ),
 
     SAGE(
-            7,
+            6,
+            "Soul",
             "Sage",
             "You seek truth, knowledge, and a deeper understanding of how things work.",
             "Filler",
             "Intelligent, thoughtful, analytical, and able to provide useful insight.",
             "Can overthink decisions, appear emotionally distant, or delay action.",
             "Wisdom",
-            "Analytical",
+            "Seeking truth for its own sake and holding it with an open mind; understanding the world clearly and letting that understanding grow.",
             "Credulity",
             "Believing too easily; taking things on faith without questioning them or looking closer.",
             "Detachment",
-            "Retreating into pure thought; knowing much but never bringing it back to bear on life."
+            "Retreating into pure thought; knowing much but never bringing it back to bear on life.",
+            "\uD83E\uDD89"
     ),
 
-    OUTLAW(
-            8,
-            "Outlaw",
-            "You challenge unfair systems and reject rules that prevent meaningful change.",
-            "Filler",
-            "Bold, independent, disruptive, and courageous enough to question authority.",
-            "Can become destructive, reckless, confrontational, or rebellious without purpose.",
-            "Liberation",
-            "Breaking what's unjust to free yourself and others; defying corrupt power for the sake of something better.",
-            "Submission",
-            "Going along with what's wrong; obeying a broken order rather than standing against it.",
-            "Vengeance",
-            "Tearing down for its own sake; destruction with no cause to serve and nothing built in its place."
-    ),
-
+    // Realm: Self
     LOVER(
-            9,
+            7,
+            "Self",
             "Lover",
             "You value emotional connection, honesty, beauty, and meaningful relationships.",
             "Filler",
@@ -147,11 +123,13 @@ public enum Archetype {
             "Insensibility",
             "Feeling too little; closed to desire, beauty, and closeness, holding others at arm's length.",
             "Self Indulgence",
-            "Desire without restraint; chasing pleasure and intensity for their own sake, heedless of who it costs."
+            "Desire without restraint; chasing pleasure and intensity for their own sake, heedless of who it costs.",
+            "\u2764\uFE0F"
     ),
 
     JESTER(
-            10,
+            8,
+            "Self",
             "Jester",
             "You use humour, playfulness, and creativity to bring joy and challenge stale thinking.",
             "Filler",
@@ -162,26 +140,31 @@ public enum Archetype {
             "Boring",
             "Bringing no lightness; too stiff or humourless to play, draining the joy from a moment.",
             "Belittling",
-            "Humour turned into a weapon; getting the laugh by mocking and cutting others down."
+            "Humour turned into a weapon; getting the laugh by mocking and cutting others down.",
+            "\uD83C\uDFAD"
     ),
 
-    RULER(
-            11,
-            "Ruler",
-            "You create order, accept responsibility, and guide others towards shared goals.",
+    EXPLORER(
+            9,
+            "Self",
+            "Explorer",
+            "You seek freedom, discovery, and new experiences beyond familiar boundaries.",
             "Filler",
-            "Confident, organised, responsible, and effective at leadership and delegation.",
-            "Can become controlling, authoritarian, inflexible, or overly concerned with status.",
-            "Order",
-            "Bringing structure and stability, and using authority in service of those you're responsible for.",
-            "Chaos",
-            "Order abandoned; failing to take charge and leaving things to fall apart.",
-            "Tyranny",
-            "Control seized for its own sake; ruling over others to serve yourself rather than them."
+            "Independent, adventurous, curious, and willing to try new paths.",
+            "Can become restless, unreliable, or dissatisfied with stability.",
+            "Curiosity",
+            "The pull to seek, learn, and discover; venturing beyond the familiar to see what's there.",
+            "Sloth",
+            "Staying put and letting the world come to you; curiosity gone cold, comfort chosen over discovery.",
+            "Restlessness",
+            "Never able to settle or arrive; forever chasing the next thing before the last one is finished.",
+            "\uD83E\uDDED"
     ),
 
+    // Realm: Mark
     CREATOR(
-            12,
+            10,
+            "Mark",
             "Creator",
             "You turn original ideas into meaningful work and express yourself through what you build.",
             "Filler",
@@ -192,10 +175,46 @@ public enum Archetype {
             "Dullness",
             "Nothing new takes shape; unable or unwilling to make, create, or bring ideas to life.",
             "Delusion",
-            "Lost in visions that never become anything; ideas untethered from reality and never made real."
+            "Lost in visions that never become anything; ideas untethered from reality and never made real.",
+            "\uD83C\uDFA8"
+    ),
+
+    RULER(
+            11,
+            "Mark",
+            "Ruler",
+            "You create order, accept responsibility, and guide others towards shared goals.",
+            "Filler",
+            "Confident, organised, responsible, and effective at leadership and delegation.",
+            "Can become controlling, authoritarian, inflexible, or overly concerned with status.",
+            "Order",
+            "Bringing structure and stability, and using authority in service of those you're responsible for.",
+            "Chaos",
+            "Order abandoned; failing to take charge and leaving things to fall apart.",
+            "Tyranny",
+            "Control seized for its own sake; ruling over others to serve yourself rather than them.",
+            "\uD83D\uDC51"
+    ),
+
+    OUTLAW(
+            12,
+            "Mark",
+            "Outlaw",
+            "You challenge unfair systems and reject rules that prevent meaningful change.",
+            "Filler",
+            "Bold, independent, disruptive, and courageous enough to question authority.",
+            "Can become destructive, reckless, confrontational, or rebellious without purpose.",
+            "Liberation",
+            "Breaking what's unjust to free yourself and others; defying corrupt power for the sake of something better.",
+            "Submission",
+            "Going along with what's wrong; obeying a broken order rather than standing against it.",
+            "Vengeance",
+            "Tearing down for its own sake; destruction with no cause to serve and nothing built in its place.",
+            "\uD83D\uDD25"
     );
 
     private final int archetypeId;
+    private final String realm;
     private final String name;
     private final String smallDescription;
     private final String longDescription;
@@ -207,11 +226,11 @@ public enum Archetype {
     private final String valueDeficitDefinition;
     private final String valueExcess;
     private final String valueExcessDefinition;
-
-
+    private final String emoji;
 
     Archetype(
             int archetypeId,
+            String realm,
             String name,
             String smallDescription,
             String longDescription,
@@ -222,9 +241,11 @@ public enum Archetype {
             String valueDeficit,
             String valueDeficitDefinition,
             String valueExcess,
-            String valueExcessDefinition
+            String valueExcessDefinition,
+            String emoji
     ) {
         this.archetypeId = archetypeId;
+        this.realm = realm;
         this.name = name;
         this.smallDescription = smallDescription;
         this.longDescription = longDescription;
@@ -236,12 +257,17 @@ public enum Archetype {
         this.valueDeficitDefinition = valueDeficitDefinition;
         this.valueExcess = valueExcess;
         this.valueExcessDefinition = valueExcessDefinition;
+        this.emoji = emoji;
     }
-
 
     // Public Getters and Setters
 
     public int getArchetypeId() {return archetypeId;}
+
+    /**
+     * The realm this archetype belongs to: "Ego", "Soul", "Self", or "Mark".
+     */
+    public String getRealm() {return realm;}
 
     public String getName() {
         return name;
@@ -256,7 +282,6 @@ public enum Archetype {
         return weaknesses;
     }
 
-
     public String getValue() {return valueMean;}
     public String getValueDefinition() {return valueMeanDefinition;}
 
@@ -266,6 +291,6 @@ public enum Archetype {
     public String getValueExcess() {return valueExcess;}
     public String getValueExcessDefinition() {return valueExcessDefinition;}
 
-
+    public String getEmoji() {return emoji;}
 
 }

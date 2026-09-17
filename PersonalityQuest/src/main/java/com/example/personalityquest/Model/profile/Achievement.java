@@ -9,12 +9,13 @@ public record Achievement(
         String description,
         String criteriaType,
         double threshold,
+        int level,
         boolean unlocked) {
 
     /**
      * Returns a copy of this achievement with an updated unlock state.
      */
     public Achievement withUnlocked(boolean unlocked) {
-        return new Achievement(achievementId, name, description, criteriaType, threshold, unlocked);
+        return new Achievement(achievementId, name, description, criteriaType, threshold, level, unlocked);
     }
 }

@@ -12,8 +12,8 @@ public class ApplicationManager {
     }
 
     public static class TaskConfig{
-        private final static int AMOUNT_OF_TASKS = 3;
-        private static int DEFAULT_SEARTCH_NUM = 1;
+        private final static int AMOUNT_OF_TASKS = 1;
+        private static int DEFAULT_SEARTCH_NUM = 228;
 
         public static int getAmountOfTasks(){
             return AMOUNT_OF_TASKS;

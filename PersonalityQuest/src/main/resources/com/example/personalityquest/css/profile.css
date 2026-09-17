@@ -85,30 +85,97 @@
     -fx-text-fill: #ffffff;
 }
 
-.achievement-badge {
-    -fx-min-height: 92px;
-    -fx-pref-height: 104px;
-    -fx-background-color: #141414;
-    -fx-background-radius: 14;
-    -fx-border-color: #3a2a20;
-    -fx-border-radius: 14;
-    -fx-border-width: 1;
+.achievement-summary {
+    -fx-font-family: Poppins;
+    -fx-font-size: 14px;
+    -fx-text-fill: #a9a0c7;
     -fx-alignment: CENTER;
 }
 
-.achievement-badge.unlocked {
-    -fx-effect: dropshadow(gaussian, rgba(255, 140, 50, 0.45), 18, 0.35, 0, 0);
+.achievements-card {
+    -fx-padding: 18 20 22 20;
 }
 
-.achievement-star {
-    -fx-scale-x: 1.8;
-    -fx-scale-y: 1.8;
-    -fx-fill: #ff8a3d;
-    -fx-effect: dropshadow(gaussian, rgba(255, 140, 50, 0.85), 16, 0.4, 0, 0);
+.achievement-card {
+    -fx-min-height: 280px;
+    -fx-pref-height: 290px;
+    -fx-padding: 14 10 12 10;
+    -fx-background-color: #171321;
+    -fx-background-radius: 18;
+    -fx-border-color: #33264c;
+    -fx-border-radius: 18;
+    -fx-border-width: 1;
+    -fx-alignment: TOP_CENTER;
 }
 
-.achievement-badge.locked .achievement-star {
-    -fx-fill: #6b4a32;
-    -fx-effect: dropshadow(gaussian, rgba(255, 140, 50, 0.18), 8, 0.2, 0, 0);
+.achievement-card:hover {
+    -fx-background-color: #201936;
+    -fx-border-color: #8b5cf6;
+}
+
+.achievement-card.unlocked {
+    -fx-effect: dropshadow(gaussian, rgba(139, 92, 246, 0.32), 18, 0.28, 0, 3);
+}
+
+.achievement-card.locked {
     -fx-opacity: 0.4;
+}
+
+.achievement-icon-holder {
+    -fx-min-width: 136px;
+    -fx-pref-width: 136px;
+    -fx-max-width: 136px;
+    -fx-min-height: 136px;
+    -fx-pref-height: 136px;
+    -fx-max-height: 136px;
+    -fx-background-color: transparent;
+    -fx-alignment: CENTER;
+}
+
+.achievement-card.locked .achievement-icon-holder {
+    -fx-background-color: transparent;
+}
+
+.achievement-icon-image {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.45), 12, 0.3, 0, 2);
+}
+
+.achievement-fallback-icon {
+    -fx-scale-x: 1.6;
+    -fx-scale-y: 1.6;
+    -fx-fill: #c4b5fd;
+    -fx-effect: dropshadow(gaussian, rgba(196, 181, 253, 0.7), 12, 0.35, 0, 1);
+}
+
+.achievement-card.locked .achievement-fallback-icon {
+    -fx-fill: #81798e;
+    -fx-effect: none;
+}
+
+.achievement-name {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+}
+
+.achievement-description {
+    -fx-font-family: Poppins;
+    -fx-font-size: 12px;
+    -fx-text-fill: #a9a0c7;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+}
+
+.achievement-level {
+    -fx-font-family: Poppins;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.achievement-card.unlocked .achievement-description {
+    -fx-text-fill: #c4b5fd;
 }

@@ -14,8 +14,9 @@ public class Quest {
     private final int labourId;
     private final int archetypeId;
     private final String name;
+    private final String narrative;
 
-    public Quest(int labourId, int archetypeId, String name){
+    public Quest(int labourId, int archetypeId, String name, String narrative) {
         if (ApplicationManager.isEmpty(name)){
             throw new IllegalArgumentException("Name is null");
         }
@@ -29,6 +30,7 @@ public class Quest {
         this.labourId = labourId;
         this.archetypeId = archetypeId;
         this.name = name;
+        this.narrative = narrative;
 
     }
     public int getArchetypeId() {
@@ -40,4 +42,5 @@ public class Quest {
     public String getName() {
         return name;
     }
+    public String getNarrative() { return narrative; }
 }

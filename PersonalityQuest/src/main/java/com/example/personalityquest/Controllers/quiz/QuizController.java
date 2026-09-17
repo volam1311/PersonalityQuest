@@ -30,7 +30,7 @@ public class QuizController implements Initializable {
     @FXML
     private Button backButton, nextButton;
 
-    private Option selectedOption;
+    private Integer selectedOption;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -46,34 +46,40 @@ public class QuizController implements Initializable {
         int total = QuizService.GetQuestionCount();
 
         questionNumberLabel.setText("Question " + number + " of " + total);
-        questionLabel.setText(question.getPrompt());
+        questionLabel.setText(question.getQuestionPrompt());
         quizProgress.setProgress((double) number / total);
         progressLabel.setText(Math.round((number * 100.0) / total) + "%");
         feedbackLabel.setText("");
         selectedOption = QuizService.GetAnswerForCurrentQuestion();
 
         optionsBox.getChildren().clear();
-        for (Option option : question.getOptions()) {
-            Button button = new Button(option.text());
-            button.setMaxWidth(Double.MAX_VALUE);
-            button.setWrapText(true);
-            button.setMnemonicParsing(false);
-            button.getStyleClass().add("quiz-option");
-            button.setUserData(option);
-            if (option.equals(selectedOption)) {
-                button.getStyleClass().add("selected");
-            }
-            button.setOnAction(event -> SelectOption(button));
-            optionsBox.getChildren().add(button);
-        }
+        Option option = question.getOptions();
+        AddOptionButton(option.getOption1(), option.getOption1Archetype());
+        AddOptionButton(option.getOption2(), option.getOption2Archetype());
+        AddOptionButton(option.getOption3(), option.getOption3Archetype());
 
         backButton.setDisable(!QuizService.CanGoBack());
         nextButton.setText(QuizService.IsLastQuestion() ? "See result" : "Next");
         nextButton.setDisable(selectedOption == null);
     }
 
+    private void AddOptionButton(String text, int archetypeId) {
+        Button button = new Button(text);
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.setWrapText(true);
+        button.setMnemonicParsing(false);
+        button.getStyleClass().add("quiz-option");
+        button.setUserData(archetypeId);
+        if (selectedOption != null && archetypeId == selectedOption){
+            button.getStyleClass().add("selected");
+        }
+        button.setOnAction(event -> SelectOption(button));
+        optionsBox.getChildren().add(button);
+
+    }
+
     private void SelectOption(Button chosen) {
-        selectedOption = (Option) chosen.getUserData();
+        selectedOption = (Integer) chosen.getUserData();
         QuizService.AnswerCurrentQuestion(selectedOption);
         feedbackLabel.setText("");
 
