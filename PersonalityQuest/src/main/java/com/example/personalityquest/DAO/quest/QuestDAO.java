@@ -1,7 +1,9 @@
 package com.example.personalityquest.DAO.quest;
 
 import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.SQLite;
+//import com.example.personalityquest.Model.quest.quiz.Archetype
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -91,19 +93,25 @@ public class QuestDAO {
      * @throws SQLException Database Access Failure
      */
     public static String GetArchetypeName(int archetypeId) throws SQLException {
-        Connection connection = SQLite.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(
-                """
-                    SELECT name FROM Archetype
-                    WHERE archetypeId = ?
-                    """)) {
-            statement.setInt(1, archetypeId);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return rs.getString("name");
+        for (Archetype archetype : Archetype.values()) {
+            if (archetype.getArchetypeId() == archetypeId){
+                return archetype.getName();
             }
-            return null;
         }
+        return null;
+//        Connection connection = SQLite.getConnection();
+//        try (PreparedStatement statement = connection.prepareStatement(
+//                """
+//                    SELECT name FROM Archetype
+//                    WHERE archetypeId = ?
+//                    """)) {
+//            statement.setInt(1, archetypeId);
+//            ResultSet rs = statement.executeQuery();
+//            if (rs.next()) {
+//                return rs.getString("name");
+//            }
+//            return null;
+//        }
     }
 
     /**
@@ -113,39 +121,48 @@ public class QuestDAO {
      * @throws SQLException Database Access Failure
      */
     public static Integer GetArchetypeIdForName(String name) throws SQLException {
-        Connection connection = SQLite.getConnection();
+        //Connection connection = SQLite.getConnection();
         String needle = name.trim().toLowerCase(Locale.ROOT);
         if (needle.startsWith("the ")) {
             needle = needle.substring(4).trim();
         }
 
-        try (PreparedStatement statement = connection.prepareStatement(
-                """
-                    SELECT archetypeId, name FROM Archetype
-                    """)) {
-            ResultSet rs = statement.executeQuery();
-            Integer fallback = null;
-            while (rs.next()) {
-                String stored = rs.getString("name");
-                if (stored == null || stored.isBlank()) {
-                    continue;
-                }
-
-                String storedName = stored.trim().toLowerCase(Locale.ROOT);
-                if (storedName.startsWith("the ")) {
-                    storedName = storedName.substring(4).trim();
-                }
-
-                if (storedName.equals(needle)) {
-                    return rs.getInt("archetypeId");
-                }
-                if (fallback == null && (storedName.contains(needle) || needle.contains(storedName))) {
-                    fallback = rs.getInt("archetypeId");
-                }
+        for (Archetype archetype : Archetype.values()) {
+            String storedName = archetype.getName().trim().toLowerCase(Locale.ROOT);
+            if (storedName.equals(needle)) {
+                return archetype.getArchetypeId();
             }
-            return fallback;
         }
+        return null;
+
+//        try (PreparedStatement statement = connection.prepareStatement(
+//                """
+//                    SELECT archetypeId, name FROM Archetype
+//                    """)) {
+//            ResultSet rs = statement.executeQuery();
+//            Integer fallback = null;
+//            while (rs.next()) {
+//                String stored = rs.getString("name");
+//                if (stored == null || stored.isBlank()) {
+//                    continue;
+//                }
+//
+//                String storedName = stored.trim().toLowerCase(Locale.ROOT);
+//                if (storedName.startsWith("the ")) {
+//                    storedName = storedName.substring(4).trim();
+//                }
+//
+//                if (storedName.equals(needle)) {
+//                    return rs.getInt("archetypeId");
+//                }
+//                if (fallback == null && (storedName.contains(needle) || needle.contains(storedName))) {
+//                    fallback = rs.getInt("archetypeId");
+//                }
+//            }
+//            return fallback;
+//        }
     }
+
 
     /**
      * Looks up the stored description of an archetype.
@@ -154,19 +171,25 @@ public class QuestDAO {
      * @throws SQLException Database Access Failure
      */
     public static String GetArchetypeDescription(int archetypeId) throws SQLException {
-        Connection connection = SQLite.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(
-                """
-                    SELECT smallDescription FROM Archetype
-                    WHERE archetypeId = ?
-                    """)) {
-            statement.setInt(1, archetypeId);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return rs.getString("smallDescription");
+        for (Archetype archetype : Archetype.values()) {
+            if (archetype.getArchetypeId() == archetypeId){
+                return archetype.getSmallDescription();
             }
-            return null;
         }
+        return null;
+//        Connection connection = SQLite.getConnection();
+//        try (PreparedStatement statement = connection.prepareStatement(
+//                """
+//                    SELECT smallDescription FROM Archetype
+//                    WHERE archetypeId = ?
+//                    """)) {
+//            statement.setInt(1, archetypeId);
+//            ResultSet rs = statement.executeQuery();
+//            if (rs.next()) {
+//                return rs.getString("smallDescription");
+//            }
+//            return null;
+//        }
     }
 
     /**

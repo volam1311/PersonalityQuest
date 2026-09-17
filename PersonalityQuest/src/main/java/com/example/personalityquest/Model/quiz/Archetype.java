@@ -19,7 +19,8 @@ public enum Archetype {
             "Naive",
             "Trusting without discernment; believing what feels safe and ignoring the warning signs.",
             "Cynic",
-            "Trust withdrawn as armour; treating hope as foolish and expecting the worst."
+            "Trust withdrawn as armour; treating hope as foolish and expecting the worst.",
+            "\uD83D\uDD4A\uFE0F"
     ),
 
     EVERYMAN(
@@ -35,7 +36,8 @@ public enum Archetype {
             "Elitism",
             "Holding yourself apart as superior; breaking the common bond to stand above the crowd.",
             "Conformity",
-            "Dissolving into the group; letting the crowd think for you and losing your own judgment."
+            "Dissolving into the group; letting the crowd think for you and losing your own judgment.",
+            "\uD83E\uDD1D"
     ),
 
     HERO(
@@ -51,7 +53,8 @@ public enum Archetype {
             "Cowardice",
             "Letting fear govern; shrinking from what should be faced.",
             "Recklessness",
-            "Feeling too little fear; rushing into danger without heeding the risk."
+            "Feeling too little fear; rushing into danger without heeding the risk.",
+            "\u2694\uFE0F"
     ),
 
     // Realm: Soul
@@ -68,7 +71,8 @@ public enum Archetype {
             "Submissive",
             "Leaving others to fend for themselves; care withheld out of coldness or self-interest.",
             "Smothering",
-            "Care that crowds and controls; help so constant it keeps others from standing on their own."
+            "Care that crowds and controls; help so constant it keeps others from standing on their own.",
+            "\uD83E\uDEC2"
     ),
 
     MAGICIAN(
@@ -84,7 +88,8 @@ public enum Archetype {
             "Rigidity",
             "Stuck and unable to change or be moved; clinging to how things are even as they stop working.",
             "Manipulation",
-            "Using the power to shape reality for your own ends; bending people and truth rather than transforming them."
+            "Using the power to shape reality for your own ends; bending people and truth rather than transforming them.",
+            "\uD83D\uDD2E"
     ),
 
     SAGE(
@@ -100,7 +105,8 @@ public enum Archetype {
             "Credulity",
             "Believing too easily; taking things on faith without questioning them or looking closer.",
             "Detachment",
-            "Retreating into pure thought; knowing much but never bringing it back to bear on life."
+            "Retreating into pure thought; knowing much but never bringing it back to bear on life.",
+            "\uD83E\uDD89"
     ),
 
     // Realm: Self
@@ -117,7 +123,8 @@ public enum Archetype {
             "Insensibility",
             "Feeling too little; closed to desire, beauty, and closeness, holding others at arm's length.",
             "Self Indulgence",
-            "Desire without restraint; chasing pleasure and intensity for their own sake, heedless of who it costs."
+            "Desire without restraint; chasing pleasure and intensity for their own sake, heedless of who it costs.",
+            "\u2764\uFE0F"
     ),
 
     JESTER(
@@ -133,7 +140,8 @@ public enum Archetype {
             "Boring",
             "Bringing no lightness; too stiff or humourless to play, draining the joy from a moment.",
             "Belittling",
-            "Humour turned into a weapon; getting the laugh by mocking and cutting others down."
+            "Humour turned into a weapon; getting the laugh by mocking and cutting others down.",
+            "\uD83C\uDFAD"
     ),
 
     EXPLORER(
@@ -149,7 +157,8 @@ public enum Archetype {
             "Sloth",
             "Staying put and letting the world come to you; curiosity gone cold, comfort chosen over discovery.",
             "Restlessness",
-            "Never able to settle or arrive; forever chasing the next thing before the last one is finished."
+            "Never able to settle or arrive; forever chasing the next thing before the last one is finished.",
+            "\uD83E\uDDED"
     ),
 
     // Realm: Mark
@@ -166,7 +175,8 @@ public enum Archetype {
             "Dullness",
             "Nothing new takes shape; unable or unwilling to make, create, or bring ideas to life.",
             "Delusion",
-            "Lost in visions that never become anything; ideas untethered from reality and never made real."
+            "Lost in visions that never become anything; ideas untethered from reality and never made real.",
+            "\uD83C\uDFA8"
     ),
 
     RULER(
@@ -182,7 +192,8 @@ public enum Archetype {
             "Chaos",
             "Order abandoned; failing to take charge and leaving things to fall apart.",
             "Tyranny",
-            "Control seized for its own sake; ruling over others to serve yourself rather than them."
+            "Control seized for its own sake; ruling over others to serve yourself rather than them.",
+            "\uD83D\uDC51"
     ),
 
     OUTLAW(
@@ -198,7 +209,8 @@ public enum Archetype {
             "Submission",
             "Going along with what's wrong; obeying a broken order rather than standing against it.",
             "Vengeance",
-            "Tearing down for its own sake; destruction with no cause to serve and nothing built in its place."
+            "Tearing down for its own sake; destruction with no cause to serve and nothing built in its place.",
+            "\uD83D\uDD25"
     );
 
     private final int archetypeId;
@@ -214,6 +226,7 @@ public enum Archetype {
     private final String valueDeficitDefinition;
     private final String valueExcess;
     private final String valueExcessDefinition;
+    private final String emoji;
 
     Archetype(
             int archetypeId,
@@ -228,7 +241,8 @@ public enum Archetype {
             String valueDeficit,
             String valueDeficitDefinition,
             String valueExcess,
-            String valueExcessDefinition
+            String valueExcessDefinition,
+            String emoji
     ) {
         this.archetypeId = archetypeId;
         this.realm = realm;
@@ -243,6 +257,7 @@ public enum Archetype {
         this.valueDeficitDefinition = valueDeficitDefinition;
         this.valueExcess = valueExcess;
         this.valueExcessDefinition = valueExcessDefinition;
+        this.emoji = emoji;
     }
 
     // Public Getters and Setters
@@ -275,5 +290,7 @@ public enum Archetype {
 
     public String getValueExcess() {return valueExcess;}
     public String getValueExcessDefinition() {return valueExcessDefinition;}
+
+    public String getEmoji() {return emoji;}
 
 }

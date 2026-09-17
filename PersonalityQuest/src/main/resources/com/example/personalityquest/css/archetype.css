@@ -302,3 +302,7 @@
     -fx-border-color: #ffe79a;
     -fx-text-fill: #191326;
 }
+
+.archetype-emoji {
+    -fx-font-size: 96px;
+}

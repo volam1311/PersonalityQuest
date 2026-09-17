@@ -22,11 +22,6 @@ import java.util.Map;
  * Runs the archetype quiz: dummy questions, answers, scoring, and quest assignment.
  */
 public class QuizService {
-    /**
-     * Realm order used for the archetype radar chart, clockwise from the top: Ego, Soul, Self, Mark.
-     */
-    public static final String[] REALM_LABELS = {"Ego", "Soul", "Self", "Mark"};
-
     private static List<Question> questions = List.of();
     private static Integer[] answers = new Integer[0];
     private static int currentIndex;
@@ -304,33 +299,30 @@ public class QuizService {
     }
 
     /**
-     * Each realm's share of the answered questions, in {@link #REALM_LABELS} order, as a
-     * value between 0 and 1. Used to plot the archetype radar chart. Returns all zeros
-     * when there is no quiz result yet.
+     * Each archetype's score, in {@link Archetype#values()} order, normalised so the
+     * highest-scoring archetype reaches 1.0. Used to plot the 12-axis archetype radar
+     * chart. Returns all zeros when there is no quiz result yet.
      */
-    public static double[] RealmScores(QuizResult quizResult) {
-        double[] values = new double[REALM_LABELS.length];
+    public static double[] ArchetypeScores(QuizResult quizResult) {
+        Archetype[] archetypes = Archetype.values();
+        double[] values = new double[archetypes.length];
         if (quizResult == null) {
             return values;
         }
 
-        int total = 0;
+        int max = 0;
         for (int score : quizResult.scores().values()) {
-            total += score;
+            if (score > max) {
+                max = score;
+            }
         }
-        if (total == 0) {
+        if (max == 0) {
             return values;
         }
 
-        for (int index = 0; index < REALM_LABELS.length; index++) {
-            String realm = REALM_LABELS[index];
-            int realmTotal = 0;
-            for (Map.Entry<Archetype, Integer> entry : quizResult.scores().entrySet()) {
-                if (entry.getKey().getRealm().equals(realm)) {
-                    realmTotal += entry.getValue();
-                }
-            }
-            values[index] = (double) realmTotal / total;
+        for (int index = 0; index < archetypes.length; index++) {
+            Integer score = quizResult.scores().get(archetypes[index]);
+            values[index] = score == null ? 0 : (double) score / max;
         }
         return values;
     }

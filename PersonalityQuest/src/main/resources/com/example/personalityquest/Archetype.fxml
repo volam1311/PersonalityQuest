@@ -49,7 +49,7 @@
 
                         <!-- Row 1, Column 1: Archetype image (placeholder) -->
                         <StackPane minHeight="300" styleClass="card, archetype-image-panel" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label styleClass="image-placeholder" text="Archetype image" />
+                            <Label fx:id="archetypeImageLabel" styleClass="archetype-emoji" text="Archetype image" />
                         </StackPane>
 
                         <!-- Row 2, Column 1: Quest focus -->

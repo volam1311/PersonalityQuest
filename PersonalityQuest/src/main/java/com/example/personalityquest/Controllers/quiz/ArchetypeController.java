@@ -48,6 +48,8 @@ public class ArchetypeController implements Initializable {
     private Button redoQuizButton, egoQuadrantButton, soulQuadrantButton, selfQuadrantButton, markQuadrantButton;
     @FXML
     private VBox rankedListBox;
+    @FXML
+    private Label archetypeImageLabel;
 
     private Map<Button, String> quadrantRealms;
     private QuizResult currentResult;
@@ -75,18 +77,22 @@ public class ArchetypeController implements Initializable {
     }
 
     private void EnsureCatalog() throws SQLException {
+        // Non-destructive: the one-time schema reset/reseed runs once at app
+        // startup (MainApplication). Running DROP/CREATE TABLE here on every
+        // visit risks SQLITE_LOCKED if any other DAO still has an open
+        // statement on the shared connection.
         ArchetypeDAO.EnsureTables();
-        if (ArchetypeDAO.HasCatalog()) {
-            return;
+        if (!ArchetypeDAO.HasCatalog()) {
+            ArchetypeDAO.SeedCatalog();
         }
-        ArchetypeDAO.SeedCatalog();
     }
 
     private void LoadArchetypes() {
         try {
             EnsureCatalog();
         } catch (Exception exception) {
-            ShowEmptyArchetype("Could not load your archetypes right now.");
+            exception.printStackTrace();
+            ShowEmptyArchetype("Could not load your archetypes right now: " + exception.getMessage());
             return;
         }
 
@@ -124,7 +130,8 @@ public class ArchetypeController implements Initializable {
 
             ShowSingleArchetype(archetype, quest);
         } catch (Exception exception) {
-            ShowEmptyArchetype("Could not load your archetypes right now.");
+            exception.printStackTrace();
+            ShowEmptyArchetype("Could not load your archetypes right now: " + exception.getMessage());
         }
     }
 
@@ -314,6 +321,7 @@ public class ArchetypeController implements Initializable {
         weaknessesLabel.setText(archetype.getWeaknesses());
         descriptionLabel.setText(archetype.getLongDescription());
         questFocusLabel.setText(QuestFocusFromDatabase(archetype, pinnedQuests.get(archetype)));
+        archetypeImageLabel.setText(archetype.getEmoji());
 
         HighlightSelection();
     }
@@ -349,6 +357,7 @@ public class ArchetypeController implements Initializable {
         weaknessesLabel.setText("—");
         descriptionLabel.setText("—");
         questFocusLabel.setText("Your quest focus will appear here once an archetype is assigned.");
+        archetypeImageLabel.setText("");
 
         ConfigureRealmWheel();
         rankedListBox.getChildren().clear();

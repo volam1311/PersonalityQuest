@@ -7,6 +7,7 @@ import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Model.profile.UserProfile;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.UserQuest;
+import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.profile.AchievementService;
 import com.example.personalityquest.Services.auth.EmailService;
@@ -14,6 +15,7 @@ import com.example.personalityquest.Services.navigation.NavigationService;
 import com.example.personalityquest.Services.profile.UserProfileService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.UserQuestService;
+import com.example.personalityquest.Services.quiz.QuizService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,17 +48,20 @@ public class ProfileController implements Initializable {
     private static final double IDENTITY_CARD_PERCENT = 32;
     private static final double PROGRESS_CARD_PERCENT = 68;
     private static final int ACHIEVEMENT_COLUMNS = 5;
-    private static final int RADAR_AXIS_COUNT = 5;
+    private static final int RADAR_AXIS_COUNT = Archetype.values().length;
     private static final int RADAR_LEVEL_COUNT = 5;
     private static final double RADAR_CENTER_Y_OFFSET = 8;
-    private static final double RADAR_RADIUS_RATIO = 0.32;
-    private static final String[] RADAR_LABELS = {
-            "Quest progress",
-            "Weekly tasks",
-            "Streak",
-            "Labours complete",
-            "Tasks finished"
-    };
+    private static final double RADAR_RADIUS_RATIO = 0.26;
+    private static final String[] RADAR_LABELS = BuildRadarLabels();
+
+    private static String[] BuildRadarLabels() {
+        Archetype[] archetypes = Archetype.values();
+        String[] labels = new String[archetypes.length];
+        for (int index = 0; index < archetypes.length; index++) {
+            labels[index] = archetypes[index].getName();
+        }
+        return labels;
+    }
 
     @FXML
     private NavBarController navBarController;
@@ -73,7 +78,7 @@ public class ProfileController implements Initializable {
     @FXML
     private Canvas progressChart;
 
-    private double[] radarValues = {0, 0, 0, 0, 0};
+    private double[] radarValues = new double[RADAR_AXIS_COUNT];
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -113,7 +118,7 @@ public class ProfileController implements Initializable {
             }
         }
         streakLabel.setText("Week " + progress.currentStreak());
-        radarValues = UserProfileService.RadarValues(progress);
+        radarValues = QuizService.ArchetypeScores(QuizService.GetResult());
 
         String archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;
         String personalityType = UserProfileService.UNKNOWN_TYPE;
@@ -252,7 +257,7 @@ public class ProfileController implements Initializable {
         graphics.strokePolygon(xPoints, yPoints, axes);
 
         graphics.setFill(Color.web("#c4b5fd"));
-        graphics.setFont(Font.font("Poppins", 12));
+        graphics.setFont(Font.font("Poppins", 10));
         graphics.setTextAlign(TextAlignment.CENTER);
         for (int axis = 0; axis < axes; axis++) {
             DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);

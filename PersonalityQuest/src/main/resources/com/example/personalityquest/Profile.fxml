@@ -49,7 +49,7 @@
                         </VBox>
 
                         <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="1">
-                            <Label id="progressTitle" styleClass="card-title centered-title" text="Your Progress" />
+                            <Label id="progressTitle" styleClass="card-title centered-title" text="Archetype Balance" />
                             <Canvas fx:id="progressChart" height="280" width="480" />
                         </VBox>
                     </GridPane>

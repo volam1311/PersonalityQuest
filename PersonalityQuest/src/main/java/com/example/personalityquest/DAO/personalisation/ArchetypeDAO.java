@@ -27,7 +27,8 @@ public class ArchetypeDAO {
             valueDeficit TEXT NOT NULL,
             valueDeficitDefinition TEXT NOT NULL,
             valueExcess TEXT NOT NULL,
-            valueExcessDefinition TEXT NOT NULL
+            valueExcessDefinition TEXT NOT NULL,
+            emoji TEXT NOT NULL
             )
             """;
 
@@ -38,7 +39,8 @@ public class ArchetypeDAO {
             InsertArchetype( archetype.getArchetypeId(), archetype.getName(), archetype.getSmallDescription(),
                     archetype.getLongDescription(), archetype.getStrengths(), archetype.getWeaknesses(),
                     archetype.getValue(), archetype.getValueDefinition(), archetype.getValueDeficit(),
-                    archetype.getValueDeficitDefinition(), archetype.getValueExcess(), archetype.getValueExcessDefinition() );
+                    archetype.getValueDeficitDefinition(), archetype.getValueExcess(), archetype.getValueExcessDefinition(),
+                    archetype.getEmoji());
         }
     }
 
@@ -73,14 +75,15 @@ public class ArchetypeDAO {
             String valueDeficit,
             String valueDeficitDefinition,
             String valueExcess,
-            String valueExcessDefinition) throws SQLException{
+            String valueExcessDefinition,
+            String emoji) throws SQLException{
         EnsureTables();
         Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                         INSERT OR IGNORE INTO Archetypes
-                        (archetypeId, name, smallDescription, longDescription, strengths, weaknesses, valueMean, valueMeanDefinition, valueDeficit, valueDeficitDefinition, valueExcess, valueExcessDefinition)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        (archetypeId, name, smallDescription, longDescription, strengths, weaknesses, valueMean, valueMeanDefinition, valueDeficit, valueDeficitDefinition, valueExcess, valueExcessDefinition, emoji)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """)) {
             statement.setInt(1, archetypeID);
             statement.setString(2, name);
@@ -94,6 +97,7 @@ public class ArchetypeDAO {
             statement.setString(10, valueDeficitDefinition);
             statement.setString(11, valueExcess);
             statement.setString(12, valueExcessDefinition);
+            statement.setString(13, emoji);
             statement.executeUpdate();
         }
     }
@@ -126,6 +130,15 @@ public class ArchetypeDAO {
             }
             return archetypes;
         }
+    }
+
+    public static void ResetAndSeedCatalog() throws SQLException{
+        Connection connection = SQLite.getConnection();
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("DROP TABLE IF EXISTS Archetypes");
+        }
+        EnsureTables();
+        SeedCatalog();
     }
 
 

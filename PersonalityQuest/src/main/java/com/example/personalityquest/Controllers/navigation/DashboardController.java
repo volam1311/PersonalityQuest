@@ -5,16 +5,18 @@ import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.Task;
 import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quest.WeeklyTask;
+import com.example.personalityquest.Model.profile.UserProfile;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.Services.navigation.NavigationService;
+import com.example.personalityquest.Services.profile.AchievementService;
 import com.example.personalityquest.Services.profile.StreakService;
+import com.example.personalityquest.Services.profile.UserProfileService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.Services.quest.WeeklyTaskService;
-import com.example.personalityquest.Services.quiz.QuizService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -49,10 +51,17 @@ public class DashboardController implements Initializable {
     private static final double PROGRESS_CARD_PERCENT = 64;
     private static final double DEFAULT_QUEST_PROGRESS = 0.2;
     private static final String DEFAULT_QUEST_PROGRESS_LABEL = "20% Complete";
-    private static final int RADAR_AXIS_COUNT = 4;
+    private static final int RADAR_AXIS_COUNT = 5;
     private static final int RADAR_LEVEL_COUNT = 5;
     private static final double RADAR_CENTER_Y_OFFSET = 8;
-    private static final double RADAR_RADIUS_RATIO = 0.34;
+    private static final double RADAR_RADIUS_RATIO = 0.36;
+    private static final String[] RADAR_LABELS = {
+            "Quest progress",
+            "Weekly tasks",
+            "Streak",
+            "Labours complete",
+            "Tasks finished"
+    };
 
     @FXML
     private NavBarController navBarController;
@@ -82,7 +91,7 @@ public class DashboardController implements Initializable {
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
         ConfigureWeeklyTaskList(weeklyTasks);
         ConfigureQuestTaskList(questTasks);
-        radarValues = QuizService.RealmScores(QuizService.GetResult());
+        radarValues = LoadRadarValues();
 
         dashboardRoot.widthProperty().addListener((observable, oldWidth, newWidth) ->
                 ApplyResponsiveLayout(newWidth.doubleValue()));
@@ -121,6 +130,19 @@ public class DashboardController implements Initializable {
         }
 
         welcomeMessage.setText("Welcome back, " + emailDetails.getFirstName() + "!");
+    }
+
+    private double[] LoadRadarValues() {
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        if (ApplicationManager.isEmpty(email)) {
+            return UserProfileService.RadarValues(UserProfile.empty());
+        }
+
+        try {
+            return UserProfileService.RadarValues(AchievementService.GetProgress(email));
+        } catch (Exception exception) {
+            return UserProfileService.RadarValues(UserProfile.empty());
+        }
     }
 
     private void UpdateStreakLabel() {
@@ -320,7 +342,7 @@ public class DashboardController implements Initializable {
         graphics.setFont(Font.font("Poppins", 12));
         graphics.setTextAlign(TextAlignment.CENTER);
         for (int axis = 0; axis < axes; axis++) {
-            DrawAxisLabel(graphics, QuizService.REALM_LABELS[axis], centerX, centerY, radius, axis, axes);
+            DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);
         }
     }
 
