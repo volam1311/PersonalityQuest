@@ -222,9 +222,11 @@ public class TaskServiceTest {
             }
         }
 
-        assertArrayEquals(new int[] { 201, 202, 203 }, TaskService.GetTaskIdsForLabourWeek(20, 1));
-        assertArrayEquals(new int[] { 204, 201, 202 }, TaskService.GetTaskIdsForLabourWeek(20, 2));
-        assertArrayEquals(new int[] { 201, 202, 203 }, TaskService.GetTaskIdsForLabourWeek(20, 3));
+        assertArrayEquals(new int[] { 201 }, TaskService.GetTaskIdsForLabourWeek(20, 1));
+        assertArrayEquals(new int[] { 202 }, TaskService.GetTaskIdsForLabourWeek(20, 2));
+        assertArrayEquals(new int[] { 203 }, TaskService.GetTaskIdsForLabourWeek(20, 3));
+        assertArrayEquals(new int[] { 204 }, TaskService.GetTaskIdsForLabourWeek(20, 4));
+        assertArrayEquals(new int[] { 201 }, TaskService.GetTaskIdsForLabourWeek(20, 5));
     }
 
     @Test

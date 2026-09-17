@@ -50,6 +50,7 @@ public class UserQuestServiceTest {
                         labourId INT PRIMARY KEY,
                         archetypeId INT NOT NULL,
                         name TEXT NOT NULL,
+                        narrative TEXT NOT NULL DEFAULT '',
                         FOREIGN KEY(archetypeId) REFERENCES Arechtype(archetypeId)
                     )
                     """);
@@ -95,8 +96,8 @@ public class UserQuestServiceTest {
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO Quests
-                        (labourId, archetypeId, name)
-                    VALUES (20, 99, "testQuestName")
+                        (labourId, archetypeId, name, narrative)
+                    VALUES (20, 99, "testQuestName", "")
                     """))
         {
 
@@ -551,13 +552,14 @@ public class UserQuestServiceTest {
         statement.setInt(1, labourId);
         ResultSet rs = statement.executeQuery();
         Quest quest = null;
-//        if (rs.next()){
-//            quest = new Quest(
-//                    rs.getInt("labourId"),
-//                    rs.getInt(("archetypeId")),
-//                    rs.getString("name")
-//            );
-//        }
+        if (rs.next()){
+            quest = new Quest(
+                    rs.getInt("labourId"),
+                    rs.getInt("archetypeId"),
+                    rs.getString("name"),
+                    rs.getString("narrative")
+            );
+        }
 
         System.out.println(quest.getName());
         UserQuest userQuest = UserQuestService.InsertNewQuestForEmail(quest, "test");
@@ -586,16 +588,17 @@ public class UserQuestServiceTest {
         statement.setInt(1, labourId);
         ResultSet rs = statement.executeQuery();
         Quest quest;
-//        if (rs.next()){
-//            quest = new Quest(
-//                    rs.getInt("labourId"),
-//                    rs.getInt(("archetypeId")),
-//                    rs.getString("name")
-//            );
-//        } else {
-//            quest = null;
-//        }
-        
-        //assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.InsertNewQuestForEmail(quest, null));
+        if (rs.next()){
+            quest = new Quest(
+                    rs.getInt("labourId"),
+                    rs.getInt("archetypeId"),
+                    rs.getString("name"),
+                    rs.getString("narrative")
+            );
+        } else {
+            quest = null;
+        }
+
+        assertThrowsExactly(IllegalArgumentException.class, () -> UserQuestService.InsertNewQuestForEmail(quest, null));
     }
 }

@@ -50,6 +50,7 @@ public class QuestServiceTest {
                         labourId INT PRIMARY KEY,
                         archetypeId INT NOT NULL,
                         name TEXT NOT NULL,
+                        narrative TEXT NOT NULL DEFAULT '',
                         FOREIGN KEY(archetypeId) REFERENCES Arechtype(archetypeId)
                     )
                     """);
@@ -82,8 +83,8 @@ public class QuestServiceTest {
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO Quests
-                        (labourId, archetypeId, name)
-                    VALUES (20, 99, "testQuestName")
+                        (labourId, archetypeId, name, narrative)
+                    VALUES (20, 99, "testQuestName", "")
                     """))
         {
 
@@ -93,8 +94,8 @@ public class QuestServiceTest {
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO Quests
-                        (labourId, archetypeId, name)
-                    VALUES (21, 99, "testQuestName2")
+                        (labourId, archetypeId, name, narrative)
+                    VALUES (21, 99, "testQuestName2", "")
                     """))
         {
 
