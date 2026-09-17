@@ -20,6 +20,8 @@ import java.util.Set;
 public class WeeklyTaskDAO {
     private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
 
+    private final static int FALLBACK_WEEKLY_LABOUR_ID = 1;
+
     private final static String SQL_UPDATE_DRAFT = """
             UPDATE WeeklyTasks
             SET reflection = ?, status = 'Started'
@@ -127,10 +129,18 @@ public class WeeklyTaskDAO {
                 taskIds = TaskService.GetRandomAmountOfTaskIdsForLabourId(currentActiveQuest.getLabourId());
             }
 
+            if (taskIds.length == 0 && currentActiveQuest.getLabourId() != FALLBACK_WEEKLY_LABOUR_ID) {
+                // Use default tasks for Archetype 1
+                taskIds = TaskService.GetTaskIdsForLabourWeek(FALLBACK_WEEKLY_LABOUR_ID, weekNumber);
+                if (taskIds.length == 0) {
+                    taskIds = TaskService.GetRandomAmountOfTaskIdsForLabourId(FALLBACK_WEEKLY_LABOUR_ID);
+                }
+            }
+
             int[] uniqueTaskIds = uniquePositiveIds(taskIds);
             if (uniqueTaskIds.length == 0) {
                 throw new Exception("Not Full Amount of Tasks where generated instead only "
-                        + taskIds.length + " where generated when the expecting was " + AMOUNT_OF_TASKS);
+                        + taskIds.length + " where expected ");
             }
 
             InsertWeeklyTaskRows(email, uniqueTaskIds, weekStart);
