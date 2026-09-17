@@ -25,10 +25,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
@@ -37,6 +40,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -47,7 +51,7 @@ public class ProfileController implements Initializable {
     private static final double HIDDEN_PERCENT = 0;
     private static final double IDENTITY_CARD_PERCENT = 32;
     private static final double PROGRESS_CARD_PERCENT = 68;
-    private static final int ACHIEVEMENT_COLUMNS = 5;
+    private static final int DEFAULT_ACHIEVEMENT_COLUMNS = 4;
     private static final int RADAR_AXIS_COUNT = Archetype.values().length;
     private static final int RADAR_LEVEL_COUNT = 5;
     private static final double RADAR_CENTER_Y_OFFSET = 8;
@@ -72,18 +76,20 @@ public class ProfileController implements Initializable {
     @FXML
     private VBox progressCard;
     @FXML
-    private Label displayNameLabel, personalityTypeLabel, streakLabel, typeBadge;
+    private Label displayNameLabel, personalityTypeLabel, streakLabel, typeBadge,
+            achievementSummaryLabel;
     @FXML
     private Button archetypeLink, archetypeBadge;
     @FXML
     private Canvas progressChart;
 
     private double[] radarValues = new double[RADAR_AXIS_COUNT];
+    private List<Achievement> achievements = List.of();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);
-        ConfigureAchievementsGrid();
+        ConfigureAchievementsGrid(DEFAULT_ACHIEVEMENT_COLUMNS);
         LoadProfile();
 
         profileRoot.widthProperty().addListener((observable, oldWidth, newWidth) ->
@@ -151,17 +157,19 @@ public class ProfileController implements Initializable {
         archetypeBadge.setText(archetypeName);
 
         try {
-            PopulateAchievements(AchievementService.GetAchievementsForEmail(email));
+            achievements = AchievementService.GetAchievementsForEmail(email);
+            PopulateAchievements(achievements);
         } catch (Exception ignored) {
+            achievements = List.of();
             PopulateAchievements(List.of());
         }
     }
 
-    private void ConfigureAchievementsGrid() {
+    private void ConfigureAchievementsGrid(int columnCount) {
         achievementsGrid.getColumnConstraints().clear();
-        for (int column = 0; column < ACHIEVEMENT_COLUMNS; column++) {
+        for (int column = 0; column < columnCount; column++) {
             ColumnConstraints constraints = new ColumnConstraints();
-            constraints.setPercentWidth(FULL_PERCENT / ACHIEVEMENT_COLUMNS);
+            constraints.setPercentWidth(FULL_PERCENT / columnCount);
             constraints.setHgrow(Priority.ALWAYS);
             achievementsGrid.getColumnConstraints().add(constraints);
         }
@@ -169,32 +177,110 @@ public class ProfileController implements Initializable {
 
     private void PopulateAchievements(List<Achievement> achievements) {
         achievementsGrid.getChildren().clear();
+        long unlockedCount = achievements.stream()
+                .filter(Achievement::unlocked)
+                .count();
+        achievementSummaryLabel.setText(
+                unlockedCount + " of " + achievements.size() + " unlocked"
+        );
+
+        int columnCount = Math.max(1, achievementsGrid.getColumnConstraints().size());
 
         for (int index = 0; index < achievements.size(); index++) {
             Achievement achievement = achievements.get(index);
-            StackPane badge = new StackPane();
-            badge.getStyleClass().add("achievement-badge");
+            VBox badge = new VBox(8);
+            badge.setAlignment(Pos.TOP_CENTER);
+            badge.getStyleClass().add("achievement-card");
             if (achievement.unlocked()) {
                 badge.getStyleClass().add("unlocked");
             } else {
                 badge.getStyleClass().add("locked");
             }
 
-            SVGPath star = new SVGPath();
-            star.setContent("M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z");
-            star.setStyle("-fx-fill: #ff8a3d;");
-            star.getStyleClass().add("achievement-star");
-            badge.getChildren().add(star);
-            StackPane.setAlignment(star, Pos.CENTER);
+            StackPane iconHolder = new StackPane();
+            iconHolder.getStyleClass().add("achievement-icon-holder");
+
+            ImageView imageIcon = LoadAchievementIcon(achievement);
+            if (imageIcon != null) {
+                iconHolder.getChildren().add(imageIcon);
+            } else {
+                iconHolder.getChildren().add(CreateFallbackIcon());
+            }
+
+            Label nameLabel = new Label(achievement.name());
+            nameLabel.getStyleClass().add("achievement-name");
+            nameLabel.setWrapText(true);
+            nameLabel.setMaxWidth(Double.MAX_VALUE);
+
+            Label levelLabel = new Label(achievement.unlocked()
+                    ? "Level " + achievement.level()
+                    : "Locked");
+            levelLabel.getStyleClass().add("achievement-level");
+
+            Region contentSpacer = new Region();
+            VBox.setVgrow(contentSpacer, Priority.ALWAYS);
+
+            Label descriptionLabel = new Label(achievement.unlocked()
+                    ? achievement.description()
+                    : "Locked");
+            descriptionLabel.getStyleClass().add("achievement-description");
+            descriptionLabel.setWrapText(true);
+            descriptionLabel.setMaxWidth(Double.MAX_VALUE);
+
+            badge.getChildren().addAll(
+                    iconHolder,
+                    contentSpacer,
+                    nameLabel,
+                    levelLabel,
+                    descriptionLabel
+            );
 
             Tooltip.install(badge, new Tooltip(achievement.name() + "\n" + achievement.description()));
-            achievementsGrid.add(badge, index % ACHIEVEMENT_COLUMNS, index / ACHIEVEMENT_COLUMNS);
+            achievementsGrid.add(badge, index % columnCount, index / columnCount);
         }
+    }
+
+    private ImageView LoadAchievementIcon(Achievement achievement) {
+        String resourcePath = IconPathForLevel(achievement.level());
+
+        try (InputStream stream = ProfileController.class.getResourceAsStream(resourcePath)) {
+            if (stream == null) {
+                return null;
+            }
+
+            ImageView imageView = new ImageView(new Image(stream));
+            imageView.setFitWidth(140);
+            imageView.setFitHeight(140);
+            imageView.setPreserveRatio(true);
+            imageView.getStyleClass().add("achievement-icon-image");
+            return imageView;
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    private SVGPath CreateFallbackIcon() {
+        SVGPath star = new SVGPath();
+        star.setContent("M12 17.27L18.18 21l-1.64-7.03L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z");
+        star.getStyleClass().add("achievement-fallback-icon");
+        return star;
     }
 
     private void ApplyResponsiveLayout(double width) {
         if (width <= 0) {
             return;
+        }
+
+        int achievementColumns = width < 600
+                ? 1
+                : width < 850
+                ? 2
+                : width < 1050
+                ? 3
+                : DEFAULT_ACHIEVEMENT_COLUMNS;
+        if (achievementsGrid.getColumnConstraints().size() != achievementColumns) {
+            ConfigureAchievementsGrid(achievementColumns);
+            PopulateAchievements(achievements);
         }
 
         boolean stacked = width < STACKED_BREAKPOINT;
@@ -300,5 +386,15 @@ public class ProfileController implements Initializable {
     @FXML
     private void OnArchetypeClick() throws IOException {
         NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);
+    }
+
+    private String IconPathForLevel(int level) {
+        return switch (level) {
+            case 1 -> "/com/example/personalityquest/img/achievements/shield-bronze-8.png";
+            case 2 -> "/com/example/personalityquest/img/achievements/shield-silver-8.png";
+            case 3 -> "/com/example/personalityquest/img/achievements/shield-gold-9.png";
+            case 4 -> "/com/example/personalityquest/img/achievements/shield-platinum-12.png";
+            default -> "/com/example/personalityquest/img/achievements/shield-bronze-8.png";
+        };
     }
 }

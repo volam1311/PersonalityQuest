@@ -28,7 +28,7 @@ public class AchievementService {
 
     /**
      * Loads streak, quest, and weekly-task totals for an account.
-     * Current streak uses {@link StreakService} so missed days match the rest of the app.
+     * Current streak uses {@link StreakService} so missed weeks match the rest of the app.
      */
     public static UserProfile GetProgress(String email) throws SQLException {
         if (ApplicationManager.isEmpty(email)) {
@@ -89,25 +89,22 @@ public class AchievementService {
 
     private static void EnsureCatalog() throws SQLException {
         AchievementDAO.EnsureTables();
-        if (AchievementDAO.HasCatalog()) {
-            return;
-        }
 
-        Insert(1, "Signed in", "Create an account and open your profile", CRITERIA_ACCOUNT, 1);
-        Insert(2, "First spark", "Record a completion and start a streak", CRITERIA_CURRENT_STREAK, 1);
-        Insert(3, "Three-day flame", "Reach a 3-day streak", CRITERIA_BEST_STREAK, 3);
-        Insert(4, "Week warrior", "Reach a 7-day streak", CRITERIA_BEST_STREAK, 7);
-        Insert(5, "Fortnight fire", "Reach a 14-day streak", CRITERIA_BEST_STREAK, 14);
-        Insert(6, "Personal best", "Hold a best streak of 7 days", CRITERIA_BEST_STREAK, 7);
-        Insert(7, "Task started", "Finish a weekly task", CRITERIA_FINISHED_TASKS, 1);
-        Insert(8, "Week complete", "Finish every weekly task this week", CRITERIA_WEEK_COMPLETE, 1);
-        Insert(9, "Quest accepted", "Have a quest assigned", CRITERIA_ASSIGNED_QUESTS, 1);
-        Insert(10, "On the path", "Reach 20% on a quest", CRITERIA_QUEST_PROGRESS, 0.2);
-        Insert(11, "Halfway hero", "Reach 50% on a quest", CRITERIA_QUEST_PROGRESS, 0.5);
-        Insert(12, "Labour complete", "Finish a quest", CRITERIA_COMPLETED_QUESTS, 1);
-        Insert(13, "Two labours", "Take on two quests", CRITERIA_ASSIGNED_QUESTS, 2);
-        Insert(14, "Triple threat", "Complete three quests", CRITERIA_COMPLETED_QUESTS, 3);
-        Insert(15, "Legend", "Reach a 21-day best streak", CRITERIA_BEST_STREAK, 21);
+        Insert(1, "Signed in", "Create an account and open your profile", CRITERIA_ACCOUNT, 1, 1);
+        Insert(2, "First spark", "Record a completion and start a streak", CRITERIA_CURRENT_STREAK, 1, 1);
+        Insert(3, "Three-week flame", "Reach a 3-week streak", CRITERIA_BEST_STREAK, 3, 2);
+        Insert(4, "Week warrior", "Reach a 7-week streak", CRITERIA_BEST_STREAK, 7, 3);
+        Insert(5, "Fortnight fire", "Reach a 14-week streak", CRITERIA_BEST_STREAK, 14, 4);
+        Insert(6, "Personal best", "Hold a best streak of 7 weeks", CRITERIA_BEST_STREAK, 7, 3);
+        Insert(7, "Task started", "Finish a weekly task", CRITERIA_FINISHED_TASKS, 1, 1);
+        Insert(8, "Week complete", "Finish every weekly task this week", CRITERIA_WEEK_COMPLETE, 1, 1);
+        Insert(9, "Quest accepted", "Have a quest assigned", CRITERIA_ASSIGNED_QUESTS, 1, 1);
+        Insert(10, "On the path", "Reach 20% on a quest", CRITERIA_QUEST_PROGRESS, 0.2, 1);
+        Insert(11, "Halfway hero", "Reach 50% on a quest", CRITERIA_QUEST_PROGRESS, 0.5, 2);
+        Insert(12, "Labour complete", "Finish a quest", CRITERIA_COMPLETED_QUESTS, 1, 3);
+        Insert(13, "Two labours", "Take on two quests", CRITERIA_ASSIGNED_QUESTS, 2, 2);
+        Insert(14, "Triple threat", "Complete three quests", CRITERIA_COMPLETED_QUESTS, 3, 3);
+        Insert(15, "Legend", "Reach a 21-week best streak", CRITERIA_BEST_STREAK, 21, 4);
     }
 
     private static void Insert(
@@ -115,7 +112,8 @@ public class AchievementService {
             String name,
             String description,
             String criteriaType,
-            double threshold) throws SQLException {
-        AchievementDAO.InsertAchievement(achievementId, name, description, criteriaType, threshold);
+            double threshold,
+            int level) throws SQLException {
+        AchievementDAO.InsertAchievement(achievementId, name, description, criteriaType, threshold, level);
     }
 }
