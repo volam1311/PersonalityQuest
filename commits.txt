@@ -1,180 +1,207 @@
-633049c was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789424058, 22 minutes ago, message: Presentation Slides for Week 9 Checkpoint
-91e862a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789386169, 11 hours ago, message: Merge pull request #157 from volam1311/documentation/meeting
-d0a4ae0 was Lam (vophuclam1311@gmail.com), 1789386100, 11 hours ago, message: documentation: Refine meeting summaries for first submission
-5af62c7 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789384163, 11 hours ago, message: Merge pull request #156 from volam1311/documentation/meeting
-9906fbf was Lam (vophuclam1311@gmail.com), 1789384100, 11 hours ago, message: documentation: Add summary for week 9 meeting
-23147c9 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789379438, 13 hours ago, message: Merge pull request #155 from volam1311/refactor/domain
-26bd663 was Lam (vophuclam1311@gmail.com), 1789379380, 13 hours ago, message: refactor: Split model, services, applications, tests into domains
-213a931 was Daniel (dfitt10@gmail.com), 1789374395, 14 hours ago, message: Fixed a typo
-a455338 was Daniel (dfitt10@gmail.com), 1789374160, 14 hours ago, message: Merge branch 'archetype-quiz' into dev
-c0d1037 was Daniel (dfitt10@gmail.com), 1789373778, 14 hours ago, message: Added associated Archetype Value and Skill
-8869dfa was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789371933, 15 hours ago, message: fixed typo in streakservice helper function
-5f320dc was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789371694, 15 hours ago, message: fixed streak service test to be weekly instead of daily
-dd7787e was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789371015, 15 hours ago, message: Merge branch 'dev' of https://github.com/volam1311/PersonalityQuest into dev
-750c271 was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789370773, 15 hours ago, message: Updated streaks to be weekly instead of daily
-1869aea was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789370543, 15 hours ago, message: Merge pull request #153 from volam1311/hotfix/task
-e65e6dc was Lam (vophuclam1311@gmail.com), 1789370475, 15 hours ago, message: fix: Fix the changes on the UI of task and quest
-a226181 was Lam (vophuclam1311@gmail.com), 1789370387, 15 hours ago, message: fix: Fix the tests for task services
-6d24715 was Lam (vophuclam1311@gmail.com), 1789370369, 15 hours ago, message: fix: Modify the task services
-ca50cfa was Lam (vophuclam1311@gmail.com), 1789370311, 15 hours ago, message: fix: Add type of task
-740dee7 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789340548, 24 hours ago, message: Merge pull request #149 from volam1311/fix/context
-119cc0e was Lam (vophuclam1311@gmail.com), 1789340494, 24 hours ago, message: fix: Fix the assignment of task weekly
-9e7a07d was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789339163, 24 hours ago, message: Merge pull request #148 from volam1311/fix/context
-0a59424 was Lam (vophuclam1311@gmail.com), 1789339107, 24 hours ago, message: fix: Fix the content of the quest task
-f433ffc was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789305154, 33 hours ago, message: Merge pull request #147 from volam1311/feat/AI_feedback
-e35e6de was Lam (vophuclam1311@gmail.com), 1789305077, 33 hours ago, message: feat: Build UI for AI feedback
-1c629c1 was Lam (vophuclam1311@gmail.com), 1789305062, 33 hours ago, message: feat: Build services for AI feedback
-52330bb was Lam (vophuclam1311@gmail.com), 1789305026, 33 hours ago, message: Add .gitignore and import modules
-48e407b was Lam (vophuclam1311@gmail.com), 1789304997, 33 hours ago, message: feat: Add .env loader for API key
-84ebc43 was Lam (vophuclam1311@gmail.com), 1789304914, 33 hours ago, message: feat: Get reflection context for AI feedback
-9748fe4 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789302628, 34 hours ago, message: Merge pull request #146 from volam1311/fix/task_service
-cf52399 was Lam (vophuclam1311@gmail.com), 1789302409, 34 hours ago, message: fix: Fix the task UI and service
-52869b0 was OpineDev (devopine@gmail.com), 1789299888, 35 hours ago, message: Merge branch 'dev' of https://github.com/volam1311/Team-Champions---CAB302 into dev
-baa196f was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789299584, 35 hours ago, message: Merge pull request #144 from volam1311/test/quiz_service
-c985c13 was Lam (vophuclam1311@gmail.com), 1789299452, 35 hours ago, message: test: Add test for quiz service
-6240977 was OpineDev (devopine@gmail.com), 1789299400, 35 hours ago, message: documented possible AI apis to implement
-4a150d3 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789298187, 35 hours ago, message: Merge pull request #142 from volam1311/feat/Quiz
-95ff76f was Lam (vophuclam1311@gmail.com), 1789298118, 35 hours ago, message: feat: Develop the quiz service and add route for quiz page
-4c5ed4b was Lam (vophuclam1311@gmail.com), 1789298037, 35 hours ago, message: feat: Develop the DAO and service of quiz
-0ea97ab was Lam (vophuclam1311@gmail.com), 1789297988, 35 hours ago, message: feat: Add style sheets for quiz page
-b748406 was Lam (vophuclam1311@gmail.com), 1789297969, 35 hours ago, message: feat: Build the UI of quiz page
-be9451e was OpineDev (devopine@gmail.com), 1789296844, 2 days ago, message: Merge remote-tracking branch 'origin/dev' into dev
-c205519 was OpineDev (devopine@gmail.com), 1789296801, 2 days ago, message: Merge branch 'feature/archetype-ui' into dev
-ae875ed was OpineDev (devopine@gmail.com), 1789296724, 2 days ago, message: Add UserProfileService tests
-bcb4126 was OpineDev (devopine@gmail.com), 1789296619, 2 days ago, message: add archetype ui and fix bugs
-3ada710 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789296343, 2 days ago, message: Merge pull request #141 from volam1311/feat/model
-59aedb8 was Lam (vophuclam1311@gmail.com), 1789296274, 2 days ago, message: feat: Develop the quiz result model
-19f8124 was Lam (vophuclam1311@gmail.com), 1789296239, 2 days ago, message: feat: Develop the quiz and option
-0aa0c7c was Lam (vophuclam1311@gmail.com), 1789296143, 2 days ago, message: feat: Develop the archetype model
-c8ffc20 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789283271, 2 days ago, message: Merge pull request #140 from volam1311/feat/Profile_Services
-5ea9078 was Lam (vophuclam1311@gmail.com), 1789283223, 2 days ago, message: feat: Build DAO and services for profile
-1fd4893 was Lam (vophuclam1311@gmail.com), 1789283189, 2 days ago, message: feat: Development Achivement model
-6d0a470 was Lam (vophuclam1311@gmail.com), 1789283177, 2 days ago, message: feat: Add model UserProfile as record
-61f26ed was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789283017, 2 days ago, message: Merge pull request #139 from volam1311/feat/Profile_UI
-6f4266c was Lam (vophuclam1311@gmail.com), 1789282955, 2 days ago, message: feat: Fix the route from navigation bar
-eae4d23 was Lam (vophuclam1311@gmail.com), 1789282896, 2 days ago, message: feat: Build controller and application for Profile
-c1f77f3 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789282666, 2 days ago, message: Merge pull request #138 from volam1311/feat/Profile_UI
-389b88c was Lam (vophuclam1311@gmail.com), 1789282455, 2 days ago, message: feat: Add style sheets for Profile page
-294d66f was Lam (vophuclam1311@gmail.com), 1789282440, 2 days ago, message: feat: Develop the Profile UI
-49f4ead was Kappikin (thisisthefinalliamkorver@gmail.com), 1789282008, 2 days ago, message: Merge pull request #136 from volam1311/TotalQuestsCompleted
-35be0f5 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789281833, 2 days ago, message: Wrote tests for new streakService and DAO functions
-4ba5ea9 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789280899, 2 days ago, message: Added Way to update total quest completed
-9905050 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789280477, 2 days ago, message: Merge pull request #135 from volam1311/feat/Nav_Bar
-713d6da was Lam (vophuclam1311@gmail.com), 1789280343, 2 days ago, message: feat: Add controller for navigation bar
-2b2d92a was Lam (vophuclam1311@gmail.com), 1789280323, 2 days ago, message: feat: Add style sheets for logout button
-a0ce2a9 was Lam (vophuclam1311@gmail.com), 1789280266, 2 days ago, message: feat: Add log out button for nav bar
-4026879 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789278909, 2 days ago, message: Added basic completion for a weeks tasks
-f47beb0 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789276427, 2 days ago, message: Merge pull request #133 from volam1311/TaskService
-856d25b was Kappikin (thisisthefinalliamkorver@gmail.com), 1789270095, 2 days ago, message: Wrote tests for new service
-f645b61 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789186682, 3 days ago, message: Merge pull request #132 from volam1311/documentation/presentation
-6b39605 was Lam (vophuclam1311@gmail.com), 1789186631, 3 days ago, message: documentation: Add links and slides for Week 9 presentation
-c871f98 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789182042, 3 days ago, message: Merge pull request #131 from volam1311/New-Refactoring
-5113b0f was Kappikin (thisisthefinalliamkorver@gmail.com), 1789181786, 3 days ago, message: Centralized Navigation Between Screens to one service
-26a3ac4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789179559, 3 days ago, message: Added UpdateAccountDetails Function to AccountDAO
-40ae4c6 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789179291, 3 days ago, message: Combined EmailDAO and PasswordDAO in AccountDAO then refactored code from this update
-c3e374d was OpineDev (devopine@gmail.com), 1789127395, 3 days ago, message: Merge test/streaks into dev
-f8c7fbc was OpineDev (devopine@gmail.com), 1789127176, 3 days ago, message: test: add streak service and DAO tests
-cc919c4 was OpineDev (devopine@gmail.com), 1789124522, 4 days ago, message: Merge feature/streaks into dev
-c0eff82 was OpineDev (devopine@gmail.com), 1789124392, 4 days ago, message: Split StreakManager into StreakDAO, StreakService, and StreakProgress model
-fa52213 was OpineDev (devopine@gmail.com), 1789123906, 4 days ago, message: Split StreakManager into StreakDAO, StreakService, and StreakProgress model
-ea82ad3 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789113867, 4 days ago, message: Merge pull request #129 from volam1311/feat/UI_task
-6294a59 was Lam (vophuclam1311@gmail.com), 1789113788, 4 days ago, message: feat: Add route to Task page #10
-6adaf1e was Lam (vophuclam1311@gmail.com), 1789113754, 4 days ago, message: feat: Build the Task application
-2c9602d was Lam (vophuclam1311@gmail.com), 1789113718, 4 days ago, message: feat: Add style sheets for Task page #10
-bd0f4b8 was Lam (vophuclam1311@gmail.com), 1789113698, 4 days ago, message: feat: Develop the UI of task page
-2b53dc0 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789083901, 4 days ago, message: Merge pull request #128 from volam1311/chore/folder
-f99f82d was Lam (vophuclam1311@gmail.com), 1789083837, 4 days ago, message: chore: Add README description for the project
-d9053bd was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789078545, 4 days ago, message: Merge pull request #127 from volam1311/refactor/navbar
-53582a2 was Lam (vophuclam1311@gmail.com), 1789078445, 4 days ago, message: refactor: Injec the new navbar navigation into controllers
-5190ee7 was Lam (vophuclam1311@gmail.com), 1789078409, 4 days ago, message: refactor: Inject the navbar into other pages UI
-5a5bf82 was Lam (vophuclam1311@gmail.com), 1789078358, 4 days ago, message: refactor: Move all route to navbar controller
-a65beea was Lam (vophuclam1311@gmail.com), 1789078298, 4 days ago, message: refactor: Fix the UI of navigation
-5d5f035 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789013663, 5 days ago, message: Merge pull request #124 from volam1311/feat/UI_quest
-d0bc43b was Lam (vophuclam1311@gmail.com), 1789013550, 5 days ago, message: feat: Add route in navbar for different pages
-c26c334 was Lam (vophuclam1311@gmail.com), 1789013492, 5 days ago, message: feat: Update data access layer for quest
-2160111 was Lam (vophuclam1311@gmail.com), 1789013444, 5 days ago, message: feat: Update the services of quest
-44b955e was Lam (vophuclam1311@gmail.com), 1789013409, 5 days ago, message: feat: Add example of quests
-9c98138 was Lam (vophuclam1311@gmail.com), 1789013357, 5 days ago, message: feat: Build the UI of the quest page
-60b9104 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789011874, 5 days ago, message: Merge pull request #123 from volam1311/Refactoring
-5af245f was Kappikin (thisisthefinalliamkorver@gmail.com), 1789011795, 5 days ago, message: Fixed JavaDoc crash
-65e11cd was Kappikin (thisisthefinalliamkorver@gmail.com), 1789011533, 5 days ago, message: EmailManager is now Seperated into DAO and Service
-926aad2 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789011338, 5 days ago, message: PasswordManager is seperated in DAO and Service
-d833bfa was Kappikin (thisisthefinalliamkorver@gmail.com), 1789010816, 5 days ago, message: TaskManager and QuestManager seperated into DAO and Service
-f3d5843 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789009939, 5 days ago, message: UserQuestManager is now separated into DAO and Service
-fcdfe0c was Kappikin (thisisthefinalliamkorver@gmail.com), 1789009200, 5 days ago, message: WeeklyTaskManager Serperated into Service and DAO
-28ff1d1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789005605, 5 days ago, message: Made System Manager's current email private with getters and setters
-c0786ea was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788929780, 6 days ago, message: Merge pull request #122 from volam1311/fix/model
-dd49839 was Lam (vophuclam1311@gmail.com), 1788929720, 6 days ago, message: fix: Add fix for User model
-8b420be was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788929652, 6 days ago, message: Merge pull request #121 from volam1311/test/dao
-7a7b122 was Lam (vophuclam1311@gmail.com), 1788929600, 6 days ago, message: test: Add tests for User data access #120
-bb066a0 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788929208, 6 days ago, message: Merge pull request #119 from volam1311/feat/DAO
-218de06 was Lam (vophuclam1311@gmail.com), 1788929150, 6 days ago, message: feat: Add data access layer for User
-428760b was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788927582, 6 days ago, message: Merge pull request #118 from volam1311/fix/UI_symbols
-dcba97b was Lam (vophuclam1311@gmail.com), 1788927514, 6 days ago, message: fix: Fix the symbols and fonts
-886621a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788926503, 6 days ago, message: Merge pull request #117 from volam1311/refactor/model_comments
-b0ea6c2 was Lam (vophuclam1311@gmail.com), 1788926421, 6 days ago, message: refactor: Add comments for User in model
-d037e3b was Kappikin (thisisthefinalliamkorver@gmail.com), 1788845891, 7 days ago, message: Merge pull request #116 from volam1311/WeeklyTasks
-d1bf6fd was Kappikin (thisisthefinalliamkorver@gmail.com), 1788845764, 7 days ago, message: Fixed Test Failures
-5e84fb2 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788845313, 7 days ago, message: Updatedd Default Systemmanager Width and Height
-b9a6edc was Kappikin (thisisthefinalliamkorver@gmail.com), 1788844873, 7 days ago, message: Commented Classes
-7c96eaa was Kappikin (thisisthefinalliamkorver@gmail.com), 1788844377, 7 days ago, message: Wrote Comments for all managers
-ed66238 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788840325, 7 days ago, message: Added Randomly Generated tasks depending on the quiz you have
-88df26b was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788831153, 7 days ago, message: Merge pull request #114 from volam1311/fix/gh_pages
-ae41a4f was Lam (vophuclam1311@gmail.com), 1788831061, 7 days ago, message: fix: Add permissions when running deployment
-7a9325c was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788830677, 7 days ago, message: Merge pull request #113 from volam1311/fix/gh_pages
-ccd4a81 was Lam (vophuclam1311@gmail.com), 1788830634, 7 days ago, message: fix: Fix the github actions for javadoc
-563de6b was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788830347, 7 days ago, message: Merge pull request #112 from volam1311/chore/gh_pages
-d5091f3 was Lam (vophuclam1311@gmail.com), 1788830289, 7 days ago, message: chore: Pipeline for Javadoc
-9b84a74 was Lam (vophuclam1311@gmail.com), 1788780796, 7 days ago, message: dev: Update all the commits in week 7
-708aa9c was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788780609, 7 days ago, message: Merge pull request #110 from volam1311/chore/folder
-3b9f477 was Lam (vophuclam1311@gmail.com), 1788780552, 7 days ago, message: chore: Restructure the folders and files
-4bf4ce5 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788610697, 9 days ago, message: Merge pull request #109 from volam1311/feat/UI_Settings
-862b12e was Lam (vophuclam1311@gmail.com), 1788610582, 9 days ago, message: feat: Add link to the dashboard
-20c57ea was Lam (vophuclam1311@gmail.com), 1788610562, 9 days ago, message: feat: Add the controller and application layer
-802343d was Lam (vophuclam1311@gmail.com), 1788610467, 9 days ago, message: feat: Add the style sheet for Settings
-8b4db20 was Lam (vophuclam1311@gmail.com), 1788610407, 9 days ago, message: feat: Develop the skeleton of Settings
-477965c was Kappikin (thisisthefinalliamkorver@gmail.com), 1788593533, 10 days ago, message: Merge pull request #106 from volam1311/QuestManager
-65b1f1e was Kappikin (thisisthefinalliamkorver@gmail.com), 1788593420, 10 days ago, message: Wrote Edge case tests
-37e50de was Kappikin (thisisthefinalliamkorver@gmail.com), 1788406823, 12 days ago, message: Merge pull request #105 from volam1311/QuestManager
-94c7f46 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788406670, 12 days ago, message: Added the link from backend to dashboard frontend.
-f68703c was Kappikin (thisisthefinalliamkorver@gmail.com), 1788406026, 12 days ago, message: Updated Functions and tests to throw exceptions
-a240779 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788405362, 12 days ago, message: Wrote Tests for user quest manager
-bb5d48d was Kappikin (thisisthefinalliamkorver@gmail.com), 1788400088, 12 days ago, message: Made Quest manager functions and updated tests
-2f0f9ca was Kappikin (thisisthefinalliamkorver@gmail.com), 1788348000, 12 days ago, message: Merge pull request #104 from volam1311/QuestManager
-6689632 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788347925, 12 days ago, message: Made test to return null instead of expetions due to github crashing the build
-92ed9e6 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788347586, 12 days ago, message: Merge pull request #103 from volam1311/QuestManager
-bfe4698 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788347309, 12 days ago, message: Wrote Test For Unimplemented Quest Manager
-153002c was Kappikin (thisisthefinalliamkorver@gmail.com), 1788344316, 13 days ago, message: Started Writing some tests for the user quests
-998833c was Kappikin (thisisthefinalliamkorver@gmail.com), 1788342023, 13 days ago, message: Updated Managers and made blank tests
-be933c4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788341088, 13 days ago, message: Made the outlines of the quest manager and the data classes
-4dc104c was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788302245, 13 days ago, message: Merge pull request #100 from volam1311/fix/cicd_pipeline
-70613ab was Lam (vophuclam1311@gmail.com), 1788302197, 13 days ago, message: fix: Add the working directory for CICD pipeline
-159524a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788301770, 13 days ago, message: Merge pull request #99 from volam1311/chore/cicd_pipeline
-d57700e was Lam (vophuclam1311@gmail.com), 1788301718, 13 days ago, message: chore: Build CICD pipleine for application
+7d988da was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789643134, 25 hours ago, message: Merge pull request #166 from volam1311/fix/user_quest
+0d8f382 was Lam (vophuclam1311@gmail.com), 1789642372, 26 hours ago, message: fix: Fix the GitHub Actions failure
+9e1dd73 was Daniel (dfitt10@gmail.com), 1789641628, 26 hours ago, message: Merge branch 'personality-quiz' into dev
+37d590e was Daniel (dfitt10@gmail.com), 1789641609, 26 hours ago, message: added database
+c1249db was Daniel (dfitt10@gmail.com), 1789641485, 26 hours ago, message: Updated UI and DAO to alignment
+1c4b07e was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789624403, 31 hours ago, message: Revamped achievements
+870379c was Daniel (dfitt10@gmail.com), 1789622068, 31 hours ago, message: Overhauled Archetype results and home page Ui
+9a8b322 was Daniel (dfitt10@gmail.com), 1789615965, 33 hours ago, message: Updated Quiz service and archetype controller to display results correctly. Added an Emoji placeholder for the archetype image
+3433f4e was Daniel (dfitt10@gmail.com), 1789560905, 2 days ago, message: Handled archetype quiz frontend Ui
+15e21f4 was Daniel (dfitt10@gmail.com), 1789552881, 2 days ago, message: Updated mock QuizController and QuizService to work with full Archetype Questions list
+629dd82 was Daniel (dfitt10@gmail.com), 1789549016, 2 days ago, message: Added OptionDAO and Updated Question DAO. Modified Option and Question class to align with new DAO methods. Populated full option and question data
+eb03a64 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789529539, 2 days ago, message: Merge pull request #163 from volam1311/FriendsService
+af3478a was Kappikin (thisisthefinalliamkorver@gmail.com), 1789529408, 2 days ago, message: Commented Functions
+1e7ce53 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789528976, 2 days ago, message: Made a DB table for Friends
+7bc37c8 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789528589, 2 days ago, message: Implemented FriendService and its DAO for Green Tests
+a3c33f1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789527056, 2 days ago, message: TDD: Created Tests For Not Yet implemented FriendsService
+49c0b4f was Daniel (dfitt10@gmail.com), 1789452983, 3 days ago, message: Updated Archetype Class to work with new Archetype DAO and populate Database
+172cba0 was Daniel (dfitt10@gmail.com), 1789451224, 3 days ago, message: Added record class to get from Database
+de0ba86 was Daniel (dfitt10@gmail.com), 1789451203, 3 days ago, message: Completed Archetype records
+2f24b49 was Daniel (dfitt10@gmail.com), 1789451177, 3 days ago, message: Added database initialisation and get catalog
+808e202 was Daniel (dfitt10@gmail.com), 1789445471, 3 days ago, message: Merge branch 'dev' of https://github.com/volam1311/Team-Champions---CAB302 into dev
+6ddae75 was Daniel (dfitt10@gmail.com), 1789445434, 3 days ago, message: Updated Java Class to include full definitions
+cfec89a was Daniel (dfitt10@gmail.com), 1789445386, 3 days ago, message: Reformated DAO with new fields to align with Java Class
+08f3947 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789427111, 4 days ago, message: Merge pull request #160 from volam1311/fix/route
+949f2f6 was Lam (vophuclam1311@gmail.com), 1789426958, 4 days ago, message: fix: Fix the route for Weekly Task Reflection
+a8262cd was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789425472, 4 days ago, message: Merge pull request #158 from volam1311/chore/commit_history
+253b3f1 was Lam (vophuclam1311@gmail.com), 1789425415, 4 days ago, message: chore: Update commits for submission 1
+633049c was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789424058, 4 days ago, message: Presentation Slides for Week 9 Checkpoint
+91e862a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789386169, 4 days ago, message: Merge pull request #157 from volam1311/documentation/meeting
+d0a4ae0 was Lam (vophuclam1311@gmail.com), 1789386100, 4 days ago, message: documentation: Refine meeting summaries for first submission
+5af62c7 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789384163, 4 days ago, message: Merge pull request #156 from volam1311/documentation/meeting
+9906fbf was Lam (vophuclam1311@gmail.com), 1789384100, 4 days ago, message: documentation: Add summary for week 9 meeting
+23147c9 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789379438, 4 days ago, message: Merge pull request #155 from volam1311/refactor/domain
+26bd663 was Lam (vophuclam1311@gmail.com), 1789379380, 4 days ago, message: refactor: Split model, services, applications, tests into domains
+213a931 was Daniel (dfitt10@gmail.com), 1789374395, 4 days ago, message: Fixed a typo
+a455338 was Daniel (dfitt10@gmail.com), 1789374160, 4 days ago, message: Merge branch 'archetype-quiz' into dev
+c0d1037 was Daniel (dfitt10@gmail.com), 1789373778, 4 days ago, message: Added associated Archetype Value and Skill
+8869dfa was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789371933, 4 days ago, message: fixed typo in streakservice helper function
+5f320dc was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789371694, 4 days ago, message: fixed streak service test to be weekly instead of daily
+dd7787e was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789371015, 4 days ago, message: Merge branch 'dev' of https://github.com/volam1311/PersonalityQuest into dev
+750c271 was OpineDev (111968600+OpineDev@users.noreply.github.com), 1789370773, 4 days ago, message: Updated streaks to be weekly instead of daily
+1869aea was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789370543, 4 days ago, message: Merge pull request #153 from volam1311/hotfix/task
+e65e6dc was Lam (vophuclam1311@gmail.com), 1789370475, 4 days ago, message: fix: Fix the changes on the UI of task and quest
+a226181 was Lam (vophuclam1311@gmail.com), 1789370387, 4 days ago, message: fix: Fix the tests for task services
+6d24715 was Lam (vophuclam1311@gmail.com), 1789370369, 4 days ago, message: fix: Modify the task services
+ca50cfa was Lam (vophuclam1311@gmail.com), 1789370311, 4 days ago, message: fix: Add type of task
+740dee7 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789340548, 5 days ago, message: Merge pull request #149 from volam1311/fix/context
+119cc0e was Lam (vophuclam1311@gmail.com), 1789340494, 5 days ago, message: fix: Fix the assignment of task weekly
+9e7a07d was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789339163, 5 days ago, message: Merge pull request #148 from volam1311/fix/context
+0a59424 was Lam (vophuclam1311@gmail.com), 1789339107, 5 days ago, message: fix: Fix the content of the quest task
+f433ffc was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789305154, 5 days ago, message: Merge pull request #147 from volam1311/feat/AI_feedback
+e35e6de was Lam (vophuclam1311@gmail.com), 1789305077, 5 days ago, message: feat: Build UI for AI feedback
+1c629c1 was Lam (vophuclam1311@gmail.com), 1789305062, 5 days ago, message: feat: Build services for AI feedback
+52330bb was Lam (vophuclam1311@gmail.com), 1789305026, 5 days ago, message: Add .gitignore and import modules
+48e407b was Lam (vophuclam1311@gmail.com), 1789304997, 5 days ago, message: feat: Add .env loader for API key
+84ebc43 was Lam (vophuclam1311@gmail.com), 1789304914, 5 days ago, message: feat: Get reflection context for AI feedback
+9748fe4 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789302628, 5 days ago, message: Merge pull request #146 from volam1311/fix/task_service
+cf52399 was Lam (vophuclam1311@gmail.com), 1789302409, 5 days ago, message: fix: Fix the task UI and service
+52869b0 was OpineDev (devopine@gmail.com), 1789299888, 5 days ago, message: Merge branch 'dev' of https://github.com/volam1311/Team-Champions---CAB302 into dev
+baa196f was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789299584, 5 days ago, message: Merge pull request #144 from volam1311/test/quiz_service
+c985c13 was Lam (vophuclam1311@gmail.com), 1789299452, 5 days ago, message: test: Add test for quiz service
+6240977 was OpineDev (devopine@gmail.com), 1789299400, 5 days ago, message: documented possible AI apis to implement
+4a150d3 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789298187, 5 days ago, message: Merge pull request #142 from volam1311/feat/Quiz
+95ff76f was Lam (vophuclam1311@gmail.com), 1789298118, 5 days ago, message: feat: Develop the quiz service and add route for quiz page
+4c5ed4b was Lam (vophuclam1311@gmail.com), 1789298037, 5 days ago, message: feat: Develop the DAO and service of quiz
+0ea97ab was Lam (vophuclam1311@gmail.com), 1789297988, 5 days ago, message: feat: Add style sheets for quiz page
+b748406 was Lam (vophuclam1311@gmail.com), 1789297969, 5 days ago, message: feat: Build the UI of quiz page
+be9451e was OpineDev (devopine@gmail.com), 1789296844, 5 days ago, message: Merge remote-tracking branch 'origin/dev' into dev
+c205519 was OpineDev (devopine@gmail.com), 1789296801, 5 days ago, message: Merge branch 'feature/archetype-ui' into dev
+ae875ed was OpineDev (devopine@gmail.com), 1789296724, 5 days ago, message: Add UserProfileService tests
+bcb4126 was OpineDev (devopine@gmail.com), 1789296619, 5 days ago, message: add archetype ui and fix bugs
+3ada710 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789296343, 5 days ago, message: Merge pull request #141 from volam1311/feat/model
+59aedb8 was Lam (vophuclam1311@gmail.com), 1789296274, 5 days ago, message: feat: Develop the quiz result model
+19f8124 was Lam (vophuclam1311@gmail.com), 1789296239, 5 days ago, message: feat: Develop the quiz and option
+0aa0c7c was Lam (vophuclam1311@gmail.com), 1789296143, 5 days ago, message: feat: Develop the archetype model
+c8ffc20 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789283271, 5 days ago, message: Merge pull request #140 from volam1311/feat/Profile_Services
+5ea9078 was Lam (vophuclam1311@gmail.com), 1789283223, 5 days ago, message: feat: Build DAO and services for profile
+1fd4893 was Lam (vophuclam1311@gmail.com), 1789283189, 5 days ago, message: feat: Development Achivement model
+6d0a470 was Lam (vophuclam1311@gmail.com), 1789283177, 5 days ago, message: feat: Add model UserProfile as record
+61f26ed was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789283017, 5 days ago, message: Merge pull request #139 from volam1311/feat/Profile_UI
+6f4266c was Lam (vophuclam1311@gmail.com), 1789282955, 5 days ago, message: feat: Fix the route from navigation bar
+eae4d23 was Lam (vophuclam1311@gmail.com), 1789282896, 5 days ago, message: feat: Build controller and application for Profile
+c1f77f3 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789282666, 5 days ago, message: Merge pull request #138 from volam1311/feat/Profile_UI
+389b88c was Lam (vophuclam1311@gmail.com), 1789282455, 5 days ago, message: feat: Add style sheets for Profile page
+294d66f was Lam (vophuclam1311@gmail.com), 1789282440, 5 days ago, message: feat: Develop the Profile UI
+49f4ead was Kappikin (thisisthefinalliamkorver@gmail.com), 1789282008, 5 days ago, message: Merge pull request #136 from volam1311/TotalQuestsCompleted
+35be0f5 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789281833, 5 days ago, message: Wrote tests for new streakService and DAO functions
+4ba5ea9 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789280899, 5 days ago, message: Added Way to update total quest completed
+9905050 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789280477, 5 days ago, message: Merge pull request #135 from volam1311/feat/Nav_Bar
+713d6da was Lam (vophuclam1311@gmail.com), 1789280343, 5 days ago, message: feat: Add controller for navigation bar
+2b2d92a was Lam (vophuclam1311@gmail.com), 1789280323, 5 days ago, message: feat: Add style sheets for logout button
+a0ce2a9 was Lam (vophuclam1311@gmail.com), 1789280266, 5 days ago, message: feat: Add log out button for nav bar
+4026879 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789278909, 5 days ago, message: Added basic completion for a weeks tasks
+f47beb0 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789276427, 5 days ago, message: Merge pull request #133 from volam1311/TaskService
+856d25b was Kappikin (thisisthefinalliamkorver@gmail.com), 1789270095, 5 days ago, message: Wrote tests for new service
+f645b61 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789186682, 6 days ago, message: Merge pull request #132 from volam1311/documentation/presentation
+6b39605 was Lam (vophuclam1311@gmail.com), 1789186631, 6 days ago, message: documentation: Add links and slides for Week 9 presentation
+c871f98 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789182042, 6 days ago, message: Merge pull request #131 from volam1311/New-Refactoring
+5113b0f was Kappikin (thisisthefinalliamkorver@gmail.com), 1789181786, 6 days ago, message: Centralized Navigation Between Screens to one service
+26a3ac4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789179559, 6 days ago, message: Added UpdateAccountDetails Function to AccountDAO
+40ae4c6 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789179291, 6 days ago, message: Combined EmailDAO and PasswordDAO in AccountDAO then refactored code from this update
+c3e374d was OpineDev (devopine@gmail.com), 1789127395, 7 days ago, message: Merge test/streaks into dev
+f8c7fbc was OpineDev (devopine@gmail.com), 1789127176, 7 days ago, message: test: add streak service and DAO tests
+cc919c4 was OpineDev (devopine@gmail.com), 1789124522, 7 days ago, message: Merge feature/streaks into dev
+c0eff82 was OpineDev (devopine@gmail.com), 1789124392, 7 days ago, message: Split StreakManager into StreakDAO, StreakService, and StreakProgress model
+fa52213 was OpineDev (devopine@gmail.com), 1789123906, 7 days ago, message: Split StreakManager into StreakDAO, StreakService, and StreakProgress model
+ea82ad3 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789113867, 7 days ago, message: Merge pull request #129 from volam1311/feat/UI_task
+6294a59 was Lam (vophuclam1311@gmail.com), 1789113788, 7 days ago, message: feat: Add route to Task page #10
+6adaf1e was Lam (vophuclam1311@gmail.com), 1789113754, 7 days ago, message: feat: Build the Task application
+2c9602d was Lam (vophuclam1311@gmail.com), 1789113718, 7 days ago, message: feat: Add style sheets for Task page #10
+bd0f4b8 was Lam (vophuclam1311@gmail.com), 1789113698, 7 days ago, message: feat: Develop the UI of task page
+2b53dc0 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789083901, 8 days ago, message: Merge pull request #128 from volam1311/chore/folder
+f99f82d was Lam (vophuclam1311@gmail.com), 1789083837, 8 days ago, message: chore: Add README description for the project
+d9053bd was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789078545, 8 days ago, message: Merge pull request #127 from volam1311/refactor/navbar
+53582a2 was Lam (vophuclam1311@gmail.com), 1789078445, 8 days ago, message: refactor: Injec the new navbar navigation into controllers
+5190ee7 was Lam (vophuclam1311@gmail.com), 1789078409, 8 days ago, message: refactor: Inject the navbar into other pages UI
+5a5bf82 was Lam (vophuclam1311@gmail.com), 1789078358, 8 days ago, message: refactor: Move all route to navbar controller
+a65beea was Lam (vophuclam1311@gmail.com), 1789078298, 8 days ago, message: refactor: Fix the UI of navigation
+5d5f035 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789013663, 8 days ago, message: Merge pull request #124 from volam1311/feat/UI_quest
+d0bc43b was Lam (vophuclam1311@gmail.com), 1789013550, 8 days ago, message: feat: Add route in navbar for different pages
+c26c334 was Lam (vophuclam1311@gmail.com), 1789013492, 8 days ago, message: feat: Update data access layer for quest
+2160111 was Lam (vophuclam1311@gmail.com), 1789013444, 8 days ago, message: feat: Update the services of quest
+44b955e was Lam (vophuclam1311@gmail.com), 1789013409, 8 days ago, message: feat: Add example of quests
+9c98138 was Lam (vophuclam1311@gmail.com), 1789013357, 8 days ago, message: feat: Build the UI of the quest page
+60b9104 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789011874, 8 days ago, message: Merge pull request #123 from volam1311/Refactoring
+5af245f was Kappikin (thisisthefinalliamkorver@gmail.com), 1789011795, 8 days ago, message: Fixed JavaDoc crash
+65e11cd was Kappikin (thisisthefinalliamkorver@gmail.com), 1789011533, 8 days ago, message: EmailManager is now Seperated into DAO and Service
+926aad2 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789011338, 8 days ago, message: PasswordManager is seperated in DAO and Service
+d833bfa was Kappikin (thisisthefinalliamkorver@gmail.com), 1789010816, 8 days ago, message: TaskManager and QuestManager seperated into DAO and Service
+f3d5843 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789009939, 8 days ago, message: UserQuestManager is now separated into DAO and Service
+fcdfe0c was Kappikin (thisisthefinalliamkorver@gmail.com), 1789009200, 8 days ago, message: WeeklyTaskManager Serperated into Service and DAO
+28ff1d1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1789005605, 8 days ago, message: Made System Manager's current email private with getters and setters
+c0786ea was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788929780, 9 days ago, message: Merge pull request #122 from volam1311/fix/model
+dd49839 was Lam (vophuclam1311@gmail.com), 1788929720, 9 days ago, message: fix: Add fix for User model
+8b420be was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788929652, 9 days ago, message: Merge pull request #121 from volam1311/test/dao
+7a7b122 was Lam (vophuclam1311@gmail.com), 1788929600, 9 days ago, message: test: Add tests for User data access #120
+bb066a0 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788929208, 9 days ago, message: Merge pull request #119 from volam1311/feat/DAO
+218de06 was Lam (vophuclam1311@gmail.com), 1788929150, 9 days ago, message: feat: Add data access layer for User
+428760b was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788927582, 9 days ago, message: Merge pull request #118 from volam1311/fix/UI_symbols
+dcba97b was Lam (vophuclam1311@gmail.com), 1788927514, 9 days ago, message: fix: Fix the symbols and fonts
+886621a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788926503, 9 days ago, message: Merge pull request #117 from volam1311/refactor/model_comments
+b0ea6c2 was Lam (vophuclam1311@gmail.com), 1788926421, 9 days ago, message: refactor: Add comments for User in model
+d037e3b was Kappikin (thisisthefinalliamkorver@gmail.com), 1788845891, 10 days ago, message: Merge pull request #116 from volam1311/WeeklyTasks
+d1bf6fd was Kappikin (thisisthefinalliamkorver@gmail.com), 1788845764, 10 days ago, message: Fixed Test Failures
+5e84fb2 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788845313, 10 days ago, message: Updatedd Default Systemmanager Width and Height
+b9a6edc was Kappikin (thisisthefinalliamkorver@gmail.com), 1788844873, 10 days ago, message: Commented Classes
+7c96eaa was Kappikin (thisisthefinalliamkorver@gmail.com), 1788844377, 10 days ago, message: Wrote Comments for all managers
+ed66238 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788840325, 10 days ago, message: Added Randomly Generated tasks depending on the quiz you have
+88df26b was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788831153, 10 days ago, message: Merge pull request #114 from volam1311/fix/gh_pages
+ae41a4f was Lam (vophuclam1311@gmail.com), 1788831061, 10 days ago, message: fix: Add permissions when running deployment
+7a9325c was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788830677, 10 days ago, message: Merge pull request #113 from volam1311/fix/gh_pages
+ccd4a81 was Lam (vophuclam1311@gmail.com), 1788830634, 10 days ago, message: fix: Fix the github actions for javadoc
+563de6b was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788830347, 10 days ago, message: Merge pull request #112 from volam1311/chore/gh_pages
+d5091f3 was Lam (vophuclam1311@gmail.com), 1788830289, 10 days ago, message: chore: Pipeline for Javadoc
+9b84a74 was Lam (vophuclam1311@gmail.com), 1788780796, 11 days ago, message: dev: Update all the commits in week 7
+708aa9c was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788780609, 11 days ago, message: Merge pull request #110 from volam1311/chore/folder
+3b9f477 was Lam (vophuclam1311@gmail.com), 1788780552, 11 days ago, message: chore: Restructure the folders and files
+4bf4ce5 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788610697, 13 days ago, message: Merge pull request #109 from volam1311/feat/UI_Settings
+862b12e was Lam (vophuclam1311@gmail.com), 1788610582, 13 days ago, message: feat: Add link to the dashboard
+20c57ea was Lam (vophuclam1311@gmail.com), 1788610562, 13 days ago, message: feat: Add the controller and application layer
+802343d was Lam (vophuclam1311@gmail.com), 1788610467, 13 days ago, message: feat: Add the style sheet for Settings
+8b4db20 was Lam (vophuclam1311@gmail.com), 1788610407, 13 days ago, message: feat: Develop the skeleton of Settings
+477965c was Kappikin (thisisthefinalliamkorver@gmail.com), 1788593533, 13 days ago, message: Merge pull request #106 from volam1311/QuestManager
+65b1f1e was Kappikin (thisisthefinalliamkorver@gmail.com), 1788593420, 13 days ago, message: Wrote Edge case tests
+37e50de was Kappikin (thisisthefinalliamkorver@gmail.com), 1788406823, 2 weeks ago, message: Merge pull request #105 from volam1311/QuestManager
+94c7f46 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788406670, 2 weeks ago, message: Added the link from backend to dashboard frontend.
+f68703c was Kappikin (thisisthefinalliamkorver@gmail.com), 1788406026, 2 weeks ago, message: Updated Functions and tests to throw exceptions
+a240779 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788405362, 2 weeks ago, message: Wrote Tests for user quest manager
+bb5d48d was Kappikin (thisisthefinalliamkorver@gmail.com), 1788400088, 2 weeks ago, message: Made Quest manager functions and updated tests
+2f0f9ca was Kappikin (thisisthefinalliamkorver@gmail.com), 1788348000, 2 weeks ago, message: Merge pull request #104 from volam1311/QuestManager
+6689632 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788347925, 2 weeks ago, message: Made test to return null instead of expetions due to github crashing the build
+92ed9e6 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788347586, 2 weeks ago, message: Merge pull request #103 from volam1311/QuestManager
+bfe4698 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788347309, 2 weeks ago, message: Wrote Test For Unimplemented Quest Manager
+153002c was Kappikin (thisisthefinalliamkorver@gmail.com), 1788344316, 2 weeks ago, message: Started Writing some tests for the user quests
+998833c was Kappikin (thisisthefinalliamkorver@gmail.com), 1788342023, 2 weeks ago, message: Updated Managers and made blank tests
+be933c4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788341088, 2 weeks ago, message: Made the outlines of the quest manager and the data classes
+4dc104c was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788302245, 2 weeks ago, message: Merge pull request #100 from volam1311/fix/cicd_pipeline
+70613ab was Lam (vophuclam1311@gmail.com), 1788302197, 2 weeks ago, message: fix: Add the working directory for CICD pipeline
+159524a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788301770, 2 weeks ago, message: Merge pull request #99 from volam1311/chore/cicd_pipeline
+d57700e was Lam (vophuclam1311@gmail.com), 1788301718, 2 weeks ago, message: chore: Build CICD pipleine for application
 b55bba9 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788239088, 2 weeks ago, message: Updated to new database
-0ef5f08 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788168988, 2 weeks ago, message: Merge pull request #98 from volam1311/linking-backend
-e585ced was Kappikin (thisisthefinalliamkorver@gmail.com), 1788168411, 2 weeks ago, message: Connected task backend to front end
-390f503 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788154225, 2 weeks ago, message: Merge pull request #96 from volam1311/chore/commit_history
-475ae34 was Lam (vophuclam1311@gmail.com), 1788154160, 2 weeks ago, message: chore: Map github user to team member
-7858a13 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788153656, 2 weeks ago, message: Merge pull request #95 from volam1311/chore/commit_history
-07228a7 was Lam (vophuclam1311@gmail.com), 1788153604, 2 weeks ago, message: chore: Add git commit command for checkpoints
-f4e977e was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788150929, 2 weeks ago, message: Merge pull request #94 from volam1311/documentation/user_stories
-6de9ea4 was Lam (vophuclam1311@gmail.com), 1788150875, 2 weeks ago, message: documentation: Add acceptance criteria for user stories
-784cf1c was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788143461, 2 weeks ago, message: Merge pull request #93 from volam1311/fix/UI_dashboard
-9bb57e3 was Lam (vophuclam1311@gmail.com), 1788143357, 2 weeks ago, message: fix: Move the dashboard styles into folder
-32a05f4 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788140822, 2 weeks ago, message: Merge pull request #92 from volam1311/fix/UI_sign_up
-a073d1a was Lam (vophuclam1311@gmail.com), 1788140180, 2 weeks ago, message: fix: Split css into folders
-c87f203 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788140125, 2 weeks ago, message: Merge pull request #91 from volam1311/fix/UI_sign_up
-f5f4580 was Lam (vophuclam1311@gmail.com), 1788140051, 2 weeks ago, message: fix: Fix the UI of the sign up page
-3c6ad7f was OpineDev (devopine@gmail.com), 1788090180, 2 weeks ago, message: Merge origin/dev into feature/streaks
-f9934cb was OpineDev (devopine@gmail.com), 1788089780, 2 weeks ago, message: Improve dashboard UI and clean up streak code
-1a3a6b8 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788087611, 2 weeks ago, message: Merge pull request #89 from volam1311/documentation/plan
-3f9b85e was Lam (vophuclam1311@gmail.com), 1788087550, 2 weeks ago, message: documentation: Add sprint and release plan
-7fc76b6 was OpineDev (devopine@gmail.com), 1788077412, 2 weeks ago, message: Add streak manager
-522dc96 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788072465, 2 weeks ago, message: Merge pull request #88 from volam1311/test/account_validator
-02bb80c was Lam (vophuclam1311@gmail.com), 1788072405, 2 weeks ago, message: test: Add tests for account sign up validator
-3ff8184 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788071838, 2 weeks ago, message: Merge pull request #87 from volam1311/fix/account_validator
-d06c0e1 was Lam (vophuclam1311@gmail.com), 1788071776, 2 weeks ago, message: fix: Add account validation logic
+0ef5f08 was Kappikin (thisisthefinalliamkorver@gmail.com), 1788168988, 3 weeks ago, message: Merge pull request #98 from volam1311/linking-backend
+e585ced was Kappikin (thisisthefinalliamkorver@gmail.com), 1788168411, 3 weeks ago, message: Connected task backend to front end
+390f503 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788154225, 3 weeks ago, message: Merge pull request #96 from volam1311/chore/commit_history
+475ae34 was Lam (vophuclam1311@gmail.com), 1788154160, 3 weeks ago, message: chore: Map github user to team member
+7858a13 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788153656, 3 weeks ago, message: Merge pull request #95 from volam1311/chore/commit_history
+07228a7 was Lam (vophuclam1311@gmail.com), 1788153604, 3 weeks ago, message: chore: Add git commit command for checkpoints
+f4e977e was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788150929, 3 weeks ago, message: Merge pull request #94 from volam1311/documentation/user_stories
+6de9ea4 was Lam (vophuclam1311@gmail.com), 1788150875, 3 weeks ago, message: documentation: Add acceptance criteria for user stories
+784cf1c was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788143461, 3 weeks ago, message: Merge pull request #93 from volam1311/fix/UI_dashboard
+9bb57e3 was Lam (vophuclam1311@gmail.com), 1788143357, 3 weeks ago, message: fix: Move the dashboard styles into folder
+32a05f4 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788140822, 3 weeks ago, message: Merge pull request #92 from volam1311/fix/UI_sign_up
+a073d1a was Lam (vophuclam1311@gmail.com), 1788140180, 3 weeks ago, message: fix: Split css into folders
+c87f203 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788140125, 3 weeks ago, message: Merge pull request #91 from volam1311/fix/UI_sign_up
+f5f4580 was Lam (vophuclam1311@gmail.com), 1788140051, 3 weeks ago, message: fix: Fix the UI of the sign up page
+3c6ad7f was OpineDev (devopine@gmail.com), 1788090180, 3 weeks ago, message: Merge origin/dev into feature/streaks
+f9934cb was OpineDev (devopine@gmail.com), 1788089780, 3 weeks ago, message: Improve dashboard UI and clean up streak code
+1a3a6b8 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788087611, 3 weeks ago, message: Merge pull request #89 from volam1311/documentation/plan
+3f9b85e was Lam (vophuclam1311@gmail.com), 1788087550, 3 weeks ago, message: documentation: Add sprint and release plan
+7fc76b6 was OpineDev (devopine@gmail.com), 1788077412, 3 weeks ago, message: Add streak manager
+522dc96 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788072465, 3 weeks ago, message: Merge pull request #88 from volam1311/test/account_validator
+02bb80c was Lam (vophuclam1311@gmail.com), 1788072405, 3 weeks ago, message: test: Add tests for account sign up validator
+3ff8184 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1788071838, 3 weeks ago, message: Merge pull request #87 from volam1311/fix/account_validator
+d06c0e1 was Lam (vophuclam1311@gmail.com), 1788071776, 3 weeks ago, message: fix: Add account validation logic
 d0dc1c5 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1787828840, 3 weeks ago, message: Merge pull request #86 from volam1311/documentation/quest_context
 1f00b14 was Lam (vophuclam1311@gmail.com), 1787828769, 3 weeks ago, message: documentation: Add quests for The Innocent
 541f0eb was Kappikin (thisisthefinalliamkorver@gmail.com), 1787825000, 3 weeks ago, message: Merge pull request #85 from volam1311/reflections-for-tasks
@@ -194,33 +221,33 @@ aba662b was Lam (vophuclam1311@gmail.com), 1787645507, 3 weeks ago, message: doc
 224b560 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787633709, 3 weeks ago, message: Merge pull request #73 from volam1311/test
 a02a1d0 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787633628, 3 weeks ago, message: Fixed: No db
 4a735c3 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787630837, 3 weeks ago, message: poml stuff
-dee3ca4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787615885, 3 weeks ago, message: Fixed: Maven Dependecy that caused test to all crash
-ef99b3a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1787614821, 3 weeks ago, message: Merge pull request #70 from volam1311/hotfix/security
-d11aea4 was Lam (vophuclam1311@gmail.com), 1787614410, 3 weeks ago, message: fix: Stop tracking the SQLite database
-83122d5 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1787612861, 3 weeks ago, message: Merge pull request #68 from volam1311/fix/UI_sign_in
-d79d7ee was Lam (vophuclam1311@gmail.com), 1787612712, 3 weeks ago, message: fix: Fix the font of the sign in page
-0571cc0 was Lam (vophuclam1311@gmail.com), 1787612055, 3 weeks ago, message: fix: Fix the design of Sign In
-4636823 was Lam (vophuclam1311@gmail.com), 1787611895, 3 weeks ago, message: fix: Add new fonts for UI sign in
-45fb069 was OpineDev (devopine@gmail.com), 1787571058, 3 weeks ago, message: added 10 user stories
-be1f18b was Kappikin (thisisthefinalliamkorver@gmail.com), 1787564077, 3 weeks ago, message: Merge pull request #67 from volam1311/meeting-minutes
-8a09bd8 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787564050, 3 weeks ago, message: Did meeting minutes for week 6
-dd92f8d was Roaming (cameronstavens@hotmail.com), 1787532388, 3 weeks ago, message: Merge pull request #64 from volam1311/User-stories-upload
-c8533f4 was Roaming (cameronstavens@hotmail.com), 1787532324, 3 weeks ago, message: Add files via upload
-33709fb was Kappikin (thisisthefinalliamkorver@gmail.com), 1787466055, 3 weeks ago, message: Merge pull request #63 from volam1311/EmailDetailsTestCases
-beae493 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787466031, 3 weeks ago, message: Wrote simple test cases for EmailDetails
-e678e41 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787464633, 3 weeks ago, message: Merge pull request #60 from volam1311/Password-and-Email-Manager-Tests
-de8098c was Kappikin (thisisthefinalliamkorver@gmail.com), 1787464574, 3 weeks ago, message: Changed Launch back
-d3fd5c5 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787464502, 3 weeks ago, message: Made Tests For Password Manager and Email Manager and then fixed problems for failed test
-526fd73 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787461015, 3 weeks ago, message: Merge pull request #59 from volam1311/Dashboard
-02330f4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787460849, 3 weeks ago, message: Added Welcome Message and Dummy Weekly Task View until actual db tasks are made.
-fb83fd0 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787458296, 3 weeks ago, message: Merge pull request #57 from volam1311/Account-Updating
-16512a4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787458119, 3 weeks ago, message: Added Debug Messages for Email Updating
-cd054c6 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787457536, 3 weeks ago, message: Adding Password Updating for accounts. Additionally Added a PasswordManager
-6d7ad9d was Kappikin (thisisthefinalliamkorver@gmail.com), 1787455305, 3 weeks ago, message: Merge pull request #56 from volam1311/Dashboard
-d2bf1d4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787455087, 3 weeks ago, message: Made Email Information class to verify and retrive sql results for a given email
-779d053 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787451871, 3 weeks ago, message: Account Details now populate the entry fields with the users information
-678ddc2 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787450307, 3 weeks ago, message: Updated Navbar for finalised Ui Design
-0be205e was OpineDev (devopine@gmail.com), 1787393645, 3 weeks ago, message: Add finalised UI design document to docs/UI Design
+dee3ca4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787615885, 4 weeks ago, message: Fixed: Maven Dependecy that caused test to all crash
+ef99b3a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1787614821, 4 weeks ago, message: Merge pull request #70 from volam1311/hotfix/security
+d11aea4 was Lam (vophuclam1311@gmail.com), 1787614410, 4 weeks ago, message: fix: Stop tracking the SQLite database
+83122d5 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1787612861, 4 weeks ago, message: Merge pull request #68 from volam1311/fix/UI_sign_in
+d79d7ee was Lam (vophuclam1311@gmail.com), 1787612712, 4 weeks ago, message: fix: Fix the font of the sign in page
+0571cc0 was Lam (vophuclam1311@gmail.com), 1787612055, 4 weeks ago, message: fix: Fix the design of Sign In
+4636823 was Lam (vophuclam1311@gmail.com), 1787611895, 4 weeks ago, message: fix: Add new fonts for UI sign in
+45fb069 was OpineDev (devopine@gmail.com), 1787571058, 4 weeks ago, message: added 10 user stories
+be1f18b was Kappikin (thisisthefinalliamkorver@gmail.com), 1787564077, 4 weeks ago, message: Merge pull request #67 from volam1311/meeting-minutes
+8a09bd8 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787564050, 4 weeks ago, message: Did meeting minutes for week 6
+dd92f8d was Roaming (cameronstavens@hotmail.com), 1787532388, 4 weeks ago, message: Merge pull request #64 from volam1311/User-stories-upload
+c8533f4 was Roaming (cameronstavens@hotmail.com), 1787532324, 4 weeks ago, message: Add files via upload
+33709fb was Kappikin (thisisthefinalliamkorver@gmail.com), 1787466055, 4 weeks ago, message: Merge pull request #63 from volam1311/EmailDetailsTestCases
+beae493 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787466031, 4 weeks ago, message: Wrote simple test cases for EmailDetails
+e678e41 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787464633, 4 weeks ago, message: Merge pull request #60 from volam1311/Password-and-Email-Manager-Tests
+de8098c was Kappikin (thisisthefinalliamkorver@gmail.com), 1787464574, 4 weeks ago, message: Changed Launch back
+d3fd5c5 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787464502, 4 weeks ago, message: Made Tests For Password Manager and Email Manager and then fixed problems for failed test
+526fd73 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787461015, 4 weeks ago, message: Merge pull request #59 from volam1311/Dashboard
+02330f4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787460849, 4 weeks ago, message: Added Welcome Message and Dummy Weekly Task View until actual db tasks are made.
+fb83fd0 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787458296, 4 weeks ago, message: Merge pull request #57 from volam1311/Account-Updating
+16512a4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787458119, 4 weeks ago, message: Added Debug Messages for Email Updating
+cd054c6 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787457536, 4 weeks ago, message: Adding Password Updating for accounts. Additionally Added a PasswordManager
+6d7ad9d was Kappikin (thisisthefinalliamkorver@gmail.com), 1787455305, 4 weeks ago, message: Merge pull request #56 from volam1311/Dashboard
+d2bf1d4 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787455087, 4 weeks ago, message: Made Email Information class to verify and retrive sql results for a given email
+779d053 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787451871, 4 weeks ago, message: Account Details now populate the entry fields with the users information
+678ddc2 was Kappikin (thisisthefinalliamkorver@gmail.com), 1787450307, 4 weeks ago, message: Updated Navbar for finalised Ui Design
+0be205e was OpineDev (devopine@gmail.com), 1787393645, 4 weeks ago, message: Add finalised UI design document to docs/UI Design
 407853a was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1787231150, 4 weeks ago, message: Merge pull request #54 from volam1311/test/account_creation
 0adbdc1 was Lam (vophuclam1311@gmail.com), 1787231057, 4 weeks ago, message: test: Add test for creating new account
 378629f was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1787231030, 4 weeks ago, message: Merge pull request #53 from volam1311/feat/account_validator
@@ -242,12 +269,12 @@ dde3140 was Daniel (dfitt10@gmail.com), 1787025752, 4 weeks ago, message: Added 
 30cf9ae was Daniel (dfitt10@gmail.com), 1787023290, 4 weeks ago, message: Added personality quiz
 46bc25c was Roaming (cameronstavens@hotmail.com), 1787022164, 4 weeks ago, message: Merge pull request #46 from volam1311/Cameron-low-fidelity-UI
 dcfc062 was Roaming (cameronstavens@hotmail.com), 1787021864, 4 weeks ago, message: Add files via upload
-50d05ae was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786966584, 4 weeks ago, message: Merge pull request #45 from volam1311/dev
-e9394c1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786964463, 4 weeks ago, message: Added week 5 minutes
-a4d0f12 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786881113, 4 weeks ago, message: Merge pull request #41 from volam1311/documentation/flow_chart
-3735db8 was Lam (vophuclam1311@gmail.com), 1786880981, 4 weeks ago, message: documentation: Add flow chart for user activities
-65d8ff5 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786707149, 4 weeks ago, message: Merge pull request #40 from volam1311/documetation/Low_Fidelity
-f2ee379 was Lam (vophuclam1311@gmail.com), 1786707037, 4 weeks ago, message: documentation: Low Fidelity for PersonalityQuest
+50d05ae was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786966584, 5 weeks ago, message: Merge pull request #45 from volam1311/dev
+e9394c1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786964463, 5 weeks ago, message: Added week 5 minutes
+a4d0f12 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786881113, 5 weeks ago, message: Merge pull request #41 from volam1311/documentation/flow_chart
+3735db8 was Lam (vophuclam1311@gmail.com), 1786880981, 5 weeks ago, message: documentation: Add flow chart for user activities
+65d8ff5 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786707149, 5 weeks ago, message: Merge pull request #40 from volam1311/documetation/Low_Fidelity
+f2ee379 was Lam (vophuclam1311@gmail.com), 1786707037, 5 weeks ago, message: documentation: Low Fidelity for PersonalityQuest
 be626c1 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786680774, 5 weeks ago, message: Merge pull request #39 from volam1311/Ui-Research
 17de198 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786680641, 5 weeks ago, message: Added explanations for why certain ui screens where chosen
 b4bf656 was Kappikin (thisisthefinalliamkorver@gmail.com), 1786678893, 5 weeks ago, message: Made A Nav Bar for dashboard and additionally put css on Account Creation, Login and Dashboard screen
@@ -272,14 +299,14 @@ fae52f3 was Lam (vophuclam1311@gmail.com), 1786423430, 5 weeks ago, message: Ini
 dbc8bf7 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786421223, 5 weeks ago, message: Merge pull request #30 from volam1311/dev
 36fa909 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786412387, 5 weeks ago, message: Merge pull request #26 from volam1311/documentation/project_requirements
 f2ede83 was Lam (vophuclam1311@gmail.com), 1786412290, 5 weeks ago, message: Documentation: Restructure meeting folder and create requirements
-7d6edf0 was OpineDev (devopine@gmail.com), 1786357224, 5 weeks ago, message: docs: add week 4 meeting recap pdf
-a09baa9 was OpineDev (devopine@gmail.com), 1786357086, 5 weeks ago, message: docs: add week 4 meeting recap
-e4b575b was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786343722, 5 weeks ago, message: Merge pull request #5 from volam1311/dev
-dbbd413 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786343685, 5 weeks ago, message: Merge pull request #4 from volam1311/idea/Leon
-15a3735 was Lam (vophuclam1311@gmail.com), 1786343395, 5 weeks ago, message: idea: Second idea from Leon
-ed2971a was Kappikin (thisisthefinalliamkorver@gmail.com), 1786339858, 5 weeks ago, message: Merge branch 'User-Stories' into dev
-7a884bd was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786273624, 5 weeks ago, message: Merge pull request #3 from volam1311/dev
-9603078 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786273532, 5 weeks ago, message: Merge pull request #2 from volam1311/idea/Andy
+7d6edf0 was OpineDev (devopine@gmail.com), 1786357224, 6 weeks ago, message: docs: add week 4 meeting recap pdf
+a09baa9 was OpineDev (devopine@gmail.com), 1786357086, 6 weeks ago, message: docs: add week 4 meeting recap
+e4b575b was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786343722, 6 weeks ago, message: Merge pull request #5 from volam1311/dev
+dbbd413 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786343685, 6 weeks ago, message: Merge pull request #4 from volam1311/idea/Leon
+15a3735 was Lam (vophuclam1311@gmail.com), 1786343395, 6 weeks ago, message: idea: Second idea from Leon
+ed2971a was Kappikin (thisisthefinalliamkorver@gmail.com), 1786339858, 6 weeks ago, message: Merge branch 'User-Stories' into dev
+7a884bd was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786273624, 6 weeks ago, message: Merge pull request #3 from volam1311/dev
+9603078 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1786273532, 6 weeks ago, message: Merge pull request #2 from volam1311/idea/Andy
 2c0497b was Kappikin (thisisthefinalliamkorver@gmail.com), 1785987186, 6 weeks ago, message: More Admin stories
 12a4ddc was Kappikin (thisisthefinalliamkorver@gmail.com), 1785985035, 6 weeks ago, message: Extra UIser stories for the customer and Admin. Additionally broke up the stories into catergories
 72b07e3 was OpineDev (devopine@gmail.com), 1785842278, 6 weeks ago, message: Add Andy's project idea PDF
