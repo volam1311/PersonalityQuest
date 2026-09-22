@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeeklyTaskReflectionController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Controllers.quest</a> &gt; <span class="el_source">WeeklyTaskReflectionController.java</span></div><h1>WeeklyTaskReflectionController.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Controllers.quest;
+
+import com.example.personalityquest.Controllers.navigation.NavBarController;
+import com.example.personalityquest.Applications.navigation.DashboardApplication;
+import com.example.personalityquest.Model.quest.WeeklyTask;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.navigation.NavigationService;
+import com.example.personalityquest.Services.quest.WeeklyTaskService;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+<span class="nc" id="L19">public class WeeklyTaskReflectionController implements Initializable {</span>
+    @FXML
+    private NavBarController navBarController;
+    @FXML
+    private TextArea reflection;
+
+    private WeeklyTask currentTask;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+<span class="nc" id="L29">        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);</span>
+<span class="nc" id="L30">    }</span>
+
+    public void setTask(WeeklyTask task){
+<span class="nc" id="L33">        this.currentTask = task;</span>
+
+
+<span class="nc" id="L36">        DisplayTask();</span>
+<span class="nc" id="L37">    }</span>
+
+    // Right How you want to display the Task info as this needs to be called
+    // due to initialize running before the Task will be set
+    private void DisplayTask(){
+<span class="nc" id="L42">        System.out.println(&quot;Current Reflection: &quot; + currentTask.getReflection());</span>
+<span class="nc" id="L43">        reflection.setText(currentTask.getReflection());</span>
+<span class="nc" id="L44">    }</span>
+    @FXML
+    private void onBackClick() throws IOException {
+        // nothing is saved and you go back to dashboard
+<span class="nc" id="L48">        GoToDashboard();</span>
+<span class="nc" id="L49">    }</span>
+
+    @FXML
+    private void onSaveDraft() throws Exception {
+        // saves the current reflection progress to come back to later
+
+
+<span class="nc" id="L56">        System.out.println(reflection.getText());</span>
+<span class="nc" id="L57">        WeeklyTaskService.UpdateGivenTaskToDraft(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+<span class="nc" id="L58">        GoToDashboard();</span>
+<span class="nc" id="L59">    }</span>
+
+    @FXML
+    private void onSubmitClick() throws Exception {
+        // saves the current reflection progress and marks it as complete
+
+        // Use this to mark a task as Finished
+<span class="nc" id="L66">        System.out.println(reflection.getText());</span>
+<span class="nc" id="L67">        WeeklyTaskService.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+
+<span class="nc" id="L69">        GoToDashboard();</span>
+<span class="nc" id="L70">    }</span>
+
+    private void GoToDashboard() throws IOException {
+<span class="nc" id="L73">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
+<span class="nc" id="L74">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

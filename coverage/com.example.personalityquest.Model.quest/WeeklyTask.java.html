@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeeklyTask.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Model.quest</a> &gt; <span class="el_source">WeeklyTask.java</span></div><h1>WeeklyTask.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Model.quest;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.SQLite;
+
+/**
+ * A weekly practice assigned to a user for one week.
+ * This is not a storyline quest task. The taskId points at a weekly practice in Tasks
+ * (taskType = WEEKLY). Quest storyline steps stay in Tasks with taskType = QUEST.
+ */
+public class WeeklyTask {
+<span class="fc" id="L17">    public WeeklyTask(String email, int taskId, String status, String reflection, String weekStarted) throws Exception {</span>
+<span class="pc bpc" id="L18" title="1 of 2 branches missed.">        if (taskId == 0){</span>
+<span class="nc" id="L19">            throw new Exception(&quot;Task Id is == 0 or is null&quot;);</span>
+        }
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(email)){</span>
+<span class="nc" id="L22">            System.out.println(&quot;Email is null&quot;);</span>
+<span class="nc" id="L23">            email = &quot;&quot;;</span>
+        }
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(status)){</span>
+<span class="nc" id="L26">            System.out.println(&quot;Status is null&quot;);</span>
+<span class="nc" id="L27">            status = &quot;&quot;;</span>
+        }
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(reflection)){</span>
+<span class="fc" id="L30">            System.out.println(&quot;Reflection is null&quot;);</span>
+<span class="fc" id="L31">            reflection = &quot;&quot;;</span>
+        }
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(weekStarted)){</span>
+<span class="nc" id="L34">            System.out.println(&quot;WeekStarted is null&quot;);</span>
+<span class="nc" id="L35">            weekStarted = &quot;&quot;;</span>
+        }
+
+<span class="fc" id="L38">        this.email = email;</span>
+<span class="fc" id="L39">        this.taskId = taskId;</span>
+<span class="fc" id="L40">        this.status = status;</span>
+<span class="fc" id="L41">        this.reflection = reflection;</span>
+<span class="fc" id="L42">        this.weekStarted = weekStarted;</span>
+<span class="fc" id="L43">    }</span>
+
+    private final String email;
+    private final int taskId;
+    private String status;
+    private String reflection;
+    private final String weekStarted;
+
+<span class="fc" id="L51">    public int getTaskId(){ return this.taskId; }</span>
+    public String getEmail(){
+<span class="fc" id="L53">        return this.email;</span>
+    }
+    public String getReflection(){
+<span class="fc" id="L56">        return this.reflection;</span>
+    }
+
+    public String getStatus(){
+<span class="nc" id="L60">        return this.status;</span>
+    }
+    public String getWeekStarted(){
+<span class="fc" id="L63">        return this.weekStarted;</span>
+    }
+
+<span class="nc" id="L66">    public void setStatus(String status){ this.status = status; }</span>
+<span class="nc" id="L67">    public void setReflection(String reflection){ this.reflection = reflection; }</span>
+
+    /**
+     * Converts the weekly task to a string
+     * in the form of its name
+     * @return the name of the weeklyTask
+     */
+    @Override
+    public String toString() {
+<span class="nc" id="L76">        Connection connection = SQLite.getConnection();</span>
+        try {
+<span class="nc" id="L78">            PreparedStatement statement = connection.prepareStatement(&quot;SELECT * FROM Tasks WHERE taskId = ?&quot;);</span>
+
+<span class="nc" id="L80">            statement.setInt(1, getTaskId());</span>
+
+<span class="nc" id="L82">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L83">            return rs.getString(&quot;name&quot;);</span>
+<span class="nc" id="L84">        } catch (SQLException e) {</span>
+<span class="nc" id="L85">            throw new RuntimeException(e);</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

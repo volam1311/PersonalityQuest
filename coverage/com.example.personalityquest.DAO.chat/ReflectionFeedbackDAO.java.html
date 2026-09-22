@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReflectionFeedbackDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.chat</a> &gt; <span class="el_source">ReflectionFeedbackDAO.java</span></div><h1>ReflectionFeedbackDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.chat;
+
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.SQLite;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/**
+ * Stores AI coaching replies against a weekly task reflection.
+ */
+public final class ReflectionFeedbackDAO {
+    private static final String CREATE_TABLE = &quot;&quot;&quot;
+            CREATE TABLE IF NOT EXISTS ReflectionFeedback (
+                accountEmail TEXT NOT NULL,
+                taskId INTEGER NOT NULL,
+                weekStart TEXT NOT NULL,
+                feedback TEXT NOT NULL,
+                PRIMARY KEY (accountEmail, taskId, weekStart)
+            )
+            &quot;&quot;&quot;;
+
+    private static final String UPSERT = &quot;&quot;&quot;
+            INSERT INTO ReflectionFeedback (accountEmail, taskId, weekStart, feedback)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(accountEmail, taskId, weekStart)
+            DO UPDATE SET feedback = excluded.feedback
+            &quot;&quot;&quot;;
+
+    private static final String FIND = &quot;&quot;&quot;
+            SELECT feedback FROM ReflectionFeedback
+            WHERE accountEmail = ? AND taskId = ? AND weekStart = ?
+            &quot;&quot;&quot;;
+
+    private ReflectionFeedbackDAO() {
+    }
+
+    /**
+     * Creates the feedback table when it does not already exist.
+     */
+    public static void EnsureTables() throws SQLException {
+<span class="fc" id="L45">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L46">        try (Statement statement = connection.createStatement()) {</span>
+<span class="fc" id="L47">            statement.execute(CREATE_TABLE);</span>
+        }
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Saves or replaces AI feedback for a weekly task.
+     */
+    public static void Save(String email, int taskId, String weekStart, String feedback) throws SQLException {
+<span class="fc" id="L55">        EnsureTables();</span>
+<span class="fc" id="L56">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L57">        try (PreparedStatement statement = connection.prepareStatement(UPSERT)) {</span>
+<span class="fc" id="L58">            statement.setString(1, email);</span>
+<span class="fc" id="L59">            statement.setInt(2, taskId);</span>
+<span class="fc" id="L60">            statement.setString(3, weekStart);</span>
+<span class="fc" id="L61">            statement.setString(4, feedback);</span>
+<span class="fc" id="L62">            statement.executeUpdate();</span>
+        }
+<span class="fc" id="L64">    }</span>
+
+    /**
+     * Loads previously stored AI feedback, or an empty string when none exists.
+     */
+    public static String Find(String email, int taskId, String weekStart) throws SQLException {
+<span class="fc" id="L70">        EnsureTables();</span>
+<span class="pc bpc" id="L71" title="2 of 6 branches missed.">        if (ApplicationManager.isEmpty(email) || ApplicationManager.isEmpty(weekStart) || taskId == 0) {</span>
+<span class="fc" id="L72">            return &quot;&quot;;</span>
+        }
+
+<span class="fc" id="L75">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L76">        try (PreparedStatement statement = connection.prepareStatement(FIND)) {</span>
+<span class="fc" id="L77">            statement.setString(1, email);</span>
+<span class="fc" id="L78">            statement.setInt(2, taskId);</span>
+<span class="fc" id="L79">            statement.setString(3, weekStart);</span>
+<span class="fc" id="L80">            ResultSet resultSet = statement.executeQuery();</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">            if (resultSet.next()) {</span>
+<span class="fc" id="L82">                String feedback = resultSet.getString(&quot;feedback&quot;);</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">                return feedback == null ? &quot;&quot; : feedback;</span>
+            }
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        }</span>
+<span class="fc" id="L86">        return &quot;&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

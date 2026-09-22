@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountSignUpValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Validators.auth</a> &gt; <span class="el_source">AccountSignUpValidator.java</span></div><h1>AccountSignUpValidator.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Validators.auth;
+
+import java.util.Objects;
+
+public final class AccountSignUpValidator {
+    private AccountSignUpValidator() {
+    }
+
+    public static boolean isValid(String email, String userName, String firstName,
+                                  String lastName, String password, String reEnterPassword) {
+<span class="fc bfc" id="L11" title="All 2 branches covered.">        return validationError(email, userName, firstName, lastName, password, reEnterPassword) == null;</span>
+    }
+
+    public static String validationError(String email, String userName, String firstName,
+                                         String lastName, String password, String reEnterPassword) {
+<span class="fc bfc" id="L16" title="All 2 branches covered.">        if (!Objects.equals(password, reEnterPassword)) {</span>
+<span class="fc" id="L17">            return &quot;Passwords do not match&quot;;</span>
+        }
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (isEmpty(email.trim())) {</span>
+<span class="fc" id="L20">            return &quot;Email is empty&quot;;</span>
+        }
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (isEmpty(userName.trim())) {</span>
+<span class="fc" id="L23">            return &quot;UserName is empty&quot;;</span>
+        }
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (isEmpty(firstName.trim())) {</span>
+<span class="fc" id="L26">            return &quot;FirstName is empty&quot;;</span>
+        }
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (isEmpty(lastName.trim())) {</span>
+<span class="fc" id="L29">            return &quot;LastName is empty&quot;;</span>
+        }
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (isEmpty(password.trim())) {</span>
+<span class="fc" id="L32">            return &quot;Password is empty&quot;;</span>
+        }
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (password.length() &lt; 8){</span>
+<span class="fc" id="L35">            return &quot;Password length should be at least 8 characters&quot;;</span>
+        }
+<span class="fc" id="L37">        return null;</span>
+    }
+
+    private static boolean isEmpty(String value) {
+<span class="pc bpc" id="L41" title="1 of 4 branches missed.">        return value == null || value.isEmpty();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

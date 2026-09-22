@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Option.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Model.quiz</a> &gt; <span class="el_source">Option.java</span></div><h1>Option.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Model.quiz;
+
+import com.example.personalityquest.ApplicationManager;
+
+/**
+ * A single answer choice on a quiz question, scored toward one archetype.
+ */
+public record Option(int optionsID,
+                     int option1Archetype,
+                     int option2Archetype,
+                     int option3Archetype,
+                     String option1,
+                     String option2,
+                     String option3) {
+
+<span class="fc" id="L16">    public Option {</span>
+        // if (ApplicationManager.isEmpty(text) ||
+<span class="pc bpc" id="L18" title="2 of 6 branches missed.">        if (option1.isBlank() || option2.isBlank() || option3.isBlank()) {</span>
+<span class="fc" id="L19">            throw new IllegalArgumentException(&quot;Option text is empty&quot;);</span>
+        }
+<span class="pc bpc" id="L21" title="2 of 6 branches missed.">        if (option1Archetype == 0 || option2Archetype == 0 || option3Archetype == 0) {</span>
+<span class="fc" id="L22">            throw new IllegalArgumentException(&quot;Option archetype is null&quot;);</span>
+        }
+        //text = text.trim();
+<span class="fc" id="L25">    }</span>
+
+    // Getters and Setters
+<span class="nc" id="L28">    public int getOptionsID() {return optionsID;}</span>
+
+<span class="fc" id="L30">    public int getOption1Archetype() {return option1Archetype;}</span>
+<span class="fc" id="L31">    public int getOption2Archetype() {return option2Archetype;}</span>
+<span class="fc" id="L32">    public int getOption3Archetype() {return option3Archetype;}</span>
+
+<span class="fc" id="L34">    public String getOption1() {return option1;}</span>
+<span class="fc" id="L35">    public String getOption2() {return option2;}</span>
+<span class="fc" id="L36">    public String getOption3() {return option3;}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

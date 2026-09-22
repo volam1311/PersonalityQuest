@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnvLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest</a> &gt; <span class="el_source">EnvLoader.java</span></div><h1>EnvLoader.java</h1><pre class="source lang-java linenums">package com.example.personalityquest;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Loads key=value pairs from a local .env file, with process environment variables taking priority.
+ */
+public final class EnvLoader {
+    private static Map&lt;String, String&gt; cachedFileValues;
+
+    private EnvLoader() {
+    }
+
+    /**
+     * Looks up a value from the process environment first, then from a nearby .env file.
+     */
+    public static String Get(String key) {
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(key)) {</span>
+<span class="nc" id="L24">            return &quot;&quot;;</span>
+        }
+
+<span class="nc" id="L27">        String fromProcess = System.getenv(key);</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        if (!ApplicationManager.isEmpty(fromProcess)) {</span>
+<span class="nc" id="L29">            return fromProcess.trim();</span>
+        }
+
+<span class="nc" id="L32">        String fromFile = FileValues().get(key);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        return fromFile == null ? &quot;&quot; : fromFile;</span>
+    }
+
+    /**
+     * Parses dotenv-style contents into a map. Later duplicate keys overwrite earlier ones.
+     */
+    public static Map&lt;String, String&gt; Parse(String contents) {
+<span class="fc" id="L40">        Map&lt;String, String&gt; values = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L41" title="All 4 branches covered.">        if (contents == null || contents.isEmpty()) {</span>
+<span class="fc" id="L42">            return values;</span>
+        }
+
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (String rawLine : contents.split(&quot;\\R&quot;)) {</span>
+<span class="fc" id="L46">            String line = rawLine.trim();</span>
+<span class="fc bfc" id="L47" title="All 4 branches covered.">            if (line.isEmpty() || line.startsWith(&quot;#&quot;)) {</span>
+<span class="fc" id="L48">                continue;</span>
+            }
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (line.startsWith(&quot;export &quot;)) {</span>
+<span class="fc" id="L51">                line = line.substring(&quot;export &quot;.length()).trim();</span>
+            }
+
+<span class="fc" id="L54">            int separator = line.indexOf('=');</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if (separator &lt;= 0) {</span>
+<span class="nc" id="L56">                continue;</span>
+            }
+
+<span class="fc" id="L59">            String key = line.substring(0, separator).trim();</span>
+<span class="fc" id="L60">            String value = Unquote(line.substring(separator + 1).trim());</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            if (!key.isEmpty()) {</span>
+<span class="fc" id="L62">                values.put(key, value);</span>
+            }
+        }
+<span class="fc" id="L65">        return values;</span>
+    }
+
+    /**
+     * Clears the cached .env file so the next lookup reads from disk again.
+     */
+    public static void Reset() {
+<span class="nc" id="L72">        cachedFileValues = null;</span>
+<span class="nc" id="L73">    }</span>
+
+    private static Map&lt;String, String&gt; FileValues() {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (cachedFileValues != null) {</span>
+<span class="nc" id="L77">            return cachedFileValues;</span>
+        }
+
+<span class="nc" id="L80">        Map&lt;String, String&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for (Path path : CandidatePaths()) {</span>
+<span class="nc bnc" id="L82" title="All 4 branches missed.">            if (path == null || !Files.isRegularFile(path)) {</span>
+<span class="nc" id="L83">                continue;</span>
+            }
+            try {
+<span class="nc" id="L86">                values.putAll(Parse(Files.readString(path)));</span>
+<span class="nc" id="L87">                break;</span>
+<span class="nc" id="L88">            } catch (IOException ignored) {</span>
+                // Try the next candidate path.
+            }
+<span class="nc" id="L91">        }</span>
+<span class="nc" id="L92">        cachedFileValues = values;</span>
+<span class="nc" id="L93">        return cachedFileValues;</span>
+    }
+
+    private static List&lt;Path&gt; CandidatePaths() {
+<span class="nc" id="L97">        Path workingDirectory = Path.of(System.getProperty(&quot;user.dir&quot;, &quot;.&quot;)).toAbsolutePath().normalize();</span>
+<span class="nc" id="L98">        return List.of(</span>
+<span class="nc" id="L99">                Path.of(&quot;.env&quot;),</span>
+<span class="nc" id="L100">                Path.of(&quot;PersonalityQuest&quot;, &quot;.env&quot;),</span>
+<span class="nc" id="L101">                workingDirectory.resolve(&quot;.env&quot;),</span>
+<span class="nc" id="L102">                workingDirectory.resolve(&quot;PersonalityQuest&quot;).resolve(&quot;.env&quot;),</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                workingDirectory.getParent() == null</span>
+<span class="nc" id="L104">                        ? null</span>
+<span class="nc" id="L105">                        : workingDirectory.getParent().resolve(&quot;.env&quot;),</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                workingDirectory.getParent() == null</span>
+<span class="nc" id="L107">                        ? null</span>
+<span class="nc" id="L108">                        : workingDirectory.getParent().resolve(&quot;PersonalityQuest&quot;).resolve(&quot;.env&quot;)</span>
+        );
+    }
+
+    private static String Unquote(String value) {
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (value.length() &gt;= 2) {</span>
+<span class="fc" id="L114">            char first = value.charAt(0);</span>
+<span class="fc" id="L115">            char last = value.charAt(value.length() - 1);</span>
+<span class="pc bpc" id="L116" title="4 of 8 branches missed.">            if ((first == '&quot;' &amp;&amp; last == '&quot;') || (first == '\'' &amp;&amp; last == '\'')) {</span>
+<span class="fc" id="L117">                return value.substring(1, value.length() - 1);</span>
+            }
+        }
+<span class="fc" id="L120">        return value;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

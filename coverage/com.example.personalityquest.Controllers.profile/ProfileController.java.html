@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Controllers.profile</a> &gt; <span class="el_source">ProfileController.java</span></div><h1>ProfileController.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Controllers.profile;
+
+import com.example.personalityquest.Controllers.navigation.NavBarController;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Model.profile.Achievement;
+import com.example.personalityquest.Model.auth.EmailDetails;
+import com.example.personalityquest.Model.profile.UserProfile;
+import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.quest.UserQuest;
+import com.example.personalityquest.Model.quiz.Archetype;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.profile.AchievementService;
+import com.example.personalityquest.Services.auth.EmailService;
+import com.example.personalityquest.Services.navigation.NavigationService;
+import com.example.personalityquest.Services.profile.UserProfileService;
+import com.example.personalityquest.Services.quest.QuestService;
+import com.example.personalityquest.Services.quest.UserQuestService;
+import com.example.personalityquest.Services.quiz.QuizService;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+<span class="nc" id="L48">public class ProfileController implements Initializable {</span>
+    private static final double STACKED_BREAKPOINT = 760;
+    private static final double FULL_PERCENT = 100;
+    private static final double HIDDEN_PERCENT = 0;
+    private static final double IDENTITY_CARD_PERCENT = 32;
+    private static final double PROGRESS_CARD_PERCENT = 68;
+    private static final int DEFAULT_ACHIEVEMENT_COLUMNS = 4;
+<span class="nc" id="L55">    private static final int RADAR_AXIS_COUNT = Archetype.values().length;</span>
+    private static final int RADAR_LEVEL_COUNT = 5;
+    private static final double RADAR_CENTER_Y_OFFSET = 8;
+    private static final double RADAR_RADIUS_RATIO = 0.26;
+<span class="nc" id="L59">    private static final String[] RADAR_LABELS = BuildRadarLabels();</span>
+
+    private static String[] BuildRadarLabels() {
+<span class="nc" id="L62">        Archetype[] archetypes = Archetype.values();</span>
+<span class="nc" id="L63">        String[] labels = new String[archetypes.length];</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for (int index = 0; index &lt; archetypes.length; index++) {</span>
+<span class="nc" id="L65">            labels[index] = archetypes[index].getName();</span>
+        }
+<span class="nc" id="L67">        return labels;</span>
+    }
+
+    @FXML
+    private NavBarController navBarController;
+    @FXML
+    private BorderPane profileRoot;
+    @FXML
+    private GridPane statsGrid, achievementsGrid;
+    @FXML
+    private VBox progressCard;
+    @FXML
+    private Label displayNameLabel, personalityTypeLabel, streakLabel, typeBadge,
+            achievementSummaryLabel;
+    @FXML
+    private Button archetypeLink, archetypeBadge;
+    @FXML
+    private Canvas progressChart;
+
+<span class="nc" id="L86">    private double[] radarValues = new double[RADAR_AXIS_COUNT];</span>
+<span class="nc" id="L87">    private List&lt;Achievement&gt; achievements = List.of();</span>
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+<span class="nc" id="L91">        navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);</span>
+<span class="nc" id="L92">        ConfigureAchievementsGrid(DEFAULT_ACHIEVEMENT_COLUMNS);</span>
+<span class="nc" id="L93">        LoadProfile();</span>
+
+<span class="nc" id="L95">        profileRoot.widthProperty().addListener((observable, oldWidth, newWidth) -&gt;</span>
+<span class="nc" id="L96">                ApplyResponsiveLayout(newWidth.doubleValue()));</span>
+
+<span class="nc" id="L98">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L99">            ApplyResponsiveLayout(profileRoot.getWidth());</span>
+<span class="nc" id="L100">            DrawProgressGraph();</span>
+<span class="nc" id="L101">        });</span>
+<span class="nc" id="L102">    }</span>
+
+    private void LoadProfile() {
+<span class="nc" id="L105">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        boolean signedIn = !ApplicationManager.isEmpty(email);</span>
+
+<span class="nc" id="L108">        EmailDetails details = null;</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (signedIn) {</span>
+            try {
+<span class="nc" id="L111">                details = EmailService.GetDetailsForEmail(email);</span>
+<span class="nc" id="L112">            } catch (Exception ignored) {</span>
+<span class="nc" id="L113">                details = null;</span>
+<span class="nc" id="L114">            }</span>
+        }
+<span class="nc" id="L116">        displayNameLabel.setText(UserProfileService.DisplayName(details));</span>
+
+<span class="nc" id="L118">        UserProfile progress = UserProfile.empty();</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (signedIn) {</span>
+            try {
+<span class="nc" id="L121">                progress = AchievementService.GetProgress(email);</span>
+<span class="nc" id="L122">            } catch (Exception ignored) {</span>
+<span class="nc" id="L123">                progress = UserProfile.empty();</span>
+<span class="nc" id="L124">            }</span>
+        }
+<span class="nc" id="L126">        streakLabel.setText(&quot;Week &quot; + progress.currentStreak());</span>
+<span class="nc" id="L127">        radarValues = QuizService.ArchetypeScores(QuizService.GetResult());</span>
+
+<span class="nc" id="L129">        String archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;</span>
+<span class="nc" id="L130">        String personalityType = UserProfileService.UNKNOWN_TYPE;</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (signedIn) {</span>
+            try {
+<span class="nc" id="L133">                UserQuest selectedQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">                if (selectedQuest == null) {</span>
+<span class="nc" id="L135">                    List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                    if (!userQuests.isEmpty()) {</span>
+<span class="nc" id="L137">                        selectedQuest = userQuests.get(0);</span>
+                    }
+                }
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                if (selectedQuest != null) {</span>
+<span class="nc" id="L141">                    Quest quest = QuestService.GetQuestForLabourId(selectedQuest.getLabourId());</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                    if (quest != null) {</span>
+<span class="nc" id="L143">                        archetypeName = UserProfileService.FormatArchetypeName(</span>
+<span class="nc" id="L144">                                QuestService.GetArchetypeName(quest.getArchetypeId()));</span>
+<span class="nc" id="L145">                        personalityType = UserProfileService.PersonalityType(</span>
+<span class="nc" id="L146">                                QuestService.GetArchetypeDescription(quest.getArchetypeId()));</span>
+                    }
+                }
+<span class="nc" id="L149">            } catch (Exception ignored) {</span>
+<span class="nc" id="L150">                archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;</span>
+<span class="nc" id="L151">            }</span>
+        }
+
+<span class="nc" id="L154">        personalityTypeLabel.setText(personalityType);</span>
+<span class="nc" id="L155">        typeBadge.setText(personalityType);</span>
+<span class="nc" id="L156">        archetypeLink.setText(archetypeName + &quot; (Click to view)&quot;);</span>
+<span class="nc" id="L157">        archetypeBadge.setText(archetypeName);</span>
+
+        try {
+<span class="nc" id="L160">            achievements = AchievementService.GetAchievementsForEmail(email);</span>
+<span class="nc" id="L161">            PopulateAchievements(achievements);</span>
+<span class="nc" id="L162">        } catch (Exception ignored) {</span>
+<span class="nc" id="L163">            achievements = List.of();</span>
+<span class="nc" id="L164">            PopulateAchievements(List.of());</span>
+<span class="nc" id="L165">        }</span>
+<span class="nc" id="L166">    }</span>
+
+    private void ConfigureAchievementsGrid(int columnCount) {
+<span class="nc" id="L169">        achievementsGrid.getColumnConstraints().clear();</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        for (int column = 0; column &lt; columnCount; column++) {</span>
+<span class="nc" id="L171">            ColumnConstraints constraints = new ColumnConstraints();</span>
+<span class="nc" id="L172">            constraints.setPercentWidth(FULL_PERCENT / columnCount);</span>
+<span class="nc" id="L173">            constraints.setHgrow(Priority.ALWAYS);</span>
+<span class="nc" id="L174">            achievementsGrid.getColumnConstraints().add(constraints);</span>
+        }
+<span class="nc" id="L176">    }</span>
+
+    private void PopulateAchievements(List&lt;Achievement&gt; achievements) {
+<span class="nc" id="L179">        achievementsGrid.getChildren().clear();</span>
+<span class="nc" id="L180">        long unlockedCount = achievements.stream()</span>
+<span class="nc" id="L181">                .filter(Achievement::unlocked)</span>
+<span class="nc" id="L182">                .count();</span>
+<span class="nc" id="L183">        achievementSummaryLabel.setText(</span>
+<span class="nc" id="L184">                unlockedCount + &quot; of &quot; + achievements.size() + &quot; unlocked&quot;</span>
+        );
+
+<span class="nc" id="L187">        int columnCount = Math.max(1, achievementsGrid.getColumnConstraints().size());</span>
+
+<span class="nc bnc" id="L189" title="All 2 branches missed.">        for (int index = 0; index &lt; achievements.size(); index++) {</span>
+<span class="nc" id="L190">            Achievement achievement = achievements.get(index);</span>
+<span class="nc" id="L191">            VBox badge = new VBox(8);</span>
+<span class="nc" id="L192">            badge.setAlignment(Pos.TOP_CENTER);</span>
+<span class="nc" id="L193">            badge.getStyleClass().add(&quot;achievement-card&quot;);</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">            if (achievement.unlocked()) {</span>
+<span class="nc" id="L195">                badge.getStyleClass().add(&quot;unlocked&quot;);</span>
+            } else {
+<span class="nc" id="L197">                badge.getStyleClass().add(&quot;locked&quot;);</span>
+            }
+
+<span class="nc" id="L200">            StackPane iconHolder = new StackPane();</span>
+<span class="nc" id="L201">            iconHolder.getStyleClass().add(&quot;achievement-icon-holder&quot;);</span>
+
+<span class="nc" id="L203">            ImageView imageIcon = LoadAchievementIcon(achievement);</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">            if (imageIcon != null) {</span>
+<span class="nc" id="L205">                iconHolder.getChildren().add(imageIcon);</span>
+            } else {
+<span class="nc" id="L207">                iconHolder.getChildren().add(CreateFallbackIcon());</span>
+            }
+
+<span class="nc" id="L210">            Label nameLabel = new Label(achievement.name());</span>
+<span class="nc" id="L211">            nameLabel.getStyleClass().add(&quot;achievement-name&quot;);</span>
+<span class="nc" id="L212">            nameLabel.setWrapText(true);</span>
+<span class="nc" id="L213">            nameLabel.setMaxWidth(Double.MAX_VALUE);</span>
+
+<span class="nc bnc" id="L215" title="All 2 branches missed.">            Label levelLabel = new Label(achievement.unlocked()</span>
+<span class="nc" id="L216">                    ? &quot;Level &quot; + achievement.level()</span>
+<span class="nc" id="L217">                    : &quot;Locked&quot;);</span>
+<span class="nc" id="L218">            levelLabel.getStyleClass().add(&quot;achievement-level&quot;);</span>
+
+<span class="nc" id="L220">            Region contentSpacer = new Region();</span>
+<span class="nc" id="L221">            VBox.setVgrow(contentSpacer, Priority.ALWAYS);</span>
+
+<span class="nc bnc" id="L223" title="All 2 branches missed.">            Label descriptionLabel = new Label(achievement.unlocked()</span>
+<span class="nc" id="L224">                    ? achievement.description()</span>
+<span class="nc" id="L225">                    : &quot;Locked&quot;);</span>
+<span class="nc" id="L226">            descriptionLabel.getStyleClass().add(&quot;achievement-description&quot;);</span>
+<span class="nc" id="L227">            descriptionLabel.setWrapText(true);</span>
+<span class="nc" id="L228">            descriptionLabel.setMaxWidth(Double.MAX_VALUE);</span>
+
+<span class="nc" id="L230">            badge.getChildren().addAll(</span>
+                    iconHolder,
+                    contentSpacer,
+                    nameLabel,
+                    levelLabel,
+                    descriptionLabel
+            );
+
+<span class="nc" id="L238">            Tooltip.install(badge, new Tooltip(achievement.name() + &quot;\n&quot; + achievement.description()));</span>
+<span class="nc" id="L239">            achievementsGrid.add(badge, index % columnCount, index / columnCount);</span>
+        }
+<span class="nc" id="L241">    }</span>
+
+    private ImageView LoadAchievementIcon(Achievement achievement) {
+<span class="nc" id="L244">        String resourcePath = IconPathForLevel(achievement.level());</span>
+
+<span class="nc" id="L246">        try (InputStream stream = ProfileController.class.getResourceAsStream(resourcePath)) {</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">            if (stream == null) {</span>
+<span class="nc" id="L248">                return null;</span>
+            }
+
+<span class="nc" id="L251">            ImageView imageView = new ImageView(new Image(stream));</span>
+<span class="nc" id="L252">            imageView.setFitWidth(140);</span>
+<span class="nc" id="L253">            imageView.setFitHeight(140);</span>
+<span class="nc" id="L254">            imageView.setPreserveRatio(true);</span>
+<span class="nc" id="L255">            imageView.getStyleClass().add(&quot;achievement-icon-image&quot;);</span>
+<span class="nc" id="L256">            return imageView;</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">        } catch (Exception exception) {</span>
+<span class="nc" id="L258">            return null;</span>
+        }
+    }
+
+    private SVGPath CreateFallbackIcon() {
+<span class="nc" id="L263">        SVGPath star = new SVGPath();</span>
+<span class="nc" id="L264">        star.setContent(&quot;M12 17.27L18.18 21l-1.64-7.03L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z&quot;);</span>
+<span class="nc" id="L265">        star.getStyleClass().add(&quot;achievement-fallback-icon&quot;);</span>
+<span class="nc" id="L266">        return star;</span>
+    }
+
+    private void ApplyResponsiveLayout(double width) {
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        if (width &lt;= 0) {</span>
+<span class="nc" id="L271">            return;</span>
+        }
+
+<span class="nc bnc" id="L274" title="All 2 branches missed.">        int achievementColumns = width &lt; 600</span>
+<span class="nc" id="L275">                ? 1</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">                : width &lt; 850</span>
+<span class="nc" id="L277">                ? 2</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">                : width &lt; 1050</span>
+<span class="nc" id="L279">                ? 3</span>
+<span class="nc" id="L280">                : DEFAULT_ACHIEVEMENT_COLUMNS;</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">        if (achievementsGrid.getColumnConstraints().size() != achievementColumns) {</span>
+<span class="nc" id="L282">            ConfigureAchievementsGrid(achievementColumns);</span>
+<span class="nc" id="L283">            PopulateAchievements(achievements);</span>
+        }
+
+<span class="nc bnc" id="L286" title="All 2 branches missed.">        boolean stacked = width &lt; STACKED_BREAKPOINT;</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">        if (stacked) {</span>
+<span class="nc" id="L288">            GridPane.setColumnIndex(progressCard, 0);</span>
+<span class="nc" id="L289">            GridPane.setRowIndex(progressCard, 1);</span>
+<span class="nc" id="L290">            statsGrid.getColumnConstraints().get(0).setPercentWidth(FULL_PERCENT);</span>
+<span class="nc" id="L291">            statsGrid.getColumnConstraints().get(1).setPercentWidth(HIDDEN_PERCENT);</span>
+        } else {
+<span class="nc" id="L293">            GridPane.setColumnIndex(progressCard, 1);</span>
+<span class="nc" id="L294">            GridPane.setRowIndex(progressCard, 0);</span>
+<span class="nc" id="L295">            statsGrid.getColumnConstraints().get(0).setPercentWidth(IDENTITY_CARD_PERCENT);</span>
+<span class="nc" id="L296">            statsGrid.getColumnConstraints().get(1).setPercentWidth(PROGRESS_CARD_PERCENT);</span>
+        }
+<span class="nc" id="L298">    }</span>
+
+    private void DrawProgressGraph() {
+<span class="nc" id="L301">        GraphicsContext graphics = progressChart.getGraphicsContext2D();</span>
+<span class="nc" id="L302">        double width = progressChart.getWidth();</span>
+<span class="nc" id="L303">        double height = progressChart.getHeight();</span>
+<span class="nc" id="L304">        double centerX = width / 2;</span>
+<span class="nc" id="L305">        double centerY = height / 2 + RADAR_CENTER_Y_OFFSET;</span>
+<span class="nc" id="L306">        double radius = Math.min(width, height) * RADAR_RADIUS_RATIO;</span>
+<span class="nc" id="L307">        int axes = RADAR_AXIS_COUNT;</span>
+
+<span class="nc" id="L309">        graphics.clearRect(0, 0, width, height);</span>
+<span class="nc" id="L310">        graphics.setLineWidth(1);</span>
+<span class="nc" id="L311">        graphics.setStroke(Color.web(&quot;#777777&quot;));</span>
+
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        for (int level = 1; level &lt;= RADAR_LEVEL_COUNT; level++) {</span>
+<span class="nc" id="L314">            double levelRadius = radius * level / RADAR_LEVEL_COUNT;</span>
+<span class="nc" id="L315">            double[] xPoints = new double[axes];</span>
+<span class="nc" id="L316">            double[] yPoints = new double[axes];</span>
+
+<span class="nc bnc" id="L318" title="All 2 branches missed.">            for (int axis = 0; axis &lt; axes; axis++) {</span>
+<span class="nc" id="L319">                xPoints[axis] = PointX(centerX, levelRadius, axis, axes);</span>
+<span class="nc" id="L320">                yPoints[axis] = PointY(centerY, levelRadius, axis, axes);</span>
+            }
+
+<span class="nc" id="L323">            graphics.strokePolygon(xPoints, yPoints, axes);</span>
+        }
+
+<span class="nc bnc" id="L326" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
+<span class="nc" id="L327">            graphics.strokeLine(centerX, centerY,</span>
+<span class="nc" id="L328">                    PointX(centerX, radius, axis, axes),</span>
+<span class="nc" id="L329">                    PointY(centerY, radius, axis, axes));</span>
+        }
+
+<span class="nc" id="L332">        double[] xPoints = new double[axes];</span>
+<span class="nc" id="L333">        double[] yPoints = new double[axes];</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
+<span class="nc" id="L335">            xPoints[axis] = PointX(centerX, radius * radarValues[axis], axis, axes);</span>
+<span class="nc" id="L336">            yPoints[axis] = PointY(centerY, radius * radarValues[axis], axis, axes);</span>
+        }
+
+<span class="nc" id="L339">        graphics.setFill(Color.rgb(46, 135, 207, 0.45));</span>
+<span class="nc" id="L340">        graphics.fillPolygon(xPoints, yPoints, axes);</span>
+<span class="nc" id="L341">        graphics.setStroke(Color.web(&quot;#43a9f2&quot;));</span>
+<span class="nc" id="L342">        graphics.setLineWidth(2);</span>
+<span class="nc" id="L343">        graphics.strokePolygon(xPoints, yPoints, axes);</span>
+
+<span class="nc" id="L345">        graphics.setFill(Color.web(&quot;#c4b5fd&quot;));</span>
+<span class="nc" id="L346">        graphics.setFont(Font.font(&quot;Poppins&quot;, 10));</span>
+<span class="nc" id="L347">        graphics.setTextAlign(TextAlignment.CENTER);</span>
+<span class="nc bnc" id="L348" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
+<span class="nc" id="L349">            DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);</span>
+        }
+<span class="nc" id="L351">    }</span>
+
+    private void DrawAxisLabel(
+            GraphicsContext graphics,
+            String label,
+            double centerX,
+            double centerY,
+            double radius,
+            int axis,
+            int axes) {
+<span class="nc" id="L361">        double labelRadius = radius + 22;</span>
+<span class="nc" id="L362">        double x = PointX(centerX, labelRadius, axis, axes);</span>
+<span class="nc" id="L363">        double y = PointY(centerY, labelRadius, axis, axes);</span>
+
+<span class="nc bnc" id="L365" title="All 2 branches missed.">        if (x &lt; centerX - 8) {</span>
+<span class="nc" id="L366">            graphics.setTextAlign(TextAlignment.RIGHT);</span>
+<span class="nc" id="L367">            x -= 4;</span>
+<span class="nc bnc" id="L368" title="All 2 branches missed.">        } else if (x &gt; centerX + 8) {</span>
+<span class="nc" id="L369">            graphics.setTextAlign(TextAlignment.LEFT);</span>
+<span class="nc" id="L370">            x += 4;</span>
+        } else {
+<span class="nc" id="L372">            graphics.setTextAlign(TextAlignment.CENTER);</span>
+        }
+
+<span class="nc" id="L375">        graphics.fillText(label, x, y);</span>
+<span class="nc" id="L376">    }</span>
+
+    private double PointX(double centerX, double radius, int axis, int axes) {
+<span class="nc" id="L379">        return centerX + radius * Math.cos(-Math.PI / 2 + axis * 2 * Math.PI / axes);</span>
+    }
+
+    private double PointY(double centerY, double radius, int axis, int axes) {
+<span class="nc" id="L383">        return centerY + radius * Math.sin(-Math.PI / 2 + axis * 2 * Math.PI / axes);</span>
+    }
+
+    @FXML
+    private void OnArchetypeClick() throws IOException {
+<span class="nc" id="L388">        NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);</span>
+<span class="nc" id="L389">    }</span>
+
+    private String IconPathForLevel(int level) {
+<span class="nc bnc" id="L392" title="All 5 branches missed.">        return switch (level) {</span>
+<span class="nc" id="L393">            case 1 -&gt; &quot;/com/example/personalityquest/img/achievements/shield-bronze-8.png&quot;;</span>
+<span class="nc" id="L394">            case 2 -&gt; &quot;/com/example/personalityquest/img/achievements/shield-silver-8.png&quot;;</span>
+<span class="nc" id="L395">            case 3 -&gt; &quot;/com/example/personalityquest/img/achievements/shield-gold-9.png&quot;;</span>
+<span class="nc" id="L396">            case 4 -&gt; &quot;/com/example/personalityquest/img/achievements/shield-platinum-12.png&quot;;</span>
+<span class="nc" id="L397">            default -&gt; &quot;/com/example/personalityquest/img/achievements/shield-bronze-8.png&quot;;</span>
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.quest</a> &gt; <span class="el_source">TaskService.java</span></div><h1>TaskService.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.quest;
+
+import com.example.personalityquest.DAO.quest.TaskDAO;
+import com.example.personalityquest.Model.quest.Task;
+import com.example.personalityquest.ApplicationManager;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+<span class="nc" id="L11">public class TaskService {</span>
+<span class="fc" id="L12">    private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();</span>
+
+    /**
+     * Gets a Task from the database that matches the given id
+     * @param taskId The taskId you of the Task you want to retrieve
+     * @return A Task objecting containing the given taskId's information of the
+     * taskId, name, description and labourId(QuestId) or Null if that taskID doesn't exist
+     * @throws IllegalArgumentException If the given taskId is equal to 0
+     * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
+     */
+    public static Task GetTaskForId(int taskId) throws Exception {
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (IsTaskIdNull(taskId)){</span>
+<span class="fc" id="L24">            throw new IllegalArgumentException(&quot;TaskId is null&quot;);</span>
+        }
+
+<span class="fc" id="L27">        return TaskDAO.GetTaskForId(taskId);</span>
+    }
+
+    /**
+     * Gets every storyline quest task that belongs to a labour.
+     * Weekly practices are stored separately and are not returned here.
+     * @param labourId The labourId you want the quest tasks for
+     * @return A list of Task objects, empty if none exist
+     * @throws Exception If the labourId is invalid or a Database Access Failure occurs
+     */
+    public static List&lt;Task&gt; GetTasksForLabourId(int labourId) throws Exception {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (IsLabourIdNull(labourId)) {</span>
+<span class="fc" id="L39">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+        }
+
+<span class="fc" id="L42">        return TaskDAO.GetTasksForLabourId(labourId);</span>
+    }
+
+    /**
+     * Joins task names for compact UI labels.
+     */
+    public static String JoinTaskNames(List&lt;Task&gt; tasks) {
+<span class="nc bnc" id="L49" title="All 4 branches missed.">        if (tasks == null || tasks.isEmpty()) {</span>
+<span class="nc" id="L50">            return &quot;&quot;;</span>
+        }
+
+<span class="nc" id="L53">        StringBuilder names = new StringBuilder();</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        for (Task task : tasks) {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            if (!names.isEmpty()) {</span>
+<span class="nc" id="L56">                names.append(&quot; · &quot;);</span>
+            }
+<span class="nc" id="L58">            names.append(task.getName());</span>
+<span class="nc" id="L59">        }</span>
+<span class="nc" id="L60">        return names.toString();</span>
+    }
+
+    /**
+     * Joins task names and descriptions for labour detail copy.
+     */
+    public static String JoinTaskDetails(List&lt;Task&gt; tasks) {
+<span class="nc bnc" id="L67" title="All 4 branches missed.">        if (tasks == null || tasks.isEmpty()) {</span>
+<span class="nc" id="L68">            return &quot;&quot;;</span>
+        }
+
+<span class="nc" id="L71">        StringBuilder details = new StringBuilder();</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        for (Task task : tasks) {</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (!details.isEmpty()) {</span>
+<span class="nc" id="L74">                details.append(&quot;\n\n&quot;);</span>
+            }
+<span class="nc" id="L76">            details.append(task.getName());</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">            if (!ApplicationManager.isEmpty(task.getDescription())) {</span>
+<span class="nc" id="L78">                details.append(&quot;\n&quot;).append(task.getDescription());</span>
+            }
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">        return details.toString();</span>
+    }
+
+
+    /**
+     * Gets random weekly-practice task ids for a labour.
+     * These come from the weekly pool, not the storyline quest tasks.
+     * @param labourId The labourId that you will get weekly taskId's for
+     * @return A populated Array of weekly taskId's that have a matching labourId to the one given
+     * @throws Exception If the labourId is null OR a Database Access Failure
+     */
+    public static int[] GetRandomAmountOfTaskIdsForLabourId(int labourId) throws Exception {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (IsLabourIdNull(labourId)){</span>
+<span class="fc" id="L94">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+        }
+
+<span class="fc" id="L97">        List&lt;Integer&gt; taskIds = TaskDAO.GetWeeklyTaskIdsForLabourId(labourId);</span>
+
+
+<span class="fc" id="L100">        Collections.shuffle(taskIds);</span>
+
+
+<span class="fc" id="L103">        int[] returnedTaskIds = new int[AMOUNT_OF_TASKS];</span>
+
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (int i = 0; i &lt; AMOUNT_OF_TASKS; i++){</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (i == taskIds.size()) {</span>
+<span class="fc" id="L107">                System.out.println(&quot;Early returned&quot;);</span>
+<span class="fc" id="L108">                return Arrays.copyOf(returnedTaskIds, i);</span>
+            }
+<span class="fc" id="L110">            returnedTaskIds[i] = taskIds.get(i);</span>
+        }
+
+<span class="fc" id="L113">        return returnedTaskIds;</span>
+    }
+
+    /**
+     * Gets the three weekly-practice ids for a labour week. Week 1 is the first three weekly tasks,
+     * week 2 the next three, and so on. Storyline quest tasks are never included.
+     * @param labourId The labour whose weekly pool to read
+     * @param weekNumber The 1-based week of the labour
+     * @return Weekly task ids for that week, empty if none exist
+     */
+    public static int[] GetTaskIdsForLabourWeek(int labourId, int weekNumber) throws Exception {
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (IsLabourIdNull(labourId)) {</span>
+<span class="nc" id="L125">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+        }
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if (weekNumber &lt;= 0) {</span>
+<span class="nc" id="L128">            throw new IllegalArgumentException(&quot;Week number is invalid&quot;);</span>
+        }
+
+<span class="fc" id="L131">        List&lt;Integer&gt; taskIds = TaskDAO.GetWeeklyTaskIdsForLabourId(labourId);</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (taskIds.isEmpty()) {</span>
+<span class="nc" id="L133">            return new int[0];</span>
+        }
+
+<span class="fc" id="L136">        int weeks = Math.max(1, (int) Math.ceil(taskIds.size() / (double) AMOUNT_OF_TASKS));</span>
+<span class="fc" id="L137">        int week = ((weekNumber - 1) % weeks) + 1;</span>
+<span class="fc" id="L138">        int start = (week - 1) * AMOUNT_OF_TASKS;</span>
+<span class="fc" id="L139">        int count = Math.min(AMOUNT_OF_TASKS, taskIds.size());</span>
+<span class="fc" id="L140">        int[] returnedTaskIds = new int[count];</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        for (int index = 0; index &lt; count; index++) {</span>
+<span class="fc" id="L142">            returnedTaskIds[index] = taskIds.get((start + index) % taskIds.size());</span>
+        }
+<span class="fc" id="L144">        return returnedTaskIds;</span>
+    }
+
+    /// NULL CHECKING
+    /**
+     * Checks if the given labourId is equal to 0
+     * @param labourId The labourId you want checked
+     * @return Whether the labourId is equal to 0
+     */
+    private static boolean IsLabourIdNull(int labourId){
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        return labourId == 0;</span>
+    }
+    /**
+     * Checks if the given taskId is equal to 0
+     * @param taskId The taskId you want checked
+     * @return Whether the taskId is equal to 0
+     */
+    private static boolean IsTaskIdNull(int taskId){
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        return taskId == 0;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

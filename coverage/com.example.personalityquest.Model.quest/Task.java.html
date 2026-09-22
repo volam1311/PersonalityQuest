@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Task.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Model.quest</a> &gt; <span class="el_source">Task.java</span></div><h1>Task.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Model.quest;
+
+import com.example.personalityquest.ApplicationManager;
+
+/**
+ * A task definition from the Tasks table.
+ * Quest tasks are storyline steps on a labour. 
+ */
+public class Task {
+<span class="fc" id="L10">    public Task(int taskId, String name, String description, int labourId) throws Exception {</span>
+<span class="pc bpc" id="L11" title="1 of 2 branches missed.">        if (taskId == 0){</span>
+<span class="nc" id="L12">            throw new Exception(&quot;Task Id is == 0 or is null&quot;);</span>
+        }
+<span class="pc bpc" id="L14" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(name)){</span>
+<span class="nc" id="L15">            System.out.println(&quot;UserName is null&quot;);</span>
+<span class="nc" id="L16">            name = &quot;&quot;;</span>
+        }
+
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(description)){</span>
+<span class="nc" id="L20">            System.out.println(&quot;FirstName is null&quot;);</span>
+<span class="nc" id="L21">            description = &quot;&quot;;</span>
+        }
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">        if (labourId == 0){</span>
+<span class="nc" id="L24">            throw new Exception(&quot;Labour Id is == 0 or is null&quot;);</span>
+        }
+
+<span class="fc" id="L27">        this.taskId = taskId;</span>
+<span class="fc" id="L28">        this.name = name;</span>
+<span class="fc" id="L29">        this.description = description;</span>
+<span class="fc" id="L30">        this.labourId = labourId;</span>
+<span class="fc" id="L31">    }</span>
+
+
+    private final int taskId;
+    private final String name;
+    private final String description;
+    private final int labourId;
+
+    public int getTaskId(){
+<span class="fc" id="L40">        return this.taskId;</span>
+    }
+
+    public String getName(){
+<span class="fc" id="L44">        return this.name;</span>
+    }
+
+    public String getDescription(){
+<span class="fc" id="L48">        return this.description;</span>
+    }
+
+    public int getLabourId(){
+<span class="fc" id="L52">        return this.labourId;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L57">        return getName();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

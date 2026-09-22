@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StreakService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.profile</a> &gt; <span class="el_source">StreakService.java</span></div><h1>StreakService.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.profile;
+
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.profile.StreakDAO;
+import com.example.personalityquest.Model.profile.StreakProgress;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.DayOfWeek;
+import java.time.temporal.TemporalAdjusters;
+
+/**
+ * Manages streak calculations and delegates progress persistence to StreakDAO
+ */
+public class StreakService {
+
+    private static final int NO_STREAK = 0;
+    private static final int FIRST_STREAK = 1;
+
+    private StreakService() {
+    }
+
+    /**
+     * @param date The date of current day
+     * Helper function to get the start of the week for streaks
+     * @return The date of the Monday of the current week
+     */
+    private static LocalDate WeekStart(LocalDate date) {
+<span class="fc" id="L29">        LocalDate today = LocalDate.now(); // Gets the current date</span>
+
+<span class="fc" id="L31">        return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));</span>
+    }
+
+    /**
+     * Records a completion and returns the updated current streak
+     * @param email The account email
+     * @param completionDate The date of the completion
+     * @return The updated current streak
+     * @throws SQLException If the progress cannot be read or saved
+     */
+    public static int RecordCompletion(String email, LocalDate completionDate)
+            throws SQLException {
+
+<span class="fc bfc" id="L44" title="All 4 branches covered.">        if (ApplicationManager.isEmpty(email) || completionDate == null) {</span>
+<span class="fc" id="L45">            return NO_STREAK;</span>
+        }
+
+<span class="fc" id="L48">        StreakProgress progress = StreakDAO.GetProgress(email);</span>
+
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (progress == null) {</span>
+<span class="fc" id="L51">            return NO_STREAK;</span>
+        }
+
+<span class="fc" id="L54">        LocalDate completionWeek = completionDate.with(</span>
+<span class="fc" id="L55">                TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)</span>
+        );
+<span class="fc" id="L57">        LocalDate lastCompletionDate = progress.GetLastCompletionDate();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        LocalDate lastCompletionWeek = lastCompletionDate == null</span>
+<span class="fc" id="L59">                ? null</span>
+<span class="fc" id="L60">                : lastCompletionDate.with(</span>
+<span class="fc" id="L61">                        TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)</span>
+                );
+
+        // Do not increase the streak more than once in the same week
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (completionWeek.equals(lastCompletionWeek)) {</span>
+<span class="fc" id="L66">            return progress.GetCurrentStreak();</span>
+        }
+
+        // Do not replace saved progress with an older completion week
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (lastCompletionWeek != null</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">                &amp;&amp; completionWeek.isBefore(lastCompletionWeek)) {</span>
+<span class="nc" id="L72">            return progress.GetCurrentStreak();</span>
+        }
+
+<span class="fc" id="L75">        int updatedStreak = FIRST_STREAK;</span>
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (lastCompletionWeek != null</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">                &amp;&amp; lastCompletionWeek.plusWeeks(1).equals(completionWeek)) {</span>
+<span class="fc" id="L79">            updatedStreak = progress.GetCurrentStreak() + 1;</span>
+        }
+
+<span class="fc" id="L82">        int updatedBestStreak = Math.max(</span>
+<span class="fc" id="L83">                progress.GetBestStreak(),</span>
+                updatedStreak
+        );
+
+<span class="fc" id="L87">        StreakDAO.SaveProgress(</span>
+                email,
+                updatedStreak,
+                updatedBestStreak,
+                completionDate
+        );
+
+<span class="fc" id="L94">        return updatedStreak;</span>
+    }
+
+    /**
+     * Gets the current streak using today's date
+     * @param email The account email
+     * @return The current streak
+     * @throws SQLException If the progress cannot be read
+     */
+    public static int GetCurrentStreak(String email) throws SQLException {
+<span class="nc" id="L104">        return GetCurrentStreak(email, LocalDate.now());</span>
+    }
+
+    /**
+     * Gets the current streak for a specified date
+     * @param email The account email
+     * @param today The date used to determine whether the streak is active
+     * @return The current streak, or zero after a missed day
+     * @throws SQLException If the progress cannot be read
+     */
+    public static int GetCurrentStreak(String email, LocalDate today) throws SQLException {
+
+<span class="pc bpc" id="L116" title="2 of 4 branches missed.">        if (ApplicationManager.isEmpty(email) || today == null) {</span>
+<span class="nc" id="L117">            return NO_STREAK;</span>
+        }
+
+<span class="fc" id="L120">        StreakProgress progress = StreakDAO.GetProgress(email);</span>
+
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if (progress == null) {</span>
+<span class="nc" id="L123">            return NO_STREAK;</span>
+        }
+
+<span class="fc" id="L126">        LocalDate currentWeek = WeekStart(today);</span>
+<span class="fc" id="L127">        LocalDate lastCompletionDate = progress.GetLastCompletionDate();</span>
+
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (lastCompletionDate != null) {</span>
+<span class="fc" id="L130">            LocalDate lastCompletionWeek = WeekStart(lastCompletionDate);</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">            if (lastCompletionWeek.isBefore(currentWeek.minusWeeks(1))) {</span>
+<span class="fc" id="L132">                return NO_STREAK;</span>
+            }
+        }
+
+<span class="nc" id="L136">        return progress.GetCurrentStreak();</span>
+    }
+
+    /**
+     * Gets the highest streak achieved by an account
+     * @param email The account email
+     * @return The best streak
+     * @throws SQLException If the progress cannot be read
+     */
+    public static int GetBestStreak(String email) throws SQLException {
+
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L148">            return NO_STREAK;</span>
+        }
+
+<span class="fc" id="L151">        StreakProgress progress = StreakDAO.GetProgress(email);</span>
+
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (progress == null) {</span>
+<span class="nc" id="L154">            return NO_STREAK;</span>
+        }
+
+<span class="fc" id="L157">        return progress.GetBestStreak();</span>
+    }
+
+    /**
+     * Increases the amount of quests the user has completed
+     * @param email The email matching the account you want to update
+     * @return What the total quest completion is at for the email
+     */
+    public static int IncreaseTotalQuestsCompleted(String email) throws SQLException {
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(email)){</span>
+<span class="nc" id="L167">            throw new IllegalArgumentException(&quot;Email is null&quot;);</span>
+        }
+
+<span class="fc" id="L170">        int totalQuests = StreakDAO.GetTotalQuestsCompleted(email);</span>
+<span class="fc" id="L171">        totalQuests++;</span>
+<span class="fc" id="L172">        StreakDAO.SetTotalQuestsCompleted(email, totalQuests);</span>
+
+<span class="fc" id="L174">        return StreakDAO.GetTotalQuestsCompleted(email);</span>
+    }
+
+    /**
+     * Gets the amount of quests the user has completed
+     * @param email The email matching the account you want to update
+     * @return What the total quest completion is for the email
+     */
+    public static int GetTotalQuestsCompleted(String email) throws SQLException {
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)){</span>
+<span class="fc" id="L184">            throw new IllegalArgumentException(&quot;Email is null&quot;);</span>
+        }
+
+<span class="fc" id="L187">        return StreakDAO.GetTotalQuestsCompleted(email);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

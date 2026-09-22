@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Archetype.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Model.quiz</a> &gt; <span class="el_source">Archetype.java</span></div><h1>Archetype.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Model.quiz;
+
+/**
+ * Jungian brand archetypes used by the personality quiz and quest assignment.
+ */
+<span class="fc" id="L6">public enum Archetype {</span>
+
+    // Realm: Ego
+<span class="fc" id="L9">    INNOCENT(</span>
+            1,
+            &quot;Ego&quot;,
+            &quot;Innocent&quot;,
+            &quot;You approach life with optimism, simplicity, and trust in others.&quot;,
+            &quot;Filler&quot;,
+            &quot;Positive, honest, hopeful, and able to make others feel safe.&quot;,
+            &quot;Can be overly trusting, avoid difficult realities, or appear naive.&quot;,
+            &quot;Faith&quot;,
+            &quot;A grounded trust in goodness and hope for how things can turn out, held with open eyes rather than illusions.&quot;,
+            &quot;Naive&quot;,
+            &quot;Trusting without discernment; believing what feels safe and ignoring the warning signs.&quot;,
+            &quot;Cynic&quot;,
+            &quot;Trust withdrawn as armour; treating hope as foolish and expecting the worst.&quot;,
+            &quot;\uD83D\uDD4A\uFE0F&quot;
+    ),
+
+<span class="fc" id="L26">    EVERYMAN(</span>
+            2,
+            &quot;Ego&quot;,
+            &quot;Everyman&quot;,
+            &quot;You value belonging, fairness, and building genuine connections with others.&quot;,
+            &quot;Filler&quot;,
+            &quot;Approachable, dependable, cooperative, and good at bringing people together.&quot;,
+            &quot;Can suppress individuality, fear standing out, or follow the group too readily.&quot;,
+            &quot;Solidarity&quot;,
+            &quot;Belonging as an equal; connecting with others on level footing, neither above nor below them.&quot;,
+            &quot;Elitism&quot;,
+            &quot;Holding yourself apart as superior; breaking the common bond to stand above the crowd.&quot;,
+            &quot;Conformity&quot;,
+            &quot;Dissolving into the group; letting the crowd think for you and losing your own judgment.&quot;,
+            &quot;\uD83E\uDD1D&quot;
+    ),
+
+<span class="fc" id="L43">    HERO(</span>
+            3,
+            &quot;Ego&quot;,
+            &quot;Hero&quot;,
+            &quot;You meet challenges directly and aim to prove yourself through courageous action.&quot;,
+            &quot;Filler&quot;,
+            &quot;Brave, determined, disciplined, and able to inspire others.&quot;,
+            &quot;Can become overly competitive, arrogant, or focused on winning at any cost.&quot;,
+            &quot;Courage&quot;,
+            &quot;Facing fear and acting well in spite of it; meeting danger with judgment rather than being ruled by it.&quot;,
+            &quot;Cowardice&quot;,
+            &quot;Letting fear govern; shrinking from what should be faced.&quot;,
+            &quot;Recklessness&quot;,
+            &quot;Feeling too little fear; rushing into danger without heeding the risk.&quot;,
+            &quot;\u2694\uFE0F&quot;
+    ),
+
+    // Realm: Soul
+<span class="fc" id="L61">    CAREGIVER(</span>
+            4,
+            &quot;Soul&quot;,
+            &quot;Caregiver&quot;,
+            &quot;You protect and support others, especially when they are facing hardship.&quot;,
+            &quot;Filler&quot;,
+            &quot;Compassionate, generous, patient, and dependable.&quot;,
+            &quot;Can neglect personal needs, become overprotective, or feel taken for granted.&quot;,
+            &quot;Compassion&quot;,
+            &quot;Tending to others' needs with warmth, and knowing where your care ends and their own strength begins.&quot;,
+            &quot;Submissive&quot;,
+            &quot;Leaving others to fend for themselves; care withheld out of coldness or self-interest.&quot;,
+            &quot;Smothering&quot;,
+            &quot;Care that crowds and controls; help so constant it keeps others from standing on their own.&quot;,
+            &quot;\uD83E\uDEC2&quot;
+    ),
+
+<span class="fc" id="L78">    MAGICIAN(</span>
+            5,
+            &quot;Soul&quot;,
+            &quot;Magician&quot;,
+            &quot;You transform ideas and perspectives to make meaningful change possible.&quot;,
+            &quot;Filler&quot;,
+            &quot;Visionary, imaginative, persuasive, and skilled at creating transformation.&quot;,
+            &quot;Can become manipulative, unrealistic, or overly secretive.&quot;,
+            &quot;Vision&quot;,
+            &quot;Seeing what could be and having the power to make it real; working with the deeper patterns of things to change them for the better.&quot;,
+            &quot;Rigidity&quot;,
+            &quot;Stuck and unable to change or be moved; clinging to how things are even as they stop working.&quot;,
+            &quot;Manipulation&quot;,
+            &quot;Using the power to shape reality for your own ends; bending people and truth rather than transforming them.&quot;,
+            &quot;\uD83D\uDD2E&quot;
+    ),
+
+<span class="fc" id="L95">    SAGE(</span>
+            6,
+            &quot;Soul&quot;,
+            &quot;Sage&quot;,
+            &quot;You seek truth, knowledge, and a deeper understanding of how things work.&quot;,
+            &quot;Filler&quot;,
+            &quot;Intelligent, thoughtful, analytical, and able to provide useful insight.&quot;,
+            &quot;Can overthink decisions, appear emotionally distant, or delay action.&quot;,
+            &quot;Wisdom&quot;,
+            &quot;Seeking truth for its own sake and holding it with an open mind; understanding the world clearly and letting that understanding grow.&quot;,
+            &quot;Credulity&quot;,
+            &quot;Believing too easily; taking things on faith without questioning them or looking closer.&quot;,
+            &quot;Detachment&quot;,
+            &quot;Retreating into pure thought; knowing much but never bringing it back to bear on life.&quot;,
+            &quot;\uD83E\uDD89&quot;
+    ),
+
+    // Realm: Self
+<span class="fc" id="L113">    LOVER(</span>
+            7,
+            &quot;Self&quot;,
+            &quot;Lover&quot;,
+            &quot;You value emotional connection, honesty, beauty, and meaningful relationships.&quot;,
+            &quot;Filler&quot;,
+            &quot;Passionate, empathetic, loyal, and attentive to others.&quot;,
+            &quot;Can become dependent, jealous, overly emotional, or afraid of rejection.&quot;,
+            &quot;Passion&quot;,
+            &quot;Loving deeply and appreciating beauty, pleasure, and connection; giving yourself fully to what and whom you cherish.&quot;,
+            &quot;Insensibility&quot;,
+            &quot;Feeling too little; closed to desire, beauty, and closeness, holding others at arm's length.&quot;,
+            &quot;Self Indulgence&quot;,
+            &quot;Desire without restraint; chasing pleasure and intensity for their own sake, heedless of who it costs.&quot;,
+            &quot;\u2764\uFE0F&quot;
+    ),
+
+<span class="fc" id="L130">    JESTER(</span>
+            8,
+            &quot;Self&quot;,
+            &quot;Jester&quot;,
+            &quot;You use humour, playfulness, and creativity to bring joy and challenge stale thinking.&quot;,
+            &quot;Filler&quot;,
+            &quot;Funny, energetic, spontaneous, and able to lighten difficult situations.&quot;,
+            &quot;Can avoid serious responsibilities, become insensitive, or use humour defensively.&quot;,
+            &quot;Witty&quot;,
+            &quot;Bringing lightness, humour, and play; lifting a moment and helping others enjoy being alive.&quot;,
+            &quot;Boring&quot;,
+            &quot;Bringing no lightness; too stiff or humourless to play, draining the joy from a moment.&quot;,
+            &quot;Belittling&quot;,
+            &quot;Humour turned into a weapon; getting the laugh by mocking and cutting others down.&quot;,
+            &quot;\uD83C\uDFAD&quot;
+    ),
+
+<span class="fc" id="L147">    EXPLORER(</span>
+            9,
+            &quot;Self&quot;,
+            &quot;Explorer&quot;,
+            &quot;You seek freedom, discovery, and new experiences beyond familiar boundaries.&quot;,
+            &quot;Filler&quot;,
+            &quot;Independent, adventurous, curious, and willing to try new paths.&quot;,
+            &quot;Can become restless, unreliable, or dissatisfied with stability.&quot;,
+            &quot;Curiosity&quot;,
+            &quot;The pull to seek, learn, and discover; venturing beyond the familiar to see what's there.&quot;,
+            &quot;Sloth&quot;,
+            &quot;Staying put and letting the world come to you; curiosity gone cold, comfort chosen over discovery.&quot;,
+            &quot;Restlessness&quot;,
+            &quot;Never able to settle or arrive; forever chasing the next thing before the last one is finished.&quot;,
+            &quot;\uD83E\uDDED&quot;
+    ),
+
+    // Realm: Mark
+<span class="fc" id="L165">    CREATOR(</span>
+            10,
+            &quot;Mark&quot;,
+            &quot;Creator&quot;,
+            &quot;You turn original ideas into meaningful work and express yourself through what you build.&quot;,
+            &quot;Filler&quot;,
+            &quot;Creative, innovative, expressive, and committed to producing high-quality work.&quot;,
+            &quot;Can become perfectionistic, impractical, self-critical, or afraid to finish.&quot;,
+            &quot;Craftiness&quot;,
+            &quot;Making something new and real, and shaping it with the skill and discipline to see it through.&quot;,
+            &quot;Dullness&quot;,
+            &quot;Nothing new takes shape; unable or unwilling to make, create, or bring ideas to life.&quot;,
+            &quot;Delusion&quot;,
+            &quot;Lost in visions that never become anything; ideas untethered from reality and never made real.&quot;,
+            &quot;\uD83C\uDFA8&quot;
+    ),
+
+<span class="fc" id="L182">    RULER(</span>
+            11,
+            &quot;Mark&quot;,
+            &quot;Ruler&quot;,
+            &quot;You create order, accept responsibility, and guide others towards shared goals.&quot;,
+            &quot;Filler&quot;,
+            &quot;Confident, organised, responsible, and effective at leadership and delegation.&quot;,
+            &quot;Can become controlling, authoritarian, inflexible, or overly concerned with status.&quot;,
+            &quot;Order&quot;,
+            &quot;Bringing structure and stability, and using authority in service of those you're responsible for.&quot;,
+            &quot;Chaos&quot;,
+            &quot;Order abandoned; failing to take charge and leaving things to fall apart.&quot;,
+            &quot;Tyranny&quot;,
+            &quot;Control seized for its own sake; ruling over others to serve yourself rather than them.&quot;,
+            &quot;\uD83D\uDC51&quot;
+    ),
+
+<span class="fc" id="L199">    OUTLAW(</span>
+            12,
+            &quot;Mark&quot;,
+            &quot;Outlaw&quot;,
+            &quot;You challenge unfair systems and reject rules that prevent meaningful change.&quot;,
+            &quot;Filler&quot;,
+            &quot;Bold, independent, disruptive, and courageous enough to question authority.&quot;,
+            &quot;Can become destructive, reckless, confrontational, or rebellious without purpose.&quot;,
+            &quot;Liberation&quot;,
+            &quot;Breaking what's unjust to free yourself and others; defying corrupt power for the sake of something better.&quot;,
+            &quot;Submission&quot;,
+            &quot;Going along with what's wrong; obeying a broken order rather than standing against it.&quot;,
+            &quot;Vengeance&quot;,
+            &quot;Tearing down for its own sake; destruction with no cause to serve and nothing built in its place.&quot;,
+            &quot;\uD83D\uDD25&quot;
+    );
+
+    private final int archetypeId;
+    private final String realm;
+    private final String name;
+    private final String smallDescription;
+    private final String longDescription;
+    private final String strengths;
+    private final String weaknesses;
+    private final String valueMean;
+    private final String valueMeanDefinition;
+    private final String valueDeficit;
+    private final String valueDeficitDefinition;
+    private final String valueExcess;
+    private final String valueExcessDefinition;
+    private final String emoji;
+
+    Archetype(
+            int archetypeId,
+            String realm,
+            String name,
+            String smallDescription,
+            String longDescription,
+            String strengths,
+            String weaknesses,
+            String valueMean,
+            String valueMeanDefinition,
+            String valueDeficit,
+            String valueDeficitDefinition,
+            String valueExcess,
+            String valueExcessDefinition,
+            String emoji
+<span class="fc" id="L246">    ) {</span>
+<span class="fc" id="L247">        this.archetypeId = archetypeId;</span>
+<span class="fc" id="L248">        this.realm = realm;</span>
+<span class="fc" id="L249">        this.name = name;</span>
+<span class="fc" id="L250">        this.smallDescription = smallDescription;</span>
+<span class="fc" id="L251">        this.longDescription = longDescription;</span>
+<span class="fc" id="L252">        this.strengths = strengths;</span>
+<span class="fc" id="L253">        this.weaknesses = weaknesses;</span>
+<span class="fc" id="L254">        this.valueMean = valueMean;</span>
+<span class="fc" id="L255">        this.valueMeanDefinition = valueMeanDefinition;</span>
+<span class="fc" id="L256">        this.valueDeficit = valueDeficit;</span>
+<span class="fc" id="L257">        this.valueDeficitDefinition = valueDeficitDefinition;</span>
+<span class="fc" id="L258">        this.valueExcess = valueExcess;</span>
+<span class="fc" id="L259">        this.valueExcessDefinition = valueExcessDefinition;</span>
+<span class="fc" id="L260">        this.emoji = emoji;</span>
+<span class="fc" id="L261">    }</span>
+
+    // Public Getters and Setters
+
+<span class="fc" id="L265">    public int getArchetypeId() {return archetypeId;}</span>
+
+    /**
+     * The realm this archetype belongs to: &quot;Ego&quot;, &quot;Soul&quot;, &quot;Self&quot;, or &quot;Mark&quot;.
+     */
+<span class="nc" id="L270">    public String getRealm() {return realm;}</span>
+
+    public String getName() {
+<span class="fc" id="L273">        return name;</span>
+    }
+<span class="fc" id="L275">    public String getSmallDescription() {return smallDescription;}</span>
+<span class="nc" id="L276">    public String getLongDescription() {return longDescription;}</span>
+
+    public String getStrengths() {
+<span class="fc" id="L279">        return strengths;</span>
+    }
+    public String getWeaknesses() {
+<span class="fc" id="L282">        return weaknesses;</span>
+    }
+
+<span class="nc" id="L285">    public String getValue() {return valueMean;}</span>
+<span class="nc" id="L286">    public String getValueDefinition() {return valueMeanDefinition;}</span>
+
+<span class="nc" id="L288">    public String getValueDeficit() {return valueDeficit;}</span>
+<span class="nc" id="L289">    public String getValueDeficitDefinition() {return valueDeficitDefinition;}</span>
+
+<span class="nc" id="L291">    public String getValueExcess() {return valueExcess;}</span>
+<span class="nc" id="L292">    public String getValueExcessDefinition() {return valueExcessDefinition;}</span>
+
+<span class="nc" id="L294">    public String getEmoji() {return emoji;}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

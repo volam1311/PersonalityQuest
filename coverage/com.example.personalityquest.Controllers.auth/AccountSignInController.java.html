@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountSignInController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Controllers.auth</a> &gt; <span class="el_source">AccountSignInController.java</span></div><h1>AccountSignInController.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Controllers.auth;
+
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.auth.EmailService;
+import com.example.personalityquest.Services.navigation.NavigationService;
+import com.example.personalityquest.Services.auth.PasswordService;
+import com.example.personalityquest.ApplicationManager;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+
+import java.io.*;
+import java.sql.*;
+
+<span class="nc" id="L21">public class AccountSignInController {</span>
+    private static final double COMPACT_BREAKPOINT = 700;
+
+    @FXML
+    private StackPane root;
+    @FXML
+    private GridPane contentGrid;
+    @FXML
+    private StackPane brandingPane;
+    @FXML
+    private ImageView brandingImage;
+    @FXML
+    private VBox formPane;
+
+    @FXML
+    private TextField emailEntry, passwordEntry;
+
+    @FXML
+    private Label Message;
+
+    @FXML
+    private void initialize() {
+<span class="nc" id="L43">        Rectangle clip = new Rectangle();</span>
+<span class="nc" id="L44">        clip.setArcWidth(56);</span>
+<span class="nc" id="L45">        clip.setArcHeight(56);</span>
+<span class="nc" id="L46">        clip.widthProperty().bind(brandingPane.widthProperty());</span>
+<span class="nc" id="L47">        clip.heightProperty().bind(brandingPane.heightProperty());</span>
+<span class="nc" id="L48">        brandingPane.setClip(clip);</span>
+
+<span class="nc" id="L50">        brandingImage.fitWidthProperty().bind(brandingPane.widthProperty());</span>
+<span class="nc" id="L51">        brandingImage.fitHeightProperty().bind(brandingPane.heightProperty());</span>
+
+<span class="nc" id="L53">        emailEntry.textProperty().addListener((obs, oldText, newText) -&gt; clearFieldError(emailEntry));</span>
+<span class="nc" id="L54">        passwordEntry.textProperty().addListener((obs, oldText, newText) -&gt; clearFieldError(passwordEntry));</span>
+
+<span class="nc" id="L56">        root.widthProperty().addListener((obs, oldWidth, newWidth) -&gt; applyResponsiveLayout());</span>
+<span class="nc" id="L57">        root.heightProperty().addListener((obs, oldHeight, newHeight) -&gt; applyResponsiveLayout());</span>
+<span class="nc" id="L58">        Platform.runLater(this::applyResponsiveLayout);</span>
+<span class="nc" id="L59">    }</span>
+
+    private void applyResponsiveLayout() {
+<span class="nc bnc" id="L62" title="All 4 branches missed.">        if (root.getWidth() &lt;= 0 || contentGrid.getColumnConstraints().size() &lt; 2) {</span>
+<span class="nc" id="L63">            return;</span>
+        }
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        boolean compact = root.getWidth() &lt; COMPACT_BREAKPOINT;</span>
+<span class="nc" id="L67">        toggleStyleClass(root, &quot;compact&quot;, compact);</span>
+
+<span class="nc" id="L69">        ColumnConstraints leftColumn = contentGrid.getColumnConstraints().get(0);</span>
+<span class="nc" id="L70">        ColumnConstraints rightColumn = contentGrid.getColumnConstraints().get(1);</span>
+<span class="nc" id="L71">        RowConstraints firstRow = contentGrid.getRowConstraints().get(0);</span>
+<span class="nc" id="L72">        RowConstraints secondRow = contentGrid.getRowConstraints().get(1);</span>
+
+<span class="nc" id="L74">        brandingPane.setMinSize(0, 0);</span>
+<span class="nc" id="L75">        formPane.setMinSize(0, 0);</span>
+<span class="nc" id="L76">        brandingPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);</span>
+<span class="nc" id="L77">        formPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (compact) {</span>
+<span class="nc" id="L80">            GridPane.setConstraints(brandingPane, 0, 0);</span>
+<span class="nc" id="L81">            GridPane.setConstraints(formPane, 0, 1);</span>
+<span class="nc" id="L82">            leftColumn.setPercentWidth(100);</span>
+<span class="nc" id="L83">            rightColumn.setPercentWidth(0);</span>
+<span class="nc" id="L84">            rightColumn.setMinWidth(0);</span>
+<span class="nc" id="L85">            rightColumn.setMaxWidth(0);</span>
+<span class="nc" id="L86">            firstRow.setPercentHeight(32);</span>
+<span class="nc" id="L87">            firstRow.setVgrow(Priority.SOMETIMES);</span>
+<span class="nc" id="L88">            secondRow.setPercentHeight(68);</span>
+<span class="nc" id="L89">            secondRow.setVgrow(Priority.ALWAYS);</span>
+        } else {
+<span class="nc" id="L91">            GridPane.setConstraints(brandingPane, 0, 0);</span>
+<span class="nc" id="L92">            GridPane.setConstraints(formPane, 1, 0);</span>
+<span class="nc" id="L93">            leftColumn.setPercentWidth(50);</span>
+<span class="nc" id="L94">            rightColumn.setPercentWidth(50);</span>
+<span class="nc" id="L95">            rightColumn.setMinWidth(0);</span>
+<span class="nc" id="L96">            rightColumn.setMaxWidth(Double.MAX_VALUE);</span>
+<span class="nc" id="L97">            firstRow.setPercentHeight(100);</span>
+<span class="nc" id="L98">            firstRow.setVgrow(Priority.ALWAYS);</span>
+<span class="nc" id="L99">            secondRow.setPercentHeight(0);</span>
+<span class="nc" id="L100">            secondRow.setVgrow(Priority.NEVER);</span>
+        }
+<span class="nc" id="L102">    }</span>
+
+    private void toggleStyleClass(Node node, String styleClass, boolean enabled) {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (enabled) {</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            if (!node.getStyleClass().contains(styleClass)) {</span>
+<span class="nc" id="L107">                node.getStyleClass().add(styleClass);</span>
+            }
+        } else {
+<span class="nc" id="L110">            node.getStyleClass().remove(styleClass);</span>
+        }
+<span class="nc" id="L112">    }</span>
+
+    /*
+     * When &quot;Sign In&quot; Button is clicked
+     * */
+    @FXML
+    private void OnSignIn() throws SQLException, IOException {
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (!isValidSignIn()) {</span>
+<span class="nc" id="L120">            System.out.println(&quot;Account Sign In Invalid&quot;);</span>
+<span class="nc" id="L121">            return;</span>
+        }
+
+        /*
+         * Set currently logged in account
+         * */
+<span class="nc" id="L127">        ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());</span>
+
+<span class="nc" id="L129">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
+
+
+<span class="nc" id="L132">        System.out.println(&quot;Sign in complete&quot;);</span>
+<span class="nc" id="L133">    }</span>
+
+    /*
+     * Checks to see if the given email and password will work as a valid
+     * sign in
+     * */
+    private boolean isValidSignIn() throws SQLException {
+<span class="nc" id="L140">        clearFieldError(emailEntry);</span>
+<span class="nc" id="L141">        clearFieldError(passwordEntry);</span>
+
+<span class="nc" id="L143">        boolean emailMissing = isBlank(emailEntry.getText());</span>
+<span class="nc" id="L144">        boolean passwordMissing = isBlank(passwordEntry.getText());</span>
+<span class="nc bnc" id="L145" title="All 4 branches missed.">        if (emailMissing || passwordMissing) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">            if (emailMissing) {</span>
+<span class="nc" id="L147">                markFieldError(emailEntry);</span>
+            }
+<span class="nc bnc" id="L149" title="All 2 branches missed.">            if (passwordMissing) {</span>
+<span class="nc" id="L150">                markFieldError(passwordEntry);</span>
+            }
+<span class="nc" id="L152">            Message.setText(&quot;*Required&quot;);</span>
+<span class="nc" id="L153">            return false;</span>
+        }
+
+        // Does the email exist and does the password match the email
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        if (!EmailService.DoesAccountWithEmailExist(emailEntry.getText())</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        || !PasswordService.isPasswordForEmail(emailEntry.getText(), passwordEntry.getText())){</span>
+<span class="nc" id="L159">            markFieldError(emailEntry);</span>
+<span class="nc" id="L160">            markFieldError(passwordEntry);</span>
+<span class="nc" id="L161">            Message.setText(&quot;Email or Password Was entered incorrectly&quot;);</span>
+<span class="nc" id="L162">            return false;</span>
+        }
+
+<span class="nc" id="L165">        Message.setText(&quot;&quot;);</span>
+<span class="nc" id="L166">        return true;</span>
+    }
+
+    private boolean isBlank(String value) {
+<span class="nc bnc" id="L170" title="All 4 branches missed.">        return value == null || value.isBlank();</span>
+    }
+
+    private void markFieldError(TextField field) {
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        if (!field.getStyleClass().contains(&quot;error&quot;)) {</span>
+<span class="nc" id="L175">            field.getStyleClass().add(&quot;error&quot;);</span>
+        }
+<span class="nc" id="L177">    }</span>
+
+    private void clearFieldError(TextField field) {
+<span class="nc" id="L180">        field.getStyleClass().remove(&quot;error&quot;);</span>
+<span class="nc" id="L181">    }</span>
+
+    /*
+    * When &quot;Click here to Sign Up&quot; label is clicked
+    * */
+    @FXML
+    private void OnSignUp(MouseEvent event) throws IOException {
+<span class="nc" id="L188">        Stage currentStage = (Stage)((Node) event.getSource()).getScene().getWindow();</span>
+<span class="nc" id="L189">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
+<span class="nc" id="L190">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

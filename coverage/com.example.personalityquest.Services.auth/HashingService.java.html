@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HashingService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.auth</a> &gt; <span class="el_source">HashingService.java</span></div><h1>HashingService.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.auth;
+
+import at.favre.lib.crypto.bcrypt.BCrypt;
+/**
+ * This class managers everything to do with hashing and has utility functions to hash
+ * a string or check whether a given hashed string and a plaintext string match
+ */
+<span class="nc" id="L8">public class HashingService {</span>
+    /**
+     * Hashes the given string
+     * @param text &quot;The text you wish to hash&quot;
+     * @return &quot;The hashed version of the input text&quot;
+     */
+    public static String Hash(String text){
+
+<span class="fc" id="L16">        return BCrypt.withDefaults().hashToString(12, text.toCharArray());</span>
+    }
+
+    /**
+     * Checks to see whether the given hashed text is the same as the textToCheck
+     * @param hashedText &quot;Hashed text you want to match&quot;
+     * @param textToCheck &quot;The text you want to check&quot;
+     * @return &quot;Whether hashedText == textToCheck&quot;
+     */
+    public static boolean VerifyHash(String hashedText, String textToCheck){
+<span class="fc" id="L26">        return BCrypt.verifyer().verify(textToCheck.toCharArray(), hashedText).verified;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

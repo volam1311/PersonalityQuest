@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.auth</a> &gt; <span class="el_source">AccountService.java</span></div><h1>AccountService.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.auth;
+
+import com.example.personalityquest.DAO.auth.AccountDAO;
+import com.example.personalityquest.Model.auth.EmailDetails;
+
+import java.sql.SQLException;
+import java.util.Objects;
+
+<span class="nc" id="L9">public class AccountService {</span>
+
+    public static void UpdateEmailDetailsForAccount(EmailDetails emailDetails, String currentEmail) throws SQLException {
+        /*
+         * Does the new email already exist and is the email being updated
+         * */
+<span class="nc bnc" id="L15" title="All 4 branches missed.">        if (EmailService.DoesAccountWithEmailExist(emailDetails.getEmail()) &amp;&amp; !Objects.equals(currentEmail,emailDetails.getEmail())){</span>
+<span class="nc" id="L16">            throw new IllegalArgumentException(&quot;Email of &quot; + emailDetails.getEmail() + &quot; Already exists&quot;);</span>
+        }
+
+<span class="nc" id="L19">        AccountDAO.UpdateAccountDetails(emailDetails, currentEmail);</span>
+<span class="nc" id="L20">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OpenAiClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.chat</a> &gt; <span class="el_source">OpenAiClient.java</span></div><h1>OpenAiClient.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.chat;
+
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.EnvLoader;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
+/**
+ * Calls OpenAI's Chat Completions API using {@code OPENAI_API_KEY} from the environment or .env file.
+ */
+public class OpenAiClient implements ChatCompletionClient {
+    static final String DEFAULT_MODEL = &quot;gpt-4o-mini&quot;;
+<span class="fc" id="L17">    private static final URI CHAT_COMPLETIONS = URI.create(&quot;https://api.openai.com/v1/chat/completions&quot;);</span>
+<span class="fc" id="L18">    private static final Duration TIMEOUT = Duration.ofSeconds(45);</span>
+
+    private final HttpClient httpClient;
+    private final String model;
+
+    public OpenAiClient() {
+<span class="fc" id="L24">        this(HttpClient.newBuilder().connectTimeout(TIMEOUT).build(), DEFAULT_MODEL);</span>
+<span class="fc" id="L25">    }</span>
+
+<span class="fc" id="L27">    OpenAiClient(HttpClient httpClient, String model) {</span>
+<span class="fc" id="L28">        this.httpClient = httpClient;</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        this.model = ApplicationManager.isEmpty(model) ? DEFAULT_MODEL : model;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public String Complete(String systemPrompt, String userPrompt) throws Exception {
+<span class="nc" id="L34">        String apiKey = EnvLoader.Get(&quot;OPENAI_API_KEY&quot;);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(apiKey)) {</span>
+<span class="nc" id="L36">            throw new IllegalStateException(</span>
+                    &quot;Add OPENAI_API_KEY to PersonalityQuest/.env to get AI feedback.&quot;);
+        }
+
+<span class="nc" id="L40">        String body = RequestBody(model, systemPrompt, userPrompt);</span>
+<span class="nc" id="L41">        HttpRequest request = HttpRequest.newBuilder(CHAT_COMPLETIONS)</span>
+<span class="nc" id="L42">                .timeout(TIMEOUT)</span>
+<span class="nc" id="L43">                .header(&quot;Authorization&quot;, &quot;Bearer &quot; + apiKey)</span>
+<span class="nc" id="L44">                .header(&quot;Content-Type&quot;, &quot;application/json&quot;)</span>
+<span class="nc" id="L45">                .POST(HttpRequest.BodyPublishers.ofString(body))</span>
+<span class="nc" id="L46">                .build();</span>
+
+<span class="nc" id="L48">        HttpResponse&lt;String&gt; response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        String json = response.body() == null ? &quot;&quot; : response.body();</span>
+<span class="nc bnc" id="L50" title="All 4 branches missed.">        if (response.statusCode() &lt; 200 || response.statusCode() &gt;= 300) {</span>
+<span class="nc" id="L51">            throw new IllegalStateException(ErrorMessage(response.statusCode(), json));</span>
+        }
+
+<span class="nc" id="L54">        String content = OpenAiJson.ExtractString(json, &quot;content&quot;, &quot;choices&quot;);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(content)) {</span>
+<span class="nc" id="L56">            throw new IllegalStateException(&quot;OpenAI returned an empty reply.&quot;);</span>
+        }
+<span class="nc" id="L58">        return content.trim();</span>
+    }
+
+    public static String RequestBody(String model, String systemPrompt, String userPrompt) {
+<span class="fc" id="L62">        return &quot;&quot;&quot;</span>
+                {
+                  &quot;model&quot;: &quot;%s&quot;,
+                  &quot;temperature&quot;: 0.7,
+                  &quot;max_tokens&quot;: 400,
+                  &quot;messages&quot;: [
+                    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;%s&quot;},
+                    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;%s&quot;}
+                  ]
+                }
+<span class="fc" id="L72">                &quot;&quot;&quot;.formatted(</span>
+<span class="fc" id="L73">                OpenAiJson.Escape(model),</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">                OpenAiJson.Escape(systemPrompt == null ? &quot;&quot; : systemPrompt),</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                OpenAiJson.Escape(userPrompt == null ? &quot;&quot; : userPrompt)</span>
+        );
+    }
+
+    public static String ErrorMessage(int statusCode, String json) {
+<span class="fc" id="L80">        String apiMessage = OpenAiJson.ExtractString(json, &quot;message&quot;, &quot;error&quot;);</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (!ApplicationManager.isEmpty(apiMessage)) {</span>
+<span class="pc bpc" id="L82" title="3 of 4 branches missed.">            if (statusCode == 401 || statusCode == 403) {</span>
+<span class="fc" id="L83">                return &quot;The OpenAI API key was rejected. Check OPENAI_API_KEY in PersonalityQuest/.env.&quot;;</span>
+            }
+<span class="nc" id="L85">            return apiMessage;</span>
+        }
+<span class="nc bnc" id="L87" title="All 4 branches missed.">        if (statusCode == 401 || statusCode == 403) {</span>
+<span class="nc" id="L88">            return &quot;The OpenAI API key was rejected. Check OPENAI_API_KEY in PersonalityQuest/.env.&quot;;</span>
+        }
+<span class="nc" id="L90">        return &quot;OpenAI request failed (HTTP &quot; + statusCode + &quot;).&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

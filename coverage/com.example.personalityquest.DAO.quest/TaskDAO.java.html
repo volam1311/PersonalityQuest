@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.quest</a> &gt; <span class="el_source">TaskDAO.java</span></div><h1>TaskDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.quest;
+
+import com.example.personalityquest.Model.quest.Task;
+import com.example.personalityquest.SQLite;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L13">public class TaskDAO {</span>
+    private static final String FIND_TASK_INFO = &quot;&quot;&quot;
+            SELECT * FROM Tasks
+            WHERE taskId = ?;
+            &quot;&quot;&quot;;
+
+    private static final String GET_QUEST_TASKS_FOR_LABOURID = &quot;&quot;&quot;
+            SELECT * FROM Tasks
+            WHERE labourId = ?
+            AND IFNULL(taskType, 'QUEST') = 'QUEST'
+            ORDER BY taskId
+            &quot;&quot;&quot;;
+
+    private static final String GET_WEEKLY_TASK_IDS_FOR_LABOURID = &quot;&quot;&quot;
+            SELECT taskId FROM Tasks
+            WHERE labourId = ?
+            AND IFNULL(taskType, 'QUEST') = 'WEEKLY'
+            ORDER BY taskId
+            &quot;&quot;&quot;;
+
+    /**
+     * Gets a Task from the database that matches the given id
+     * @param taskId The taskId you of the Task you want to retrieve
+     * @return A Task objecting containing the given taskId's information of the
+     * taskId, name, description and labourId(QuestId)
+     * @throws IllegalArgumentException If the given taskId is equal to 0
+     * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
+     */
+    public static Task GetTaskForId(int taskId) throws Exception {
+<span class="fc" id="L42">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L43">        PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);</span>
+<span class="fc" id="L44">        Task task = null;</span>
+
+<span class="fc" id="L46">        statement.setInt(1, taskId);</span>
+<span class="fc" id="L47">        ResultSet rs = statement.executeQuery();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        while (rs.next()) {</span>
+<span class="fc" id="L49">            System.out.println(&quot;Makes new task&quot;);</span>
+<span class="fc" id="L50">            task = new Task(</span>
+<span class="fc" id="L51">                    rs.getInt(&quot;taskId&quot;),</span>
+<span class="fc" id="L52">                    rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L53">                    rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L54">                    rs.getInt(&quot;labourId&quot;)</span>
+            );
+        }
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (task == null){</span>
+<span class="fc" id="L59">            throw new Exception(&quot;No task matching the givenId&quot;);</span>
+        }
+<span class="fc" id="L61">        return task;</span>
+    }
+
+    /**
+     * Gets the weekly-practice task ids for a labour. These are not storyline quest tasks.
+     * @param labourId The labourId you want to get the weekly taskIds for
+     * @return A list of weekly task ids
+     * @throws SQLException Database Access Failure
+     */
+    public static List&lt;Integer&gt; GetWeeklyTaskIdsForLabourId(int labourId) throws SQLException {
+<span class="fc" id="L71">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L72">        PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK_IDS_FOR_LABOURID);</span>
+<span class="fc" id="L73">        List&lt;Integer&gt; taskIds = new ArrayList&lt;Integer&gt;();</span>
+
+<span class="fc" id="L75">        statement.setInt(1, labourId);</span>
+<span class="fc" id="L76">        ResultSet rs = statement.executeQuery();</span>
+
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        while (rs.next()) {</span>
+<span class="fc" id="L79">            taskIds.add(rs.getInt(&quot;taskId&quot;));</span>
+        }
+
+<span class="fc" id="L82">        return taskIds;</span>
+    }
+
+    /**
+     * Gets every storyline quest task that belongs to a labour.
+     * Weekly practices are stored separately and are not included.
+     * @param labourId The labourId you want the quest tasks for
+     * @return A list of Task objects, empty if none exist
+     * @throws Exception If a row cannot be mapped to a Task, or Database Access Failure
+     */
+    public static List&lt;Task&gt; GetTasksForLabourId(int labourId) throws Exception {
+<span class="fc" id="L93">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L94">        try (PreparedStatement statement = connection.prepareStatement(GET_QUEST_TASKS_FOR_LABOURID)) {</span>
+<span class="fc" id="L95">            statement.setInt(1, labourId);</span>
+<span class="fc" id="L96">            ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L97">            List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L99">                tasks.add(new Task(</span>
+<span class="fc" id="L100">                        rs.getInt(&quot;taskId&quot;),</span>
+<span class="fc" id="L101">                        rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L102">                        rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L103">                        rs.getInt(&quot;labourId&quot;)</span>
+                ));
+            }
+<span class="fc" id="L106">            return tasks;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

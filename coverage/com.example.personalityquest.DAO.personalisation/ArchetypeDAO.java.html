@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ArchetypeDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.personalisation</a> &gt; <span class="el_source">ArchetypeDAO.java</span></div><h1>ArchetypeDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.personalisation;
+
+import com.example.personalityquest.Model.quiz.Archetype;
+import com.example.personalityquest.Model.quiz.ArchetypeRecord;
+import com.example.personalityquest.SQLite;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class ArchetypeDAO {
+    private static final String CREATE_ARCHETYPES = &quot;&quot;&quot;
+            CREATE TABLE IF NOT EXISTS Archetypes (
+            archetypeId INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            smallDescription TEXT,
+            longDescription TEXT,
+            strengths TEXT,
+            weaknesses TEXT,
+            valueMean TEXT NOT NULL,
+            valueMeanDefinition TEXT NOT NULL,
+            valueDeficit TEXT NOT NULL,
+            valueDeficitDefinition TEXT NOT NULL,
+            valueExcess TEXT NOT NULL,
+            valueExcessDefinition TEXT NOT NULL,
+            emoji TEXT NOT NULL
+            )
+            &quot;&quot;&quot;;
+
+    private ArchetypeDAO() {}
+
+    public static void SeedCatalog() throws SQLException {
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc" id="L39">            InsertArchetype( archetype.getArchetypeId(), archetype.getName(), archetype.getSmallDescription(),</span>
+<span class="nc" id="L40">                    archetype.getLongDescription(), archetype.getStrengths(), archetype.getWeaknesses(),</span>
+<span class="nc" id="L41">                    archetype.getValue(), archetype.getValueDefinition(), archetype.getValueDeficit(),</span>
+<span class="nc" id="L42">                    archetype.getValueDeficitDefinition(), archetype.getValueExcess(), archetype.getValueExcessDefinition(),</span>
+<span class="nc" id="L43">                    archetype.getEmoji());</span>
+        }
+<span class="nc" id="L45">    }</span>
+
+    public static void EnsureTables() throws SQLException{
+<span class="nc" id="L48">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L49">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L50">            statement.executeUpdate(CREATE_ARCHETYPES);</span>
+        }
+<span class="nc" id="L52">    }</span>
+
+    public static boolean HasCatalog() throws SQLException{
+<span class="nc" id="L55">        EnsureTables();</span>
+<span class="nc" id="L56">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L57">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;SELECT COUNT(*) FROM Archetypes&quot;)) {
+<span class="nc" id="L59">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L60" title="All 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt;0;</span>
+        }
+    }
+
+
+
+    public static void InsertArchetype(
+            int archetypeID,
+            String name,
+            String smallDescription,
+            String longDescription,
+            String strengths,
+            String weaknesses,
+            String valueMean,
+            String valueMeanDefinition,
+            String valueDeficit,
+            String valueDeficitDefinition,
+            String valueExcess,
+            String valueExcessDefinition,
+            String emoji) throws SQLException{
+<span class="nc" id="L80">        EnsureTables();</span>
+<span class="nc" id="L81">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L82">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;&quot;&quot;
+                        INSERT OR IGNORE INTO Archetypes
+                        (archetypeId, name, smallDescription, longDescription, strengths, weaknesses, valueMean, valueMeanDefinition, valueDeficit, valueDeficitDefinition, valueExcess, valueExcessDefinition, emoji)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        &quot;&quot;&quot;)) {
+<span class="nc" id="L88">            statement.setInt(1, archetypeID);</span>
+<span class="nc" id="L89">            statement.setString(2, name);</span>
+<span class="nc" id="L90">            statement.setString(3, smallDescription);</span>
+<span class="nc" id="L91">            statement.setString(4, longDescription);</span>
+<span class="nc" id="L92">            statement.setString(5, strengths);</span>
+<span class="nc" id="L93">            statement.setString(6, weaknesses);</span>
+<span class="nc" id="L94">            statement.setString(7, valueMean);</span>
+<span class="nc" id="L95">            statement.setString(8, valueMeanDefinition);</span>
+<span class="nc" id="L96">            statement.setString(9, valueDeficit);</span>
+<span class="nc" id="L97">            statement.setString(10, valueDeficitDefinition);</span>
+<span class="nc" id="L98">            statement.setString(11, valueExcess);</span>
+<span class="nc" id="L99">            statement.setString(12, valueExcessDefinition);</span>
+<span class="nc" id="L100">            statement.setString(13, emoji);</span>
+<span class="nc" id="L101">            statement.executeUpdate();</span>
+        }
+<span class="nc" id="L103">    }</span>
+
+
+    public static List&lt;ArchetypeRecord&gt; GetCatalog() throws SQLException{
+<span class="nc" id="L107">        EnsureTables();</span>
+<span class="nc" id="L108">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L109">        try(PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;&quot;&quot;
+                    SELECT * FROM Archetypes ORDER BY archetypeID
+                    &quot;&quot;&quot; )){
+<span class="nc" id="L113">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L114">            List&lt;ArchetypeRecord&gt; archetypes = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L116">                archetypes.add(new ArchetypeRecord(</span>
+<span class="nc" id="L117">                        rs.getInt(&quot;archetypeID&quot;),</span>
+<span class="nc" id="L118">                        rs.getString(&quot;name&quot;),</span>
+<span class="nc" id="L119">                        rs.getString(&quot;smallDescription&quot;),</span>
+<span class="nc" id="L120">                        rs.getString(&quot;longDescription&quot;),</span>
+<span class="nc" id="L121">                        rs.getString(&quot;strengths&quot;),</span>
+<span class="nc" id="L122">                        rs.getString(&quot;weaknesses&quot;),</span>
+<span class="nc" id="L123">                        rs.getString(&quot;valueMean&quot;),</span>
+<span class="nc" id="L124">                        rs.getString(&quot;valueMeanDefinition&quot;),</span>
+<span class="nc" id="L125">                        rs.getString(&quot;valueDeficit&quot;),</span>
+<span class="nc" id="L126">                        rs.getString(&quot;valueDeficitDefinition&quot;),</span>
+<span class="nc" id="L127">                        rs.getString(&quot;valueExcess&quot;),</span>
+<span class="nc" id="L128">                        rs.getString(&quot;valueExcessDefinition&quot;)</span>
+                ));
+            }
+<span class="nc" id="L131">            return archetypes;</span>
+        }
+    }
+
+    public static void ResetAndSeedCatalog() throws SQLException{
+<span class="nc" id="L136">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L137">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L138">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS Archetypes&quot;);</span>
+        }
+<span class="nc" id="L140">        EnsureTables();</span>
+<span class="nc" id="L141">        SeedCatalog();</span>
+<span class="nc" id="L142">    }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

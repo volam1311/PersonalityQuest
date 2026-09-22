@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppFonts.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest</a> &gt; <span class="el_source">AppFonts.java</span></div><h1>AppFonts.java</h1><pre class="source lang-java linenums">package com.example.personalityquest;
+
+import javafx.scene.text.Font;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+public final class AppFonts {
+<span class="nc" id="L9">    private static final String[] FONT_FILES = {</span>
+            &quot;/com/example/personalityquest/fonts/Poppins-Regular.ttf&quot;,
+            &quot;/com/example/personalityquest/fonts/Poppins-Bold.ttf&quot;,
+            &quot;/com/example/personalityquest/fonts/Poppins-Italic.ttf&quot;,
+            &quot;/com/example/personalityquest/fonts/Montserrat-Regular.ttf&quot;,
+            &quot;/com/example/personalityquest/fonts/Montserrat-Bold.ttf&quot;,
+            &quot;/com/example/personalityquest/fonts/MaterialSymbolsRounded.ttf&quot;
+    };
+
+    private static boolean loaded;
+
+    private AppFonts() {
+    }
+
+    public static void load() {
+<span class="nc bnc" id="L24" title="All 2 branches missed.">        if (loaded) {</span>
+<span class="nc" id="L25">            return;</span>
+        }
+
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        for (String fontFile : FONT_FILES) {</span>
+<span class="nc" id="L29">            try (InputStream stream = AppFonts.class.getResourceAsStream(fontFile)) {</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">                if (stream == null) {</span>
+<span class="nc" id="L31">                    System.err.println(&quot;Font resource not found: &quot; + fontFile);</span>
+<span class="nc" id="L32">                    continue;</span>
+                }
+<span class="nc" id="L34">                Font.loadFont(stream, 12);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">            } catch (IOException exception) {</span>
+<span class="nc" id="L36">                System.err.println(&quot;Failed to load font: &quot; + fontFile);</span>
+<span class="nc" id="L37">            }</span>
+        }
+
+<span class="nc" id="L40">        loaded = true;</span>
+<span class="nc" id="L41">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

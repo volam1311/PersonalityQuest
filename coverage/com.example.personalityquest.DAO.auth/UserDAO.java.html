@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.auth</a> &gt; <span class="el_source">UserDAO.java</span></div><h1>UserDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.auth;
+
+import com.example.personalityquest.DAO.SQLiteConnection;
+import com.example.personalityquest.Model.auth.User;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/**
+ * SQLite persistence for {@link User} against the existing Accounts table.
+ */
+public class UserDAO implements IUserDAO {
+    private static final String CREATE_TABLE = &quot;&quot;&quot;
+            CREATE TABLE IF NOT EXISTS Accounts (
+                email TEXT NOT NULL,
+                userName TEXT NOT NULL,
+                firstName TEXT NOT NULL,
+                lastName TEXT NOT NULL,
+                password TEXT NOT NULL,
+                PRIMARY KEY(email)
+            )
+            &quot;&quot;&quot;;
+
+    private static final String INSERT_USER =
+            &quot;INSERT INTO Accounts (email, userName, firstName, lastName, password) VALUES (?, ?, ?, ?, ?)&quot;;
+
+    private static final String UPDATE_USER =
+            &quot;UPDATE Accounts SET email = ?, userName = ?, firstName = ?, lastName = ?, password = ? WHERE rowid = ?&quot;;
+
+    private static final String DELETE_USER =
+            &quot;DELETE FROM Accounts WHERE rowid = ?&quot;;
+
+    private static final String SELECT_USER =
+            &quot;SELECT rowid AS id, email, userName, firstName, lastName, password FROM Accounts WHERE rowid = ?&quot;;
+
+    private final Connection connection;
+
+    /**
+     * Creates a DAO that uses the shared application database connection.
+     */
+    public UserDAO() {
+<span class="nc" id="L45">        this(SQLiteConnection.getInstance());</span>
+<span class="nc" id="L46">    }</span>
+
+    /**
+     * Creates a DAO that uses the given connection. Used by tests with an in-memory database.
+     * @param connection The JDBC connection to use
+     */
+<span class="fc" id="L52">    public UserDAO(Connection connection) {</span>
+<span class="fc" id="L53">        this.connection = connection;</span>
+<span class="fc" id="L54">        createTable();</span>
+<span class="fc" id="L55">    }</span>
+
+    private void createTable() {
+<span class="fc" id="L58">        try (Statement statement = connection.createStatement()) {</span>
+<span class="fc" id="L59">            statement.execute(CREATE_TABLE);</span>
+<span class="nc" id="L60">        } catch (SQLException e) {</span>
+<span class="nc" id="L61">            throw new RuntimeException(&quot;Failed to create Accounts table&quot;, e);</span>
+<span class="fc" id="L62">        }</span>
+<span class="fc" id="L63">    }</span>
+
+    @Override
+    public void createUser(User user) {
+<span class="fc" id="L67">        try (PreparedStatement statement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {</span>
+<span class="fc" id="L68">            statement.setString(1, user.getEmail());</span>
+<span class="fc" id="L69">            statement.setString(2, user.getUsername());</span>
+<span class="fc" id="L70">            statement.setString(3, nullToEmpty(user.getFirstName()));</span>
+<span class="fc" id="L71">            statement.setString(4, nullToEmpty(user.getLastName()));</span>
+<span class="fc" id="L72">            statement.setString(5, user.getPassword());</span>
+<span class="fc" id="L73">            statement.executeUpdate();</span>
+
+<span class="fc" id="L75">            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                if (generatedKeys.next()) {</span>
+<span class="fc" id="L77">                    user.setUserId(generatedKeys.getInt(1));</span>
+                }
+            }
+<span class="fc" id="L80">        } catch (SQLException e) {</span>
+<span class="fc" id="L81">            throw new RuntimeException(&quot;Failed to create user&quot;, e);</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">    }</span>
+
+    @Override
+    public void updateUser(User user) {
+<span class="fc" id="L87">        try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {</span>
+<span class="fc" id="L88">            statement.setString(1, user.getEmail());</span>
+<span class="fc" id="L89">            statement.setString(2, user.getUsername());</span>
+<span class="fc" id="L90">            statement.setString(3, nullToEmpty(user.getFirstName()));</span>
+<span class="fc" id="L91">            statement.setString(4, nullToEmpty(user.getLastName()));</span>
+<span class="fc" id="L92">            statement.setString(5, user.getPassword());</span>
+<span class="fc" id="L93">            statement.setInt(6, user.getUserId());</span>
+<span class="fc" id="L94">            statement.executeUpdate();</span>
+<span class="nc" id="L95">        } catch (SQLException e) {</span>
+<span class="nc" id="L96">            throw new RuntimeException(&quot;Failed to update user&quot;, e);</span>
+<span class="fc" id="L97">        }</span>
+<span class="fc" id="L98">    }</span>
+
+    @Override
+    public void deleteUser(User user) {
+<span class="fc" id="L102">        try (PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {</span>
+<span class="fc" id="L103">            statement.setInt(1, user.getUserId());</span>
+<span class="fc" id="L104">            statement.executeUpdate();</span>
+<span class="nc" id="L105">        } catch (SQLException e) {</span>
+<span class="nc" id="L106">            throw new RuntimeException(&quot;Failed to delete user&quot;, e);</span>
+<span class="fc" id="L107">        }</span>
+<span class="fc" id="L108">    }</span>
+
+    @Override
+    public User getUser(int id) {
+<span class="fc" id="L112">        try (PreparedStatement statement = connection.prepareStatement(SELECT_USER)) {</span>
+<span class="fc" id="L113">            statement.setInt(1, id);</span>
+<span class="fc" id="L114">            try (ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">                if (resultSet.next()) {</span>
+<span class="fc" id="L116">                    return mapUser(resultSet);</span>
+                }
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">            }</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        } catch (SQLException e) {</span>
+<span class="nc" id="L120">            throw new RuntimeException(&quot;Failed to get user&quot;, e);</span>
+<span class="fc" id="L121">        }</span>
+<span class="fc" id="L122">        return null;</span>
+    }
+
+    private static User mapUser(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L126">        User user = new User(</span>
+<span class="fc" id="L127">                resultSet.getString(&quot;userName&quot;),</span>
+<span class="fc" id="L128">                resultSet.getString(&quot;email&quot;),</span>
+<span class="fc" id="L129">                resultSet.getString(&quot;firstName&quot;),</span>
+<span class="fc" id="L130">                resultSet.getString(&quot;lastName&quot;),</span>
+<span class="fc" id="L131">                resultSet.getString(&quot;password&quot;)</span>
+        );
+<span class="fc" id="L133">        user.setUserId(resultSet.getInt(&quot;id&quot;));</span>
+<span class="fc" id="L134">        return user;</span>
+    }
+
+    private static String nullToEmpty(String value) {
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        return value == null ? &quot;&quot; : value;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

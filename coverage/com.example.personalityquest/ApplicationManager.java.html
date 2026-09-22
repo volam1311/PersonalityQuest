@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApplicationManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest</a> &gt; <span class="el_source">ApplicationManager.java</span></div><h1>ApplicationManager.java</h1><pre class="source lang-java linenums">package com.example.personalityquest;
+
+/**
+ * This class managers everything to do with the overall system of the program
+ * holding static data such as the current logged in account or screen dimensions
+ * as well as global utility functions
+ */
+<span class="nc" id="L8">public class ApplicationManager {</span>
+<span class="nc" id="L9">    public static class SceneInfo {</span>
+        public static final int SCENEWIDTH = 1200;
+        public static final int SCENEHEIGHT = 720;
+    }
+
+<span class="nc" id="L14">    public static class TaskConfig{</span>
+        private final static int AMOUNT_OF_TASKS = 1;
+<span class="fc" id="L16">        private static int DEFAULT_SEARTCH_NUM = 228;</span>
+
+        public static int getAmountOfTasks(){
+<span class="fc" id="L19">            return AMOUNT_OF_TASKS;</span>
+        }
+        public static int getDefaultSearchNum(){
+<span class="fc" id="L22">            return DEFAULT_SEARTCH_NUM;</span>
+        }
+        public static void setDefaultSearchNum(int defaultSeartchNum){
+<span class="fc" id="L25">            DEFAULT_SEARTCH_NUM = defaultSeartchNum;</span>
+<span class="fc" id="L26">        }</span>
+    }
+
+<span class="nc" id="L29">    public static class CurrentAccount{</span>
+        /*
+        * The current email that the user is signed in with
+        */
+<span class="fc" id="L33">        private static String currentEmail = &quot;&quot;;</span>
+
+        public static String getCurrentEmail() {
+<span class="fc" id="L36">            return currentEmail;</span>
+        }
+
+        public static void setCurrentEmail(String currentEmail) {
+<span class="nc" id="L40">            CurrentAccount.currentEmail = currentEmail;</span>
+<span class="nc" id="L41">        }</span>
+    }
+
+    /**
+     * Checks to see if a given string is null or empty
+     * @param value the string you want to check
+     * @return Whether a given string isEmpty
+     */
+    public static boolean isEmpty(String value) {
+<span class="fc bfc" id="L50" title="All 4 branches covered.">        return value == null || value.isEmpty();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

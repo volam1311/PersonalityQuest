@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuizResult.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Model.quiz</a> &gt; <span class="el_source">QuizResult.java</span></div><h1>QuizResult.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Model.quiz;
+
+import com.example.personalityquest.Model.quest.Quest;
+
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
+
+/**
+ * The scored outcome of an archetype quiz, optionally with the quest assigned from it.
+ */
+public record QuizResult(Archetype archetype, Map&lt;Archetype, Integer&gt; scores, Quest assignedQuest) {
+<span class="fc" id="L13">    public QuizResult {</span>
+<span class="pc bpc" id="L14" title="1 of 2 branches missed.">        if (archetype == null) {</span>
+<span class="nc" id="L15">            throw new IllegalArgumentException(&quot;Quiz result archetype is null&quot;);</span>
+        }
+<span class="pc bpc" id="L17" title="2 of 4 branches missed.">        if (scores == null || scores.isEmpty()) {</span>
+<span class="nc" id="L18">            throw new IllegalArgumentException(&quot;Quiz result scores are empty&quot;);</span>
+        }
+
+<span class="fc" id="L21">        Map&lt;Archetype, Integer&gt; copy = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="fc" id="L22">        copy.putAll(scores);</span>
+<span class="fc" id="L23">        scores = Collections.unmodifiableMap(copy);</span>
+<span class="fc" id="L24">    }</span>
+
+    public QuizResult(Archetype archetype, Map&lt;Archetype, Integer&gt; scores) {
+<span class="fc" id="L27">        this(archetype, scores, null);</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Returns a copy of this result with the quest assigned after scoring.
+     */
+    public QuizResult withAssignedQuest(Quest assignedQuest) {
+<span class="fc" id="L34">        return new QuizResult(archetype, scores, assignedQuest);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

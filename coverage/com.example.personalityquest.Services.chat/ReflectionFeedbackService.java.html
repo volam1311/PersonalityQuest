@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReflectionFeedbackService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.chat</a> &gt; <span class="el_source">ReflectionFeedbackService.java</span></div><h1>ReflectionFeedbackService.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.chat;
+
+import com.example.personalityquest.Services.quest.QuestService;
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.chat.ReflectionFeedbackDAO;
+import com.example.personalityquest.Model.quiz.Archetype;
+import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.chat.ReflectionContext;
+import com.example.personalityquest.Model.quest.Task;
+import com.example.personalityquest.Model.quest.WeeklyTask;
+
+import java.sql.SQLException;
+
+/**
+ * Builds a coaching prompt from a weekly-task reflection and asks OpenAI for feedback.
+ */
+public final class ReflectionFeedbackService {
+    static final String SYSTEM_PROMPT = &quot;&quot;&quot;
+            You are a supportive coach inside PersonalityQuest, a growth app based on Jungian brand archetypes.
+            The user just wrote a reflection after attempting a weekly practice.
+            Weekly practices are the tasks people do each week. They are not storyline quest tasks.
+            Reply in 2-4 short paragraphs of plain text (no bullet lists, no markdown headings).
+            Acknowledge what they actually wrote, name one strength you can see, connect it to their archetype when that helps, and offer one concrete next step.
+            Keep a warm, grounded tone. Do not mention being an AI unless asked.
+            &quot;&quot;&quot;;
+
+<span class="fc" id="L27">    private static ChatCompletionClient client = new OpenAiClient();</span>
+
+    private ReflectionFeedbackService() {
+    }
+
+    /**
+     * Replaces the chat client. Used by tests to avoid calling the live OpenAI API.
+     */
+    public static void SetClient(ChatCompletionClient chatClient) {
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        client = chatClient == null ? new OpenAiClient() : chatClient;</span>
+<span class="fc" id="L37">    }</span>
+
+    /**
+     * Restores the default OpenAI client.
+     */
+    public static void Reset() {
+<span class="fc" id="L43">        client = new OpenAiClient();</span>
+<span class="fc" id="L44">    }</span>
+
+    /**
+     * Asks the model for feedback on the given reflection context.
+     * @param context Task, quest, archetype, and reflection details
+     * @return Coaching feedback for the user
+     * @throws IllegalArgumentException If the reflection is empty
+     * @throws Exception If the chat client cannot complete the request
+     */
+    public static String FeedbackFor(ReflectionContext context) throws Exception {
+<span class="fc bfc" id="L54" title="All 4 branches covered.">        if (context == null || ApplicationManager.isEmpty(context.reflection())) {</span>
+<span class="fc" id="L55">            throw new IllegalArgumentException(&quot;Write a reflection before requesting AI feedback.&quot;);</span>
+        }
+
+<span class="fc" id="L58">        return client.Complete(SYSTEM_PROMPT, UserPrompt(context)).trim();</span>
+    }
+
+    /**
+     * Builds a prompt containing the task, quest, archetype, and user reflection.
+     */
+    public static String UserPrompt(ReflectionContext context) {
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        ReflectionContext safe = context == null</span>
+<span class="nc" id="L66">                ? new ReflectionContext(&quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)</span>
+<span class="fc" id="L67">                : context;</span>
+
+<span class="fc" id="L69">        return &quot;&quot;&quot;</span>
+                Task: %s
+                Task description: %s
+                Current labour: %s
+                Archetype: %s
+                Archetype overview: %s
+                Archetype strengths: %s
+                Archetype growth edges: %s
+
+                User reflection:
+                %s
+<span class="fc" id="L80">                &quot;&quot;&quot;.formatted(</span>
+<span class="fc" id="L81">                Fallback(safe.taskName(), &quot;Weekly task&quot;),</span>
+<span class="fc" id="L82">                Fallback(safe.taskDescription(), &quot;No description provided.&quot;),</span>
+<span class="fc" id="L83">                Fallback(safe.questName(), &quot;Unknown labour&quot;),</span>
+<span class="fc" id="L84">                Fallback(safe.archetypeName(), &quot;Unknown&quot;),</span>
+<span class="fc" id="L85">                Fallback(safe.archetypeOverview(), &quot;Not available.&quot;),</span>
+<span class="fc" id="L86">                Fallback(safe.archetypeStrengths(), &quot;Not available.&quot;),</span>
+<span class="fc" id="L87">                Fallback(safe.archetypeWeaknesses(), &quot;Not available.&quot;),</span>
+<span class="fc" id="L88">                safe.reflection()</span>
+        );
+    }
+
+    /**
+     * Enriches a task with quest and archetype details for the feedback prompt.
+     */
+    public static ReflectionContext ContextFor(Task task, String questName, String reflection) {
+<span class="nc" id="L96">        String resolvedQuestName = questName;</span>
+<span class="nc" id="L97">        String archetypeName = &quot;&quot;;</span>
+<span class="nc" id="L98">        String overview = &quot;&quot;;</span>
+<span class="nc" id="L99">        String strengths = &quot;&quot;;</span>
+<span class="nc" id="L100">        String weaknesses = &quot;&quot;;</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (task != null) {</span>
+            try {
+<span class="nc" id="L104">                Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">                if (quest != null) {</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                    if (ApplicationManager.isEmpty(resolvedQuestName)) {</span>
+<span class="nc" id="L107">                        resolvedQuestName = quest.getName();</span>
+                    }
+<span class="nc" id="L109">                    archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
+<span class="nc" id="L110">                    overview = QuestService.GetArchetypeDescription(quest.getArchetypeId());</span>
+<span class="nc" id="L111">                    Archetype matched = MatchArchetype(archetypeName);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                    if (matched != null) {</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                        if (ApplicationManager.isEmpty(overview)) {</span>
+<span class="nc" id="L114">                            overview = matched.getSmallDescription();</span>
+                        }
+<span class="nc" id="L116">                        strengths = matched.getStrengths();</span>
+<span class="nc" id="L117">                        weaknesses = matched.getWeaknesses();</span>
+                    }
+                }
+<span class="nc" id="L120">            } catch (Exception ignored) {</span>
+                // Feedback still works with the task and reflection alone.
+<span class="nc" id="L122">            }</span>
+        }
+
+<span class="nc" id="L125">        return new ReflectionContext(</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                task == null ? &quot;&quot; : task.getName(),</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                task == null ? &quot;&quot; : task.getDescription(),</span>
+                resolvedQuestName,
+                archetypeName,
+                overview,
+                strengths,
+                weaknesses,
+                reflection
+        );
+    }
+
+    /**
+     * Saves AI feedback for a weekly task so it can be shown again later.
+     */
+    public static void Save(WeeklyTask weeklyTask, String feedback) throws SQLException {
+<span class="pc bpc" id="L141" title="2 of 4 branches missed.">        if (weeklyTask == null || ApplicationManager.isEmpty(feedback)) {</span>
+<span class="nc" id="L142">            return;</span>
+        }
+<span class="fc" id="L144">        ReflectionFeedbackDAO.Save(</span>
+<span class="fc" id="L145">                weeklyTask.getEmail(),</span>
+<span class="fc" id="L146">                weeklyTask.getTaskId(),</span>
+<span class="fc" id="L147">                weeklyTask.getWeekStarted(),</span>
+<span class="fc" id="L148">                feedback.trim());</span>
+<span class="fc" id="L149">    }</span>
+
+    /**
+     * Loads stored AI feedback for a weekly task, or an empty string when none exists.
+     */
+    public static String Find(WeeklyTask weeklyTask) throws SQLException {
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (weeklyTask == null) {</span>
+<span class="fc" id="L156">            return &quot;&quot;;</span>
+        }
+<span class="fc" id="L158">        return ReflectionFeedbackDAO.Find(</span>
+<span class="fc" id="L159">                weeklyTask.getEmail(),</span>
+<span class="fc" id="L160">                weeklyTask.getTaskId(),</span>
+<span class="fc" id="L161">                weeklyTask.getWeekStarted());</span>
+    }
+
+    static Archetype MatchArchetype(String name) {
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(name)) {</span>
+<span class="nc" id="L166">            return null;</span>
+        }
+
+<span class="nc" id="L169">        String normalised = name.trim();</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (normalised.regionMatches(true, 0, &quot;The &quot;, 0, 4)) {</span>
+<span class="nc" id="L171">            normalised = normalised.substring(4).trim();</span>
+        }
+
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            if (archetype.getName().equalsIgnoreCase(normalised)</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">                    || archetype.name().equalsIgnoreCase(normalised)) {</span>
+<span class="nc" id="L177">                return archetype;</span>
+            }
+        }
+<span class="nc" id="L180">        return null;</span>
+    }
+
+    private static String Fallback(String value, String fallback) {
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        return ApplicationManager.isEmpty(value) ? fallback : value;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

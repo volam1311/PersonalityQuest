@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserQuestService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.quest</a> &gt; <span class="el_source">UserQuestService.java</span></div><h1>UserQuestService.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.quest;
+
+import com.example.personalityquest.DAO.quest.UserQuestDAO;
+import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.quest.UserQuest;
+import com.example.personalityquest.ApplicationManager;
+
+import java.sql.SQLException;
+import java.util.List;
+
+/**
+ * This class managers everything to do with UserQuests and has utility functions to retrieve
+ * userQuests matching email, whether there's an active userQuest, to update userQuests in the database
+ * and to insert new ones
+ */
+<span class="nc" id="L16">public class UserQuestService {</span>
+    /**
+     * Retrives the current active quest for the user matching the account
+     * @param email The email of the account you want to check
+     * @return The currently active UserQuest in the database or null if no active quest is set for the email
+     * @throws IllegalArgumentException If the given email is empty
+     * @throws SQLException Database Access Failure
+     */
+    public static UserQuest GetCurrentActiveUserQuestForEmail(String email) throws IllegalArgumentException, SQLException {
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)){</span>
+<span class="fc" id="L26">            throw new IllegalArgumentException(&quot;Checking for active quest with null email&quot;);</span>
+        }
+
+<span class="fc" id="L29">        return UserQuestDAO.GetCurrentActiveUserQuestForEmail(email);</span>
+    }
+
+    /**
+     * Gets every UserQuest assigned to the given account.
+     * @param email The email of the account to load quests for
+     * @return A list of UserQuests, empty if the account has none
+     * @throws IllegalArgumentException If the given email is empty
+     * @throws SQLException Database Access Failure
+     */
+    public static List&lt;UserQuest&gt; GetUserQuestsForEmail(String email)
+            throws IllegalArgumentException, SQLException {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L42">            throw new IllegalArgumentException(&quot;Checking for quests with null email&quot;);</span>
+        }
+
+<span class="nc" id="L45">        return UserQuestDAO.GetUserQuestsForEmail(email);</span>
+    }
+
+    /**
+     * Sets the given UserQuest to active in the database
+     * @param userQuest The userQuest you want to set as active
+     * @param email The account you want to set the quest active for
+     * @return The updated UserQuest with a status active
+     * @throws IllegalArgumentException If the quest or email is null Or if the given email doesn't
+     * have an active quest
+     * @throws SQLException Database Update Failure
+     */
+    public static UserQuest SetUserQuesStatusAsActive(UserQuest userQuest, String email) throws IllegalArgumentException, SQLException {
+<span class="fc bfc" id="L58" title="All 4 branches covered.">        if (userQuest == null || ApplicationManager.isEmpty(email)){</span>
+<span class="fc" id="L59">            throw new IllegalArgumentException(&quot;Checking for active quest with null email&quot;);</span>
+        }
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (DoesUserHaveActiveQuest(email)){</span>
+<span class="fc" id="L62">            throw new IllegalArgumentException(&quot;User already has an active quest with labourId &quot;</span>
+<span class="fc" id="L63">                    + GetCurrentActiveUserQuestForEmail(email).getLabourId());</span>
+        }
+
+<span class="fc" id="L66">        UserQuestDAO.SetUserQuesStatusAsActive(userQuest, email);</span>
+
+<span class="fc" id="L68">        return GetCurrentActiveUserQuestForEmail(email);</span>
+    }
+
+    /**
+     * Inserts a new User Quest into the database then returns it
+     * @param quest The quest you want to turn into a userQuest
+     * @param email The account you want to insert a new quest for
+     * @return The new UserQuest that was made
+     * @throws SQLException If A constraint on foreign keys fails or Database Update Failure
+     */
+    public static UserQuest InsertNewQuestForEmail(Quest quest, String email) throws SQLException {
+<span class="fc bfc" id="L79" title="All 4 branches covered.">        if (quest == null || ApplicationManager.isEmpty(email)){</span>
+<span class="fc" id="L80">            throw new IllegalArgumentException(&quot;Quest you wanted to set or email is null&quot;);</span>
+        }
+
+<span class="fc" id="L83">        UserQuestDAO.InsertNewQuestForEmail(quest, email);</span>
+
+<span class="fc" id="L85">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+    }
+
+    /**
+     * Sets the given UserQuest to status &quot;Complete&quot; in the database
+     * @param quest The UserQuest you want to set as &quot;Complete&quot;
+     * @param email The account you want to set the quest as complete for
+     * @return The updated UserQuest with a status complete
+     * @throws IllegalArgumentException If quest is null or email is empty
+     * @throws SQLException Database Access and Update Failure
+     */
+    public static UserQuest SetUserQuestStatusAsComplete(UserQuest quest, String email) throws SQLException {
+<span class="fc bfc" id="L97" title="All 4 branches covered.">        if (quest == null || ApplicationManager.isEmpty(email)){</span>
+<span class="fc" id="L98">            throw new IllegalArgumentException(&quot;Quest you wanted to set or email is null&quot;);</span>
+        }
+
+<span class="fc" id="L101">        UserQuestDAO.SetUserQuestStatusAsComplete(quest, email);</span>
+
+<span class="fc" id="L103">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+    }
+
+    /**
+     * Sets the given User quest to a percentage complete from 0 and 1 for the given email
+     * @param quest The user quest you want to update
+     * @param email The account email you want to update the user quest for
+     * @param percentage The percentage between 0 and 1 you want the quest to be at
+     * @return The updated UserQuest with the new percentageComplete
+     * @throws IllegalArgumentException If the quest or email is null Or if the percentageComplete is not between
+     * 0 and 1
+     * @throws SQLException Database Access or Update Failure
+     */
+    public static UserQuest SetUserQuestToPercentageComplete(UserQuest quest, String email, float percentage) throws SQLException {
+<span class="fc bfc" id="L117" title="All 4 branches covered.">        if (quest == null || ApplicationManager.isEmpty(email)){</span>
+<span class="fc" id="L118">            throw new IllegalArgumentException(&quot;Quest you wanted to set or email is null&quot;);</span>
+        }
+
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (IsPercentageOutOfRange(percentage)){</span>
+<span class="fc" id="L122">            throw new IllegalArgumentException(&quot;Percentage is out of the 0-1 range&quot;);</span>
+        }
+
+<span class="fc" id="L125">        UserQuestDAO.SetUserQuestToPercentageComplete(quest, email, percentage);</span>
+
+<span class="fc" id="L127">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+    }
+
+    /**
+     * Checks to see if a given account email has a currently active quest
+     * @param email The email of the account you want to check
+    * @return Whether the given email has an account with an active quest
+     * @throws IllegalArgumentException If the user has more than 1 active quest
+     * @throws SQLException Database Access Failure
+     */
+    private static boolean DoesUserHaveActiveQuest(String email) throws IllegalArgumentException, SQLException {
+<span class="fc" id="L138">        return UserQuestDAO.DoesUserHaveActiveQuest(email);</span>
+    }
+
+    /**
+     * Checks to see whether a given percentage is between 0 and 1
+     * @param percentage The given percentage you want to check
+     * @return Whether the given percentage was between 0 and 1
+     */
+    private static boolean IsPercentageOutOfRange(float percentage){
+<span class="fc bfc" id="L147" title="All 4 branches covered.">        if (percentage &lt; 0 || percentage &gt; 1){</span>
+<span class="fc" id="L148">            return true;</span>
+        }
+
+<span class="fc" id="L151">        return false;</span>
+    }
+
+    /**
+     * Gets an accounts specific UserQuest for the labourId
+     * @param email The account email you want to retrieve a UserQuest for
+     * @param labourId The labourId that matches a UserQuest in the database for email
+     * @return The UserQuest matching the email and labourId given OR null if none could be retrived
+     * @throws SQLException Database Access Failure
+     */
+    private static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
+<span class="fc" id="L162">        return UserQuestDAO.GetUserQuestForEmailAndLabourId(email, labourId);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
