@@ -1,4 +1,4 @@
-name: Generate Javadoc
+name: Test Coverage
 
 on:
   push: 
@@ -7,11 +7,12 @@ on:
     branches: ["main", "dev"]
 
 jobs:
-  build:
+  coverage:
 
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      
     steps:
     - uses: actions/checkout@v5
     - name: Set up JDK 26
@@ -20,12 +21,11 @@ jobs:
         java-version: '26'
         distribution: 'corretto'
         cache: maven
-    - name: Generate Javadoc
+    - name: Run tests with JaCoCo
       working-directory: PersonalityQuest
-      run: mvn -B javadoc:javadoc
-    
-    - name: Publish Javadoc
+      run: mvn -B test jacoco:report --file pom.xml
+    - name: Publish coverage to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        folder: PersonalityQuest/target/docs/javadoc/apidocs
-        clean-exclude: coverage
+        folder: PersonalityQuest/target/site/jacoco
+        target-folder: coverage
