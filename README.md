@@ -1,6 +1,11 @@
 # PersonalityQuest
 
-PersonalityQuest is a JavaFX desktop application that turns personal development into archetype-based quests, weekly tasks, and structured reflections.
+PersonalityQuest is a JavaFX desktop application that turns personal development
+into archetype-based quests, weekly tasks, and structured reflections.
+
+## Documentation:
+
+Link to Javadoc: [Documentation](https://volam1311.github.io/PersonalityQuest/)
 
 ## Folder Structure:
 
