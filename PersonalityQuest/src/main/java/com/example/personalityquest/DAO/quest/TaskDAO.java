@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Stores and retrieves task catalog records */
 public class TaskDAO {
     private static final String FIND_TASK_INFO = """
             SELECT * FROM Tasks

@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.sql.*;
 
+/** Controls account sign-in */
 public class AccountSignInController {
     private static final double COMPACT_BREAKPOINT = 700;
 

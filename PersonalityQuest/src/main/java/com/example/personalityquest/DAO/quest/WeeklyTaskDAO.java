@@ -17,6 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+/** Stores and updates each account's weekly task records */
 public class WeeklyTaskDAO {
     private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
 

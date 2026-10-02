@@ -63,6 +63,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    /** {@inheritDoc} */
     public void createUser(User user) {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getEmail());
@@ -83,6 +84,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    /** {@inheritDoc} */
     public void updateUser(User user) {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             statement.setString(1, user.getEmail());
@@ -98,6 +100,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    /** {@inheritDoc} */
     public void deleteUser(User user) {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
             statement.setInt(1, user.getUserId());
@@ -108,6 +111,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    /** {@inheritDoc} */
     public User getUser(int id) {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_USER)) {
             statement.setInt(1, id);

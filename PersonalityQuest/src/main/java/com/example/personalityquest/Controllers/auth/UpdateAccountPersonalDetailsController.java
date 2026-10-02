@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** Controls account personal-details updates */
 public class UpdateAccountPersonalDetailsController implements Initializable {
 
 
@@ -32,6 +33,10 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     private String oldEmail;
 
 
+    /** Initialises the personal-details form
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         oldEmail = ApplicationManager.CurrentAccount.getCurrentEmail();
@@ -48,6 +53,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     * Attempts to save updated changes made to the users account details
     * */
     @FXML
+    /** Saves the updated personal details and closes the screen */
     public void OnSaveAndExit() {
         /*
         * Failsafe for if somehow this variable does not become set
@@ -79,6 +85,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     /*
      * Returns to previous screen without updating user details
      * */
+    /** Closes the personal-details screen */
     public void OnExit(){
 
     }

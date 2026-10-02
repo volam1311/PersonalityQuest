@@ -15,12 +15,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/** Controls the quiz-results screen */
 public class QuizResultController implements Initializable {
     @FXML
     private NavBarController navBarController;
     @FXML
     private Label archetypeNameLabel, archetypeDescriptionLabel, strengthsLabel, weaknessesLabel, questLabel;
 
+    /** Initialises the quiz-results screen
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         QuizResult result = QuizService.GetResult();

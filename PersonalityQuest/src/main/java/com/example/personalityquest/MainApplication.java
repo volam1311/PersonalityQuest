@@ -12,7 +12,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/** Starts the JavaFX application and opens its initial screen */
 public class MainApplication extends Application {
+    /** Initialises application resources and displays the account screen
+     * @param stage the primary JavaFX stage
+     * @throws IOException if the screen resource cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException{
         AppFonts.load();

@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/** Controls quest selection and progress display */
 public class QuestController implements Initializable {
     private static final double STACKED_BREAKPOINT = 760;
     private static final double FULL_PERCENT = 100;
@@ -50,6 +51,10 @@ public class QuestController implements Initializable {
     @FXML
     private ListView<QuestListItem> questHistory;
 
+    /** Initialises quest controls and loads available quests
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUESTS);

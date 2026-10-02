@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/** Provides task lookup, formatting, and selection operations */
 public class TaskService {
     private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
 

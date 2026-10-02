@@ -13,7 +13,12 @@ import java.io.IOException;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEHEIGHT;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEWIDTH;
 
+/** Launches the weekly-tasks screen */
 public class TasksApplication extends Application {
+    /** Loads the weekly-tasks screen into the primary stage
+     * @param stage the primary JavaFX stage
+     * @throws IOException if the screen resource cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
         AppFonts.load();

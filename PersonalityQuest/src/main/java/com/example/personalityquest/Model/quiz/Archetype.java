@@ -262,6 +262,9 @@ public enum Archetype {
 
     // Public Getters and Setters
 
+    /** Returns the archetype ID
+     * @return the archetype ID
+     */
     public int getArchetypeId() {return archetypeId;}
 
     /**
@@ -269,28 +272,64 @@ public enum Archetype {
      */
     public String getRealm() {return realm;}
 
+    /** Returns the archetype name
+     * @return the archetype name
+     */
     public String getName() {
         return name;
     }
+    /** Returns the short archetype description
+     * @return the short description
+     */
     public String getSmallDescription() {return smallDescription;}
+    /** Returns the full archetype description
+     * @return the full description
+     */
     public String getLongDescription() {return longDescription;}
 
+    /** Returns the archetype strengths
+     * @return the strengths
+     */
     public String getStrengths() {
         return strengths;
     }
+    /** Returns the archetype weaknesses
+     * @return the weaknesses
+     */
     public String getWeaknesses() {
         return weaknesses;
     }
 
+    /** Returns the archetype's balanced value
+     * @return the balanced value
+     */
     public String getValue() {return valueMean;}
+    /** Returns the description of the balanced value
+     * @return the balanced-value description
+     */
     public String getValueDefinition() {return valueMeanDefinition;}
 
+    /** Returns the archetype's deficient value
+     * @return the deficient value
+     */
     public String getValueDeficit() {return valueDeficit;}
+    /** Returns the description of the deficient value
+     * @return the deficient-value description
+     */
     public String getValueDeficitDefinition() {return valueDeficitDefinition;}
 
+    /** Returns the archetype's excessive value
+     * @return the excessive value
+     */
     public String getValueExcess() {return valueExcess;}
+    /** Returns the description of the excessive value
+     * @return the excessive-value description
+     */
     public String getValueExcessDefinition() {return valueExcessDefinition;}
 
+    /** Returns the emoji representing the archetype
+     * @return the archetype emoji
+     */
     public String getEmoji() {return emoji;}
 
 }

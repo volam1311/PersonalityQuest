@@ -6,36 +6,54 @@ package com.example.personalityquest;
  * as well as global utility functions
  */
 public class ApplicationManager {
+    /** Stores the information needed to display a scene */
     public static class SceneInfo {
         public static final int SCENEWIDTH = 1200;
         public static final int SCENEHEIGHT = 720;
     }
 
+    /** Stores settings used when generating tasks */
     public static class TaskConfig{
         private final static int AMOUNT_OF_TASKS = 1;
         private static int DEFAULT_SEARTCH_NUM = 228;
 
+        /** Returns the configured number of tasks
+         * @return the configured number of tasks
+         */
         public static int getAmountOfTasks(){
             return AMOUNT_OF_TASKS;
         }
+        /** Returns the default number of tasks to search for
+         * @return the default search number
+         */
         public static int getDefaultSearchNum(){
             return DEFAULT_SEARTCH_NUM;
         }
+        /** Sets the default number of tasks to search for
+         * @param defaultSeartchNum the new default search number
+         */
         public static void setDefaultSearchNum(int defaultSeartchNum){
             DEFAULT_SEARTCH_NUM = defaultSeartchNum;
         }
     }
 
+    /** Stores the email address of the signed-in account */
     public static class CurrentAccount{
         /*
         * The current email that the user is signed in with
         */
         private static String currentEmail = "";
 
+        /** Returns the signed-in account email
+         * @return the current account email
+         */
         public static String getCurrentEmail() {
             return currentEmail;
         }
 
+        /** Sets the signed-in account email
+         * @param currentEmail the email address to store
+         */
         public static void setCurrentEmail(String currentEmail) {
             CurrentAccount.currentEmail = currentEmail;
         }

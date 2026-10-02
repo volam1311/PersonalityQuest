@@ -21,8 +21,8 @@ public class StreakService {
     }
 
     /**
-     * @param date The date of current day
      * Helper function to get the start of the week for streaks
+     * @param date The date to normalise to its week's start
      * @return The date of the Monday of the current week
      */
     private static LocalDate WeekStart(LocalDate date) {
@@ -95,7 +95,7 @@ public class StreakService {
     }
 
     /**
-     * Gets the current streak using today's date
+     * Gets the current streak using the current date.
      * @param email The account email
      * @return The current streak
      * @throws SQLException If the progress cannot be read
@@ -108,7 +108,7 @@ public class StreakService {
      * Gets the current streak for a specified date
      * @param email The account email
      * @param today The date used to determine whether the streak is active
-     * @return The current streak, or zero after a missed day
+     * @return The current streak, or zero after a missed week
      * @throws SQLException If the progress cannot be read
      */
     public static int GetCurrentStreak(String email, LocalDate today) throws SQLException {

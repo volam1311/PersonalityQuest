@@ -125,6 +125,12 @@ public class AccountDAO {
         return true;
     }
 
+    /**
+     * updates the account details in storage for the current email address
+     * @param emailDetails the updated account details
+     * @param currentEmail the email address identifying the account to update
+     * @throws SQLException if account details cannot be updated
+     */
     public static void UpdateAccountDetails(EmailDetails emailDetails, String currentEmail) throws SQLException {
 
         Connection connection = SQLite.getConnection();

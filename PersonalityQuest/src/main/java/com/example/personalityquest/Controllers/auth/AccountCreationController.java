@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/** Controls account creation and validation */
 public class AccountCreationController {
     private static final double COMPACT_BREAKPOINT = 700;
 

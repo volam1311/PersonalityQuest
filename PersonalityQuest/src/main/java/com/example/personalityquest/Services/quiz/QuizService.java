@@ -71,6 +71,9 @@ public class QuizService {
         return shortList;
     }
 
+    /** Ensures the quiz catalog is available in the database
+     * @throws SQLException if the catalog cannot be prepared
+     */
     public static void EnsureCatalog() throws SQLException {
         QuestionDAO.EnsureTables();
         if (!QuestionDAO.HasCatalog()){
