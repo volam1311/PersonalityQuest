@@ -25,13 +25,13 @@ import java.util.Set;
     private final static String SQL_UPDATE_DRAFT = &quot;&quot;&quot;
             UPDATE WeeklyTasks
             SET reflection = ?, status = 'Started'
-            WHERE accountEmail = ? AND taskId = ?
+            WHERE accountEmail = ? AND taskId = ? AND weekStart = ?
         &quot;&quot;&quot;;
 
     private final static String SQL_FINISH_TASK = &quot;&quot;&quot;
             UPDATE WeeklyTasks
             SET reflection = ?, status = 'Finished'
-            WHERE accountEmail = ? AND taskId = ?
+            WHERE accountEmail = ? AND taskId = ? AND weekStart = ?
         &quot;&quot;&quot;;
 
     private final static String TASK_FOR_EMAIL = &quot;&quot;&quot;
@@ -230,9 +230,10 @@ import java.util.Set;
 <span class="fc" id="L230">        statement.setString(1, reflection);</span>
 <span class="fc" id="L231">        statement.setString(2, email);</span>
 <span class="fc" id="L232">        statement.setInt(3, task.getTaskId());</span>
+<span class="fc" id="L233">        statement.setString(4, task.getWeekStarted());</span>
 
-<span class="fc" id="L234">        statement.executeUpdate();</span>
-<span class="fc" id="L235">    }</span>
+<span class="fc" id="L235">        statement.executeUpdate();</span>
+<span class="fc" id="L236">    }</span>
     /**
      * Updates the given Weekly Tasks to be finished
      * @param task The task you want to update to be finished
@@ -241,13 +242,14 @@ import java.util.Set;
      * @throws Exception If a Database Access Failure Or if the weekly task
      */
     public static void UpdateGivenTaskToBeFinished(WeeklyTask task, String reflection, String email) throws Exception {
-<span class="fc" id="L244">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L245">        PreparedStatement statement = connection.prepareStatement(SQL_FINISH_TASK);</span>
-<span class="fc" id="L246">        statement.setString(1, reflection);</span>
-<span class="fc" id="L247">        statement.setString(2, email);</span>
-<span class="fc" id="L248">        statement.setInt(3, task.getTaskId());</span>
+<span class="fc" id="L245">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L246">        PreparedStatement statement = connection.prepareStatement(SQL_FINISH_TASK);</span>
+<span class="fc" id="L247">        statement.setString(1, reflection);</span>
+<span class="fc" id="L248">        statement.setString(2, email);</span>
+<span class="fc" id="L249">        statement.setInt(3, task.getTaskId());</span>
+<span class="fc" id="L250">        statement.setString(4, task.getWeekStarted());</span>
 
-<span class="fc" id="L250">        statement.executeUpdate();</span>
-<span class="fc" id="L251">    }</span>
+<span class="fc" id="L252">        statement.executeUpdate();</span>
+<span class="fc" id="L253">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
