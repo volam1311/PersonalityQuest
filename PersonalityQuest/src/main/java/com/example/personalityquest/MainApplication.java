@@ -24,8 +24,7 @@ public class MainApplication extends Application {
         try {
             ArchetypeDAO.ResetAndSeedCatalog();
             QuestDAO.ResetAndSeedCatalog();
-            UserQuestDAO.EnsureTables();
-            UserQuestDAO.ClearAll();
+            initialiseUserQuestData();
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -37,5 +36,10 @@ public class MainApplication extends Application {
         catch (IOException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    static void initialiseUserQuestData() throws Exception{
+        UserQuestDAO.EnsureTables();
+        UserQuestDAO.ClearAll();
     }
 }
