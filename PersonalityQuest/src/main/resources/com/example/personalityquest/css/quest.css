@@ -91,3 +91,31 @@
     -fx-font-family: Poppins;
     -fx-text-fill: #c4b5fd;
 }
+
+.viewer-tab-bar {
+    -fx-spacing: 8;
+}
+
+.viewer-tab-button {
+    -fx-background-color: #2d2745;
+    -fx-background-radius: 9;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-family: Poppins;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a884ff;
+    -fx-padding: 10 18 10 18;
+    -fx-cursor: hand;
+}
+
+.viewer-tab-button:hover {
+    -fx-background-color: #423761
+}
+
+.viewer-tab-button.selected-viewer-tab,
+.viewer-tab-button.selected-viewer-tab:hover,
+.viewer-tab-button.selected-viewer-tab:focused {
+    -fx-background-color: #9a72ff;
+    -fx-text-fill: #140e25;
+}

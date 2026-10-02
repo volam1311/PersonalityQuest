@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 
 public class NavBarController implements Initializable {
     public enum NavDestination {
-        HOME, QUESTS, TASKS, ARCHETYPE, PROFILE, SETTINGS
+        HOME, QUESTS, QUEST_VIEWER, TASKS, ARCHETYPE, PROFILE, SETTINGS
     }
 
     private static final double SIDEBAR_BREAKPOINT = 900;
@@ -46,9 +46,9 @@ public class NavBarController implements Initializable {
     @FXML
     private Label brandLabel, profileNameLabel, logoutNavLabel;
     @FXML
-    private Label homeNavLabel, questsNavLabel, tasksNavLabel, archetypeNavLabel;
+    private Label homeNavLabel, questsNavLabel, questViewerNavLabel, tasksNavLabel, archetypeNavLabel;
     @FXML
-    private Button menuButton, homeButton, questsButton,
+    private Button menuButton, homeButton, questsButton, questViewerButton,
             tasksButton, archetypeButton, profileButton, settingsButton, logoutButton;
 
     private boolean sidebarExpanded = true;
@@ -131,6 +131,7 @@ public class NavBarController implements Initializable {
 
         SetLabelVisible(homeNavLabel, expanded);
         SetLabelVisible(questsNavLabel, expanded);
+        SetLabelVisible(questViewerNavLabel, expanded);
         SetLabelVisible(tasksNavLabel, expanded);
         SetLabelVisible(archetypeNavLabel, expanded);
         SetLabelVisible(profileNameLabel, expanded);
@@ -138,6 +139,7 @@ public class NavBarController implements Initializable {
 
         SetButtonDimensions(homeButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(questsButton, expanded, NAV_BUTTON_HEIGHT);
+        SetButtonDimensions(questViewerButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(tasksButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(archetypeButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(profileButton, expanded, PROFILE_BUTTON_HEIGHT);
@@ -169,6 +171,7 @@ public class NavBarController implements Initializable {
     private void ApplySelectedStyles() {
         homeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         questsButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
+        questViewerButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         tasksButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         archetypeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         profileButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
@@ -181,6 +184,7 @@ public class NavBarController implements Initializable {
         switch (currentDestination) {
             case HOME -> homeButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case QUESTS -> questsButton.getStyleClass().add(SELECTED_NAV_BUTTON);
+            case QUEST_VIEWER ->  questViewerButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case TASKS -> tasksButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case ARCHETYPE -> archetypeButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case PROFILE -> profileButton.getStyleClass().add(SELECTED_NAV_BUTTON);
@@ -208,6 +212,7 @@ public class NavBarController implements Initializable {
         switch (destination) {
             case HOME -> NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
             case QUESTS -> NavigationService.LoadScreen(ScreenEnum.QUESTS);
+            case QUEST_VIEWER -> NavigationService.LoadScreen(ScreenEnum.QUEST_VIEWER);
             case TASKS -> NavigationService.LoadScreen(ScreenEnum.TASKS);
             case SETTINGS -> NavigationService.LoadScreen(ScreenEnum.SETTINGS);
             case PROFILE -> NavigationService.LoadScreen(ScreenEnum.PROFILE);
@@ -227,6 +232,9 @@ public class NavBarController implements Initializable {
         }
         if (button == questsButton) {
             return NavDestination.QUESTS;
+        }
+        if (button == questViewerButton) {
+            return NavDestination.QUEST_VIEWER;
         }
         if (button == tasksButton) {
             return NavDestination.TASKS;

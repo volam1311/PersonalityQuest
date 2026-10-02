@@ -5,6 +5,7 @@ import com.example.personalityquest.Applications.auth.UpdateAccountPersonalDetai
 import com.example.personalityquest.DAO.auth.UserDAO;
 import com.example.personalityquest.DAO.personalisation.ArchetypeDAO;
 import com.example.personalityquest.DAO.quest.QuestDAO;
+import com.example.personalityquest.DAO.quest.QuestOptionDAO;
 import com.example.personalityquest.DAO.quest.UserQuestDAO;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import javafx.application.Application;
@@ -24,8 +25,8 @@ public class MainApplication extends Application {
         try {
             ArchetypeDAO.ResetAndSeedCatalog();
             QuestDAO.ResetAndSeedCatalog();
+            QuestOptionDAO.ResetAndSeedCatalog();
             UserQuestDAO.EnsureTables();
-            UserQuestDAO.ClearAll();
         } catch (Exception exception) {
             exception.printStackTrace();
         }

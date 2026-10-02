@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ProgressBar?>
+<BorderPane fx:id="questViewerRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.quest.QuestViewerController">
+    <left>
+        <fx:include fx:id="navBar" source="NavBar.fxml" />
+    </left>
+
+    <center>
+        <GridPane fx:id="questViewerGrid" vgap="16">
+            <padding>
+                <Insets bottom="24" left="24" right="24" top="24" />
+            </padding>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="16.6" vgrow="ALWAYS" />
+                <RowConstraints percentHeight="83.4" vgrow="ALWAYS" />
+            </rowConstraints>
+
+            <HBox fx:id="tabBar" alignment="CENTER_LEFT" spacing="8" styleClass="card, viewer-tab-bar" GridPane.rowIndex="0" GridPane.halignment="LEFT" GridPane.valignment="CENTER" GridPane.fillWidth="false" GridPane.fillHeight="false">
+                <Button fx:id="storylineTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Storyline" />
+                <Button fx:id="reactionTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Your Reaction" />
+                <Button fx:id="challengeTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Challenge" />
+                <Button fx:id="reflectionTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Reflection" />
+            </HBox>
+
+            <StackPane fx:id="displayStack" GridPane.rowIndex="1">
+                <VBox fx:id="storylinePane" spacing="12" styleClass="card quest-card">
+                    <Label fx:id="storylineTitleLabel" styleClass="card-title" text="No active quest" />
+                    <ScrollPane fx:id="storylineDescriptionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" VBox.vgrow="ALWAYS">
+                        <content>
+                            <Label fx:id="storylineDescriptionLabel" styleClass="quest-description" wrapText="true" text="Complete the quiz to begin a labour." />
+                        </content>
+                    </ScrollPane>
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <ProgressBar fx:id="storylineProgress" maxWidth="1.7976931348623157E308" progress="0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="storylineProgressLabel" styleClass="progress-label" text="0% Complete" />
+                    </HBox>
+                </VBox>
+                <VBox fx:id="reactionPane" spacing="16" styleClass="card quiz-card">
+                    <Label fx:id="reactionQuestionLabel" styleClass="quiz-question" wrapText="true" text="How would you react in this moment?" />
+                    <VBox fx:id="reactionOptionsBox" spacing="12" />
+                    <Label fx:id="reactionFeedbackLabel" styleClass="quiz-feedback" wrapText="true" />
+                </VBox>
+                <VBox fx:id="challengePane" styleClass="card">
+                    <Label text="Challenge content goes here" />
+                </VBox>
+                <VBox fx:id="reflectionPane" styleClass="card">
+                    <Label text="Reflection content goes here" />
+                </VBox>
+            </StackPane>
+        </GridPane>
+    </center>
+</BorderPane>
