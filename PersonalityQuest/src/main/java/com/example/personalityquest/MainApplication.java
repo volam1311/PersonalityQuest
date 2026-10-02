@@ -40,6 +40,5 @@ public class MainApplication extends Application {
 
     static void initialiseUserQuestData() throws Exception{
         UserQuestDAO.EnsureTables();
-        UserQuestDAO.ClearAll();
     }
 }
