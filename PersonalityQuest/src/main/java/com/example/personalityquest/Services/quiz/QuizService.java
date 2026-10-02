@@ -2,6 +2,7 @@ package com.example.personalityquest.Services.quiz;
 
 import com.example.personalityquest.DAO.personalisation.OptionDAO;
 import com.example.personalityquest.DAO.personalisation.QuestionDAO;
+import com.example.personalityquest.DAO.quest.QuizResultDAO;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.ApplicationManager;
@@ -223,6 +224,12 @@ public class QuizService {
         }
 
         try {
+            QuizResultDAO.SaveResult(email, result);
+        } catch (Exception ignored){
+            // Continue to show result if persistence fails
+        }
+
+        try {
             UserQuest activeQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
             if (activeQuest != null) {
                 return result;
@@ -343,6 +350,31 @@ public class QuizService {
     private static void EnsureInProgress() {
         if (!HasActiveAttempt()) {
             throw new IllegalStateException("Quiz has not been started");
+        }
+    }
+
+    public static QuizResult LoadStoredResult(String email){
+        if (result != null){
+            return result;
+        }
+        if (ApplicationManager.isEmpty(email)){
+            return null;
+        }
+        try {
+            QuizResult stored = QuizResultDAO.LoadResult(email);
+            if (stored != null){
+            UserQuest activeQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            if (activeQuest != null){
+                Quest quest = QuestService.GetQuestForLabourId(activeQuest.getLabourId());
+                if (quest != null){
+                    stored = stored.withAssignedQuest(quest);
+                }
+            }
+            result = stored;
+            }
+            return result;
+        } catch (Exception exception) {
+            return null;
         }
     }
 

@@ -124,7 +124,7 @@ public class ProfileController implements Initializable {
             }
         }
         streakLabel.setText("Week " + progress.currentStreak());
-        radarValues = QuizService.ArchetypeScores(QuizService.GetResult());
+        radarValues = QuizService.ArchetypeScores(QuizService.LoadStoredResult(email));
 
         String archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;
         String personalityType = UserProfileService.UNKNOWN_TYPE;

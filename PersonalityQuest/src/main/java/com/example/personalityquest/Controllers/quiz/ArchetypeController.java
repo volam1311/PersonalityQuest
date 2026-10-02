@@ -103,7 +103,7 @@ public class ArchetypeController implements Initializable {
         }
 
         try {
-            QuizResult quizResult = QuizService.GetResult();
+            QuizResult quizResult = QuizService.LoadStoredResult(email);
             if (quizResult != null) {
                 ShowQuizResult(quizResult);
                 return;
