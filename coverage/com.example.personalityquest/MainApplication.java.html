@@ -24,19 +24,22 @@ import java.io.IOException;
         try {
 <span class="nc" id="L25">            ArchetypeDAO.ResetAndSeedCatalog();</span>
 <span class="nc" id="L26">            QuestDAO.ResetAndSeedCatalog();</span>
-<span class="nc" id="L27">            UserQuestDAO.EnsureTables();</span>
-<span class="nc" id="L28">            UserQuestDAO.ClearAll();</span>
-<span class="nc" id="L29">        } catch (Exception exception) {</span>
-<span class="nc" id="L30">            exception.printStackTrace();</span>
-<span class="nc" id="L31">        }</span>
+<span class="nc" id="L27">            initialiseUserQuestData();</span>
+<span class="nc" id="L28">        } catch (Exception exception) {</span>
+<span class="nc" id="L29">            exception.printStackTrace();</span>
+<span class="nc" id="L30">        }</span>
 
         try {
-<span class="nc" id="L34">            NavigationService.Init(stage);</span>
-<span class="nc" id="L35">            NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
+<span class="nc" id="L33">            NavigationService.Init(stage);</span>
+<span class="nc" id="L34">            NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
         }
-<span class="nc" id="L37">        catch (IOException e){</span>
-<span class="nc" id="L38">            System.out.println(e.getMessage());</span>
-<span class="nc" id="L39">        }</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L36">        catch (IOException e){</span>
+<span class="nc" id="L37">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L38">        }</span>
+<span class="nc" id="L39">    }</span>
+
+    static void initialiseUserQuestData() throws Exception{
+<span class="fc" id="L42">        UserQuestDAO.EnsureTables();</span>
+<span class="fc" id="L43">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -21,11 +21,11 @@ import java.util.List;
             &quot;&quot;&quot;;
 
     public static void EnsureTables() throws SQLException {
-<span class="nc" id="L24">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L25">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L26">            statement.executeUpdate(CREATE_USER_QUESTS);</span>
+<span class="fc" id="L24">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L25">        try (Statement statement = connection.createStatement()) {</span>
+<span class="fc" id="L26">            statement.executeUpdate(CREATE_USER_QUESTS);</span>
         }
-<span class="nc" id="L28">    }</span>
+<span class="fc" id="L28">    }</span>
 
     public static void ClearAll()  throws SQLException {
 <span class="nc" id="L31">        Connection connection = SQLite.getConnection();</span>
