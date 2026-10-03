@@ -119,3 +119,12 @@
     -fx-background-color: #9a72ff;
     -fx-text-fill: #140e25;
 }
+
+.viewer-tab-button:disabled {
+    -fx-opacity: 0.4;
+    -fx-cursor: default;
+}
+
+.storyline-description {
+    -fx-font-size: 19px;
+}

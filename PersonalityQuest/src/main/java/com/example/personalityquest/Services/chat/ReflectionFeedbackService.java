@@ -183,4 +183,20 @@ public final class ReflectionFeedbackService {
     private static String Fallback(String value, String fallback) {
         return ApplicationManager.isEmpty(value) ? fallback : value;
     }
+
+    private static final String QUEST_FEEDBACK_KEY ="QUEST";
+
+    public static void SaveForQuest(String email, int labourId, String feedback) throws SQLException {
+        if (ApplicationManager.isEmpty(email) || ApplicationManager.isEmpty(feedback)) {
+            return;
+        }
+        ReflectionFeedbackDAO.Save(email, labourId, QUEST_FEEDBACK_KEY, feedback.trim());
+    }
+
+    public static String FindForQuest(String email, int labourId) throws SQLException {
+        if (ApplicationManager.isEmpty(email)) {
+            return "";
+        }
+        return ReflectionFeedbackDAO.Find(email, labourId, QUEST_FEEDBACK_KEY);
+    }
 }

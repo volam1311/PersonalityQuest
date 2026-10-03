@@ -3,24 +3,26 @@ package com.example.personalityquest.Controllers.quest;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Controllers.navigation.NavBarController;
 import com.example.personalityquest.DAO.quest.QuestOptionDAO;
-import com.example.personalityquest.Model.quest.Quest;
-import com.example.personalityquest.Model.quest.QuestOption;
-import com.example.personalityquest.Model.quest.Task;
-import com.example.personalityquest.Model.quest.UserQuest;
+import com.example.personalityquest.DAO.quest.ReflectionPromptDAO;
+import com.example.personalityquest.Model.quest.*;
+import com.example.personalityquest.Services.chat.ReflectionFeedbackService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 
 public class QuestViewerController implements Initializable {
 
@@ -46,14 +48,35 @@ public class QuestViewerController implements Initializable {
     private VBox reactionOptionsBox;
     @FXML
     private Label challengeDetailsLabel;
+    @FXML
+    private Label reflectionPromptLabel;
+    @FXML
+    private Button challengeJournalButton;
+    @FXML
+    private Label challengeJournalFeedbackLabel;
+    @FXML
+    private TextArea reflectionEntryArea;
+    @FXML
+    private Button reflectionFeedbackButton, reflectionDraftButton, reflectionSubmitButton;
+    @FXML
+    private Label reflectionStatusLabel;
+    @FXML
+    private VBox reflectionAiFeedbackCard;
+    @FXML
+    private Label reflectionAiFeedbackLabel;
+
+    private UserQuest activeUserQuest;
 
     private QuestOption.ReactionType selectedReaction;
 
     private Tab currentTab;
+    private boolean reactionAnswered;
+    private boolean challengeVisited;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUEST_VIEWER);
+        UpdateTabLocks();
         SelectTab(Tab.STORYLINE);
     }
 
@@ -65,6 +88,14 @@ public class QuestViewerController implements Initializable {
             return;
         }
         SelectTab(tab);
+    }
+
+    @FXML
+    private void OnAddToJournal(){
+        challengeVisited = true;
+        challengeJournalButton.setDisable(true);
+        challengeJournalFeedbackLabel.setText("Added to your journal");
+        UpdateTabLocks();
     }
 
     private void SelectTab(Tab tab) {
@@ -80,6 +111,10 @@ public class QuestViewerController implements Initializable {
 
         if (tab == Tab.CHALLENGE) {
             LoadChallenge();
+        }
+
+        if (tab == Tab.REFLECTION) {
+            LoadReflection();
         }
 
         SetPaneVisible(storylinePane, tab == Tab.STORYLINE);
@@ -212,6 +247,9 @@ public class QuestViewerController implements Initializable {
         reactionOptionsBox.getChildren().forEach(node -> node.getStyleClass().remove("selected"));
         chosen.getStyleClass().add("selected");
         reactionFeedbackLabel.setText("Recorded as: " + selectedReaction);
+
+        reactionAnswered = true;
+        UpdateTabLocks();
     }
 
     private void LoadChallenge(){
@@ -243,4 +281,199 @@ public class QuestViewerController implements Initializable {
             challengeDetailsLabel.setText("Could not load your challenge right now.");
         }
     }
+
+    private void LoadReflection() {
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        if (ApplicationManager.isEmpty(email)) {
+            reflectionPromptLabel.setText("Sign in to see your current labour's reflection choice.");
+            DisableReflectionActions();
+            return;
+        }
+
+        try {
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            if (userQuest == null) {
+                reflectionPromptLabel.setText("Complete the quiz to begin a labour.");
+                DisableReflectionActions();
+                return;
+            }
+
+            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            if (quest == null) {
+                reflectionPromptLabel.setText("Complete the quiz to begin a labour.");
+                DisableReflectionActions();
+                return;
+            }
+
+            List<ReflectionPrompt> prompts = ReflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());
+            if (prompts.isEmpty()) {
+                reflectionPromptLabel.setText("No prompts are stored for this labour yet.");
+                DisableReflectionActions();
+                return;
+            }
+
+            if (selectedReaction == null){
+                reflectionPromptLabel.setText("Answer \"Your Reaction\" first to see your reflection prompt");
+                DisableReflectionActions();
+                return;
+            }
+
+            ReflectionPrompt matched = null;
+            for (ReflectionPrompt prompt : prompts) {
+                if (selectedReaction.name().equalsIgnoreCase(prompt.reactionType())){
+                    matched = prompt;
+                    break;
+                }
+            }
+
+            reflectionPromptLabel.setText(matched != null
+                    ? matched.prompt()
+                    : "No reflection prompt is stored for your reaction yet");
+
+            activeUserQuest = userQuest;
+            boolean finished = "Finished".equalsIgnoreCase(activeUserQuest.getReflectionStatus());
+            reflectionEntryArea.setText(userQuest.getReflection() == null ? "" : activeUserQuest.getReflection());
+            reflectionEntryArea.setDisable(false);
+            reflectionDraftButton.setDisable(finished);
+            reflectionSubmitButton.setDisable(finished);
+            reflectionSubmitButton.setText(finished ? "Submitted" : "Submit");
+            reflectionFeedbackButton.setDisable(false);
+            reflectionStatusLabel.setText(finished ? "This reflection has already been submitted." : "");
+            ShowStoredQuestFeedback(activeUserQuest.getAccountEmail(), activeUserQuest.getLabourId());
+
+        } catch (Exception exception){
+            reflectionPromptLabel.setText("Could not load your reflection right now.");
+        }
+
+
+    }
+
+    private void UpdateTabLocks() {
+        challengeTabButton.setDisable(!reactionAnswered);
+        reflectionTabButton.setDisable(!challengeVisited);
+    }
+
+    private void DisableReflectionActions(){
+        activeUserQuest = null;
+        reflectionEntryArea.clear();
+        reflectionEntryArea.setDisable(true);
+        reflectionDraftButton.setDisable(true);
+        reflectionSubmitButton.setDisable(true);
+        reflectionSubmitButton.setText("Submit");
+        reflectionFeedbackButton.setDisable(true);
+        reflectionStatusLabel.setText("");
+        HideQuestAiFeedback();
+    }
+
+    @FXML
+    private void OnSaveDraft(){
+        if (activeUserQuest == null){
+            return;
+        }
+
+        String reflection = CurrentReflection();
+        if (ApplicationManager.isEmpty(reflection)){
+            reflectionStatusLabel.setText("Write something before saving a draft");
+            return;
+        }
+
+        try{
+            activeUserQuest = UserQuestService.UpdateQuestReflectionToDraft(
+                    activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
+            reflectionStatusLabel.setText("Draft Saved");
+        } catch (Exception exception) {
+            reflectionStatusLabel.setText("Could not save your reflection right now.");
+        }
+    }
+
+    @FXML
+    private void OnSubmit() {
+        if (activeUserQuest == null) {
+            return;
+        }
+        String reflection = CurrentReflection();
+        if (ApplicationManager.isEmpty(reflection)) {
+            reflectionStatusLabel.setText("Write a reflection before submitting.");
+            return;
+        }
+        try {
+            activeUserQuest = UserQuestService.UpdateQuestReflectionToBeFinished(
+                    activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
+            reflectionDraftButton.setDisable(true);
+            reflectionSubmitButton.setDisable(true);
+            reflectionSubmitButton.setText("Submitted");
+            RequestAiFeedback(reflection, "Reflection submitted. Generating AI feedback...");
+        } catch (Exception exception) {
+            reflectionStatusLabel.setText("Could not submit this reflection right now.");
+        }
+    }
+    @FXML
+    private void OnGetFeedback() {
+        if (activeUserQuest == null) {
+            return;
+        }
+        String reflection = CurrentReflection();
+        if (ApplicationManager.isEmpty(reflection)) {
+            reflectionStatusLabel.setText("Write a reflection before requesting AI feedback.");
+            return;
+        }
+        RequestAiFeedback(reflection, "Generating AI feedback...");
+    }
+    private void RequestAiFeedback(String reflection, String statusMessage) {
+        UserQuest quest = activeUserQuest;
+        reflectionFeedbackButton.setDisable(true);
+        reflectionStatusLabel.setText(statusMessage);
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                Quest questDetails = QuestService.GetQuestForLabourId(quest.getLabourId());
+                List<Task> tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
+                Task firstTask = tasks.isEmpty() ? null : tasks.get(0);
+                String questName = questDetails == null ? "" : questDetails.getName();
+                return ReflectionFeedbackService.FeedbackFor(
+                        ReflectionFeedbackService.ContextFor(firstTask, questName, reflection));
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
+        }).whenComplete((text, error) -> Platform.runLater(() -> {
+            reflectionFeedbackButton.setDisable(false);
+            if (error != null) {
+                reflectionStatusLabel.setText("Could not get AI feedback right now.");
+                return;
+            }
+            try {
+                ReflectionFeedbackService.SaveForQuest(quest.getAccountEmail(), quest.getLabourId(), text);
+            } catch (Exception ignored) {
+                // Showing the reply still helps even if it cannot be stored.
+            }
+            reflectionAiFeedbackLabel.setText(text);
+            reflectionAiFeedbackCard.setVisible(true);
+            reflectionAiFeedbackCard.setManaged(true);
+            reflectionStatusLabel.setText("AI feedback is ready.");
+        }));
+    }
+    private void ShowStoredQuestFeedback(String email, int labourId) {
+        try {
+            String stored = ReflectionFeedbackService.FindForQuest(email, labourId);
+            if (ApplicationManager.isEmpty(stored)) {
+                HideQuestAiFeedback();
+                return;
+            }
+            reflectionAiFeedbackLabel.setText(stored);
+            reflectionAiFeedbackCard.setVisible(true);
+            reflectionAiFeedbackCard.setManaged(true);
+        } catch (Exception exception) {
+            HideQuestAiFeedback();
+        }
+    }
+    private void HideQuestAiFeedback() {
+        reflectionAiFeedbackLabel.setText("");
+        reflectionAiFeedbackCard.setVisible(false);
+        reflectionAiFeedbackCard.setManaged(false);
+    }
+    private String CurrentReflection() {
+        String reflection = reflectionEntryArea.getText();
+        return reflection == null ? "" : reflection.trim();
+    }
+
+
 }

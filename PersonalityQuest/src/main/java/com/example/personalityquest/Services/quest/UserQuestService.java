@@ -161,4 +161,24 @@ public class UserQuestService {
     private static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
         return UserQuestDAO.GetUserQuestForEmailAndLabourId(email, labourId);
     }
+
+    public static UserQuest UpdateQuestReflectionToDraft(UserQuest quest, String reflection, String email) throws SQLException {
+        if (quest == null || ApplicationManager.isEmpty(reflection) || ApplicationManager.isEmpty(email)) {
+            throw new IllegalArgumentException("Null quest, reflection or email");
+        }
+
+        UserQuestDAO.UpdateGivenQuestReflectionToDraft(quest, reflection, email);
+
+        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
+    }
+
+    public static UserQuest UpdateQuestReflectionToBeFinished(UserQuest quest, String reflection, String email) throws SQLException {
+        if (quest == null || ApplicationManager.isEmpty(reflection) || ApplicationManager.isEmpty(email)) {
+            throw new IllegalArgumentException("Null quest, reflection or email");
+        }
+
+        UserQuestDAO.UpdateGivenQuestReflectionToBeFinished(quest, reflection, email);
+
+        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
+    }
 }

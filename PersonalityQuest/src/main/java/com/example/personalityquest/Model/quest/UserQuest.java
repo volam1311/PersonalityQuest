@@ -6,9 +6,9 @@ import com.example.personalityquest.ApplicationManager;
  * Holds the details pertaining to UserQuests that have been assigned in the database to users
  */
 /*
-* This is a user quest which is the ones that get assigned to the user for them to complete.
-* Not to be mistaken with a Quest which is only the unassigned information of the quest.
-* */
+ * This is a user quest which is the ones that get assigned to the user for them to complete.
+ * Not to be mistaken with a Quest which is only the unassigned information of the quest.
+ * */
 public class UserQuest {
     private final int labourId;
     private final String accountEmail;
@@ -17,7 +17,16 @@ public class UserQuest {
     // Either 'Active', 'Completed'
     private String status;
 
+    // Either 'Not Started', 'Started', 'Finished'
+    private String reflection;
+    private String reflectionStatus;
+
     public UserQuest(int labourId, String accountEmail, float percentageComplete, String status){
+        this(labourId, accountEmail, percentageComplete, status, "", "Not Started");
+    }
+
+    public UserQuest(int labourId, String accountEmail, float percentageComplete, String status,
+                     String reflection, String reflectionStatus){
         if (labourId <= 0){
             throw new IllegalArgumentException("Labour Id is null");
         }
@@ -35,6 +44,8 @@ public class UserQuest {
         this.accountEmail = accountEmail;
         this.percentageComplete = percentageComplete;
         this.status = status;
+        this.reflection = ApplicationManager.isEmpty(reflection) ? "" : reflection;
+        this.reflectionStatus = ApplicationManager.isEmpty(reflectionStatus) ? "Not Started" : reflectionStatus;
     }
 
     public int getLabourId() {
@@ -53,11 +64,27 @@ public class UserQuest {
         return status;
     }
 
+    public String getReflection() {
+        return reflection;
+    }
+
+    public String getReflectionStatus() {
+        return reflectionStatus;
+    }
+
     public void setPercentageComplete(float percentageComplete) {
         this.percentageComplete = percentageComplete;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setReflection(String reflection) {
+        this.reflection = reflection;
+    }
+
+    public void setReflectionStatus(String reflectionStatus) {
+        this.reflectionStatus = reflectionStatus;
     }
 }

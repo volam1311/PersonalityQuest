@@ -16,6 +16,8 @@ public class UserQuestDAO {
             labourId INTEGER NOT NULL,
             percentageComplete REAL NOT NULL,
             status TEXT NOT NULL,
+            reflection TEXT NOT NULL DEFAULT '',
+            reflectionStatus TEXT NOT NULL DEFAULT 'Not Started',
             PRIMARY KEY (accountEmail, labourId)
             )
             """;
@@ -24,6 +26,17 @@ public class UserQuestDAO {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_USER_QUESTS);
+        }
+        AddColumnIfMissing("reflection", "TEXT NOT NULL DEFAULT ''");
+        AddColumnIfMissing("reflectionStatus", "TEXT NOT NULL DEFAULT 'Not started'");
+    }
+
+    private static void AddColumnIfMissing(String columnName, String definition) {
+        Connection connection = SQLite.getConnection();
+        try (Statement statement = connection.createStatement()){
+            statement.executeUpdate("ALTER TABLE UserQuests ADD COLUMN " + columnName + " " + definition);
+        } catch (SQLException alreadyExists){
+            // Column already exists so ignore
         }
     }
 
@@ -57,7 +70,9 @@ public class UserQuestDAO {
                     rs.getInt("labourId"),
                     rs.getString("accountEmail"),
                     rs.getFloat("percentageComplete"),
-                    rs.getString("status")
+                    rs.getString("status"),
+                    rs.getString("reflection"),
+                    rs.getString("reflectionStatus")
             );
         }
 
@@ -92,7 +107,9 @@ public class UserQuestDAO {
                         rs.getInt("labourId"),
                         rs.getString("accountEmail"),
                         rs.getFloat("percentageComplete"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getString("reflection"),
+                        rs.getString("reflectionStatus")
                 ));
             }
             return quests;
@@ -259,5 +276,38 @@ public class UserQuestDAO {
             System.out.println("updated quest is null");
         }
         return updatedQuest;
+
+    }
+
+    private static final String SQL_UPDATE_REFLECTION_DRAFT = """
+            UPDATE UserQuests
+            SET reflection = ?, reflectionStatus = 'Started'
+            WHERE accountEmail = ? AND labourId = ?
+            """;
+
+    private static final String SQL_FINISH_REFLECTION = """
+            UPDATE UserQuests
+            SET reflection = ?,reflectionStatus = 'Finished'
+            WHERE accountEmail = ? AND labourId = ?
+            """;
+
+    public static void UpdateGivenQuestReflectionToDraft(UserQuest quest, String reflection, String email) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement =  connection.prepareStatement(SQL_UPDATE_REFLECTION_DRAFT)){
+            statement.setString(1, reflection);
+            statement.setString(2, email);
+            statement.setInt(3, quest.getLabourId());
+            statement.executeUpdate();
+        }
+    }
+
+    public static void UpdateGivenQuestReflectionToBeFinished(UserQuest quest, String reflection, String email) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement =  connection.prepareStatement(SQL_FINISH_REFLECTION)){
+            statement.setString(1, reflection);
+            statement.setString(2, email);
+            statement.setInt(3, quest.getLabourId());
+            statement.executeUpdate();
+        }
     }
 }

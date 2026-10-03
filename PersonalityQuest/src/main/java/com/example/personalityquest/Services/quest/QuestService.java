@@ -1,10 +1,15 @@
 package com.example.personalityquest.Services.quest;
 
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.quest.QuestDAO;
+import com.example.personalityquest.DAO.quest.UserQuestDAO;
 import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.quest.UserQuest;
 
 import java.sql.SQLException;
 import java.util.Random;
+
+import static com.example.personalityquest.DAO.quest.UserQuestDAO.GetUserQuestForEmailAndLabourId;
 
 /**
  * This class managers everything to do with quests and has utility functions to retrieve
@@ -107,6 +112,26 @@ public class QuestService {
         int randomInt = random.nextInt(0, quests.length);
 
         return quests[randomInt];
+    }
+
+    public static UserQuest UpdateQuestReflectionToDraft(UserQuest quest, String reflection, String email) throws SQLException {
+        if (quest == null || ApplicationManager.isEmpty(reflection) || ApplicationManager.isEmpty(email)) {
+            throw new IllegalArgumentException("Null quest, refleciton or email");
+        }
+
+        UserQuestDAO.UpdateGivenQuestReflectionToDraft(quest, reflection, email);
+
+        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
+    }
+
+    public static UserQuest UpdateQuestReflectionToBeFinished(UserQuest quest, String reflection, String email) throws SQLException {
+        if (quest == null || ApplicationManager.isEmpty(reflection) || ApplicationManager.isEmpty(email)) {
+            throw new IllegalArgumentException("Null quest, refleciton or email");
+        }
+
+        UserQuestDAO.UpdateGivenQuestReflectionToBeFinished(quest, reflection, email);
+
+        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
     }
 
 }
