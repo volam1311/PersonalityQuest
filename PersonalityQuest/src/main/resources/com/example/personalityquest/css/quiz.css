@@ -5,7 +5,7 @@
 .quiz-question {
     -fx-font-family: Montserrat;
     -fx-font-size: 22px;
-    -fx-font-weight: bold;
+    -fx-font-weight: normal;
     -fx-text-fill: #ffffff;
 }
 
@@ -36,7 +36,7 @@
     -fx-border-width: 1.5;
     -fx-font-family: Poppins;
     -fx-font-size: 15px;
-    -fx-font-weight: bold;
+    -fx-font-weight: normal;
     -fx-text-fill: #e8ddff;
     -fx-padding: 12 18 12 18;
     -fx-cursor: hand;

@@ -310,4 +310,19 @@ public class UserQuestDAO {
             statement.executeUpdate();
         }
     }
+
+    public static void DeactivateUserQuest(UserQuest quest, String email) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    UPDATE UserQuests
+                    SET status = 'Not Started'
+                    WHERE accountEmail = ? AND labourId = ?
+                    """)){
+            statement.setString(1, email);
+            statement.setInt(2, quest.getLabourId());
+            statement.executeUpdate();
+        }
+
+    }
 }

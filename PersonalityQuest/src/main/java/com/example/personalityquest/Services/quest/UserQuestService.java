@@ -158,7 +158,7 @@ public class UserQuestService {
      * @return The UserQuest matching the email and labourId given OR null if none could be retrived
      * @throws SQLException Database Access Failure
      */
-    private static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
+    public static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
         return UserQuestDAO.GetUserQuestForEmailAndLabourId(email, labourId);
     }
 
@@ -180,5 +180,35 @@ public class UserQuestService {
         UserQuestDAO.UpdateGivenQuestReflectionToBeFinished(quest, reflection, email);
 
         return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
+    }
+
+    public static UserQuest DeactivateUserQuest(UserQuest quest, String email) throws SQLException {
+        if (quest == null || ApplicationManager.isEmpty(email)) {
+        throw new IllegalArgumentException("Quest or email is null");
+        }
+
+        UserQuestDAO.DeactivateUserQuest(quest, email);
+        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
+    }
+
+    public static UserQuest ChangeActiveQuest(Quest quest, String email) throws SQLException {
+        if (quest == null || ApplicationManager.isEmpty(email)) {
+            throw new IllegalArgumentException("Quest or email is null");
+        }
+
+        UserQuest activeQuest = GetCurrentActiveUserQuestForEmail(email);
+        if (activeQuest != null && activeQuest.getLabourId() == quest.getLabourId()) {
+            // Already active on this quest, nothing to change
+            return activeQuest;
+        }
+
+        if (activeQuest != null){
+            DeactivateUserQuest(activeQuest, email);
+        }
+
+        UserQuest existing = GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
+        UserQuest target = existing != null ? existing : InsertNewQuestForEmail(quest, email);
+
+        return SetUserQuesStatusAsActive(target, email);
     }
 }

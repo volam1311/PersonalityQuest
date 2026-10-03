@@ -50,7 +50,7 @@ public class QuizService {
             EnsureCatalog();
             questions = QuestionDAO.GetQuestions();
             if (DEMO_MODE){
-                questions = FirstQuestionPerRealm(questions);
+                questions = DemoQuestionSet(questions);
             }
         } catch (SQLException exception) {
             throw new IllegalStateException("Could not load quiz questions", exception);
@@ -230,11 +230,6 @@ public class QuizService {
         }
 
         try {
-            UserQuest activeQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
-            if (activeQuest != null) {
-                return result;
-            }
-
             Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());
             if (archetypeId == null) {
                 return result;
@@ -245,10 +240,10 @@ public class QuizService {
                 return result;
             }
 
-            UserQuest inserted = UserQuestService.InsertNewQuestForEmail(quest, email);
-            UserQuestService.SetUserQuesStatusAsActive(inserted, email);
+            UserQuestService.ChangeActiveQuest(quest,email);
             result = result.withAssignedQuest(quest);
             return result;
+
         } catch (Exception exception) {
             return result;
         }
@@ -377,6 +372,23 @@ public class QuizService {
             return null;
         }
     }
+
+    // Use Quiz questions for hero, Everyman and Innocent
+    private static final String FEATURED_DEMO_REALM = "Ego";
+
+    private static List<Question> DemoQuestionSet(List<Question> all){
+        List<Question> selected = new ArrayList<>();
+        Set<String> seenOtherRealms = new LinkedHashSet<>();
+        for (Question question : all){
+            if (FEATURED_DEMO_REALM.equals(question.getRealmType())){
+                selected.add(question);
+            } else if (seenOtherRealms.add(question.getRealmType())){
+                selected.add(question);
+            }
+        }
+        return selected;
+    }
+
 
 
 

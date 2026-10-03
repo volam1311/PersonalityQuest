@@ -128,3 +128,17 @@
 .storyline-description {
     -fx-font-size: 19px;
 }
+
+.resolution-card {
+    -fx-border-color: #9a72ff;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: rgba(154, 114, 255, 0.08);
+    -fx-padding: 12;
+}
+
+.viewer-tab-button.flashing-tab {
+    -fx-background-color: #ffcf6b;
+    -fx-text-fill: #140e25;
+}

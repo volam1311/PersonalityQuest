@@ -15,8 +15,15 @@ public class Quest {
     private final int archetypeId;
     private final String name;
     private final String narrative;
+    private final String decisionQuestion;
+    private final String resolution;
 
-    public Quest(int labourId, int archetypeId, String name, String narrative) {
+    public Quest(int labourId, int archetypeId, String name, String narrative){
+        this(labourId, archetypeId, name, narrative, "", "");
+    }
+
+    public Quest(int labourId, int archetypeId, String name, String narrative, String decisionQuestion, String resolution) {
+
         if (ApplicationManager.isEmpty(name)){
             throw new IllegalArgumentException("Name is null");
         }
@@ -31,6 +38,10 @@ public class Quest {
         this.archetypeId = archetypeId;
         this.name = name;
         this.narrative = narrative;
+        this.decisionQuestion = decisionQuestion == null ? "" : decisionQuestion;
+        this.resolution = resolution == null ? "" : resolution;
+
+
 
     }
     public int getArchetypeId() {
@@ -43,4 +54,8 @@ public class Quest {
         return name;
     }
     public String getNarrative() { return narrative; }
+
+    public String getDecisionQuestion() { return decisionQuestion; }
+
+    public String getResolution() { return resolution; }
 }

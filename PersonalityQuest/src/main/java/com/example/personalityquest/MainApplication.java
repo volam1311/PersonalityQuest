@@ -4,10 +4,7 @@ import com.example.personalityquest.Applications.auth.AccountCreationApplication
 import com.example.personalityquest.Applications.auth.UpdateAccountPersonalDetailsApplication;
 import com.example.personalityquest.DAO.auth.UserDAO;
 import com.example.personalityquest.DAO.personalisation.ArchetypeDAO;
-import com.example.personalityquest.DAO.quest.QuestDAO;
-import com.example.personalityquest.DAO.quest.QuestOptionDAO;
-import com.example.personalityquest.DAO.quest.ReflectionPromptDAO;
-import com.example.personalityquest.DAO.quest.UserQuestDAO;
+import com.example.personalityquest.DAO.quest.*;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -29,6 +26,8 @@ public class MainApplication extends Application {
             QuestOptionDAO.ResetAndSeedCatalog();
             ReflectionPromptDAO.ResetAndSeedCatalog();
             UserQuestDAO.EnsureTables();
+            TaskDAO.EnsureTables();
+            TaskDAO.PopulateChallenges();
         } catch (Exception exception) {
             exception.printStackTrace();
         }

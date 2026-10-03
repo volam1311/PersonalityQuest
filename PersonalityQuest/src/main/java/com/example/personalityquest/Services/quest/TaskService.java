@@ -144,6 +144,17 @@ public class TaskService {
         return returnedTaskIds;
     }
 
+    public static List<Task> GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception {
+        if (IsLabourIdNull(labourId)) {
+            throw new IllegalArgumentException("Labour Id is null");
+        }
+        if (ApplicationManager.isEmpty(reactionType)){
+            throw new IllegalArgumentException("Reaction type is null");
+        }
+
+        return TaskDAO.GetTasksForLabourIdAndReactionType(labourId, reactionType);
+    }
+
     /// NULL CHECKING
     /**
      * Checks if the given labourId is equal to 0
