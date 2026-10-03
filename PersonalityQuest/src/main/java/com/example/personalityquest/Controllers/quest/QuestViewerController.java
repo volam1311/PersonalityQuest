@@ -5,8 +5,10 @@ import com.example.personalityquest.Controllers.navigation.NavBarController;
 import com.example.personalityquest.DAO.quest.QuestOptionDAO;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.QuestOption;
+import com.example.personalityquest.Model.quest.Task;
 import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Services.quest.QuestService;
+import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,6 +44,8 @@ public class QuestViewerController implements Initializable {
     private Label reactionQuestionLabel, reactionFeedbackLabel;
     @FXML
     private VBox reactionOptionsBox;
+    @FXML
+    private Label challengeDetailsLabel;
 
     private QuestOption.ReactionType selectedReaction;
 
@@ -72,6 +76,10 @@ public class QuestViewerController implements Initializable {
 
         if (tab == Tab.REACTION) {
             LoadReaction();
+        }
+
+        if (tab == Tab.CHALLENGE) {
+            LoadChallenge();
         }
 
         SetPaneVisible(storylinePane, tab == Tab.STORYLINE);
@@ -204,5 +212,35 @@ public class QuestViewerController implements Initializable {
         reactionOptionsBox.getChildren().forEach(node -> node.getStyleClass().remove("selected"));
         chosen.getStyleClass().add("selected");
         reactionFeedbackLabel.setText("Recorded as: " + selectedReaction);
+    }
+
+    private void LoadChallenge(){
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        if (ApplicationManager.isEmpty(email)) {
+            challengeDetailsLabel.setText("Sign in to see your current labour's challenge choice.");
+            return;
+        }
+
+        try {
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            if (userQuest == null) {
+                challengeDetailsLabel.setText("Complete the quiz to begin a labour.");
+                return;
+            }
+
+            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            if (quest == null) {
+                challengeDetailsLabel.setText("Complete the quiz to begin a labour.");
+                return;
+            }
+
+            List<Task> tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
+            String details =TaskService.JoinTaskDetails(tasks);
+            challengeDetailsLabel.setText(details.isEmpty()
+                    ? "No tasks are stored for this labour yet."
+                    : details);
+        } catch (Exception exception){
+            challengeDetailsLabel.setText("Could not load your challenge right now.");
+        }
     }
 }

@@ -56,8 +56,13 @@
                     <VBox fx:id="reactionOptionsBox" spacing="12" />
                     <Label fx:id="reactionFeedbackLabel" styleClass="quiz-feedback" wrapText="true" />
                 </VBox>
-                <VBox fx:id="challengePane" styleClass="card">
-                    <Label text="Challenge content goes here" />
+                <VBox fx:id="challengePane" spacing = "12" styleClass="card quest-card">
+                    <Label styleClass="card-title" text="Challenge for this quest" />
+                    <ScrollPane fx:id ="challengeScroll" fitToWidth = "true" hbarPolicy = "NEVER" vbarPolicy = "AS_NEEDED" styleClass = "quest-description-scroll" VBox.vgrow = "ALWAYS">
+                        <content>
+                            <Label fx:id = "challengeDetailsLabel" styleClass = "quest-description" wrapText = "true" text = "Your challenge will appear here once a quest is active."/>
+                        </content>
+                    </ScrollPane>
                 </VBox>
                 <VBox fx:id="reflectionPane" styleClass="card">
                     <Label text="Reflection content goes here" />
