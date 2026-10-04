@@ -5,8 +5,9 @@ import javafx.scene.text.Font;
 import java.io.IOException;
 import java.io.InputStream;
 
+/** Loads fonts used by the application */
 public final class AppFonts {
-<span class="nc" id="L9">    private static final String[] FONT_FILES = {</span>
+<span class="nc" id="L10">    private static final String[] FONT_FILES = {</span>
             &quot;/com/example/personalityquest/fonts/Poppins-Regular.ttf&quot;,
             &quot;/com/example/personalityquest/fonts/Poppins-Bold.ttf&quot;,
             &quot;/com/example/personalityquest/fonts/Poppins-Italic.ttf&quot;,
@@ -20,24 +21,25 @@ public final class AppFonts {
     private AppFonts() {
     }
 
+    /** Registers the bundled fonts with JavaFX */
     public static void load() {
-<span class="nc bnc" id="L24" title="All 2 branches missed.">        if (loaded) {</span>
-<span class="nc" id="L25">            return;</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (loaded) {</span>
+<span class="nc" id="L27">            return;</span>
         }
 
-<span class="nc bnc" id="L28" title="All 2 branches missed.">        for (String fontFile : FONT_FILES) {</span>
-<span class="nc" id="L29">            try (InputStream stream = AppFonts.class.getResourceAsStream(fontFile)) {</span>
-<span class="nc bnc" id="L30" title="All 2 branches missed.">                if (stream == null) {</span>
-<span class="nc" id="L31">                    System.err.println(&quot;Font resource not found: &quot; + fontFile);</span>
-<span class="nc" id="L32">                    continue;</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        for (String fontFile : FONT_FILES) {</span>
+<span class="nc" id="L31">            try (InputStream stream = AppFonts.class.getResourceAsStream(fontFile)) {</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">                if (stream == null) {</span>
+<span class="nc" id="L33">                    System.err.println(&quot;Font resource not found: &quot; + fontFile);</span>
+<span class="nc" id="L34">                    continue;</span>
                 }
-<span class="nc" id="L34">                Font.loadFont(stream, 12);</span>
-<span class="nc bnc" id="L35" title="All 2 branches missed.">            } catch (IOException exception) {</span>
-<span class="nc" id="L36">                System.err.println(&quot;Failed to load font: &quot; + fontFile);</span>
-<span class="nc" id="L37">            }</span>
+<span class="nc" id="L36">                Font.loadFont(stream, 12);</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">            } catch (IOException exception) {</span>
+<span class="nc" id="L38">                System.err.println(&quot;Failed to load font: &quot; + fontFile);</span>
+<span class="nc" id="L39">            }</span>
         }
 
-<span class="nc" id="L40">        loaded = true;</span>
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L42">        loaded = true;</span>
+<span class="nc" id="L43">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

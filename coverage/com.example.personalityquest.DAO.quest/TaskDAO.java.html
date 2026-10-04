@@ -10,7 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="nc" id="L13">public class TaskDAO {</span>
+/** Stores and retrieves task catalog records */
+<span class="nc" id="L14">public class TaskDAO {</span>
     private static final String FIND_TASK_INFO = &quot;&quot;&quot;
             SELECT * FROM Tasks
             WHERE taskId = ?;
@@ -39,26 +40,26 @@ import java.util.List;
      * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
      */
     public static Task GetTaskForId(int taskId) throws Exception {
-<span class="fc" id="L42">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L43">        PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);</span>
-<span class="fc" id="L44">        Task task = null;</span>
+<span class="fc" id="L43">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L44">        PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);</span>
+<span class="fc" id="L45">        Task task = null;</span>
 
-<span class="fc" id="L46">        statement.setInt(1, taskId);</span>
-<span class="fc" id="L47">        ResultSet rs = statement.executeQuery();</span>
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        while (rs.next()) {</span>
-<span class="fc" id="L49">            System.out.println(&quot;Makes new task&quot;);</span>
-<span class="fc" id="L50">            task = new Task(</span>
-<span class="fc" id="L51">                    rs.getInt(&quot;taskId&quot;),</span>
-<span class="fc" id="L52">                    rs.getString(&quot;name&quot;),</span>
-<span class="fc" id="L53">                    rs.getString(&quot;description&quot;),</span>
-<span class="fc" id="L54">                    rs.getInt(&quot;labourId&quot;)</span>
+<span class="fc" id="L47">        statement.setInt(1, taskId);</span>
+<span class="fc" id="L48">        ResultSet rs = statement.executeQuery();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        while (rs.next()) {</span>
+<span class="fc" id="L50">            System.out.println(&quot;Makes new task&quot;);</span>
+<span class="fc" id="L51">            task = new Task(</span>
+<span class="fc" id="L52">                    rs.getInt(&quot;taskId&quot;),</span>
+<span class="fc" id="L53">                    rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L54">                    rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L55">                    rs.getInt(&quot;labourId&quot;)</span>
             );
         }
 
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (task == null){</span>
-<span class="fc" id="L59">            throw new Exception(&quot;No task matching the givenId&quot;);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (task == null){</span>
+<span class="fc" id="L60">            throw new Exception(&quot;No task matching the givenId&quot;);</span>
         }
-<span class="fc" id="L61">        return task;</span>
+<span class="fc" id="L62">        return task;</span>
     }
 
     /**
@@ -68,18 +69,18 @@ import java.util.List;
      * @throws SQLException Database Access Failure
      */
     public static List&lt;Integer&gt; GetWeeklyTaskIdsForLabourId(int labourId) throws SQLException {
-<span class="fc" id="L71">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L72">        PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK_IDS_FOR_LABOURID);</span>
-<span class="fc" id="L73">        List&lt;Integer&gt; taskIds = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L72">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L73">        PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK_IDS_FOR_LABOURID);</span>
+<span class="fc" id="L74">        List&lt;Integer&gt; taskIds = new ArrayList&lt;Integer&gt;();</span>
 
-<span class="fc" id="L75">        statement.setInt(1, labourId);</span>
-<span class="fc" id="L76">        ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L76">        statement.setInt(1, labourId);</span>
+<span class="fc" id="L77">        ResultSet rs = statement.executeQuery();</span>
 
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        while (rs.next()) {</span>
-<span class="fc" id="L79">            taskIds.add(rs.getInt(&quot;taskId&quot;));</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        while (rs.next()) {</span>
+<span class="fc" id="L80">            taskIds.add(rs.getInt(&quot;taskId&quot;));</span>
         }
 
-<span class="fc" id="L82">        return taskIds;</span>
+<span class="fc" id="L83">        return taskIds;</span>
     }
 
     /**
@@ -90,20 +91,20 @@ import java.util.List;
      * @throws Exception If a row cannot be mapped to a Task, or Database Access Failure
      */
     public static List&lt;Task&gt; GetTasksForLabourId(int labourId) throws Exception {
-<span class="fc" id="L93">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L94">        try (PreparedStatement statement = connection.prepareStatement(GET_QUEST_TASKS_FOR_LABOURID)) {</span>
-<span class="fc" id="L95">            statement.setInt(1, labourId);</span>
-<span class="fc" id="L96">            ResultSet rs = statement.executeQuery();</span>
-<span class="fc" id="L97">            List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">            while (rs.next()) {</span>
-<span class="fc" id="L99">                tasks.add(new Task(</span>
-<span class="fc" id="L100">                        rs.getInt(&quot;taskId&quot;),</span>
-<span class="fc" id="L101">                        rs.getString(&quot;name&quot;),</span>
-<span class="fc" id="L102">                        rs.getString(&quot;description&quot;),</span>
-<span class="fc" id="L103">                        rs.getInt(&quot;labourId&quot;)</span>
+<span class="fc" id="L94">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L95">        try (PreparedStatement statement = connection.prepareStatement(GET_QUEST_TASKS_FOR_LABOURID)) {</span>
+<span class="fc" id="L96">            statement.setInt(1, labourId);</span>
+<span class="fc" id="L97">            ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L98">            List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L100">                tasks.add(new Task(</span>
+<span class="fc" id="L101">                        rs.getInt(&quot;taskId&quot;),</span>
+<span class="fc" id="L102">                        rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L103">                        rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L104">                        rs.getInt(&quot;labourId&quot;)</span>
                 ));
             }
-<span class="fc" id="L106">            return tasks;</span>
+<span class="fc" id="L107">            return tasks;</span>
         }
     }
 }

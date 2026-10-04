@@ -26,7 +26,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-<span class="nc" id="L29">public class QuestController implements Initializable {</span>
+/** Controls quest selection and progress display */
+<span class="nc" id="L30">public class QuestController implements Initializable {</span>
     private static final double STACKED_BREAKPOINT = 760;
     private static final double FULL_PERCENT = 100;
     private static final double HIDDEN_PERCENT = 0;
@@ -50,227 +51,231 @@ import java.util.ResourceBundle;
     @FXML
     private ListView&lt;QuestListItem&gt; questHistory;
 
+    /** Initialises quest controls and loads available quests
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L55">        navBarController.setCurrentDestination(NavBarController.NavDestination.QUESTS);</span>
-<span class="nc" id="L56">        ConfigureTaskList();</span>
-<span class="nc" id="L57">        ConfigureHistoryList();</span>
-<span class="nc" id="L58">        LoadQuestline();</span>
+<span class="nc" id="L60">        navBarController.setCurrentDestination(NavBarController.NavDestination.QUESTS);</span>
+<span class="nc" id="L61">        ConfigureTaskList();</span>
+<span class="nc" id="L62">        ConfigureHistoryList();</span>
+<span class="nc" id="L63">        LoadQuestline();</span>
 
-<span class="nc" id="L60">        questRoot.widthProperty().addListener((observable, oldWidth, newWidth) -&gt;</span>
-<span class="nc" id="L61">                ApplyResponsiveLayout(newWidth.doubleValue()));</span>
+<span class="nc" id="L65">        questRoot.widthProperty().addListener((observable, oldWidth, newWidth) -&gt;</span>
+<span class="nc" id="L66">                ApplyResponsiveLayout(newWidth.doubleValue()));</span>
 
-<span class="nc" id="L63">        Platform.runLater(() -&gt; ApplyResponsiveLayout(questRoot.getWidth()));</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L68">        Platform.runLater(() -&gt; ApplyResponsiveLayout(questRoot.getWidth()));</span>
+<span class="nc" id="L69">    }</span>
 
     private void LoadQuestline() {
-<span class="nc" id="L67">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
-<span class="nc" id="L68">        questHistory.getItems().clear();</span>
+<span class="nc" id="L72">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc" id="L73">        questHistory.getItems().clear();</span>
 
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L71">            ShowEmptyQuest(&quot;Sign in to see your questline.&quot;);</span>
-<span class="nc" id="L72">            return;</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L76">            ShowEmptyQuest(&quot;Sign in to see your questline.&quot;);</span>
+<span class="nc" id="L77">            return;</span>
         }
 
         try {
-<span class="nc" id="L76">            List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
-<span class="nc" id="L77">            QuestListItem selected = null;</span>
+<span class="nc" id="L81">            List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
+<span class="nc" id="L82">            QuestListItem selected = null;</span>
 
-<span class="nc bnc" id="L79" title="All 2 branches missed.">            for (UserQuest userQuest : userQuests) {</span>
-<span class="nc" id="L80">                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                if (quest == null) {</span>
-<span class="nc" id="L82">                    continue;</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            for (UserQuest userQuest : userQuests) {</span>
+<span class="nc" id="L85">                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                if (quest == null) {</span>
+<span class="nc" id="L87">                    continue;</span>
                 }
 
-<span class="nc" id="L85">                String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
-<span class="nc" id="L86">                QuestListItem item = new QuestListItem(userQuest, quest, archetypeName);</span>
-<span class="nc" id="L87">                questHistory.getItems().add(item);</span>
+<span class="nc" id="L90">                String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
+<span class="nc" id="L91">                QuestListItem item = new QuestListItem(userQuest, quest, archetypeName);</span>
+<span class="nc" id="L92">                questHistory.getItems().add(item);</span>
 
-<span class="nc bnc" id="L89" title="All 4 branches missed.">                if (selected == null || &quot;Active&quot;.equalsIgnoreCase(userQuest.getStatus())) {</span>
-<span class="nc" id="L90">                    selected = item;</span>
+<span class="nc bnc" id="L94" title="All 4 branches missed.">                if (selected == null || &quot;Active&quot;.equalsIgnoreCase(userQuest.getStatus())) {</span>
+<span class="nc" id="L95">                    selected = item;</span>
                 }
-<span class="nc" id="L92">            }</span>
+<span class="nc" id="L97">            }</span>
 
-<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (selected == null) {</span>
-<span class="nc" id="L95">                ShowEmptyQuest(&quot;No quests have been assigned yet.&quot;);</span>
-<span class="nc" id="L96">                return;</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (selected == null) {</span>
+<span class="nc" id="L100">                ShowEmptyQuest(&quot;No quests have been assigned yet.&quot;);</span>
+<span class="nc" id="L101">                return;</span>
             }
 
-<span class="nc" id="L99">            questHistory.getSelectionModel().select(selected);</span>
-<span class="nc" id="L100">            ShowQuest(selected);</span>
-<span class="nc" id="L101">        } catch (Exception exception) {</span>
-<span class="nc" id="L102">            ShowEmptyQuest(&quot;Could not load your questline right now.&quot;);</span>
-<span class="nc" id="L103">        }</span>
-<span class="nc" id="L104">    }</span>
+<span class="nc" id="L104">            questHistory.getSelectionModel().select(selected);</span>
+<span class="nc" id="L105">            ShowQuest(selected);</span>
+<span class="nc" id="L106">        } catch (Exception exception) {</span>
+<span class="nc" id="L107">            ShowEmptyQuest(&quot;Could not load your questline right now.&quot;);</span>
+<span class="nc" id="L108">        }</span>
+<span class="nc" id="L109">    }</span>
 
     private void ShowQuest(QuestListItem item) {
-<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (item == null) {</span>
-<span class="nc" id="L108">            ShowEmptyQuest(&quot;Select a quest to read its story.&quot;);</span>
-<span class="nc" id="L109">            return;</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (item == null) {</span>
+<span class="nc" id="L113">            ShowEmptyQuest(&quot;Select a quest to read its story.&quot;);</span>
+<span class="nc" id="L114">            return;</span>
         }
 
-<span class="nc" id="L112">        UserQuest userQuest = item.userQuest();</span>
-<span class="nc" id="L113">        Quest quest = item.quest();</span>
+<span class="nc" id="L117">        UserQuest userQuest = item.userQuest();</span>
+<span class="nc" id="L118">        Quest quest = item.quest();</span>
         List&lt;Task&gt; tasks;
         try {
-<span class="nc" id="L116">            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
-<span class="nc" id="L117">        } catch (Exception exception) {</span>
-<span class="nc" id="L118">            tasks = List.of();</span>
-<span class="nc" id="L119">        }</span>
+<span class="nc" id="L121">            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L122">        } catch (Exception exception) {</span>
+<span class="nc" id="L123">            tasks = List.of();</span>
+<span class="nc" id="L124">        }</span>
 
-<span class="nc" id="L121">        String story = &quot;&quot;;</span>
+<span class="nc" id="L126">        String story = &quot;&quot;;</span>
         try {
-<span class="nc" id="L123">            story = QuestService.GetArchetypeDescription(quest.getArchetypeId());</span>
-<span class="nc" id="L124">        } catch (Exception exception) {</span>
-<span class="nc" id="L125">            story = &quot;&quot;;</span>
-<span class="nc" id="L126">        }</span>
-<span class="nc" id="L127">        String taskDetails = TaskService.JoinTaskDetails(tasks);</span>
+<span class="nc" id="L128">            story = QuestService.GetArchetypeDescription(quest.getArchetypeId());</span>
+<span class="nc" id="L129">        } catch (Exception exception) {</span>
+<span class="nc" id="L130">            story = &quot;&quot;;</span>
+<span class="nc" id="L131">        }</span>
+<span class="nc" id="L132">        String taskDetails = TaskService.JoinTaskDetails(tasks);</span>
 
-<span class="nc" id="L129">        questTitleLabel.setText(quest.getName());</span>
-<span class="nc" id="L130">        questArchetypeLabel.setText(item.archetypeName());</span>
-<span class="nc bnc" id="L131" title="All 2 branches missed.">        questStoryLabel.setText(ApplicationManager.isEmpty(story)</span>
-<span class="nc" id="L132">                ? &quot;Complete this labour's storyline tasks to continue the questline.&quot;</span>
-<span class="nc" id="L133">                : story);</span>
-<span class="nc bnc" id="L134" title="All 2 branches missed.">        challengeLabel.setText(taskDetails.isEmpty()</span>
-<span class="nc" id="L135">                ? &quot;No tasks are stored for this labour yet.&quot;</span>
-<span class="nc" id="L136">                : taskDetails);</span>
-<span class="nc" id="L137">        traitLabel.setText(item.archetypeName());</span>
-<span class="nc" id="L138">        reflectionPromptLabel.setText(&quot;Weekly practices are on the Tasks page. These storyline tasks belong to the labour itself.&quot;);</span>
+<span class="nc" id="L134">        questTitleLabel.setText(quest.getName());</span>
+<span class="nc" id="L135">        questArchetypeLabel.setText(item.archetypeName());</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        questStoryLabel.setText(ApplicationManager.isEmpty(story)</span>
+<span class="nc" id="L137">                ? &quot;Complete this labour's storyline tasks to continue the questline.&quot;</span>
+<span class="nc" id="L138">                : story);</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        challengeLabel.setText(taskDetails.isEmpty()</span>
+<span class="nc" id="L140">                ? &quot;No tasks are stored for this labour yet.&quot;</span>
+<span class="nc" id="L141">                : taskDetails);</span>
+<span class="nc" id="L142">        traitLabel.setText(item.archetypeName());</span>
+<span class="nc" id="L143">        reflectionPromptLabel.setText(&quot;Weekly practices are on the Tasks page. These storyline tasks belong to the labour itself.&quot;);</span>
 
-<span class="nc" id="L140">        float progress = userQuest.getPercentageComplete();</span>
-<span class="nc" id="L141">        questProgress.setProgress(progress);</span>
-<span class="nc" id="L142">        questProgressLabel.setText(String.format(&quot;%.0f%% Complete&quot;, progress * 100));</span>
-<span class="nc" id="L143">        SetStatusChip(userQuest.getStatus());</span>
-<span class="nc" id="L144">        labourTasks.getItems().setAll(tasks);</span>
-<span class="nc" id="L145">    }</span>
+<span class="nc" id="L145">        float progress = userQuest.getPercentageComplete();</span>
+<span class="nc" id="L146">        questProgress.setProgress(progress);</span>
+<span class="nc" id="L147">        questProgressLabel.setText(String.format(&quot;%.0f%% Complete&quot;, progress * 100));</span>
+<span class="nc" id="L148">        SetStatusChip(userQuest.getStatus());</span>
+<span class="nc" id="L149">        labourTasks.getItems().setAll(tasks);</span>
+<span class="nc" id="L150">    }</span>
 
     private void ShowEmptyQuest(String message) {
-<span class="nc" id="L148">        questTitleLabel.setText(&quot;No active quest&quot;);</span>
-<span class="nc" id="L149">        questArchetypeLabel.setText(message);</span>
-<span class="nc" id="L150">        questStoryLabel.setText(&quot;When a quest is assigned, its story, challenge, and tasks will appear here.&quot;);</span>
-<span class="nc" id="L151">        challengeLabel.setText(&quot;Your challenge will appear here once a quest is active.&quot;);</span>
-<span class="nc" id="L152">        traitLabel.setText(&quot;—&quot;);</span>
-<span class="nc" id="L153">        reflectionPromptLabel.setText(&quot;—&quot;);</span>
-<span class="nc" id="L154">        questProgress.setProgress(0);</span>
-<span class="nc" id="L155">        questProgressLabel.setText(&quot;0% Complete&quot;);</span>
-<span class="nc" id="L156">        SetStatusChip(&quot;None&quot;);</span>
-<span class="nc" id="L157">        labourTasks.getItems().clear();</span>
-<span class="nc" id="L158">    }</span>
+<span class="nc" id="L153">        questTitleLabel.setText(&quot;No active quest&quot;);</span>
+<span class="nc" id="L154">        questArchetypeLabel.setText(message);</span>
+<span class="nc" id="L155">        questStoryLabel.setText(&quot;When a quest is assigned, its story, challenge, and tasks will appear here.&quot;);</span>
+<span class="nc" id="L156">        challengeLabel.setText(&quot;Your challenge will appear here once a quest is active.&quot;);</span>
+<span class="nc" id="L157">        traitLabel.setText(&quot;—&quot;);</span>
+<span class="nc" id="L158">        reflectionPromptLabel.setText(&quot;—&quot;);</span>
+<span class="nc" id="L159">        questProgress.setProgress(0);</span>
+<span class="nc" id="L160">        questProgressLabel.setText(&quot;0% Complete&quot;);</span>
+<span class="nc" id="L161">        SetStatusChip(&quot;None&quot;);</span>
+<span class="nc" id="L162">        labourTasks.getItems().clear();</span>
+<span class="nc" id="L163">    }</span>
 
     private void SetStatusChip(String status) {
-<span class="nc" id="L161">        questStatusLabel.getStyleClass().removeAll(&quot;status-active&quot;, &quot;status-complete&quot;, &quot;status-other&quot;);</span>
-<span class="nc" id="L162">        questStatusLabel.setText(status);</span>
+<span class="nc" id="L166">        questStatusLabel.getStyleClass().removeAll(&quot;status-active&quot;, &quot;status-complete&quot;, &quot;status-other&quot;);</span>
+<span class="nc" id="L167">        questStatusLabel.setText(status);</span>
 
-<span class="nc bnc" id="L164" title="All 2 branches missed.">        if (&quot;Active&quot;.equalsIgnoreCase(status)) {</span>
-<span class="nc" id="L165">            questStatusLabel.getStyleClass().add(&quot;status-active&quot;);</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">        } else if (&quot;Complete&quot;.equalsIgnoreCase(status)) {</span>
-<span class="nc" id="L167">            questStatusLabel.getStyleClass().add(&quot;status-complete&quot;);</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        if (&quot;Active&quot;.equalsIgnoreCase(status)) {</span>
+<span class="nc" id="L170">            questStatusLabel.getStyleClass().add(&quot;status-active&quot;);</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        } else if (&quot;Complete&quot;.equalsIgnoreCase(status)) {</span>
+<span class="nc" id="L172">            questStatusLabel.getStyleClass().add(&quot;status-complete&quot;);</span>
         } else {
-<span class="nc" id="L169">            questStatusLabel.getStyleClass().add(&quot;status-other&quot;);</span>
+<span class="nc" id="L174">            questStatusLabel.getStyleClass().add(&quot;status-other&quot;);</span>
         }
-<span class="nc" id="L171">    }</span>
+<span class="nc" id="L176">    }</span>
 
     private void ConfigureTaskList() {
-<span class="nc" id="L174">        labourTasks.setPlaceholder(new Label(&quot;No tasks for this labour yet.&quot;));</span>
-<span class="nc" id="L175">        labourTasks.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
-<span class="nc" id="L176">            private final Label nameLabel = new Label();</span>
-<span class="nc" id="L177">            private final Label detailLabel = new Label();</span>
-<span class="nc" id="L178">            private final VBox row = new VBox(2, nameLabel, detailLabel);</span>
+<span class="nc" id="L179">        labourTasks.setPlaceholder(new Label(&quot;No tasks for this labour yet.&quot;));</span>
+<span class="nc" id="L180">        labourTasks.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
+<span class="nc" id="L181">            private final Label nameLabel = new Label();</span>
+<span class="nc" id="L182">            private final Label detailLabel = new Label();</span>
+<span class="nc" id="L183">            private final VBox row = new VBox(2, nameLabel, detailLabel);</span>
 
             {
-<span class="nc" id="L181">                row.getStyleClass().add(&quot;labour-task-row&quot;);</span>
-<span class="nc" id="L182">                nameLabel.getStyleClass().add(&quot;labour-task-name&quot;);</span>
-<span class="nc" id="L183">                detailLabel.getStyleClass().add(&quot;labour-task-detail&quot;);</span>
-<span class="nc" id="L184">                detailLabel.setWrapText(true);</span>
+<span class="nc" id="L186">                row.getStyleClass().add(&quot;labour-task-row&quot;);</span>
+<span class="nc" id="L187">                nameLabel.getStyleClass().add(&quot;labour-task-name&quot;);</span>
+<span class="nc" id="L188">                detailLabel.getStyleClass().add(&quot;labour-task-detail&quot;);</span>
+<span class="nc" id="L189">                detailLabel.setWrapText(true);</span>
             }
 
             @Override
             protected void updateItem(Task task, boolean empty) {
-<span class="nc" id="L189">                super.updateItem(task, empty);</span>
+<span class="nc" id="L194">                super.updateItem(task, empty);</span>
 
-<span class="nc bnc" id="L191" title="All 4 branches missed.">                if (empty || task == null) {</span>
-<span class="nc" id="L192">                    setText(null);</span>
-<span class="nc" id="L193">                    setGraphic(null);</span>
-<span class="nc" id="L194">                    return;</span>
+<span class="nc bnc" id="L196" title="All 4 branches missed.">                if (empty || task == null) {</span>
+<span class="nc" id="L197">                    setText(null);</span>
+<span class="nc" id="L198">                    setGraphic(null);</span>
+<span class="nc" id="L199">                    return;</span>
                 }
 
-<span class="nc" id="L197">                nameLabel.setText(task.getName());</span>
-<span class="nc" id="L198">                detailLabel.setText(task.getDescription());</span>
-<span class="nc" id="L199">                setText(null);</span>
-<span class="nc" id="L200">                setGraphic(row);</span>
-<span class="nc" id="L201">            }</span>
+<span class="nc" id="L202">                nameLabel.setText(task.getName());</span>
+<span class="nc" id="L203">                detailLabel.setText(task.getDescription());</span>
+<span class="nc" id="L204">                setText(null);</span>
+<span class="nc" id="L205">                setGraphic(row);</span>
+<span class="nc" id="L206">            }</span>
         });
-<span class="nc" id="L203">    }</span>
+<span class="nc" id="L208">    }</span>
 
     private void ConfigureHistoryList() {
-<span class="nc" id="L206">        questHistory.setPlaceholder(new Label(&quot;No quests assigned yet.&quot;));</span>
-<span class="nc" id="L207">        questHistory.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
-<span class="nc" id="L208">            private final Label nameLabel = new Label();</span>
-<span class="nc" id="L209">            private final Label detailLabel = new Label();</span>
-<span class="nc" id="L210">            private final Region spacer = new Region();</span>
-<span class="nc" id="L211">            private final Label percentLabel = new Label();</span>
-<span class="nc" id="L212">            private final HBox header = new HBox(8, nameLabel, spacer, percentLabel);</span>
-<span class="nc" id="L213">            private final VBox row = new VBox(2, header, detailLabel);</span>
+<span class="nc" id="L211">        questHistory.setPlaceholder(new Label(&quot;No quests assigned yet.&quot;));</span>
+<span class="nc" id="L212">        questHistory.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
+<span class="nc" id="L213">            private final Label nameLabel = new Label();</span>
+<span class="nc" id="L214">            private final Label detailLabel = new Label();</span>
+<span class="nc" id="L215">            private final Region spacer = new Region();</span>
+<span class="nc" id="L216">            private final Label percentLabel = new Label();</span>
+<span class="nc" id="L217">            private final HBox header = new HBox(8, nameLabel, spacer, percentLabel);</span>
+<span class="nc" id="L218">            private final VBox row = new VBox(2, header, detailLabel);</span>
 
             {
-<span class="nc" id="L216">                row.getStyleClass().add(&quot;history-row&quot;);</span>
-<span class="nc" id="L217">                nameLabel.getStyleClass().add(&quot;history-name&quot;);</span>
-<span class="nc" id="L218">                detailLabel.getStyleClass().add(&quot;history-detail&quot;);</span>
-<span class="nc" id="L219">                percentLabel.getStyleClass().add(&quot;history-detail&quot;);</span>
-<span class="nc" id="L220">                HBox.setHgrow(spacer, Priority.ALWAYS);</span>
+<span class="nc" id="L221">                row.getStyleClass().add(&quot;history-row&quot;);</span>
+<span class="nc" id="L222">                nameLabel.getStyleClass().add(&quot;history-name&quot;);</span>
+<span class="nc" id="L223">                detailLabel.getStyleClass().add(&quot;history-detail&quot;);</span>
+<span class="nc" id="L224">                percentLabel.getStyleClass().add(&quot;history-detail&quot;);</span>
+<span class="nc" id="L225">                HBox.setHgrow(spacer, Priority.ALWAYS);</span>
             }
 
             @Override
             protected void updateItem(QuestListItem item, boolean empty) {
-<span class="nc" id="L225">                super.updateItem(item, empty);</span>
+<span class="nc" id="L230">                super.updateItem(item, empty);</span>
 
-<span class="nc bnc" id="L227" title="All 4 branches missed.">                if (empty || item == null) {</span>
-<span class="nc" id="L228">                    setText(null);</span>
-<span class="nc" id="L229">                    setGraphic(null);</span>
-<span class="nc" id="L230">                    return;</span>
+<span class="nc bnc" id="L232" title="All 4 branches missed.">                if (empty || item == null) {</span>
+<span class="nc" id="L233">                    setText(null);</span>
+<span class="nc" id="L234">                    setGraphic(null);</span>
+<span class="nc" id="L235">                    return;</span>
                 }
 
-<span class="nc" id="L233">                nameLabel.setText(item.quest().getName());</span>
-<span class="nc" id="L234">                detailLabel.setText(item.userQuest().getStatus() + &quot; · &quot; + item.archetypeName());</span>
-<span class="nc" id="L235">                percentLabel.setText(String.format(&quot;%.0f%%&quot;, item.userQuest().getPercentageComplete() * 100));</span>
-<span class="nc" id="L236">                setText(null);</span>
-<span class="nc" id="L237">                setGraphic(row);</span>
-<span class="nc" id="L238">            }</span>
+<span class="nc" id="L238">                nameLabel.setText(item.quest().getName());</span>
+<span class="nc" id="L239">                detailLabel.setText(item.userQuest().getStatus() + &quot; · &quot; + item.archetypeName());</span>
+<span class="nc" id="L240">                percentLabel.setText(String.format(&quot;%.0f%%&quot;, item.userQuest().getPercentageComplete() * 100));</span>
+<span class="nc" id="L241">                setText(null);</span>
+<span class="nc" id="L242">                setGraphic(row);</span>
+<span class="nc" id="L243">            }</span>
         });
 
-<span class="nc" id="L241">        questHistory.getSelectionModel().selectedItemProperty().addListener(</span>
+<span class="nc" id="L246">        questHistory.getSelectionModel().selectedItemProperty().addListener(</span>
                 (observable, oldItem, newItem) -&gt; {
-<span class="nc bnc" id="L243" title="All 2 branches missed.">                    if (newItem != null) {</span>
-<span class="nc" id="L244">                        ShowQuest(newItem);</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">                    if (newItem != null) {</span>
+<span class="nc" id="L249">                        ShowQuest(newItem);</span>
                     }
-<span class="nc" id="L246">                });</span>
-<span class="nc" id="L247">    }</span>
+<span class="nc" id="L251">                });</span>
+<span class="nc" id="L252">    }</span>
 
     private void ApplyResponsiveLayout(double width) {
-<span class="nc bnc" id="L250" title="All 2 branches missed.">        if (width &lt;= 0) {</span>
-<span class="nc" id="L251">            return;</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        if (width &lt;= 0) {</span>
+<span class="nc" id="L256">            return;</span>
         }
 
-<span class="nc bnc" id="L254" title="All 2 branches missed.">        boolean stacked = width &lt; STACKED_BREAKPOINT;</span>
-<span class="nc" id="L255">        SetGridCardLayout(detailGrid, traitCard, stacked);</span>
-<span class="nc" id="L256">        SetGridCardLayout(listsGrid, historyCard, stacked);</span>
-<span class="nc" id="L257">    }</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        boolean stacked = width &lt; STACKED_BREAKPOINT;</span>
+<span class="nc" id="L260">        SetGridCardLayout(detailGrid, traitCard, stacked);</span>
+<span class="nc" id="L261">        SetGridCardLayout(listsGrid, historyCard, stacked);</span>
+<span class="nc" id="L262">    }</span>
 
     private void SetGridCardLayout(GridPane grid, VBox secondaryCard, boolean stacked) {
-<span class="nc bnc" id="L260" title="All 2 branches missed.">        if (stacked) {</span>
-<span class="nc" id="L261">            GridPane.setColumnIndex(secondaryCard, 0);</span>
-<span class="nc" id="L262">            GridPane.setRowIndex(secondaryCard, 1);</span>
-<span class="nc" id="L263">            grid.getColumnConstraints().get(0).setPercentWidth(FULL_PERCENT);</span>
-<span class="nc" id="L264">            grid.getColumnConstraints().get(1).setPercentWidth(HIDDEN_PERCENT);</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        if (stacked) {</span>
+<span class="nc" id="L266">            GridPane.setColumnIndex(secondaryCard, 0);</span>
+<span class="nc" id="L267">            GridPane.setRowIndex(secondaryCard, 1);</span>
+<span class="nc" id="L268">            grid.getColumnConstraints().get(0).setPercentWidth(FULL_PERCENT);</span>
+<span class="nc" id="L269">            grid.getColumnConstraints().get(1).setPercentWidth(HIDDEN_PERCENT);</span>
         } else {
-<span class="nc" id="L266">            GridPane.setColumnIndex(secondaryCard, 1);</span>
-<span class="nc" id="L267">            GridPane.setRowIndex(secondaryCard, 0);</span>
-<span class="nc" id="L268">            grid.getColumnConstraints().get(0).setPercentWidth(55);</span>
-<span class="nc" id="L269">            grid.getColumnConstraints().get(1).setPercentWidth(45);</span>
+<span class="nc" id="L271">            GridPane.setColumnIndex(secondaryCard, 1);</span>
+<span class="nc" id="L272">            GridPane.setRowIndex(secondaryCard, 0);</span>
+<span class="nc" id="L273">            grid.getColumnConstraints().get(0).setPercentWidth(55);</span>
+<span class="nc" id="L274">            grid.getColumnConstraints().get(1).setPercentWidth(45);</span>
         }
-<span class="nc" id="L271">    }</span>
+<span class="nc" id="L276">    }</span>
 
-<span class="nc" id="L273">    private record QuestListItem(UserQuest userQuest, Quest quest, String archetypeName) {</span>
+<span class="nc" id="L278">    private record QuestListItem(UserQuest userQuest, Quest quest, String archetypeName) {</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

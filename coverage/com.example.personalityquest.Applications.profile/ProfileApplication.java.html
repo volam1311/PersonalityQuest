@@ -8,14 +8,19 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-<span class="nc" id="L11">public class ProfileApplication extends Application {</span>
+/** Launches the profile screen */
+<span class="nc" id="L12">public class ProfileApplication extends Application {</span>
+    /** Loads the profile screen into the primary stage
+     * @param stage the primary JavaFX stage
+     * @throws IOException if the screen resource cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
-<span class="nc" id="L14">        AppFonts.load();</span>
-<span class="nc" id="L15">        NavigationService.Init(stage);</span>
-<span class="nc" id="L16">        NavigationService.LoadScreen(ScreenEnum.PROFILE);</span>
-<span class="nc" id="L17">        stage.setMinWidth(680);</span>
-<span class="nc" id="L18">        stage.setMinHeight(520);</span>
-<span class="nc" id="L19">    }</span>
+<span class="nc" id="L19">        AppFonts.load();</span>
+<span class="nc" id="L20">        NavigationService.Init(stage);</span>
+<span class="nc" id="L21">        NavigationService.LoadScreen(ScreenEnum.PROFILE);</span>
+<span class="nc" id="L22">        stage.setMinWidth(680);</span>
+<span class="nc" id="L23">        stage.setMinHeight(520);</span>
+<span class="nc" id="L24">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

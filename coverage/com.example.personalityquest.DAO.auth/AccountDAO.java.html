@@ -125,18 +125,24 @@ import java.util.Objects;
 <span class="fc" id="L125">        return true;</span>
     }
 
+    /**
+     * updates the account details in storage for the current email address
+     * @param emailDetails the updated account details
+     * @param currentEmail the email address identifying the account to update
+     * @throws SQLException if account details cannot be updated
+     */
     public static void UpdateAccountDetails(EmailDetails emailDetails, String currentEmail) throws SQLException {
 
-<span class="nc" id="L130">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L131">        PreparedStatement statement = connection.prepareStatement(saveQuery);</span>
+<span class="nc" id="L136">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L137">        PreparedStatement statement = connection.prepareStatement(saveQuery);</span>
         // assign parameters
-<span class="nc" id="L133">        statement.setString(1, emailDetails.getEmail());</span>
-<span class="nc" id="L134">        statement.setString(2, emailDetails.getUserName());</span>
-<span class="nc" id="L135">        statement.setString(3, emailDetails.getFirstName());</span>
-<span class="nc" id="L136">        statement.setString(4, emailDetails.getLastName());</span>
-<span class="nc" id="L137">        statement.setString(5, currentEmail);</span>
+<span class="nc" id="L139">        statement.setString(1, emailDetails.getEmail());</span>
+<span class="nc" id="L140">        statement.setString(2, emailDetails.getUserName());</span>
+<span class="nc" id="L141">        statement.setString(3, emailDetails.getFirstName());</span>
+<span class="nc" id="L142">        statement.setString(4, emailDetails.getLastName());</span>
+<span class="nc" id="L143">        statement.setString(5, currentEmail);</span>
 
-<span class="nc" id="L139">        statement.executeUpdate();</span>
-<span class="nc" id="L140">    }</span>
+<span class="nc" id="L145">        statement.executeUpdate();</span>
+<span class="nc" id="L146">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

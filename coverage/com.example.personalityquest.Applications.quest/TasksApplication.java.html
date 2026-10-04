@@ -13,15 +13,20 @@ import java.io.IOException;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEHEIGHT;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEWIDTH;
 
-<span class="nc" id="L16">public class TasksApplication extends Application {</span>
+/** Launches the weekly-tasks screen */
+<span class="nc" id="L17">public class TasksApplication extends Application {</span>
+    /** Loads the weekly-tasks screen into the primary stage
+     * @param stage the primary JavaFX stage
+     * @throws IOException if the screen resource cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
-<span class="nc" id="L19">        AppFonts.load();</span>
+<span class="nc" id="L24">        AppFonts.load();</span>
 
-<span class="nc" id="L21">        stage.setTitle(&quot;Tasks&quot;);</span>
-<span class="nc" id="L22">        stage.setMinWidth(680);</span>
-<span class="nc" id="L23">        stage.setMinHeight(520);</span>
-<span class="nc" id="L24">        stage.show();</span>
-<span class="nc" id="L25">    }</span>
+<span class="nc" id="L26">        stage.setTitle(&quot;Tasks&quot;);</span>
+<span class="nc" id="L27">        stage.setMinWidth(680);</span>
+<span class="nc" id="L28">        stage.setMinHeight(520);</span>
+<span class="nc" id="L29">        stage.show();</span>
+<span class="nc" id="L30">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

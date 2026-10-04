@@ -16,7 +16,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-<span class="nc" id="L19">public class WeeklyTaskReflectionController implements Initializable {</span>
+/** Controls the weekly-reflection form */
+<span class="nc" id="L20">public class WeeklyTaskReflectionController implements Initializable {</span>
     @FXML
     private NavBarController navBarController;
     @FXML
@@ -24,54 +25,61 @@ import java.util.ResourceBundle;
 
     private WeeklyTask currentTask;
 
+    /** Initialises the weekly-reflection form
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L29">        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);</span>
-<span class="nc" id="L30">    }</span>
+<span class="nc" id="L34">        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);</span>
+<span class="nc" id="L35">    }</span>
 
+    /** Sets the task displayed by the reflection form
+     * @param task the weekly task to display
+     */
     public void setTask(WeeklyTask task){
-<span class="nc" id="L33">        this.currentTask = task;</span>
+<span class="nc" id="L41">        this.currentTask = task;</span>
 
 
-<span class="nc" id="L36">        DisplayTask();</span>
-<span class="nc" id="L37">    }</span>
+<span class="nc" id="L44">        DisplayTask();</span>
+<span class="nc" id="L45">    }</span>
 
     // Right How you want to display the Task info as this needs to be called
     // due to initialize running before the Task will be set
     private void DisplayTask(){
-<span class="nc" id="L42">        System.out.println(&quot;Current Reflection: &quot; + currentTask.getReflection());</span>
-<span class="nc" id="L43">        reflection.setText(currentTask.getReflection());</span>
-<span class="nc" id="L44">    }</span>
+<span class="nc" id="L50">        System.out.println(&quot;Current Reflection: &quot; + currentTask.getReflection());</span>
+<span class="nc" id="L51">        reflection.setText(currentTask.getReflection());</span>
+<span class="nc" id="L52">    }</span>
     @FXML
     private void onBackClick() throws IOException {
         // nothing is saved and you go back to dashboard
-<span class="nc" id="L48">        GoToDashboard();</span>
-<span class="nc" id="L49">    }</span>
+<span class="nc" id="L56">        GoToDashboard();</span>
+<span class="nc" id="L57">    }</span>
 
     @FXML
     private void onSaveDraft() throws Exception {
         // saves the current reflection progress to come back to later
 
 
-<span class="nc" id="L56">        System.out.println(reflection.getText());</span>
-<span class="nc" id="L57">        WeeklyTaskService.UpdateGivenTaskToDraft(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());</span>
-<span class="nc" id="L58">        GoToDashboard();</span>
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L64">        System.out.println(reflection.getText());</span>
+<span class="nc" id="L65">        WeeklyTaskService.UpdateGivenTaskToDraft(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+<span class="nc" id="L66">        GoToDashboard();</span>
+<span class="nc" id="L67">    }</span>
 
     @FXML
     private void onSubmitClick() throws Exception {
         // saves the current reflection progress and marks it as complete
 
         // Use this to mark a task as Finished
-<span class="nc" id="L66">        System.out.println(reflection.getText());</span>
-<span class="nc" id="L67">        WeeklyTaskService.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+<span class="nc" id="L74">        System.out.println(reflection.getText());</span>
+<span class="nc" id="L75">        WeeklyTaskService.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());</span>
 
-<span class="nc" id="L69">        GoToDashboard();</span>
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L77">        GoToDashboard();</span>
+<span class="nc" id="L78">    }</span>
 
     private void GoToDashboard() throws IOException {
-<span class="nc" id="L73">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L81">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
+<span class="nc" id="L82">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

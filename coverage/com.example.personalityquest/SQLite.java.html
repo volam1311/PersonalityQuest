@@ -4,32 +4,39 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/** Provides the shared connection to the application SQLite database */
 public class SQLite {
-<span class="fc" id="L8">    private static Connection instance = null;</span>
+<span class="fc" id="L9">    private static Connection instance = null;</span>
 
-<span class="nc" id="L10">    private SQLite(){</span>
-<span class="nc" id="L11">        String url = &quot;jdbc:sqlite:PersonalityQuest.db&quot;;</span>
+<span class="nc" id="L11">    private SQLite(){</span>
+<span class="nc" id="L12">        String url = &quot;jdbc:sqlite:PersonalityQuest.db&quot;;</span>
         try{
-<span class="nc" id="L13">            instance = DriverManager.getConnection(url);</span>
-<span class="nc" id="L14">        } catch (SQLException e) {</span>
-<span class="nc" id="L15">            throw new RuntimeException(e);</span>
-<span class="nc" id="L16">        }</span>
+<span class="nc" id="L14">            instance = DriverManager.getConnection(url);</span>
+<span class="nc" id="L15">        } catch (SQLException e) {</span>
+<span class="nc" id="L16">            throw new RuntimeException(e);</span>
+<span class="nc" id="L17">        }</span>
 
-<span class="nc" id="L18">    }</span>
+<span class="nc" id="L19">    }</span>
 
     /*
      * Used for tests as they need to connect to an in memory db
      * */
+    /** Replaces the shared database connection
+     * @param newConnection the connection to use
+     */
     public static void setConnection(Connection newConnection){
-<span class="fc" id="L24">        instance = newConnection;</span>
-<span class="fc" id="L25">    }</span>
+<span class="fc" id="L28">        instance = newConnection;</span>
+<span class="fc" id="L29">    }</span>
 
+    /** Returns the shared database connection
+     * @return the active SQLite connection
+     */
     public static Connection getConnection(){
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (instance == null){</span>
-<span class="nc" id="L29">            new SQLite();</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (instance == null){</span>
+<span class="nc" id="L36">            new SQLite();</span>
         }
 
-<span class="fc" id="L32">        return instance;</span>
+<span class="fc" id="L39">        return instance;</span>
     }
 
 }

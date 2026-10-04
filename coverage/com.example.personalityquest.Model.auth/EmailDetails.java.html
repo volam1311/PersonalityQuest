@@ -6,50 +6,68 @@ import com.example.personalityquest.ApplicationManager;
  * Holds the details pertaining to an account
  */
 public class EmailDetails {
-<span class="fc" id="L9">    public EmailDetails(String email, String userName, String firstName, String lastName){</span>
-<span class="fc bfc" id="L10" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)){</span>
-<span class="fc" id="L11">            System.out.println(&quot;Email is null&quot;);</span>
-<span class="fc" id="L12">            email = &quot;&quot;;</span>
+    /** Creates account details and replaces empty values with empty strings
+     * @param email the account email address
+     * @param userName the account username
+     * @param firstName the account holder's first name
+     * @param lastName the account holder's last name
+     */
+<span class="fc" id="L15">    public EmailDetails(String email, String userName, String firstName, String lastName){</span>
+<span class="fc bfc" id="L16" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)){</span>
+<span class="fc" id="L17">            System.out.println(&quot;Email is null&quot;);</span>
+<span class="fc" id="L18">            email = &quot;&quot;;</span>
         }
-<span class="fc bfc" id="L14" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(userName)){</span>
-<span class="fc" id="L15">            System.out.println(&quot;UserName is null&quot;);</span>
-<span class="fc" id="L16">            userName = &quot;&quot;;</span>
-        }
-
-<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(firstName)){</span>
-<span class="fc" id="L20">            System.out.println(&quot;FirstName is null&quot;);</span>
-<span class="fc" id="L21">            firstName = &quot;&quot;;</span>
-        }
-<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(lastName)){</span>
-<span class="fc" id="L24">            System.out.println(&quot;LastName is null&quot;);</span>
-<span class="fc" id="L25">            lastName = &quot;&quot;;</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(userName)){</span>
+<span class="fc" id="L21">            System.out.println(&quot;UserName is null&quot;);</span>
+<span class="fc" id="L22">            userName = &quot;&quot;;</span>
         }
 
-<span class="fc" id="L28">        this.email = email;</span>
-<span class="fc" id="L29">        this.userName = userName;</span>
-<span class="fc" id="L30">        this.firstName = firstName;</span>
-<span class="fc" id="L31">        this.lastName = lastName;</span>
-<span class="fc" id="L32">    }</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(firstName)){</span>
+<span class="fc" id="L26">            System.out.println(&quot;FirstName is null&quot;);</span>
+<span class="fc" id="L27">            firstName = &quot;&quot;;</span>
+        }
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(lastName)){</span>
+<span class="fc" id="L30">            System.out.println(&quot;LastName is null&quot;);</span>
+<span class="fc" id="L31">            lastName = &quot;&quot;;</span>
+        }
+
+<span class="fc" id="L34">        this.email = email;</span>
+<span class="fc" id="L35">        this.userName = userName;</span>
+<span class="fc" id="L36">        this.firstName = firstName;</span>
+<span class="fc" id="L37">        this.lastName = lastName;</span>
+<span class="fc" id="L38">    }</span>
 
     private final String email;
     private final String userName;
     private final String firstName;
     private final String lastName;
 
+    /** Returns the account email address
+     * @return the account email
+     */
     public String getEmail(){
-<span class="fc" id="L40">        return email;</span>
+<span class="fc" id="L49">        return email;</span>
     }
 
+    /** Returns the account username
+     * @return the account username
+     */
     public String getUserName(){
-<span class="fc" id="L44">        return userName;</span>
+<span class="fc" id="L56">        return userName;</span>
     }
 
+    /** Returns the account holder's first name
+     * @return the first name
+     */
     public String getFirstName(){
-<span class="fc" id="L48">        return firstName;</span>
+<span class="fc" id="L63">        return firstName;</span>
     }
 
+    /** Returns the account holder's last name
+     * @return the last name
+     */
     public String getLastName(){
-<span class="fc" id="L52">        return lastName;</span>
+<span class="fc" id="L70">        return lastName;</span>
     }
 
 }

@@ -10,7 +10,8 @@ import javafx.scene.control.ToggleGroup;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-<span class="nc" id="L13">public class SettingsController implements Initializable {</span>
+/** Controls settings interactions */
+<span class="nc" id="L14">public class SettingsController implements Initializable {</span>
     @FXML
     private NavBarController navBarController;
     @FXML
@@ -24,64 +25,68 @@ import java.util.ResourceBundle;
     private ToggleButton languageEnglishButton, languageVietnameseButton,
             languageSpanishButton;
 
+    /** Initialises the settings controls
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L29">        navBarController.setCurrentDestination(NavBarController.NavDestination.SETTINGS);</span>
-<span class="nc" id="L30">        KeepToggleSelected(backgroundColorGroup);</span>
-<span class="nc" id="L31">        KeepToggleSelected(languageGroup);</span>
-<span class="nc" id="L32">    }</span>
+<span class="nc" id="L34">        navBarController.setCurrentDestination(NavBarController.NavDestination.SETTINGS);</span>
+<span class="nc" id="L35">        KeepToggleSelected(backgroundColorGroup);</span>
+<span class="nc" id="L36">        KeepToggleSelected(languageGroup);</span>
+<span class="nc" id="L37">    }</span>
 
     private void KeepToggleSelected(ToggleGroup group) {
-<span class="nc" id="L35">        group.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -&gt; {</span>
-<span class="nc bnc" id="L36" title="All 4 branches missed.">            if (newToggle == null &amp;&amp; oldToggle != null) {</span>
-<span class="nc" id="L37">                oldToggle.setSelected(true);</span>
+<span class="nc" id="L40">        group.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -&gt; {</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">            if (newToggle == null &amp;&amp; oldToggle != null) {</span>
+<span class="nc" id="L42">                oldToggle.setSelected(true);</span>
             }
-<span class="nc" id="L39">        });</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L44">        });</span>
+<span class="nc" id="L45">    }</span>
 
     @FXML
     private void OnSave() {
-<span class="nc" id="L44">        feedbackLabel.setText(&quot;Saved &quot; + GetSelectedColorName() + &quot; / &quot; + GetSelectedLanguageName());</span>
-<span class="nc" id="L45">        System.out.println(&quot;Saved settings: colour=&quot; + GetSelectedColorName()</span>
-<span class="nc" id="L46">                + &quot;, language=&quot; + GetSelectedLanguageName());</span>
-<span class="nc" id="L47">    }</span>
+<span class="nc" id="L49">        feedbackLabel.setText(&quot;Saved &quot; + GetSelectedColorName() + &quot; / &quot; + GetSelectedLanguageName());</span>
+<span class="nc" id="L50">        System.out.println(&quot;Saved settings: colour=&quot; + GetSelectedColorName()</span>
+<span class="nc" id="L51">                + &quot;, language=&quot; + GetSelectedLanguageName());</span>
+<span class="nc" id="L52">    }</span>
 
     @FXML
     private void OnReset() {
-<span class="nc" id="L51">        colorDarkButton.setSelected(true);</span>
-<span class="nc" id="L52">        languageEnglishButton.setSelected(true);</span>
-<span class="nc" id="L53">        feedbackLabel.setText(&quot;Reset to default&quot;);</span>
-<span class="nc" id="L54">        System.out.println(&quot;Reset settings to default&quot;);</span>
-<span class="nc" id="L55">    }</span>
+<span class="nc" id="L56">        colorDarkButton.setSelected(true);</span>
+<span class="nc" id="L57">        languageEnglishButton.setSelected(true);</span>
+<span class="nc" id="L58">        feedbackLabel.setText(&quot;Reset to default&quot;);</span>
+<span class="nc" id="L59">        System.out.println(&quot;Reset settings to default&quot;);</span>
+<span class="nc" id="L60">    }</span>
 
     private String GetSelectedColorName() {
-<span class="nc" id="L58">        Toggle selected = backgroundColorGroup.getSelectedToggle();</span>
+<span class="nc" id="L63">        Toggle selected = backgroundColorGroup.getSelectedToggle();</span>
 
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (selected == colorDuskButton) {</span>
-<span class="nc" id="L61">            return &quot;Dusk&quot;;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (selected == colorDuskButton) {</span>
+<span class="nc" id="L66">            return &quot;Dusk&quot;;</span>
         }
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (selected == colorForestButton) {</span>
-<span class="nc" id="L64">            return &quot;Forest&quot;;</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (selected == colorForestButton) {</span>
+<span class="nc" id="L69">            return &quot;Forest&quot;;</span>
         }
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (selected == colorOceanButton) {</span>
-<span class="nc" id="L67">            return &quot;Ocean&quot;;</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (selected == colorOceanButton) {</span>
+<span class="nc" id="L72">            return &quot;Ocean&quot;;</span>
         }
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (selected == colorLightButton) {</span>
-<span class="nc" id="L70">            return &quot;Light&quot;;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (selected == colorLightButton) {</span>
+<span class="nc" id="L75">            return &quot;Light&quot;;</span>
         }
-<span class="nc" id="L72">        return &quot;Dark&quot;;</span>
+<span class="nc" id="L77">        return &quot;Dark&quot;;</span>
     }
 
     private String GetSelectedLanguageName() {
-<span class="nc" id="L76">        Toggle selected = languageGroup.getSelectedToggle();</span>
+<span class="nc" id="L81">        Toggle selected = languageGroup.getSelectedToggle();</span>
 
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (selected == languageVietnameseButton) {</span>
-<span class="nc" id="L79">            return &quot;Tiếng Việt&quot;;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (selected == languageVietnameseButton) {</span>
+<span class="nc" id="L84">            return &quot;Tiếng Việt&quot;;</span>
         }
-<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (selected == languageSpanishButton) {</span>
-<span class="nc" id="L82">            return &quot;Español&quot;;</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (selected == languageSpanishButton) {</span>
+<span class="nc" id="L87">            return &quot;Español&quot;;</span>
         }
-<span class="nc" id="L84">        return &quot;English&quot;;</span>
+<span class="nc" id="L89">        return &quot;English&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -6,39 +6,57 @@
  * as well as global utility functions
  */
 <span class="nc" id="L8">public class ApplicationManager {</span>
-<span class="nc" id="L9">    public static class SceneInfo {</span>
+    /** Stores the information needed to display a scene */
+<span class="nc" id="L10">    public static class SceneInfo {</span>
         public static final int SCENEWIDTH = 1200;
         public static final int SCENEHEIGHT = 720;
     }
 
-<span class="nc" id="L14">    public static class TaskConfig{</span>
+    /** Stores settings used when generating tasks */
+<span class="nc" id="L16">    public static class TaskConfig{</span>
         private final static int AMOUNT_OF_TASKS = 1;
-<span class="fc" id="L16">        private static int DEFAULT_SEARTCH_NUM = 228;</span>
+<span class="fc" id="L18">        private static int DEFAULT_SEARTCH_NUM = 228;</span>
 
+        /** Returns the configured number of tasks
+         * @return the configured number of tasks
+         */
         public static int getAmountOfTasks(){
-<span class="fc" id="L19">            return AMOUNT_OF_TASKS;</span>
+<span class="fc" id="L24">            return AMOUNT_OF_TASKS;</span>
         }
+        /** Returns the default number of tasks to search for
+         * @return the default search number
+         */
         public static int getDefaultSearchNum(){
-<span class="fc" id="L22">            return DEFAULT_SEARTCH_NUM;</span>
+<span class="fc" id="L30">            return DEFAULT_SEARTCH_NUM;</span>
         }
+        /** Sets the default number of tasks to search for
+         * @param defaultSeartchNum the new default search number
+         */
         public static void setDefaultSearchNum(int defaultSeartchNum){
-<span class="fc" id="L25">            DEFAULT_SEARTCH_NUM = defaultSeartchNum;</span>
-<span class="fc" id="L26">        }</span>
+<span class="fc" id="L36">            DEFAULT_SEARTCH_NUM = defaultSeartchNum;</span>
+<span class="fc" id="L37">        }</span>
     }
 
-<span class="nc" id="L29">    public static class CurrentAccount{</span>
+    /** Stores the email address of the signed-in account */
+<span class="nc" id="L41">    public static class CurrentAccount{</span>
         /*
         * The current email that the user is signed in with
         */
-<span class="fc" id="L33">        private static String currentEmail = &quot;&quot;;</span>
+<span class="fc" id="L45">        private static String currentEmail = &quot;&quot;;</span>
 
+        /** Returns the signed-in account email
+         * @return the current account email
+         */
         public static String getCurrentEmail() {
-<span class="fc" id="L36">            return currentEmail;</span>
+<span class="fc" id="L51">            return currentEmail;</span>
         }
 
+        /** Sets the signed-in account email
+         * @param currentEmail the email address to store
+         */
         public static void setCurrentEmail(String currentEmail) {
-<span class="nc" id="L40">            CurrentAccount.currentEmail = currentEmail;</span>
-<span class="nc" id="L41">        }</span>
+<span class="nc" id="L58">            CurrentAccount.currentEmail = currentEmail;</span>
+<span class="nc" id="L59">        }</span>
     }
 
     /**
@@ -47,7 +65,7 @@
      * @return Whether a given string isEmpty
      */
     public static boolean isEmpty(String value) {
-<span class="fc bfc" id="L50" title="All 4 branches covered.">        return value == null || value.isEmpty();</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">        return value == null || value.isEmpty();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -9,7 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="nc" id="L12">public class FriendsService {</span>
+/** Coordinates friendship operations between accounts */
+<span class="nc" id="L13">public class FriendsService {</span>
     /**
      * Gets the List of details for a friend
      * @param accountEmail the account you want to get the friends for
@@ -17,7 +18,7 @@ import java.util.List;
      * @throws Exception Database Access Failure
      */
     public static List&lt;EmailDetails&gt; GetFriendsForAccount(String accountEmail) throws Exception {
-<span class="fc" id="L20">        return FriendsDAO.GetFriendsForEmail(accountEmail);</span>
+<span class="fc" id="L21">        return FriendsDAO.GetFriendsForEmail(accountEmail);</span>
     }
 
     /**
@@ -27,11 +28,11 @@ import java.util.List;
      * @throws Exception Database Update Failure
      */
     public static void AddFriendForAccount(String accountEmail, String friendsEmail) throws Exception {
-<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (EmailService.GetDetailsForEmail(friendsEmail) == null){</span>
-<span class="fc" id="L31">            throw new IllegalArgumentException(&quot;Friend with email&quot; + friendsEmail + &quot; Doesnt exist&quot;);</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (EmailService.GetDetailsForEmail(friendsEmail) == null){</span>
+<span class="fc" id="L32">            throw new IllegalArgumentException(&quot;Friend with email&quot; + friendsEmail + &quot; Doesnt exist&quot;);</span>
         }
-<span class="fc" id="L33">        FriendsDAO.AddFriend(accountEmail, friendsEmail);</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L34">        FriendsDAO.AddFriend(accountEmail, friendsEmail);</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * Removes a friend from your account
@@ -40,11 +41,11 @@ import java.util.List;
      * @throws Exception Database Update Failure
      */
     public static void RemoveFriend(String accountEmail, String friendsEmail) throws Exception {
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (EmailService.GetDetailsForEmail(friendsEmail) == null){</span>
-<span class="fc" id="L44">            throw new IllegalArgumentException(&quot;Friend with email&quot; + friendsEmail + &quot; Doesnt exist&quot;);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (EmailService.GetDetailsForEmail(friendsEmail) == null){</span>
+<span class="fc" id="L45">            throw new IllegalArgumentException(&quot;Friend with email&quot; + friendsEmail + &quot; Doesnt exist&quot;);</span>
         }
 
-<span class="fc" id="L47">        FriendsDAO.RemoveFriend(accountEmail, friendsEmail);</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L48">        FriendsDAO.RemoveFriend(accountEmail, friendsEmail);</span>
+<span class="fc" id="L49">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

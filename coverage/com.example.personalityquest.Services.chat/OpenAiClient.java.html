@@ -20,46 +20,59 @@ public class OpenAiClient implements ChatCompletionClient {
     private final HttpClient httpClient;
     private final String model;
 
+    /** Creates a client that sends requests to the configured OpenAI service */
     public OpenAiClient() {
-<span class="fc" id="L24">        this(HttpClient.newBuilder().connectTimeout(TIMEOUT).build(), DEFAULT_MODEL);</span>
-<span class="fc" id="L25">    }</span>
+<span class="fc" id="L25">        this(HttpClient.newBuilder().connectTimeout(TIMEOUT).build(), DEFAULT_MODEL);</span>
+<span class="fc" id="L26">    }</span>
 
-<span class="fc" id="L27">    OpenAiClient(HttpClient httpClient, String model) {</span>
-<span class="fc" id="L28">        this.httpClient = httpClient;</span>
-<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        this.model = ApplicationManager.isEmpty(model) ? DEFAULT_MODEL : model;</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L28">    OpenAiClient(HttpClient httpClient, String model) {</span>
+<span class="fc" id="L29">        this.httpClient = httpClient;</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        this.model = ApplicationManager.isEmpty(model) ? DEFAULT_MODEL : model;</span>
+<span class="fc" id="L31">    }</span>
 
     @Override
+    /** Sends a chat-completion request and returns the response text
+     * @param systemPrompt instructions that define the assistant's behaviour
+     * @param userPrompt the user's request
+     * @return the generated response text
+     * @throws Exception if the request fails or the response cannot be read
+     */
     public String Complete(String systemPrompt, String userPrompt) throws Exception {
-<span class="nc" id="L34">        String apiKey = EnvLoader.Get(&quot;OPENAI_API_KEY&quot;);</span>
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(apiKey)) {</span>
-<span class="nc" id="L36">            throw new IllegalStateException(</span>
+<span class="nc" id="L41">        String apiKey = EnvLoader.Get(&quot;OPENAI_API_KEY&quot;);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(apiKey)) {</span>
+<span class="nc" id="L43">            throw new IllegalStateException(</span>
                     &quot;Add OPENAI_API_KEY to PersonalityQuest/.env to get AI feedback.&quot;);
         }
 
-<span class="nc" id="L40">        String body = RequestBody(model, systemPrompt, userPrompt);</span>
-<span class="nc" id="L41">        HttpRequest request = HttpRequest.newBuilder(CHAT_COMPLETIONS)</span>
-<span class="nc" id="L42">                .timeout(TIMEOUT)</span>
-<span class="nc" id="L43">                .header(&quot;Authorization&quot;, &quot;Bearer &quot; + apiKey)</span>
-<span class="nc" id="L44">                .header(&quot;Content-Type&quot;, &quot;application/json&quot;)</span>
-<span class="nc" id="L45">                .POST(HttpRequest.BodyPublishers.ofString(body))</span>
-<span class="nc" id="L46">                .build();</span>
+<span class="nc" id="L47">        String body = RequestBody(model, systemPrompt, userPrompt);</span>
+<span class="nc" id="L48">        HttpRequest request = HttpRequest.newBuilder(CHAT_COMPLETIONS)</span>
+<span class="nc" id="L49">                .timeout(TIMEOUT)</span>
+<span class="nc" id="L50">                .header(&quot;Authorization&quot;, &quot;Bearer &quot; + apiKey)</span>
+<span class="nc" id="L51">                .header(&quot;Content-Type&quot;, &quot;application/json&quot;)</span>
+<span class="nc" id="L52">                .POST(HttpRequest.BodyPublishers.ofString(body))</span>
+<span class="nc" id="L53">                .build();</span>
 
-<span class="nc" id="L48">        HttpResponse&lt;String&gt; response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        String json = response.body() == null ? &quot;&quot; : response.body();</span>
-<span class="nc bnc" id="L50" title="All 4 branches missed.">        if (response.statusCode() &lt; 200 || response.statusCode() &gt;= 300) {</span>
-<span class="nc" id="L51">            throw new IllegalStateException(ErrorMessage(response.statusCode(), json));</span>
+<span class="nc" id="L55">        HttpResponse&lt;String&gt; response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        String json = response.body() == null ? &quot;&quot; : response.body();</span>
+<span class="nc bnc" id="L57" title="All 4 branches missed.">        if (response.statusCode() &lt; 200 || response.statusCode() &gt;= 300) {</span>
+<span class="nc" id="L58">            throw new IllegalStateException(ErrorMessage(response.statusCode(), json));</span>
         }
 
-<span class="nc" id="L54">        String content = OpenAiJson.ExtractString(json, &quot;content&quot;, &quot;choices&quot;);</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(content)) {</span>
-<span class="nc" id="L56">            throw new IllegalStateException(&quot;OpenAI returned an empty reply.&quot;);</span>
+<span class="nc" id="L61">        String content = OpenAiJson.ExtractString(json, &quot;content&quot;, &quot;choices&quot;);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(content)) {</span>
+<span class="nc" id="L63">            throw new IllegalStateException(&quot;OpenAI returned an empty reply.&quot;);</span>
         }
-<span class="nc" id="L58">        return content.trim();</span>
+<span class="nc" id="L65">        return content.trim();</span>
     }
 
+    /** Builds the JSON body for a chat-completion request
+     * @param model the model to use
+     * @param systemPrompt instructions that define the assistant's behaviour
+     * @param userPrompt the user's request
+     * @return the JSON request body
+     */
     public static String RequestBody(String model, String systemPrompt, String userPrompt) {
-<span class="fc" id="L62">        return &quot;&quot;&quot;</span>
+<span class="fc" id="L75">        return &quot;&quot;&quot;</span>
                 {
                   &quot;model&quot;: &quot;%s&quot;,
                   &quot;temperature&quot;: 0.7,
@@ -69,25 +82,30 @@ public class OpenAiClient implements ChatCompletionClient {
                     {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;%s&quot;}
                   ]
                 }
-<span class="fc" id="L72">                &quot;&quot;&quot;.formatted(</span>
-<span class="fc" id="L73">                OpenAiJson.Escape(model),</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">                OpenAiJson.Escape(systemPrompt == null ? &quot;&quot; : systemPrompt),</span>
-<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                OpenAiJson.Escape(userPrompt == null ? &quot;&quot; : userPrompt)</span>
+<span class="fc" id="L85">                &quot;&quot;&quot;.formatted(</span>
+<span class="fc" id="L86">                OpenAiJson.Escape(model),</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">                OpenAiJson.Escape(systemPrompt == null ? &quot;&quot; : systemPrompt),</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">                OpenAiJson.Escape(userPrompt == null ? &quot;&quot; : userPrompt)</span>
         );
     }
 
+    /** Extracts a readable error message from an API response
+     * @param statusCode the HTTP response status code
+     * @param json the response body
+     * @return the error message to display
+     */
     public static String ErrorMessage(int statusCode, String json) {
-<span class="fc" id="L80">        String apiMessage = OpenAiJson.ExtractString(json, &quot;message&quot;, &quot;error&quot;);</span>
-<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (!ApplicationManager.isEmpty(apiMessage)) {</span>
-<span class="pc bpc" id="L82" title="3 of 4 branches missed.">            if (statusCode == 401 || statusCode == 403) {</span>
-<span class="fc" id="L83">                return &quot;The OpenAI API key was rejected. Check OPENAI_API_KEY in PersonalityQuest/.env.&quot;;</span>
+<span class="fc" id="L98">        String apiMessage = OpenAiJson.ExtractString(json, &quot;message&quot;, &quot;error&quot;);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (!ApplicationManager.isEmpty(apiMessage)) {</span>
+<span class="pc bpc" id="L100" title="3 of 4 branches missed.">            if (statusCode == 401 || statusCode == 403) {</span>
+<span class="fc" id="L101">                return &quot;The OpenAI API key was rejected. Check OPENAI_API_KEY in PersonalityQuest/.env.&quot;;</span>
             }
-<span class="nc" id="L85">            return apiMessage;</span>
+<span class="nc" id="L103">            return apiMessage;</span>
         }
-<span class="nc bnc" id="L87" title="All 4 branches missed.">        if (statusCode == 401 || statusCode == 403) {</span>
-<span class="nc" id="L88">            return &quot;The OpenAI API key was rejected. Check OPENAI_API_KEY in PersonalityQuest/.env.&quot;;</span>
+<span class="nc bnc" id="L105" title="All 4 branches missed.">        if (statusCode == 401 || statusCode == 403) {</span>
+<span class="nc" id="L106">            return &quot;The OpenAI API key was rejected. Check OPENAI_API_KEY in PersonalityQuest/.env.&quot;;</span>
         }
-<span class="nc" id="L90">        return &quot;OpenAI request failed (HTTP &quot; + statusCode + &quot;).&quot;;</span>
+<span class="nc" id="L108">        return &quot;OpenAI request failed (HTTP &quot; + statusCode + &quot;).&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

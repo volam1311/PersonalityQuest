@@ -2,43 +2,64 @@
 
 import java.util.Objects;
 
+/** Validates values supplied during account sign-up */
 public final class AccountSignUpValidator {
     private AccountSignUpValidator() {
     }
 
+    /**
+     * Checks whether all supplied sign-up values pass validation
+     * @param email the email to validate
+     * @param userName the username to validate
+     * @param firstName the first name to validate
+     * @param lastName the last name to validate
+     * @param password the password to validate
+     * @param reEnterPassword the confirmation password to compare
+     * @return true if values are valid, otherwise returns false
+     */
     public static boolean isValid(String email, String userName, String firstName,
                                   String lastName, String password, String reEnterPassword) {
-<span class="fc bfc" id="L11" title="All 2 branches covered.">        return validationError(email, userName, firstName, lastName, password, reEnterPassword) == null;</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        return validationError(email, userName, firstName, lastName, password, reEnterPassword) == null;</span>
     }
 
+    /**
+     * Returns the first validation error found
+     * @param email the email to validate
+     * @param userName the username to validate
+     * @param firstName the first name to validate
+     * @param lastName the last name to validate
+     * @param password the password to validate
+     * @param reEnterPassword the confirmation password to compare
+     * @return an error message or null if details are valid
+     */
     public static String validationError(String email, String userName, String firstName,
                                          String lastName, String password, String reEnterPassword) {
-<span class="fc bfc" id="L16" title="All 2 branches covered.">        if (!Objects.equals(password, reEnterPassword)) {</span>
-<span class="fc" id="L17">            return &quot;Passwords do not match&quot;;</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (!Objects.equals(password, reEnterPassword)) {</span>
+<span class="fc" id="L38">            return &quot;Passwords do not match&quot;;</span>
         }
-<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (isEmpty(email.trim())) {</span>
-<span class="fc" id="L20">            return &quot;Email is empty&quot;;</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (isEmpty(email.trim())) {</span>
+<span class="fc" id="L41">            return &quot;Email is empty&quot;;</span>
         }
-<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (isEmpty(userName.trim())) {</span>
-<span class="fc" id="L23">            return &quot;UserName is empty&quot;;</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (isEmpty(userName.trim())) {</span>
+<span class="fc" id="L44">            return &quot;UserName is empty&quot;;</span>
         }
-<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (isEmpty(firstName.trim())) {</span>
-<span class="fc" id="L26">            return &quot;FirstName is empty&quot;;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (isEmpty(firstName.trim())) {</span>
+<span class="fc" id="L47">            return &quot;FirstName is empty&quot;;</span>
         }
-<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (isEmpty(lastName.trim())) {</span>
-<span class="fc" id="L29">            return &quot;LastName is empty&quot;;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (isEmpty(lastName.trim())) {</span>
+<span class="fc" id="L50">            return &quot;LastName is empty&quot;;</span>
         }
-<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (isEmpty(password.trim())) {</span>
-<span class="fc" id="L32">            return &quot;Password is empty&quot;;</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (isEmpty(password.trim())) {</span>
+<span class="fc" id="L53">            return &quot;Password is empty&quot;;</span>
         }
-<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (password.length() &lt; 8){</span>
-<span class="fc" id="L35">            return &quot;Password length should be at least 8 characters&quot;;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (password.length() &lt; 8){</span>
+<span class="fc" id="L56">            return &quot;Password length should be at least 8 characters&quot;;</span>
         }
-<span class="fc" id="L37">        return null;</span>
+<span class="fc" id="L58">        return null;</span>
     }
 
     private static boolean isEmpty(String value) {
-<span class="pc bpc" id="L41" title="1 of 4 branches missed.">        return value == null || value.isEmpty();</span>
+<span class="pc bpc" id="L62" title="1 of 4 branches missed.">        return value == null || value.isEmpty();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -262,36 +262,75 @@
 
     // Public Getters and Setters
 
-<span class="fc" id="L265">    public int getArchetypeId() {return archetypeId;}</span>
+    /** Returns the archetype ID
+     * @return the archetype ID
+     */
+<span class="fc" id="L268">    public int getArchetypeId() {return archetypeId;}</span>
 
     /**
      * The realm this archetype belongs to: &quot;Ego&quot;, &quot;Soul&quot;, &quot;Self&quot;, or &quot;Mark&quot;.
      */
-<span class="nc" id="L270">    public String getRealm() {return realm;}</span>
+<span class="nc" id="L273">    public String getRealm() {return realm;}</span>
 
+    /** Returns the archetype name
+     * @return the archetype name
+     */
     public String getName() {
-<span class="fc" id="L273">        return name;</span>
+<span class="fc" id="L279">        return name;</span>
     }
-<span class="fc" id="L275">    public String getSmallDescription() {return smallDescription;}</span>
-<span class="nc" id="L276">    public String getLongDescription() {return longDescription;}</span>
+    /** Returns the short archetype description
+     * @return the short description
+     */
+<span class="fc" id="L284">    public String getSmallDescription() {return smallDescription;}</span>
+    /** Returns the full archetype description
+     * @return the full description
+     */
+<span class="nc" id="L288">    public String getLongDescription() {return longDescription;}</span>
 
+    /** Returns the archetype strengths
+     * @return the strengths
+     */
     public String getStrengths() {
-<span class="fc" id="L279">        return strengths;</span>
+<span class="fc" id="L294">        return strengths;</span>
     }
+    /** Returns the archetype weaknesses
+     * @return the weaknesses
+     */
     public String getWeaknesses() {
-<span class="fc" id="L282">        return weaknesses;</span>
+<span class="fc" id="L300">        return weaknesses;</span>
     }
 
-<span class="nc" id="L285">    public String getValue() {return valueMean;}</span>
-<span class="nc" id="L286">    public String getValueDefinition() {return valueMeanDefinition;}</span>
+    /** Returns the archetype's balanced value
+     * @return the balanced value
+     */
+<span class="nc" id="L306">    public String getValue() {return valueMean;}</span>
+    /** Returns the description of the balanced value
+     * @return the balanced-value description
+     */
+<span class="nc" id="L310">    public String getValueDefinition() {return valueMeanDefinition;}</span>
 
-<span class="nc" id="L288">    public String getValueDeficit() {return valueDeficit;}</span>
-<span class="nc" id="L289">    public String getValueDeficitDefinition() {return valueDeficitDefinition;}</span>
+    /** Returns the archetype's deficient value
+     * @return the deficient value
+     */
+<span class="nc" id="L315">    public String getValueDeficit() {return valueDeficit;}</span>
+    /** Returns the description of the deficient value
+     * @return the deficient-value description
+     */
+<span class="nc" id="L319">    public String getValueDeficitDefinition() {return valueDeficitDefinition;}</span>
 
-<span class="nc" id="L291">    public String getValueExcess() {return valueExcess;}</span>
-<span class="nc" id="L292">    public String getValueExcessDefinition() {return valueExcessDefinition;}</span>
+    /** Returns the archetype's excessive value
+     * @return the excessive value
+     */
+<span class="nc" id="L324">    public String getValueExcess() {return valueExcess;}</span>
+    /** Returns the description of the excessive value
+     * @return the excessive-value description
+     */
+<span class="nc" id="L328">    public String getValueExcessDefinition() {return valueExcessDefinition;}</span>
 
-<span class="nc" id="L294">    public String getEmoji() {return emoji;}</span>
+    /** Returns the emoji representing the archetype
+     * @return the archetype emoji
+     */
+<span class="nc" id="L333">    public String getEmoji() {return emoji;}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -16,32 +16,51 @@ public class Quest {
     private final String name;
     private final String narrative;
 
-<span class="fc" id="L19">    public Quest(int labourId, int archetypeId, String name, String narrative) {</span>
-<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(name)){</span>
-<span class="nc" id="L21">            throw new IllegalArgumentException(&quot;Name is null&quot;);</span>
+    /** Creates an unassigned quest definition
+     * @param labourId the quest's unique ID
+     * @param archetypeId the ID of the archetype associated with the quest
+     * @param name the quest name
+     * @param narrative the quest narrative
+     * @throws IllegalArgumentException if an ID is invalid or the name is empty
+     */
+<span class="fc" id="L26">    public Quest(int labourId, int archetypeId, String name, String narrative) {</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(name)){</span>
+<span class="nc" id="L28">            throw new IllegalArgumentException(&quot;Name is null&quot;);</span>
         }
-<span class="pc bpc" id="L23" title="1 of 2 branches missed.">        if (labourId &lt;= 0){</span>
-<span class="nc" id="L24">            throw new IllegalArgumentException(&quot;LabourId is null&quot;);</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (labourId &lt;= 0){</span>
+<span class="nc" id="L31">            throw new IllegalArgumentException(&quot;LabourId is null&quot;);</span>
         }
-<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (archetypeId &lt;= 0){</span>
-<span class="nc" id="L27">            throw new IllegalArgumentException(&quot;ArchetypeId is null&quot;);</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (archetypeId &lt;= 0){</span>
+<span class="nc" id="L34">            throw new IllegalArgumentException(&quot;ArchetypeId is null&quot;);</span>
         }
 
-<span class="fc" id="L30">        this.labourId = labourId;</span>
-<span class="fc" id="L31">        this.archetypeId = archetypeId;</span>
-<span class="fc" id="L32">        this.name = name;</span>
-<span class="fc" id="L33">        this.narrative = narrative;</span>
+<span class="fc" id="L37">        this.labourId = labourId;</span>
+<span class="fc" id="L38">        this.archetypeId = archetypeId;</span>
+<span class="fc" id="L39">        this.name = name;</span>
+<span class="fc" id="L40">        this.narrative = narrative;</span>
 
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L42">    }</span>
+    /** Returns the associated archetype ID
+     * @return the archetype ID
+     */
     public int getArchetypeId() {
-<span class="fc" id="L37">        return archetypeId;</span>
+<span class="fc" id="L47">        return archetypeId;</span>
     }
+    /** Returns the quest ID
+     * @return the quest ID
+     */
     public int getLabourId() {
-<span class="fc" id="L40">        return labourId;</span>
+<span class="fc" id="L53">        return labourId;</span>
     }
+    /** Returns the quest name
+     * @return the quest name
+     */
     public String getName() {
-<span class="fc" id="L43">        return name;</span>
+<span class="fc" id="L59">        return name;</span>
     }
-<span class="nc" id="L45">    public String getNarrative() { return narrative; }</span>
+    /** Returns the quest narrative
+     * @return the quest narrative
+     */
+<span class="nc" id="L64">    public String getNarrative() { return narrative; }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

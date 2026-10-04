@@ -15,61 +15,66 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-<span class="nc" id="L18">public class QuizResultController implements Initializable {</span>
+/** Controls the quiz-results screen */
+<span class="nc" id="L19">public class QuizResultController implements Initializable {</span>
     @FXML
     private NavBarController navBarController;
     @FXML
     private Label archetypeNameLabel, archetypeDescriptionLabel, strengthsLabel, weaknessesLabel, questLabel;
 
+    /** Initialises the quiz-results screen
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L26">        QuizResult result = QuizService.GetResult();</span>
-<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (result == null) {</span>
-<span class="nc" id="L28">            archetypeNameLabel.setText(UserProfileService.UNASSIGNED_ARCHETYPE);</span>
-<span class="nc" id="L29">            archetypeDescriptionLabel.setText(&quot;Complete the quiz to discover your archetype.&quot;);</span>
-<span class="nc" id="L30">            strengthsLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L31">            weaknessesLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L32">            questLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L33">            return;</span>
+<span class="nc" id="L31">        QuizResult result = QuizService.GetResult();</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (result == null) {</span>
+<span class="nc" id="L33">            archetypeNameLabel.setText(UserProfileService.UNASSIGNED_ARCHETYPE);</span>
+<span class="nc" id="L34">            archetypeDescriptionLabel.setText(&quot;Complete the quiz to discover your archetype.&quot;);</span>
+<span class="nc" id="L35">            strengthsLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L36">            weaknessesLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L37">            questLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L38">            return;</span>
         }
 
-<span class="nc" id="L36">        String name = UserProfileService.FormatArchetypeName(result.archetype().getName());</span>
-<span class="nc" id="L37">        archetypeNameLabel.setText(name);</span>
-<span class="nc" id="L38">        archetypeDescriptionLabel.setText(DescriptionFor(result));</span>
-<span class="nc" id="L39">        strengthsLabel.setText(result.archetype().getStrengths());</span>
-<span class="nc" id="L40">        weaknessesLabel.setText(result.archetype().getWeaknesses());</span>
+<span class="nc" id="L41">        String name = UserProfileService.FormatArchetypeName(result.archetype().getName());</span>
+<span class="nc" id="L42">        archetypeNameLabel.setText(name);</span>
+<span class="nc" id="L43">        archetypeDescriptionLabel.setText(DescriptionFor(result));</span>
+<span class="nc" id="L44">        strengthsLabel.setText(result.archetype().getStrengths());</span>
+<span class="nc" id="L45">        weaknessesLabel.setText(result.archetype().getWeaknesses());</span>
 
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (result.assignedQuest() != null) {</span>
-<span class="nc" id="L43">            questLabel.setText(&quot;Your first labour is ready: &quot; + result.assignedQuest().getName());</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (result.assignedQuest() != null) {</span>
+<span class="nc" id="L48">            questLabel.setText(&quot;Your first labour is ready: &quot; + result.assignedQuest().getName());</span>
         } else {
-<span class="nc" id="L45">            questLabel.setText(&quot;Your questline will use this archetype when a matching labour is available.&quot;);</span>
+<span class="nc" id="L50">            questLabel.setText(&quot;Your questline will use this archetype when a matching labour is available.&quot;);</span>
         }
-<span class="nc" id="L47">    }</span>
+<span class="nc" id="L52">    }</span>
 
     private String DescriptionFor(QuizResult result) {
         try {
-<span class="nc" id="L51">            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (archetypeId != null) {</span>
-<span class="nc" id="L53">                String stored = QuestService.GetArchetypeDescription(archetypeId);</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">                if (!stored.isBlank()) {</span>
-<span class="nc" id="L55">                    return stored;</span>
+<span class="nc" id="L56">            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (archetypeId != null) {</span>
+<span class="nc" id="L58">                String stored = QuestService.GetArchetypeDescription(archetypeId);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                if (!stored.isBlank()) {</span>
+<span class="nc" id="L60">                    return stored;</span>
                 }
             }
-<span class="nc" id="L58">        } catch (Exception ignored) {</span>
+<span class="nc" id="L63">        } catch (Exception ignored) {</span>
             // Fall back to the in-memory copy when the database has no row.
-<span class="nc" id="L60">        }</span>
-<span class="nc" id="L61">        return result.archetype().getSmallDescription();</span>
+<span class="nc" id="L65">        }</span>
+<span class="nc" id="L66">        return result.archetype().getSmallDescription();</span>
     }
 
     @FXML
     private void OnRetake() throws IOException {
-<span class="nc" id="L66">        QuizService.StartQuiz();</span>
-<span class="nc" id="L67">        NavigationService.LoadScreen(ScreenEnum.QUIZ);</span>
-<span class="nc" id="L68">    }</span>
+<span class="nc" id="L71">        QuizService.StartQuiz();</span>
+<span class="nc" id="L72">        NavigationService.LoadScreen(ScreenEnum.QUIZ);</span>
+<span class="nc" id="L73">    }</span>
 
     @FXML
     private void OnBeginQuest() throws IOException {
-<span class="nc" id="L72">        NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);</span>
-<span class="nc" id="L73">    }</span>
+<span class="nc" id="L77">        NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);</span>
+<span class="nc" id="L78">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -6,17 +6,24 @@ import com.example.personalityquest.Model.auth.EmailDetails;
 import java.sql.SQLException;
 import java.util.Objects;
 
-<span class="nc" id="L9">public class AccountService {</span>
+/** Coordinates account profile updates */
+<span class="nc" id="L10">public class AccountService {</span>
 
+    /**
+     * updates an account's details through account data service
+     * @param emailDetails the new account details
+     * @param currentEmail the email address associated with the account
+     * @throws SQLException if account details cannot be updated
+     */
     public static void UpdateEmailDetailsForAccount(EmailDetails emailDetails, String currentEmail) throws SQLException {
         /*
          * Does the new email already exist and is the email being updated
          * */
-<span class="nc bnc" id="L15" title="All 4 branches missed.">        if (EmailService.DoesAccountWithEmailExist(emailDetails.getEmail()) &amp;&amp; !Objects.equals(currentEmail,emailDetails.getEmail())){</span>
-<span class="nc" id="L16">            throw new IllegalArgumentException(&quot;Email of &quot; + emailDetails.getEmail() + &quot; Already exists&quot;);</span>
+<span class="nc bnc" id="L22" title="All 4 branches missed.">        if (EmailService.DoesAccountWithEmailExist(emailDetails.getEmail()) &amp;&amp; !Objects.equals(currentEmail,emailDetails.getEmail())){</span>
+<span class="nc" id="L23">            throw new IllegalArgumentException(&quot;Email of &quot; + emailDetails.getEmail() + &quot; Already exists&quot;);</span>
         }
 
-<span class="nc" id="L19">        AccountDAO.UpdateAccountDetails(emailDetails, currentEmail);</span>
-<span class="nc" id="L20">    }</span>
+<span class="nc" id="L26">        AccountDAO.UpdateAccountDetails(emailDetails, currentEmail);</span>
+<span class="nc" id="L27">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

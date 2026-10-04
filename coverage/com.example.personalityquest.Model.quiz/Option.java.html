@@ -25,15 +25,36 @@ public record Option(int optionsID,
 <span class="fc" id="L25">    }</span>
 
     // Getters and Setters
-<span class="nc" id="L28">    public int getOptionsID() {return optionsID;}</span>
+    /** Returns the option set ID
+     * @return the option set ID
+     */
+<span class="nc" id="L31">    public int getOptionsID() {return optionsID;}</span>
 
-<span class="fc" id="L30">    public int getOption1Archetype() {return option1Archetype;}</span>
-<span class="fc" id="L31">    public int getOption2Archetype() {return option2Archetype;}</span>
-<span class="fc" id="L32">    public int getOption3Archetype() {return option3Archetype;}</span>
+    /** Returns the archetype ID for the first answer
+     * @return the first answer's archetype ID
+     */
+<span class="fc" id="L36">    public int getOption1Archetype() {return option1Archetype;}</span>
+    /** Returns the archetype ID for the second answer
+     * @return the second answer's archetype ID
+     */
+<span class="fc" id="L40">    public int getOption2Archetype() {return option2Archetype;}</span>
+    /** Returns the archetype ID for the third answer
+     * @return the third answer's archetype ID
+     */
+<span class="fc" id="L44">    public int getOption3Archetype() {return option3Archetype;}</span>
 
-<span class="fc" id="L34">    public String getOption1() {return option1;}</span>
-<span class="fc" id="L35">    public String getOption2() {return option2;}</span>
-<span class="fc" id="L36">    public String getOption3() {return option3;}</span>
+    /** Returns the text of the first answer
+     * @return the first answer text
+     */
+<span class="fc" id="L49">    public String getOption1() {return option1;}</span>
+    /** Returns the text of the second answer
+     * @return the second answer text
+     */
+<span class="fc" id="L53">    public String getOption2() {return option2;}</span>
+    /** Returns the text of the third answer
+     * @return the third answer text
+     */
+<span class="fc" id="L57">    public String getOption3() {return option3;}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

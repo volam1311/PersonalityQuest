@@ -17,48 +17,73 @@ public class UserQuest {
     // Either 'Active', 'Completed'
     private String status;
 
-<span class="fc" id="L20">    public UserQuest(int labourId, String accountEmail, float percentageComplete, String status){</span>
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (labourId &lt;= 0){</span>
-<span class="nc" id="L22">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+    /** Creates quest progress for an account
+     * @param labourId the quest ID
+     * @param accountEmail the account email
+     * @param percentageComplete progress from zero to one
+     * @param status the quest status
+     * @throws IllegalArgumentException if an ID, email, status, or progress value is invalid
+     */
+<span class="fc" id="L27">    public UserQuest(int labourId, String accountEmail, float percentageComplete, String status){</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (labourId &lt;= 0){</span>
+<span class="nc" id="L29">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
         }
-<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(accountEmail)){</span>
-<span class="nc" id="L25">            throw new IllegalArgumentException(&quot;Email is null&quot;);</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(accountEmail)){</span>
+<span class="nc" id="L32">            throw new IllegalArgumentException(&quot;Email is null&quot;);</span>
         }
-<span class="pc bpc" id="L27" title="2 of 4 branches missed.">        if (percentageComplete &lt; 0 || percentageComplete &gt; 1){</span>
-<span class="nc" id="L28">            throw new IllegalArgumentException(&quot;Percentage complete is out of range of 0 - 1&quot;);</span>
+<span class="pc bpc" id="L34" title="2 of 4 branches missed.">        if (percentageComplete &lt; 0 || percentageComplete &gt; 1){</span>
+<span class="nc" id="L35">            throw new IllegalArgumentException(&quot;Percentage complete is out of range of 0 - 1&quot;);</span>
         }
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(status)){</span>
-<span class="nc" id="L31">            throw new IllegalArgumentException(&quot;Status is null&quot;);</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(status)){</span>
+<span class="nc" id="L38">            throw new IllegalArgumentException(&quot;Status is null&quot;);</span>
         }
 
-<span class="fc" id="L34">        this.labourId = labourId;</span>
-<span class="fc" id="L35">        this.accountEmail = accountEmail;</span>
-<span class="fc" id="L36">        this.percentageComplete = percentageComplete;</span>
-<span class="fc" id="L37">        this.status = status;</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L41">        this.labourId = labourId;</span>
+<span class="fc" id="L42">        this.accountEmail = accountEmail;</span>
+<span class="fc" id="L43">        this.percentageComplete = percentageComplete;</span>
+<span class="fc" id="L44">        this.status = status;</span>
+<span class="fc" id="L45">    }</span>
 
+    /** Returns the quest ID
+     * @return the quest ID
+     */
     public int getLabourId() {
-<span class="fc" id="L41">        return labourId;</span>
+<span class="fc" id="L51">        return labourId;</span>
     }
 
+    /** Returns the quest progress as a value from zero to one
+     * @return the completion ratio
+     */
     public float getPercentageComplete() {
-<span class="fc" id="L45">        return percentageComplete;</span>
+<span class="fc" id="L58">        return percentageComplete;</span>
     }
 
+    /** Returns the email of the account assigned to the quest
+     * @return the account email
+     */
     public String getAccountEmail() {
-<span class="fc" id="L49">        return accountEmail;</span>
+<span class="fc" id="L65">        return accountEmail;</span>
     }
 
+    /** Returns the quest status
+     * @return the current status
+     */
     public String getStatus() {
-<span class="fc" id="L53">        return status;</span>
+<span class="fc" id="L72">        return status;</span>
     }
 
+    /** Sets the quest progress ratio
+     * @param percentageComplete progress from zero to one
+     */
     public void setPercentageComplete(float percentageComplete) {
-<span class="nc" id="L57">        this.percentageComplete = percentageComplete;</span>
-<span class="nc" id="L58">    }</span>
+<span class="nc" id="L79">        this.percentageComplete = percentageComplete;</span>
+<span class="nc" id="L80">    }</span>
 
+    /** Sets the quest status
+     * @param status the new status
+     */
     public void setStatus(String status) {
-<span class="nc" id="L61">        this.status = status;</span>
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L86">        this.status = status;</span>
+<span class="nc" id="L87">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

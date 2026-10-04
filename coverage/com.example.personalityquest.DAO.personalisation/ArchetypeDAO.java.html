@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/** Stores and retrieves archetype catalog records */
 public class ArchetypeDAO {
     private static final String CREATE_ARCHETYPES = &quot;&quot;&quot;
             CREATE TABLE IF NOT EXISTS Archetypes (
@@ -34,35 +35,62 @@ public class ArchetypeDAO {
 
     private ArchetypeDAO() {}
 
+    /** Inserts the default archetype catalog
+     * @throws SQLException if the catalog cannot be inserted
+     */
     public static void SeedCatalog() throws SQLException {
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc" id="L39">            InsertArchetype( archetype.getArchetypeId(), archetype.getName(), archetype.getSmallDescription(),</span>
-<span class="nc" id="L40">                    archetype.getLongDescription(), archetype.getStrengths(), archetype.getWeaknesses(),</span>
-<span class="nc" id="L41">                    archetype.getValue(), archetype.getValueDefinition(), archetype.getValueDeficit(),</span>
-<span class="nc" id="L42">                    archetype.getValueDeficitDefinition(), archetype.getValueExcess(), archetype.getValueExcessDefinition(),</span>
-<span class="nc" id="L43">                    archetype.getEmoji());</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc" id="L43">            InsertArchetype( archetype.getArchetypeId(), archetype.getName(), archetype.getSmallDescription(),</span>
+<span class="nc" id="L44">                    archetype.getLongDescription(), archetype.getStrengths(), archetype.getWeaknesses(),</span>
+<span class="nc" id="L45">                    archetype.getValue(), archetype.getValueDefinition(), archetype.getValueDeficit(),</span>
+<span class="nc" id="L46">                    archetype.getValueDeficitDefinition(), archetype.getValueExcess(), archetype.getValueExcessDefinition(),</span>
+<span class="nc" id="L47">                    archetype.getEmoji());</span>
         }
-<span class="nc" id="L45">    }</span>
+<span class="nc" id="L49">    }</span>
 
+    /** Creates archetype tables if they do not already exist
+     * @throws SQLException if the tables cannot be created
+     */
     public static void EnsureTables() throws SQLException{
-<span class="nc" id="L48">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L49">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L50">            statement.executeUpdate(CREATE_ARCHETYPES);</span>
+<span class="nc" id="L55">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L56">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L57">            statement.executeUpdate(CREATE_ARCHETYPES);</span>
         }
-<span class="nc" id="L52">    }</span>
+<span class="nc" id="L59">    }</span>
 
+    /** Checks whether archetype catalog records exist
+     * @return true when the catalog contains records
+     * @throws SQLException if the catalog cannot be checked
+     */
     public static boolean HasCatalog() throws SQLException{
-<span class="nc" id="L55">        EnsureTables();</span>
-<span class="nc" id="L56">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L57">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="nc" id="L66">        EnsureTables();</span>
+<span class="nc" id="L67">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L68">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;SELECT COUNT(*) FROM Archetypes&quot;)) {
-<span class="nc" id="L59">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc bnc" id="L60" title="All 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt;0;</span>
+<span class="nc" id="L70">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt;0;</span>
         }
     }
 
 
-
+    /**
+     * Inserts an archetype into the catalog if its ID is not already present
+     *
+     * @param archetypeID the archetype's unique ID
+     * @param name the archetype name
+     * @param smallDescription the short archetype description
+     * @param longDescription the full archetype description
+     * @param strengths the archetype's strengths
+     * @param weaknesses the archetype's weaknesses
+     * @param valueMean the archetype's balanced value
+     * @param valueMeanDefinition the description of the balanced value
+     * @param valueDeficit the archetype's deficient value
+     * @param valueDeficitDefinition the description of the deficient value
+     * @param valueExcess the archetype's excessive value
+     * @param valueExcessDefinition the description of the excessive value
+     * @param emoji the emoji representing the archetype
+     * @throws SQLException if the archetype cannot be inserted
+     */
     public static void InsertArchetype(
             int archetypeID,
             String name,
@@ -77,69 +105,76 @@ public class ArchetypeDAO {
             String valueExcess,
             String valueExcessDefinition,
             String emoji) throws SQLException{
-<span class="nc" id="L80">        EnsureTables();</span>
-<span class="nc" id="L81">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L82">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="nc" id="L108">        EnsureTables();</span>
+<span class="nc" id="L109">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L110">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                         INSERT OR IGNORE INTO Archetypes
                         (archetypeId, name, smallDescription, longDescription, strengths, weaknesses, valueMean, valueMeanDefinition, valueDeficit, valueDeficitDefinition, valueExcess, valueExcessDefinition, emoji)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         &quot;&quot;&quot;)) {
-<span class="nc" id="L88">            statement.setInt(1, archetypeID);</span>
-<span class="nc" id="L89">            statement.setString(2, name);</span>
-<span class="nc" id="L90">            statement.setString(3, smallDescription);</span>
-<span class="nc" id="L91">            statement.setString(4, longDescription);</span>
-<span class="nc" id="L92">            statement.setString(5, strengths);</span>
-<span class="nc" id="L93">            statement.setString(6, weaknesses);</span>
-<span class="nc" id="L94">            statement.setString(7, valueMean);</span>
-<span class="nc" id="L95">            statement.setString(8, valueMeanDefinition);</span>
-<span class="nc" id="L96">            statement.setString(9, valueDeficit);</span>
-<span class="nc" id="L97">            statement.setString(10, valueDeficitDefinition);</span>
-<span class="nc" id="L98">            statement.setString(11, valueExcess);</span>
-<span class="nc" id="L99">            statement.setString(12, valueExcessDefinition);</span>
-<span class="nc" id="L100">            statement.setString(13, emoji);</span>
-<span class="nc" id="L101">            statement.executeUpdate();</span>
+<span class="nc" id="L116">            statement.setInt(1, archetypeID);</span>
+<span class="nc" id="L117">            statement.setString(2, name);</span>
+<span class="nc" id="L118">            statement.setString(3, smallDescription);</span>
+<span class="nc" id="L119">            statement.setString(4, longDescription);</span>
+<span class="nc" id="L120">            statement.setString(5, strengths);</span>
+<span class="nc" id="L121">            statement.setString(6, weaknesses);</span>
+<span class="nc" id="L122">            statement.setString(7, valueMean);</span>
+<span class="nc" id="L123">            statement.setString(8, valueMeanDefinition);</span>
+<span class="nc" id="L124">            statement.setString(9, valueDeficit);</span>
+<span class="nc" id="L125">            statement.setString(10, valueDeficitDefinition);</span>
+<span class="nc" id="L126">            statement.setString(11, valueExcess);</span>
+<span class="nc" id="L127">            statement.setString(12, valueExcessDefinition);</span>
+<span class="nc" id="L128">            statement.setString(13, emoji);</span>
+<span class="nc" id="L129">            statement.executeUpdate();</span>
         }
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L131">    }</span>
 
 
+    /** Returns archetype catalog records ordered by ID
+     * @return the archetype records in the catalog
+     * @throws SQLException if the catalog cannot be read
+     */
     public static List&lt;ArchetypeRecord&gt; GetCatalog() throws SQLException{
-<span class="nc" id="L107">        EnsureTables();</span>
-<span class="nc" id="L108">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L109">        try(PreparedStatement statement = connection.prepareStatement(</span>
+<span class="nc" id="L139">        EnsureTables();</span>
+<span class="nc" id="L140">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L141">        try(PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * FROM Archetypes ORDER BY archetypeID
                     &quot;&quot;&quot; )){
-<span class="nc" id="L113">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc" id="L114">            List&lt;ArchetypeRecord&gt; archetypes = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L116">                archetypes.add(new ArchetypeRecord(</span>
-<span class="nc" id="L117">                        rs.getInt(&quot;archetypeID&quot;),</span>
-<span class="nc" id="L118">                        rs.getString(&quot;name&quot;),</span>
-<span class="nc" id="L119">                        rs.getString(&quot;smallDescription&quot;),</span>
-<span class="nc" id="L120">                        rs.getString(&quot;longDescription&quot;),</span>
-<span class="nc" id="L121">                        rs.getString(&quot;strengths&quot;),</span>
-<span class="nc" id="L122">                        rs.getString(&quot;weaknesses&quot;),</span>
-<span class="nc" id="L123">                        rs.getString(&quot;valueMean&quot;),</span>
-<span class="nc" id="L124">                        rs.getString(&quot;valueMeanDefinition&quot;),</span>
-<span class="nc" id="L125">                        rs.getString(&quot;valueDeficit&quot;),</span>
-<span class="nc" id="L126">                        rs.getString(&quot;valueDeficitDefinition&quot;),</span>
-<span class="nc" id="L127">                        rs.getString(&quot;valueExcess&quot;),</span>
-<span class="nc" id="L128">                        rs.getString(&quot;valueExcessDefinition&quot;)</span>
+<span class="nc" id="L145">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L146">            List&lt;ArchetypeRecord&gt; archetypes = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L148">                archetypes.add(new ArchetypeRecord(</span>
+<span class="nc" id="L149">                        rs.getInt(&quot;archetypeID&quot;),</span>
+<span class="nc" id="L150">                        rs.getString(&quot;name&quot;),</span>
+<span class="nc" id="L151">                        rs.getString(&quot;smallDescription&quot;),</span>
+<span class="nc" id="L152">                        rs.getString(&quot;longDescription&quot;),</span>
+<span class="nc" id="L153">                        rs.getString(&quot;strengths&quot;),</span>
+<span class="nc" id="L154">                        rs.getString(&quot;weaknesses&quot;),</span>
+<span class="nc" id="L155">                        rs.getString(&quot;valueMean&quot;),</span>
+<span class="nc" id="L156">                        rs.getString(&quot;valueMeanDefinition&quot;),</span>
+<span class="nc" id="L157">                        rs.getString(&quot;valueDeficit&quot;),</span>
+<span class="nc" id="L158">                        rs.getString(&quot;valueDeficitDefinition&quot;),</span>
+<span class="nc" id="L159">                        rs.getString(&quot;valueExcess&quot;),</span>
+<span class="nc" id="L160">                        rs.getString(&quot;valueExcessDefinition&quot;)</span>
                 ));
             }
-<span class="nc" id="L131">            return archetypes;</span>
+<span class="nc" id="L163">            return archetypes;</span>
         }
     }
 
+    /** Recreates the archetype catalog and inserts its default records
+     * @throws SQLException if the catalog cannot be recreated
+     */
     public static void ResetAndSeedCatalog() throws SQLException{
-<span class="nc" id="L136">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L137">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L138">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS Archetypes&quot;);</span>
+<span class="nc" id="L171">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L172">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L173">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS Archetypes&quot;);</span>
         }
-<span class="nc" id="L140">        EnsureTables();</span>
-<span class="nc" id="L141">        SeedCatalog();</span>
-<span class="nc" id="L142">    }</span>
+<span class="nc" id="L175">        EnsureTables();</span>
+<span class="nc" id="L176">        SeedCatalog();</span>
+<span class="nc" id="L177">    }</span>
 
 
 

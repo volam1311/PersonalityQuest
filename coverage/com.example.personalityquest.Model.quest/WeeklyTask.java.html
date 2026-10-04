@@ -14,33 +14,41 @@ import com.example.personalityquest.SQLite;
  * (taskType = WEEKLY). Quest storyline steps stay in Tasks with taskType = QUEST.
  */
 public class WeeklyTask {
-<span class="fc" id="L17">    public WeeklyTask(String email, int taskId, String status, String reflection, String weekStarted) throws Exception {</span>
-<span class="pc bpc" id="L18" title="1 of 2 branches missed.">        if (taskId == 0){</span>
-<span class="nc" id="L19">            throw new Exception(&quot;Task Id is == 0 or is null&quot;);</span>
+    /** Creates a weekly task assigned to an account
+     * @param email the account email
+     * @param taskId the weekly task ID
+     * @param status the task status
+     * @param reflection the saved reflection text
+     * @param weekStarted the Monday date for the task's week
+     * @throws Exception if the task ID is zero
+     */
+<span class="fc" id="L25">    public WeeklyTask(String email, int taskId, String status, String reflection, String weekStarted) throws Exception {</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (taskId == 0){</span>
+<span class="nc" id="L27">            throw new Exception(&quot;Task Id is == 0 or is null&quot;);</span>
         }
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(email)){</span>
-<span class="nc" id="L22">            System.out.println(&quot;Email is null&quot;);</span>
-<span class="nc" id="L23">            email = &quot;&quot;;</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(email)){</span>
+<span class="nc" id="L30">            System.out.println(&quot;Email is null&quot;);</span>
+<span class="nc" id="L31">            email = &quot;&quot;;</span>
         }
-<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(status)){</span>
-<span class="nc" id="L26">            System.out.println(&quot;Status is null&quot;);</span>
-<span class="nc" id="L27">            status = &quot;&quot;;</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(status)){</span>
+<span class="nc" id="L34">            System.out.println(&quot;Status is null&quot;);</span>
+<span class="nc" id="L35">            status = &quot;&quot;;</span>
         }
-<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(reflection)){</span>
-<span class="fc" id="L30">            System.out.println(&quot;Reflection is null&quot;);</span>
-<span class="fc" id="L31">            reflection = &quot;&quot;;</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(reflection)){</span>
+<span class="fc" id="L38">            System.out.println(&quot;Reflection is null&quot;);</span>
+<span class="fc" id="L39">            reflection = &quot;&quot;;</span>
         }
-<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(weekStarted)){</span>
-<span class="nc" id="L34">            System.out.println(&quot;WeekStarted is null&quot;);</span>
-<span class="nc" id="L35">            weekStarted = &quot;&quot;;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(weekStarted)){</span>
+<span class="nc" id="L42">            System.out.println(&quot;WeekStarted is null&quot;);</span>
+<span class="nc" id="L43">            weekStarted = &quot;&quot;;</span>
         }
 
-<span class="fc" id="L38">        this.email = email;</span>
-<span class="fc" id="L39">        this.taskId = taskId;</span>
-<span class="fc" id="L40">        this.status = status;</span>
-<span class="fc" id="L41">        this.reflection = reflection;</span>
-<span class="fc" id="L42">        this.weekStarted = weekStarted;</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L46">        this.email = email;</span>
+<span class="fc" id="L47">        this.taskId = taskId;</span>
+<span class="fc" id="L48">        this.status = status;</span>
+<span class="fc" id="L49">        this.reflection = reflection;</span>
+<span class="fc" id="L50">        this.weekStarted = weekStarted;</span>
+<span class="fc" id="L51">    }</span>
 
     private final String email;
     private final int taskId;
@@ -48,23 +56,44 @@ public class WeeklyTask {
     private String reflection;
     private final String weekStarted;
 
-<span class="fc" id="L51">    public int getTaskId(){ return this.taskId; }</span>
+    /** Returns the weekly task ID
+     * @return the task ID
+     */
+<span class="fc" id="L62">    public int getTaskId(){ return this.taskId; }</span>
+    /** Returns the account email
+     * @return the account email
+     */
     public String getEmail(){
-<span class="fc" id="L53">        return this.email;</span>
+<span class="fc" id="L67">        return this.email;</span>
     }
+    /** Returns the saved reflection text
+     * @return the reflection text
+     */
     public String getReflection(){
-<span class="fc" id="L56">        return this.reflection;</span>
+<span class="fc" id="L73">        return this.reflection;</span>
     }
 
+    /** Returns the weekly task status
+     * @return the current status
+     */
     public String getStatus(){
-<span class="fc" id="L60">        return this.status;</span>
+<span class="fc" id="L80">        return this.status;</span>
     }
+    /** Returns the Monday date associated with the task
+     * @return the week start date as text
+     */
     public String getWeekStarted(){
-<span class="fc" id="L63">        return this.weekStarted;</span>
+<span class="fc" id="L86">        return this.weekStarted;</span>
     }
 
-<span class="nc" id="L66">    public void setStatus(String status){ this.status = status; }</span>
-<span class="nc" id="L67">    public void setReflection(String reflection){ this.reflection = reflection; }</span>
+    /** Sets the weekly task status
+     * @param status the new status
+     */
+<span class="nc" id="L92">    public void setStatus(String status){ this.status = status; }</span>
+    /** Sets the reflection text
+     * @param reflection the new reflection text
+     */
+<span class="nc" id="L96">    public void setReflection(String reflection){ this.reflection = reflection; }</span>
 
     /**
      * Converts the weekly task to a string
@@ -73,16 +102,16 @@ public class WeeklyTask {
      */
     @Override
     public String toString() {
-<span class="nc" id="L76">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L105">        Connection connection = SQLite.getConnection();</span>
         try {
-<span class="nc" id="L78">            PreparedStatement statement = connection.prepareStatement(&quot;SELECT * FROM Tasks WHERE taskId = ?&quot;);</span>
+<span class="nc" id="L107">            PreparedStatement statement = connection.prepareStatement(&quot;SELECT * FROM Tasks WHERE taskId = ?&quot;);</span>
 
-<span class="nc" id="L80">            statement.setInt(1, getTaskId());</span>
+<span class="nc" id="L109">            statement.setInt(1, getTaskId());</span>
 
-<span class="nc" id="L82">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc" id="L83">            return rs.getString(&quot;name&quot;);</span>
-<span class="nc" id="L84">        } catch (SQLException e) {</span>
-<span class="nc" id="L85">            throw new RuntimeException(e);</span>
+<span class="nc" id="L111">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L112">            return rs.getString(&quot;name&quot;);</span>
+<span class="nc" id="L113">        } catch (SQLException e) {</span>
+<span class="nc" id="L114">            throw new RuntimeException(e);</span>
         }
 
     }

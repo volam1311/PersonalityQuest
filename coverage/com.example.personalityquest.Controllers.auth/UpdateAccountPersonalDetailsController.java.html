@@ -18,7 +18,8 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-<span class="nc" id="L21">public class UpdateAccountPersonalDetailsController implements Initializable {</span>
+/** Controls account personal-details updates */
+<span class="nc" id="L22">public class UpdateAccountPersonalDetailsController implements Initializable {</span>
 
 
 
@@ -32,56 +33,62 @@ import java.util.ResourceBundle;
     private String oldEmail;
 
 
+    /** Initialises the personal-details form
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L37">        oldEmail = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc" id="L42">        oldEmail = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
 
         // attempt to populate the entry fields with the users current account details
         try {
-<span class="nc" id="L41">            PopulateEntryFields();</span>
-<span class="nc" id="L42">        } catch (Exception e) {</span>
-<span class="nc" id="L43">            throw new RuntimeException(e);</span>
-<span class="nc" id="L44">        }</span>
-<span class="nc" id="L45">    }</span>
+<span class="nc" id="L46">            PopulateEntryFields();</span>
+<span class="nc" id="L47">        } catch (Exception e) {</span>
+<span class="nc" id="L48">            throw new RuntimeException(e);</span>
+<span class="nc" id="L49">        }</span>
+<span class="nc" id="L50">    }</span>
 
     /*
     * Attempts to save updated changes made to the users account details
     * */
     @FXML
+    /** Saves the updated personal details and closes the screen */
     public void OnSaveAndExit() {
         /*
         * Failsafe for if somehow this variable does not become set
         * */
-<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (Objects.equals(oldEmail, &quot;&quot;)){</span>
-<span class="nc" id="L56">            System.out.println(&quot;Old email is null&quot;);</span>
-<span class="nc" id="L57">            return;</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (Objects.equals(oldEmail, &quot;&quot;)){</span>
+<span class="nc" id="L62">            System.out.println(&quot;Old email is null&quot;);</span>
+<span class="nc" id="L63">            return;</span>
         }
-<span class="nc" id="L59">        EmailDetails newDetails = new EmailDetails(</span>
-<span class="nc" id="L60">            emailEntry.getText(),</span>
-<span class="nc" id="L61">            userNameEntry.getText(),</span>
-<span class="nc" id="L62">            firstNameEntry.getText(),</span>
-<span class="nc" id="L63">            lastNameEntry.getText());</span>
+<span class="nc" id="L65">        EmailDetails newDetails = new EmailDetails(</span>
+<span class="nc" id="L66">            emailEntry.getText(),</span>
+<span class="nc" id="L67">            userNameEntry.getText(),</span>
+<span class="nc" id="L68">            firstNameEntry.getText(),</span>
+<span class="nc" id="L69">            lastNameEntry.getText());</span>
 
         try{
-<span class="nc" id="L66">            AccountService.UpdateEmailDetailsForAccount(newDetails, oldEmail);</span>
-<span class="nc" id="L67">            Message.setText(&quot;Updated Details&quot;);</span>
-<span class="nc" id="L68">            System.out.println(&quot;Updated Details&quot;);</span>
+<span class="nc" id="L72">            AccountService.UpdateEmailDetailsForAccount(newDetails, oldEmail);</span>
+<span class="nc" id="L73">            Message.setText(&quot;Updated Details&quot;);</span>
+<span class="nc" id="L74">            System.out.println(&quot;Updated Details&quot;);</span>
         }
-<span class="nc" id="L70">        catch (IllegalArgumentException e){</span>
-<span class="nc" id="L71">            Message.setText(e.getMessage());</span>
+<span class="nc" id="L76">        catch (IllegalArgumentException e){</span>
+<span class="nc" id="L77">            Message.setText(e.getMessage());</span>
         }
-<span class="nc" id="L73">        catch (SQLException e){</span>
-<span class="nc" id="L74">            Message.setText(&quot;Something went wrong. Please Try Again&quot;);</span>
-<span class="nc" id="L75">            System.out.println(e.getStackTrace());</span>
-<span class="nc" id="L76">        }</span>
-<span class="nc" id="L77">    }</span>
+<span class="nc" id="L79">        catch (SQLException e){</span>
+<span class="nc" id="L80">            Message.setText(&quot;Something went wrong. Please Try Again&quot;);</span>
+<span class="nc" id="L81">            System.out.println(e.getStackTrace());</span>
+<span class="nc" id="L82">        }</span>
+<span class="nc" id="L83">    }</span>
 
     /*
      * Returns to previous screen without updating user details
      * */
+    /** Closes the personal-details screen */
     public void OnExit(){
 
-<span class="nc" id="L84">    }</span>
+<span class="nc" id="L91">    }</span>
     /*
      * Checks to see if the given account update is valid
      * */
@@ -90,32 +97,32 @@ import java.util.ResourceBundle;
         /*
         * Does the new email already exist and is the email being updated
         * */
-<span class="nc bnc" id="L93" title="All 4 branches missed.">        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText()) &amp;&amp; !Objects.equals(oldEmail, emailEntry.getText())){</span>
-<span class="nc" id="L94">            Message.setText(&quot;Email of &quot; + emailEntry.getText() + &quot; Already exists. Please Use Another&quot;);</span>
-<span class="nc" id="L95">            System.out.println(&quot;Email of &quot; + emailEntry.getText() + &quot; Already exists&quot;);</span>
-<span class="nc" id="L96">            return false;</span>
+<span class="nc bnc" id="L100" title="All 4 branches missed.">        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText()) &amp;&amp; !Objects.equals(oldEmail, emailEntry.getText())){</span>
+<span class="nc" id="L101">            Message.setText(&quot;Email of &quot; + emailEntry.getText() + &quot; Already exists. Please Use Another&quot;);</span>
+<span class="nc" id="L102">            System.out.println(&quot;Email of &quot; + emailEntry.getText() + &quot; Already exists&quot;);</span>
+<span class="nc" id="L103">            return false;</span>
         }
 
-<span class="nc" id="L99">        return true;</span>
+<span class="nc" id="L106">        return true;</span>
     }
 
     /*
     * Populates the entry fields with their current values
     * */
     private boolean PopulateEntryFields() throws Exception {
-<span class="nc" id="L106">        EmailDetails emailDetails = EmailService.GetDetailsForEmail(oldEmail);</span>
+<span class="nc" id="L113">        EmailDetails emailDetails = EmailService.GetDetailsForEmail(oldEmail);</span>
 
-<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (Objects.equals(emailDetails, null)){</span>
-<span class="nc" id="L109">            System.out.println(&quot;Account doesnt exist with the given email &quot; + oldEmail);</span>
-<span class="nc" id="L110">            return false;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (Objects.equals(emailDetails, null)){</span>
+<span class="nc" id="L116">            System.out.println(&quot;Account doesnt exist with the given email &quot; + oldEmail);</span>
+<span class="nc" id="L117">            return false;</span>
         }
 
-<span class="nc" id="L113">        emailEntry.setText(emailDetails.getEmail());</span>
-<span class="nc" id="L114">        userNameEntry.setText(emailDetails.getUserName());</span>
-<span class="nc" id="L115">        firstNameEntry.setText(emailDetails.getFirstName());</span>
-<span class="nc" id="L116">        lastNameEntry.setText(emailDetails.getLastName());</span>
+<span class="nc" id="L120">        emailEntry.setText(emailDetails.getEmail());</span>
+<span class="nc" id="L121">        userNameEntry.setText(emailDetails.getUserName());</span>
+<span class="nc" id="L122">        firstNameEntry.setText(emailDetails.getFirstName());</span>
+<span class="nc" id="L123">        lastNameEntry.setText(emailDetails.getLastName());</span>
 
-<span class="nc" id="L118">        return true;</span>
+<span class="nc" id="L125">        return true;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
