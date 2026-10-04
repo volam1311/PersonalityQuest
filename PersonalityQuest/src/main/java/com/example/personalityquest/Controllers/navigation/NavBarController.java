@@ -9,6 +9,9 @@ import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.Services.navigation.NavigationService;
+import com.example.personalityquest.Services.quiz.QuizService;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -21,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -78,11 +82,46 @@ public class NavBarController implements Initializable {
                 ApplyResponsiveLayout(scene.getWidth());
             }
         });
+
+        ApplyQuizProgressLock();
     }
 
     public void setCurrentDestination(NavDestination destination) {
         currentDestination = destination;
         ApplySelectedStyles();
+        ApplyQuizProgressLock();
+    }
+
+    /**
+     * While the user is mid-attempt on the archetype quiz (just clicked "Redo Quiz", or is
+     * taking it for the first time), lock them out of Home/Journal/Quest Viewer so they can't
+     * wander off with an unsaved attempt in progress. Archetype stays open as the only way out,
+     * and picking it abandons the in-progress attempt (see OnNavigationClick).
+     */
+    private void ApplyQuizProgressLock() {
+        boolean quizInProgress = QuizService.HasActiveAttempt();
+        homeButton.setDisable(quizInProgress);
+        tasksButton.setDisable(quizInProgress);
+        questViewerButton.setDisable(quizInProgress);
+    }
+
+    private static final String NAV_FLASH_STYLE = "nav-flash";
+
+    /**
+     * Briefly flashes the Journal nav button one time to draw the user's
+     * attention to it (e.g. after adding a challenge or submitting a reflection).
+     */
+    public void FlashTasksButtonOnce() {
+        FlashButtonOnce(tasksButton);
+    }
+
+    private void FlashButtonOnce(Button button) {
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, event -> button.getStyleClass().add(NAV_FLASH_STYLE)),
+                new KeyFrame(Duration.seconds(0.25), event -> button.getStyleClass().remove(NAV_FLASH_STYLE)),
+                new KeyFrame(Duration.seconds(0.5), event -> button.getStyleClass().add(NAV_FLASH_STYLE)),
+                new KeyFrame(Duration.seconds(0.75), event -> button.getStyleClass().remove(NAV_FLASH_STYLE)));
+        timeline.play();
     }
 
     private void SetProfileLabel() {
@@ -130,7 +169,7 @@ public class NavBarController implements Initializable {
         brandLabel.setVisible(expanded);
 
         SetLabelVisible(homeNavLabel, expanded);
-        SetLabelVisible(questsNavLabel, expanded);
+        //SetLabelVisible(questsNavLabel, expanded);
         SetLabelVisible(questViewerNavLabel, expanded);
         SetLabelVisible(tasksNavLabel, expanded);
         SetLabelVisible(archetypeNavLabel, expanded);
@@ -138,7 +177,7 @@ public class NavBarController implements Initializable {
         SetLabelVisible(logoutNavLabel, expanded);
 
         SetButtonDimensions(homeButton, expanded, NAV_BUTTON_HEIGHT);
-        SetButtonDimensions(questsButton, expanded, NAV_BUTTON_HEIGHT);
+        //SetButtonDimensions(questsButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(questViewerButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(tasksButton, expanded, NAV_BUTTON_HEIGHT);
         SetButtonDimensions(archetypeButton, expanded, NAV_BUTTON_HEIGHT);
@@ -170,7 +209,7 @@ public class NavBarController implements Initializable {
 
     private void ApplySelectedStyles() {
         homeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
-        questsButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
+        //questsButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         questViewerButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         tasksButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
         archetypeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
@@ -183,7 +222,7 @@ public class NavBarController implements Initializable {
 
         switch (currentDestination) {
             case HOME -> homeButton.getStyleClass().add(SELECTED_NAV_BUTTON);
-            case QUESTS -> questsButton.getStyleClass().add(SELECTED_NAV_BUTTON);
+            //case QUESTS -> questsButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case QUEST_VIEWER ->  questViewerButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case TASKS -> tasksButton.getStyleClass().add(SELECTED_NAV_BUTTON);
             case ARCHETYPE -> archetypeButton.getStyleClass().add(SELECTED_NAV_BUTTON);
@@ -216,7 +255,14 @@ public class NavBarController implements Initializable {
             case TASKS -> NavigationService.LoadScreen(ScreenEnum.TASKS);
             case SETTINGS -> NavigationService.LoadScreen(ScreenEnum.SETTINGS);
             case PROFILE -> NavigationService.LoadScreen(ScreenEnum.PROFILE);
-            case ARCHETYPE -> NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);
+            case ARCHETYPE -> {
+                if (QuizService.HasActiveAttempt()) {
+                    // Abandon the in-progress attempt - nothing has been saved yet, so this
+                    // reverts the user straight back to whatever result they had before.
+                    QuizService.Reset();
+                }
+                NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);
+            }
         }
     }
 
@@ -230,9 +276,9 @@ public class NavBarController implements Initializable {
         if (button == homeButton) {
             return NavDestination.HOME;
         }
-        if (button == questsButton) {
-            return NavDestination.QUESTS;
-        }
+//        if (button == questsButton) {
+//            return NavDestination.QUESTS;
+//        }
         if (button == questViewerButton) {
             return NavDestination.QUEST_VIEWER;
         }

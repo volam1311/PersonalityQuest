@@ -11,19 +11,17 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
 
-<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.navigation.DashboardController">
+<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.navigation.DashboardController">
     <left>
         <fx:include fx:id="navBar" source="NavBar.fxml" />
     </left>
 
     <center>
-        <ScrollPane fx:id="contentScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
+        <ScrollPane fx:id="contentScroll" fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
             <content>
                 <VBox fx:id="contentContainer" spacing="18" styleClass="content-container">
                     <padding>
@@ -39,58 +37,72 @@
                         </HBox>
                     </HBox>
 
-                    <GridPane fx:id="topGrid" hgap="12" vgap="12">
+                    <!-- Placeholder 2x3 home layout: boxes reused directly from the Profile and Quest screens -->
+                    <GridPane fx:id="homeGrid" hgap="12" vgap="12" VBox.vgrow="ALWAYS" maxHeight="Infinity" maxWidth="Infinity" minHeight="0" minWidth="0">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="65" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="35" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.34" />
                         </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints percentHeight="50" vgrow="ALWAYS" />
+                            <RowConstraints percentHeight="50" vgrow="ALWAYS" />
+                        </rowConstraints>
 
-                        <VBox fx:id="questCard" spacing="12" styleClass="card quest-card" GridPane.columnIndex="0">
-                            <Label fx:id="questTitleLabel" styleClass="card-title" text="The Hydra Questline" />
-                            <ScrollPane fx:id="questDescriptionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                                        styleClass="quest-description-scroll" VBox.vgrow="ALWAYS">
-                                <content>
-                                    <Label fx:id="questDescriptionLabel" styleClass="quest-description" text="Complete the storyline quest tasks to continue the labour" wrapText="true" />
-                                </content>
-                            </ScrollPane>
-                            <HBox alignment="CENTER_LEFT" spacing="12">
-                                <ProgressBar fx:id="questProgress" maxWidth="1.7976931348623157E308" progress="0.2" HBox.hgrow="ALWAYS" />
-                                <Label fx:id="questProgressLabel" styleClass="progress-label" text="20% Complete" />
+                        <!-- Row 1, Col 1: Archetype Balance (copied from Profile.fxml progressCard) -->
+                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" minWidth="0" minHeight="0"
+                              GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label id="progressTitle" styleClass="card-title centered-title" text="Archetype Balance" />
+                            <Canvas fx:id="progressChart" height="280" width="480" />
+                        </VBox>
+
+                        <!-- Row 1, Col 2: Why this labour (copied from Quest.fxml traitCard) -->
+                        <VBox fx:id="traitCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label styleClass="card-title" text="Why this labour" />
+                            <Label styleClass="section-label" text="Trait focus" />
+                            <Label fx:id="traitLabel" styleClass="lore-body" wrapText="true" text="—" />
+                            <Label styleClass="section-label" text="Reflection" />
+                            <Label fx:id="reflectionPromptLabel" styleClass="lore-body" wrapText="true" text="—" />
+                        </VBox>
+
+                        <!-- Row 1 and 2, Col 3: Three thermometers (vertical progress bars) -->
+                        <VBox fx:id="verticalProgressCard" alignment="CENTER" spacing="10" styleClass="card" minWidth="0" minHeight="0"
+                              GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.rowSpan="2">
+                            <Label styleClass="card-title centered-title" text="Progress" />
+                            <HBox fx:id="thermometerRow" alignment="CENTER" spacing="12" VBox.vgrow="ALWAYS" minHeight="0">
+                                <VBox alignment="CENTER" spacing="10" fillWidth="false" HBox.hgrow="ALWAYS" minHeight="0">
+                                    <Label styleClass="progress-label" text="Challenges" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <ProgressBar fx:id="challengesProgress" progress="0" prefWidth="260" rotate="-90" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                </VBox>
+                                <VBox alignment="CENTER" spacing="10" fillWidth="false" HBox.hgrow="ALWAYS" minHeight="0">
+                                    <Label styleClass="progress-label" text="Reflections" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <ProgressBar fx:id="reflectionsProgress" progress="0" prefWidth="260" rotate="-90" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                </VBox>
+                                <VBox alignment="CENTER" spacing="10" fillWidth="false" HBox.hgrow="ALWAYS" minHeight="0">
+                                    <Label styleClass="progress-label" text="Weeklys" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <ProgressBar fx:id="weeklyProgress" progress="0" prefWidth="260" rotate="-90" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                </VBox>
                             </HBox>
                         </VBox>
 
-                        <VBox fx:id="tasksCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
-                            <Label id="tasksTitle" styleClass="card-title centered-title" text="Quest Challenges" />
-                            <ListView fx:id="questTasks" focusTraversable="false" onMouseClicked="#OnQuestTaskClick" prefHeight="270" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        <!-- Row 2, Col 1: Your quests (copied from Quest.fxml historyCard) -->
+                        <VBox fx:id="historyCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label styleClass="card-title" text="Your quests" />
+                            <Label styleClass="page-subtitle" text="Select a quest to read its story." />
+                            <ListView fx:id="questHistory" focusTraversable="false" prefHeight="280" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
 
-
-                    </GridPane>
-
-                    <GridPane fx:id="lowerGrid" hgap="12" vgap="12">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="65" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="35" />
-                        </columnConstraints>
-
-                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="0">
-                            <Label id="progressTitle" styleClass="card-title centered-title" text="Your Progress" />
-                            <BarChart fx:id="progressChart" legendVisible="false" animated ="false" styleClass="progress-chart" prefHeight="230">
-                                <xAxis>
-                                    <CategoryAxis side = "BOTTOM" tickLabelFill ="white"/>
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis side = "LEFT" lowerBound = "0" upperBound = "1" tickUnit="0.2"
-                                                tickLabelsVisible="false" tickMarkVisible="false" minorTickVisible="false"/>
-                                </yAxis>
-                            </BarChart>
+                        <!-- Row 2, Col 2: This week's challenge (copied from Quest.fxml challengeCard) -->
+                        <VBox fx:id="challengeCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label styleClass="card-title" text="This week's challenge" />
+                            <Label fx:id="challengeLabel" styleClass="lore-body" wrapText="true" text="Your challenge will appear here once a quest is active." />
                         </VBox>
-
-                        <VBox fx:id="dailiesCard" spacing="10" styleClass="card" GridPane.columnIndex="1">
-                            <Label id="dailiesTitle" styleClass="card-title centered-title" text="Weekly Tasks" />
-                            <ListView fx:id="weeklyTasks" focusTraversable="false" onMouseClicked="#OnWeeklyTaskClick" prefHeight="230" styleClass="task-list" VBox.vgrow="ALWAYS" />
-                        </VBox>
-
                     </GridPane>
                 </VBox>
             </content>

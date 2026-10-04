@@ -21,12 +21,14 @@ public class UserQuest {
     private String reflection;
     private String reflectionStatus;
 
+    private String reactionType;
+
     public UserQuest(int labourId, String accountEmail, float percentageComplete, String status){
-        this(labourId, accountEmail, percentageComplete, status, "", "Not Started");
+        this(labourId, accountEmail, percentageComplete, status, "", "Not Started", "");
     }
 
     public UserQuest(int labourId, String accountEmail, float percentageComplete, String status,
-                     String reflection, String reflectionStatus){
+                     String reflection, String reflectionStatus, String reactionType){
         if (labourId <= 0){
             throw new IllegalArgumentException("Labour Id is null");
         }
@@ -46,6 +48,7 @@ public class UserQuest {
         this.status = status;
         this.reflection = ApplicationManager.isEmpty(reflection) ? "" : reflection;
         this.reflectionStatus = ApplicationManager.isEmpty(reflectionStatus) ? "Not Started" : reflectionStatus;
+        this.reactionType = ApplicationManager.isEmpty(reactionType) ? "" : reactionType;
     }
 
     public int getLabourId() {
@@ -72,6 +75,10 @@ public class UserQuest {
         return reflectionStatus;
     }
 
+    public String getReactionType() {return reactionType;}
+
+    public void setReactionType(String reactionType){this.reactionType = reactionType;}
+
     public void setPercentageComplete(float percentageComplete) {
         this.percentageComplete = percentageComplete;
     }
@@ -87,4 +94,5 @@ public class UserQuest {
     public void setReflectionStatus(String reflectionStatus) {
         this.reflectionStatus = reflectionStatus;
     }
+
 }

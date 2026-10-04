@@ -6,6 +6,7 @@ import com.example.personalityquest.DAO.quest.QuestOptionDAO;
 import com.example.personalityquest.DAO.quest.ReflectionPromptDAO;
 import com.example.personalityquest.Model.quest.*;
 import com.example.personalityquest.Services.chat.ReflectionFeedbackService;
+import com.example.personalityquest.Services.quest.JournalEntryService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
@@ -43,17 +44,23 @@ public class QuestViewerController implements Initializable {
     @FXML
     private ProgressBar storylineProgress;
     @FXML
-    private Label reactionQuestionLabel, reactionFeedbackLabel;
+    private Label reactionQuestionLabel;
     @FXML
     private VBox reactionOptionsBox;
     @FXML
     private Label challengeDetailsLabel;
     @FXML
+    private Label challengeOverviewLabel;
+    @FXML
     private Label reflectionPromptLabel;
+    @FXML
+    private Label reflectionOverviewLabel;
     @FXML
     private Button challengeJournalButton;
     @FXML
     private Label challengeJournalFeedbackLabel;
+    @FXML
+    private TextArea challengeJournalEntryArea;
     @FXML
     private TextArea reflectionEntryArea;
     @FXML
@@ -79,7 +86,7 @@ public class QuestViewerController implements Initializable {
 
     private static final String FLASHING_TAB = "flashing-tab";
 
-    private Timeline storylineFlashTimeline;
+    private Timeline reactionFlashTimeline;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -100,30 +107,37 @@ public class QuestViewerController implements Initializable {
 
     @FXML
     private void OnAddToJournal(){
-        challengeVisited = true;
-        challengeJournalButton.setDisable(true);
-        challengeJournalFeedbackLabel.setText("Added to your journal");
-        UpdateTabLocks();
-
         String email = ApplicationManager.CurrentAccount.getCurrentEmail();
-        if (ApplicationManager.isEmpty(email)) {
+        if (ApplicationManager.isEmpty(email) || activeUserQuest == null || selectedReaction == null) {
+            return;
+        }
+
+        String focusText = challengeJournalEntryArea.getText();
+        focusText = focusText == null ? "" : focusText.trim();
+        if (focusText.isEmpty()) {
+            challengeJournalFeedbackLabel.setText("Write your challenge focus before adding to journal.");
             return;
         }
 
         try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
-            if (userQuest == null) {
-                return;
-            }
+            List<Task> tasks = TaskService.GetTasksForLabourIdAndReactionType(
+                    activeUserQuest.getLabourId(), selectedReaction.name());
+            Task task = tasks.isEmpty() ? null : tasks.get(0);
+            String title = task == null ? "Challenge" : task.getName();
 
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
-            if (quest == null) {
-                return;
-            }
+            JournalEntryService.AddChallengeEntry(email, activeUserQuest.getLabourId(), title, focusText);
+            boolean wasAlreadyVisited = challengeVisited;
+            challengeVisited = true;
+            challengeJournalFeedbackLabel.setText(wasAlreadyVisited ? "Updated your journal entry" : "Added to your journal");
+            UpdateTabLocks();
+            navBarController.FlashTasksButtonOnce();
 
-            ShowResolutionIfAvailable(quest);
+            Quest quest = QuestService.GetQuestForLabourId(activeUserQuest.getLabourId());
+            if (quest != null) {
+                ShowResolutionIfAvailable(quest, !wasAlreadyVisited);
+            }
         } catch (Exception exception) {
-            // No resolution available right now; the challenge details are still shown.
+            challengeJournalFeedbackLabel.setText("Could not save this to your journal right now.");
         }
     }
 
@@ -132,11 +146,11 @@ public class QuestViewerController implements Initializable {
 
         if (tab == Tab.STORYLINE) {
             LoadStoryline();
-            StopStorylineFlash();
         }
 
         if (tab == Tab.REACTION) {
             LoadReaction();
+            StopReactionFlash();
         }
 
         if (tab == Tab.CHALLENGE) {
@@ -220,14 +234,13 @@ public class QuestViewerController implements Initializable {
         storylineDescriptionLabel.setText(message);
         storylineProgress.setProgress(0);
         storylineProgressLabel.setText("0% complete");
-        resolutionCard.setVisible(false);
-        resolutionCard.setManaged(false);
     }
 
     private void LoadReaction() {
         reactionOptionsBox.getChildren().clear();
-        reactionFeedbackLabel.setText("");
         selectedReaction = null;
+        resolutionCard.setVisible(false);
+        resolutionCard.setManaged(false);
 
         String email = ApplicationManager.CurrentAccount.getCurrentEmail();
         if (ApplicationManager.isEmpty(email)) {
@@ -237,6 +250,7 @@ public class QuestViewerController implements Initializable {
 
         try {
             UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            activeUserQuest = userQuest;
             if (userQuest == null) {
                 reactionQuestionLabel.setText("Complete the quiz to begin a labour.");
                 return;
@@ -257,13 +271,50 @@ public class QuestViewerController implements Initializable {
             String question = quest.getDecisionQuestion();
             reactionQuestionLabel.setText(ApplicationManager.isEmpty(question)
                     ? "In \"" + quest.getName() + "\", how would you react?"
-                    : question);
+                    : StripLeadingWhatWouldYouDo(question));
             for (QuestOption option : options) {
                 AddReactionOptionButton(option);
             }
+
+            // Restore a previously saved reaction so the Challenge tab stays unlocked
+            if (!ApplicationManager.isEmpty(userQuest.getReactionType())) {
+                try {
+                    selectedReaction = QuestOption.ReactionType.valueOf(userQuest.getReactionType());
+                } catch (IllegalArgumentException ignored) {
+                    selectedReaction = null;
+                }
+            }
+            if (selectedReaction != null) {
+                for (var node : reactionOptionsBox.getChildren()) {
+                    if (node.getUserData() instanceof QuestOption opt && opt.reactionType() == selectedReaction) {
+                        node.getStyleClass().add("selected");
+                    }
+                }
+                reactionAnswered = true;
+                UpdateTabLocks();
+            }
+
+            // Persist "How It Ended" in this tab once the challenge has been journaled, regardless
+            // of app restarts or screen changes. No flash here - the user is already on this tab.
+            if (JournalEntryService.HasAddedChallengeForLabour(email, quest.getLabourId())) {
+                ShowResolutionIfAvailable(quest, false);
+            }
+
         } catch (Exception exception) {
             reactionQuestionLabel.setText("Could not load your questline right now.");
         }
+    }
+
+    private String StripLeadingWhatWouldYouDo(String question) {
+        if (question == null) {
+            return "";
+        }
+        String trimmed = question.strip();
+        String[] lines = trimmed.split("\n", 2);
+        if (lines.length > 0 && lines[0].strip().equalsIgnoreCase("What would you do?")) {
+            return lines.length > 1 ? lines[1].strip() : "";
+        }
+        return trimmed;
     }
 
     private void AddReactionOptionButton(QuestOption option) {
@@ -279,9 +330,16 @@ public class QuestViewerController implements Initializable {
 
     private void SelectReaction(Button chosen, QuestOption option) {
         selectedReaction = option.reactionType();
+        try{
+            if (activeUserQuest != null) {
+                activeUserQuest = UserQuestService.SetUserQuestReactionType(
+                        activeUserQuest, ApplicationManager.CurrentAccount.getCurrentEmail(), selectedReaction.name());
+            }
+        } catch (Exception ignored){ // Non fatal
+        }
+
         reactionOptionsBox.getChildren().forEach(node -> node.getStyleClass().remove("selected"));
         chosen.getStyleClass().add("selected");
-        reactionFeedbackLabel.setText("Recorded as: " + selectedReaction);
 
         reactionAnswered = true;
         UpdateTabLocks();
@@ -300,6 +358,7 @@ public class QuestViewerController implements Initializable {
                 challengeDetailsLabel.setText("Complete the quiz to begin a labour.");
                 return;
             }
+            activeUserQuest = userQuest;
 
             Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
             if (quest == null) {
@@ -313,13 +372,40 @@ public class QuestViewerController implements Initializable {
             }
 
             List<Task> tasks = TaskService.GetTasksForLabourIdAndReactionType(quest.getLabourId(), selectedReaction.name());
-            String details =TaskService.JoinTaskDetails(tasks);
+            Task task = tasks.isEmpty() ? null : tasks.get(0);
+            String details = TaskService.JoinTaskDetails(tasks);
             challengeDetailsLabel.setText(details.isEmpty()
                     ? "No tasks are stored for this labour yet."
                     : details);
+            challengeOverviewLabel.setText(task == null ? "" : task.getOverview());
+
+            challengeVisited = JournalEntryService.HasAddedChallengeForLabour(email, userQuest.getLabourId());
+            challengeJournalFeedbackLabel.setText(challengeVisited ? "Added to your journal" : "");
+            challengeJournalEntryArea.setText(FindExistingChallengeEntryText(email, userQuest.getLabourId(), task));
+            UpdateTabLocks();
         } catch (Exception exception){
             challengeDetailsLabel.setText("Could not load your challenge right now.");
         }
+    }
+
+    private String FindExistingChallengeEntryText(String email, int labourId, Task task) {
+        try {
+            List<JournalEntry> entries = JournalEntryService.GetChallengesForEmail(email);
+            for (JournalEntry entry : entries) {
+                if (entry.getLabourId() != null && entry.getLabourId() == labourId) {
+                    String body = entry.getBody() == null ? "" : entry.getBody();
+                    // Older saves stored the task's own description as the body. Treat that
+                    // as "nothing written yet" rather than showing it back as the user's text.
+                    if (task != null && body.equalsIgnoreCase(task.getDescription())) {
+                        return "";
+                    }
+                    return body;
+                }
+            }
+        } catch (Exception ignored) {
+            // No existing entry available - leave the focus area blank
+        }
+        return "";
     }
 
     private void LoadReflection() {
@@ -369,16 +455,17 @@ public class QuestViewerController implements Initializable {
             reflectionPromptLabel.setText(matched != null
                     ? matched.prompt()
                     : "No reflection prompt is stored for your reaction yet");
+            reflectionOverviewLabel.setText(matched != null && matched.overview() != null ? matched.overview() : "");
 
             activeUserQuest = userQuest;
             boolean finished = "Finished".equalsIgnoreCase(activeUserQuest.getReflectionStatus());
             reflectionEntryArea.setText(userQuest.getReflection() == null ? "" : activeUserQuest.getReflection());
             reflectionEntryArea.setDisable(false);
-            reflectionDraftButton.setDisable(finished);
-            reflectionSubmitButton.setDisable(finished);
-            reflectionSubmitButton.setText(finished ? "Submitted" : "Submit");
+            reflectionDraftButton.setDisable(false);
+            reflectionSubmitButton.setDisable(false);
+            reflectionSubmitButton.setText(finished ? "Update Submission" : "Submit");
             reflectionFeedbackButton.setDisable(false);
-            reflectionStatusLabel.setText(finished ? "This reflection has already been submitted." : "");
+            reflectionStatusLabel.setText(finished ? "Submitted - you can still edit and resubmit." : "");
             ShowStoredQuestFeedback(activeUserQuest.getAccountEmail(), activeUserQuest.getLabourId());
 
         } catch (Exception exception){
@@ -439,9 +526,8 @@ public class QuestViewerController implements Initializable {
         try {
             activeUserQuest = UserQuestService.UpdateQuestReflectionToBeFinished(
                     activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
-            reflectionDraftButton.setDisable(true);
-            reflectionSubmitButton.setDisable(true);
-            reflectionSubmitButton.setText("Submitted");
+            reflectionSubmitButton.setText("Update Submission");
+            navBarController.FlashTasksButtonOnce();
             RequestAiFeedback(reflection, "Reflection submitted. Generating AI feedback...");
         } catch (Exception exception) {
             reflectionStatusLabel.setText("Could not submit this reflection right now.");
@@ -515,22 +601,24 @@ public class QuestViewerController implements Initializable {
         return reflection == null ? "" : reflection.trim();
     }
 
-    private void ShowResolutionIfAvailable(Quest quest) {
+    private void ShowResolutionIfAvailable(Quest quest, boolean flash) {
         String resolution = quest.getResolution();
         if (!ApplicationManager.isEmpty(resolution)) {
             resolutionLabel.setText(resolution);
             resolutionCard.setVisible(true);
             resolutionCard.setManaged(true);
-            StartStorylineFlash();
+            if (flash) {
+                StartReactionFlash();
+            }
         }
     }
 
-    private void StartStorylineFlash() {
-        StopStorylineFlash();
-        storylineFlashTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.5), event -> ToggleStyleClass(storylineTabButton, FLASHING_TAB)));
-        storylineFlashTimeline.setCycleCount(Timeline.INDEFINITE);
-        storylineFlashTimeline.play();
+    private void StartReactionFlash() {
+        StopReactionFlash();
+        reactionFlashTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), event -> ToggleStyleClass(reactionTabButton, FLASHING_TAB)));
+        reactionFlashTimeline.setCycleCount(Timeline.INDEFINITE);
+        reactionFlashTimeline.play();
     }
 
     public void ToggleStyleClass(Button button, String styleClass) {
@@ -541,12 +629,12 @@ public class QuestViewerController implements Initializable {
         }
     }
 
-    private void StopStorylineFlash() {
-        if (storylineFlashTimeline != null) {
-            storylineFlashTimeline.stop();
-            storylineFlashTimeline = null;
+    private void StopReactionFlash() {
+        if (reactionFlashTimeline != null) {
+            reactionFlashTimeline.stop();
+            reactionFlashTimeline = null;
         }
-        storylineTabButton.getStyleClass().remove(FLASHING_TAB);
+        reactionTabButton.getStyleClass().remove(FLASHING_TAB);
     }
 
 

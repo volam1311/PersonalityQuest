@@ -28,6 +28,7 @@ public class MainApplication extends Application {
             UserQuestDAO.EnsureTables();
             TaskDAO.EnsureTables();
             TaskDAO.PopulateChallenges();
+            JournalEntryDAO.EnsureTables();
         } catch (Exception exception) {
             exception.printStackTrace();
         }

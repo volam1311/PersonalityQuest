@@ -138,6 +138,19 @@
     -fx-text-fill: #140e25;
 }
 
+.nav-button.nav-flash {
+    -fx-background-color: #ffcf6b;
+    -fx-background-insets: 0;
+}
+
+.nav-button.nav-flash .nav-label {
+    -fx-text-fill: #140e25;
+}
+
+.nav-button.nav-flash .material-symbol {
+    -fx-fill: #140e25;
+}
+
 .nav-button.selected-nav-button .material-symbol,
 .profile-button.selected-nav-button .material-symbol,
 .profile-button.selected-nav-button .material-symbol {

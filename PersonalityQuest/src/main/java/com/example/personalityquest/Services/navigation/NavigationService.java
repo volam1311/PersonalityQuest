@@ -61,7 +61,7 @@ public class NavigationService {
             case QUIZ -> "Archetype Quiz";
             case QUIZ_RESULT -> "Your Archetype";
             case SETTINGS -> "Settings";
-            case TASKS -> "Tasks";
+            case TASKS -> "Journal";
             case UPDATE_ACCOUNT_PASSWORD -> "Update Password";
             case UPDATE_PERSONAL_DETAILS -> "Update Details";
             case WEEKLY_TASK_REFLECTION -> "Weekly Reflection";

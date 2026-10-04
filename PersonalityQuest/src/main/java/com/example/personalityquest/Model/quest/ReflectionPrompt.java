@@ -6,8 +6,7 @@ package com.example.personalityquest.Model.quest;
  * choice the user makes.
  */
 
-public record ReflectionPrompt(int reflectionId, int labourId, String reactionType, String prompt) {
-
+public record ReflectionPrompt(int reflectionId, int labourId, String reactionType, String name, String prompt, String overview) {
     public ReflectionPrompt {
         if (prompt == null || prompt.isBlank()) {
             throw new IllegalArgumentException("Reflection prompt text is empty");
@@ -16,5 +15,4 @@ public record ReflectionPrompt(int reflectionId, int labourId, String reactionTy
             throw new IllegalArgumentException("Labour ID is invalid");
         }
     }
-
 }

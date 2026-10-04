@@ -2,27 +2,17 @@ package com.example.personalityquest.Controllers.quest;
 
 import com.example.personalityquest.Controllers.navigation.NavBarController;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.Model.quest.Quest;
-import com.example.personalityquest.Model.quest.Task;
-import com.example.personalityquest.Model.quest.UserQuest;
-import com.example.personalityquest.Model.quest.WeeklyTask;
+import com.example.personalityquest.DAO.quest.ReflectionPromptDAO;
+import com.example.personalityquest.Model.quest.*;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.chat.ReflectionFeedbackService;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import com.example.personalityquest.Services.profile.StreakService;
-import com.example.personalityquest.Services.quest.QuestService;
-import com.example.personalityquest.Services.quest.TaskService;
-import com.example.personalityquest.Services.quest.UserQuestService;
-import com.example.personalityquest.Services.quest.WeeklyTaskService;
+import com.example.personalityquest.Services.quest.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -70,23 +60,32 @@ public class TasksController implements Initializable {
     private VBox aiFeedbackCard;
     @FXML
     private Button draftButton, submitButton, feedbackButton;
+    @FXML
+    private Label questTitleLabel, questProgressLabel;
+    @FXML
+    private ProgressBar questProgress;
+    @FXML
+    private ListView<ChallengeListItem> questChallengesList;
+    @FXML
+    private ListView<ReflectionListItem> questReflectionsList;
 
+    private record ChallengeListItem(JournalEntry entry, Quest quest, Task task){}
+    private record ReflectionListItem(UserQuest userQuest, Quest quest, ReflectionPrompt prompt){}
     private WeeklyTask taskToSelect;
     private boolean updatingSelection;
     private boolean generatingFeedback;
     private int feedbackRequestId;
 
+    private boolean updatingJournalSelection;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
-        ConfigureWeeklyTaskList();
-        ConfigureQuestTaskList();
-        LoadTasks();
-
-        tasksRoot.widthProperty().addListener((observable, oldWidth, newWidth) ->
-                ApplyResponsiveLayout(newWidth.doubleValue()));
-
-        Platform.runLater(() -> ApplyResponsiveLayout(tasksRoot.getWidth()));
+        ConfigureQuestChallengesList();
+        ConfigureQuestReflectionsList();
+        PopulateActiveQuestHeader();
+        LoadQuestChallenges();
+        LoadQuestReflections();
     }
 
     public void selectTask(WeeklyTask weeklyTask) {
@@ -274,6 +273,23 @@ public class TasksController implements Initializable {
         submitButton.setText("Submit");
         feedbackButton.setDisable(true);
         feedbackLabel.setText("Reflections are submitted from weekly practices, not storyline quest tasks.");
+        HideAiFeedback();
+    }
+
+    private void ShowJournalChallenge(ChallengeListItem item){
+        JournalEntry entry = item.entry();
+        String questName = item.quest() == null ? "Quest challenge" : item.quest().getName();
+        taskTitleLabel.setText(item.task() == null ? entry.getTitle() : item.task().getName());
+        questLabel.setText(questName);
+        descriptionLabel.setText(entry.getBody());
+        progressBox.setSelected(true);
+        reflectionArea.clear();
+        reflectionArea.setDisable(true);
+        draftButton.setDisable(true);
+        submitButton.setDisable(true);
+        submitButton.setText("Submit");
+        feedbackButton.setDisable(true);
+        feedbackLabel.setText("");
         HideAiFeedback();
     }
 
@@ -640,4 +656,205 @@ public class TasksController implements Initializable {
             return "Weekly task";
         }
     }
+
+    private void PopulateActiveQuestHeader(){
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        try {
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            if (userQuest == null) {
+                questTitleLabel.setText("No active quest");
+                questProgress.setProgress(0);
+                questProgressLabel.setText("0% Complete");
+                return;
+            }
+            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
+            questTitleLabel.setText(quest.getName() + " (" +archetypeName + ")");
+            questProgress.setProgress(userQuest.getPercentageComplete());
+            questProgressLabel.setText(String.format("%.0f%% Complete", userQuest.getPercentageComplete() *100));
+        } catch (Exception exception) {
+            questTitleLabel.setText("No active quest");
+            questProgress.setProgress(0);
+            questProgressLabel.setText("0% Complete");
+        }
+    }
+    private void ConfigureQuestChallengesList() {
+        questChallengesList.setPlaceholder(new Label("Add a challenge to your journal from the Quest Viewer"));
+        questChallengesList.setCellFactory(list -> new ListCell<>() {
+            private final CheckBox doneBox = new CheckBox();
+            private final Region spacer = new Region();
+            private final Label nameLabel = new Label();
+            private final HBox header = new HBox(8, nameLabel, spacer, doneBox);
+            private final Label overviewLabel = new Label();
+            private final VBox row = new VBox(4, header, overviewLabel);
+
+            {
+                row.getStyleClass().add("labour-task-row");
+                nameLabel.getStyleClass().add("labour-task-name");
+                overviewLabel.getStyleClass().add("labour-task-detail");
+                nameLabel.setWrapText(true);
+                overviewLabel.setWrapText(true);
+                HBox.setHgrow(nameLabel, Priority.ALWAYS);
+                doneBox.setMouseTransparent(true);
+                doneBox.setFocusTraversable(false);
+                doneBox.getStyleClass().add("labour-task-check");
+                row.maxWidthProperty().bind(questChallengesList.widthProperty().subtract(24));
+            }
+
+            @Override
+            protected void updateItem(ChallengeListItem item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+                nameLabel.setText(item.task() == null ? item.entry().getTitle() : item.task().getName());
+                overviewLabel.setText(item.task() == null ? "" : item.task().getOverview());
+                doneBox.setSelected(true);
+                setText(null);
+                setGraphic(row);
+            }
+        });
+
+        questChallengesList.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldItem, newItem) -> {
+                    if (updatingJournalSelection || newItem == null) return;
+                    updatingJournalSelection = true;
+                    questReflectionsList.getSelectionModel().clearSelection();
+                    updatingJournalSelection = false;
+                    ShowJournalChallenge(newItem);
+                });
+    }
+
+    private void LoadQuestChallenges(){
+        questChallengesList.getItems().clear();
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        if (ApplicationManager.isEmpty(email)) return;
+
+        try {
+            for (JournalEntry entry : JournalEntryService.GetChallengesForEmail(email)) {
+                Quest quest = QuestService.GetQuestForLabourId(entry.getLabourId());
+                Task task = FindChallengeTask(email, entry.getLabourId());
+                questChallengesList.getItems().add(new ChallengeListItem(entry, quest, task));
+            }
+        } catch (Exception exception) {
+            System.err.println("Could not load quest challenges" + exception.getMessage());
+        }
+    }
+
+    private Task FindChallengeTask(String email, int labourId) {
+        try {
+            UserQuest userQuest = UserQuestService.GetUserQuestForEmailAndLabourId(email, labourId);
+            if (userQuest == null || ApplicationManager.isEmpty(userQuest.getReactionType())) return null;
+            List<Task> tasks = TaskService.GetTasksForLabourIdAndReactionType(labourId, userQuest.getReactionType());
+            return tasks.isEmpty() ? null : tasks.get(0);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private void LoadQuestReflections(){
+        questReflectionsList.getItems().clear();
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        if (ApplicationManager.isEmpty(email)) return;
+
+        try {
+            for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {
+                if (ApplicationManager.isEmpty(userQuest.getReactionType())) continue; // quest not started yet
+                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+                ReflectionPrompt prompt = FindReflectionPrompt(userQuest);
+                questReflectionsList.getItems().add(new ReflectionListItem(userQuest, quest, prompt));
+            }
+            // TODO: append standalone journal entry
+        } catch (Exception exception) {
+            System.err.println("Could not load quest reflections" + exception.getMessage());
+        }
+    }
+
+    private ReflectionPrompt FindReflectionPrompt(UserQuest userQuest) {
+        try {
+            List<ReflectionPrompt> prompts = ReflectionPromptDAO.GetReflectionPromptsForLabourId(userQuest.getLabourId());
+            for (ReflectionPrompt prompt : prompts) {
+                if (userQuest.getReactionType().equalsIgnoreCase(prompt.reactionType())) {
+                    return prompt;
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    @FXML
+    private void OnWriteNewReflection(){
+        questReflectionsList.getSelectionModel().clearSelection();
+        questChallengesList.getSelectionModel().clearSelection();
+        ShowEmptyDetail("Write a new refleciton, not tied to a specific quest.");
+        reflectionArea.setDisable(false);
+        // Add full save to journal entries
+    }
+
+
+    private void ConfigureQuestReflectionsList(){
+        questReflectionsList.setPlaceholder(new Label("No reflections yet"));
+        questReflectionsList.setCellFactory(list -> new ListCell<>() {
+            private final CheckBox doneBox = new CheckBox();
+            private final Region spacer = new Region();
+            private final Label nameLabel = new Label();
+            private final HBox header = new HBox(8, nameLabel, spacer, doneBox);
+            private final Label overviewLabel = new Label();
+            private final VBox row = new VBox(4, header, overviewLabel);
+
+            {
+                row.getStyleClass().add("labour-task-row");
+                nameLabel.getStyleClass().add("labour-task-name");
+                overviewLabel.getStyleClass().add("labour-task-detail");
+                nameLabel.setWrapText(true);
+                overviewLabel.setWrapText(true);
+                HBox.setHgrow(nameLabel, Priority.ALWAYS);
+                doneBox.setMouseTransparent(true);
+                doneBox.setFocusTraversable(false);
+                doneBox.getStyleClass().add("labour-task-check");
+                row.maxWidthProperty().bind(questReflectionsList.widthProperty().subtract(24));
+            }
+
+            @Override
+            protected void updateItem(ReflectionListItem item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null){
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+                nameLabel.setText(item.prompt() == null ? "Reflection" : item.prompt().name());
+                overviewLabel.setText(item.prompt() == null ? "" : item.prompt().overview());
+                doneBox.setSelected("Finished".equalsIgnoreCase(item.userQuest().getReflectionStatus()));
+                setText(null);
+                setGraphic(row);
+            }
+        });
+
+        questReflectionsList.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldItem, newItem) -> {
+                    if (updatingJournalSelection || newItem == null) return;
+                    updatingJournalSelection = true;
+                    questChallengesList.getSelectionModel().clearSelection();
+                    updatingJournalSelection = false;
+                    ShowReflection(newItem);
+                });
+    }
+
+private void ShowReflection(TasksController.ReflectionListItem item){
+    String questName = item.quest() == null ? "General" : item.quest().getName();
+    taskTitleLabel.setText(item.prompt() == null ? "Reflection" : item.prompt().name());
+    questLabel.setText("Quest reflection · " + questName);
+    descriptionLabel.setText(item.prompt() == null ? "Reflection prompt not available yet." : item.prompt().prompt());
+    progressBox.setSelected("Finished".equalsIgnoreCase(item.userQuest().getReflectionStatus()));
+    String answer = item.userQuest().getReflection();
+    reflectionArea.setText(ApplicationManager.isEmpty(answer) ? "" : answer);
+    reflectionArea.setDisable(false);
+}
+
+
+
 }

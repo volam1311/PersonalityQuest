@@ -18,6 +18,7 @@ public class UserQuestDAO {
             status TEXT NOT NULL,
             reflection TEXT NOT NULL DEFAULT '',
             reflectionStatus TEXT NOT NULL DEFAULT 'Not Started',
+            reactionType TEXT NOT NULL DEFAULT '',
             PRIMARY KEY (accountEmail, labourId)
             )
             """;
@@ -29,6 +30,7 @@ public class UserQuestDAO {
         }
         AddColumnIfMissing("reflection", "TEXT NOT NULL DEFAULT ''");
         AddColumnIfMissing("reflectionStatus", "TEXT NOT NULL DEFAULT 'Not started'");
+        AddColumnIfMissing("reactionType", "TEXT NOT NULL DEFAULT ''");
     }
 
     private static void AddColumnIfMissing(String columnName, String definition) {
@@ -72,7 +74,8 @@ public class UserQuestDAO {
                     rs.getFloat("percentageComplete"),
                     rs.getString("status"),
                     rs.getString("reflection"),
-                    rs.getString("reflectionStatus")
+                    rs.getString("reflectionStatus"),
+                    rs.getString("reactionType")
             );
         }
 
@@ -109,7 +112,8 @@ public class UserQuestDAO {
                         rs.getFloat("percentageComplete"),
                         rs.getString("status"),
                         rs.getString("reflection"),
-                        rs.getString("reflectionStatus")
+                        rs.getString("reflectionStatus"),
+                        rs.getString("reactionType")
                 ));
             }
             return quests;
@@ -268,7 +272,10 @@ public class UserQuestDAO {
                     rs.getInt("labourId"),
                     rs.getString("accountEmail"),
                     rs.getFloat("percentageComplete"),
-                    rs.getString("status")
+                    rs.getString("status"),
+                    rs.getString("reflection"),
+                    rs.getString("reflectionStatus"),
+                    rs.getString("reactionType")
             );
         }
 
@@ -324,5 +331,21 @@ public class UserQuestDAO {
             statement.executeUpdate();
         }
 
+    }
+
+    private static final String SQL_UPDATE_REACTION_TYPE = """
+            UPDATE UserQuests
+            Set reactionType = ?
+            WHERE accountEmail = ? AND labourId = ?
+            """;
+
+    public static void UpdateUserQuestReactionType(UserQuest quest, String email, String reactionType) throws SQLException {
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_REACTION_TYPE)){
+            statement.setString(1, reactionType);
+            statement.setString(2, email);
+            statement.setInt(3, quest.getLabourId());
+            statement.executeUpdate();
+        }
     }
 }

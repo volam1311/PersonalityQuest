@@ -176,3 +176,45 @@
     -fx-text-fill: #f4f0ff;
     -fx-line-spacing: 3px;
 }
+
+.compact-button {
+    -fx-min-height: 28px;
+    -fx-pref-height: 28px;
+    -fx-font-size: 12px;
+    -fx-padding: 2 14 2 14;
+}
+.labour-task-check { -fx-padding: 0; }
+.labour-task-check .box {
+    -fx-min-width: 22; -fx-min-height: 22;
+    -fx-pref-width: 22; -fx-pref-height: 22;
+}
+.labour-task-check:selected .box,
+.labour-task-check:disabled:selected .box { -fx-background-color: #8860dd; -fx-opacity: 1; }
+.labour-task-check:selected .mark,
+.labour-task-check:disabled:selected .mark { -fx-background-color: #ffffff; -fx-opacity: 1; }
+
+.detail-description-scroll,
+.detail-description-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.detail-description-scroll {
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.detail-description-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.detail-description-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #8460df;
+    -fx-background-radius: 6;
+}
+
+.detail-description-scroll .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+}

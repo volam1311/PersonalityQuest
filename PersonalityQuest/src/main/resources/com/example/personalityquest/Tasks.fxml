@@ -12,78 +12,102 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.control.ProgressBar?>
 <BorderPane fx:id="tasksRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css, @css/tasks.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.quest.TasksController">
     <left>
         <fx:include fx:id="navBar" source="NavBar.fxml" />
     </left>
 
     <center>
-        <ScrollPane fx:id="contentScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
-            <content>
-                <VBox fx:id="contentContainer" spacing="18" styleClass="content-container">
-                    <padding>
-                        <Insets bottom="24" left="24" right="24" top="24" />
-                    </padding>
+        <VBox spacing="12" styleClass="content-container">
+            <padding>
+                <Insets bottom="24" left="24" right="24" top="24" />
+            </padding>
 
-                    <VBox spacing="6">
-                        <Label styleClass="page-title" text="Tasks" />
-                        <Label fx:id="weekSummaryLabel" styleClass="page-subtitle" text="This week's practices, then the storyline tasks in your current labour." />
+            <VBox spacing="6">
+                <Label styleClass="page-title" text="Journal" />
+            </VBox>
+
+            <GridPane fx:id="tasksGrid" hgap="12" vgap="12" VBox.vgrow="ALWAYS">
+                <rowConstraints>
+                    <RowConstraints percentHeight="10.0" vgrow="ALWAYS" />
+                    <RowConstraints percentHeight="45.0" vgrow="ALWAYS" />
+                    <RowConstraints percentHeight="45.0" vgrow="ALWAYS" />
+                </rowConstraints>
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="40" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="60" />
+                </columnConstraints>
+
+                <!-- Row 0: Active Quest (spans both columns) -->
+                <VBox fx:id="activeQuestCard" spacing="8" styleClass="card quest-card"
+                      GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+                    <HBox alignment="BASELINE_LEFT" spacing="8">
+                        <Label styleClass="card-title" text="Active Quest:" />
+                        <Label fx:id="questTitleLabel" styleClass="quest-meta" text="No active quest" />
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <ProgressBar fx:id="questProgress" maxWidth="1.7976931348623157E308" progress="0" HBox.hgrow="ALWAYS" visible="false" managed="false" />
+                        <Label fx:id="questProgressLabel" styleClass="progress-label" text="0% Complete" />
+                    </HBox>
+                </VBox>
+
+                <!-- Row 1, Col 0: Quest Challenges -->
+                <VBox fx:id="questChallengesCard" spacing="10" styleClass="card"
+                      GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label styleClass="card-title centered-title" text="Quest Challenges" style="-fx-font-size: 24px; -fx-text-fill: #ffffff; -fx-font-weight: 900;" />
+                    <ListView fx:id="questChallengesList" focusTraversable="false" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                </VBox>
+
+                <!-- Row 2, Col 0: Quest Reflections -->
+                <VBox fx:id="questReflectionsCard" spacing="10" styleClass="card"
+                      GridPane.columnIndex="0" GridPane.rowIndex="2">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label styleClass="card-title centered-title" text="Reflections" style="-fx-font-size: 24px; -fx-text-fill: #ffffff; -fx-font-weight: 900;" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="writeNewReflectionButton" mnemonicParsing="false" onAction="#OnWriteNewReflection"
+                                styleClass="draft-button, compact-button" text="New Reflection" />
+                    </HBox>
+                    <ListView fx:id="questReflectionsList" focusTraversable="false" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                </VBox>
+
+                <!-- Col 1, Rows 1-2: Detail & Reflection panel -->
+                <VBox fx:id="detailCard" spacing="14" styleClass="card"
+                      GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                    <HBox alignment="TOP_RIGHT" spacing="12">
+                        <Label fx:id="taskTitleLabel" styleClass="page-title" text="Select a task" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <CheckBox fx:id="progressBox" disable="true" focusTraversable="false" mouseTransparent="true" styleClass="progress-check" />
+                    </HBox>
+                    <Label fx:id="questLabel" styleClass="quest-meta" text="Choose a quest challenge or reflection to read its details." wrapText="true" />
+                    <ScrollPane fx:id="descriptionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="detail-description-scroll" minHeight="0" prefHeight="0" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                        <content>
+                            <Label fx:id="descriptionLabel" styleClass="lore-body" wrapText="true" text="" />
+                        </content>
+                    </ScrollPane>
+
+                    <VBox spacing="8" minHeight="0" prefHeight="0" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                        <TextArea fx:id="reflectionArea" minHeight="0" prefHeight="0" maxHeight="1.7976931348623157E308" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
                     </VBox>
 
-                    <GridPane fx:id="tasksGrid" hgap="12" vgap="12">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="38" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="62" />
-                        </columnConstraints>
+                    <VBox fx:id="aiFeedbackCard" spacing="8" styleClass="ai-feedback-card" visible="false" managed="false">
+                        <Label styleClass="section-label" text="AI Feedback" />
+                        <ScrollPane fx:id="aiFeedbackScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" prefHeight="180" styleClass="ai-feedback-scroll">
+                            <content>
+                                <Label fx:id="aiFeedbackLabel" styleClass="ai-feedback-body" wrapText="true" text="" />
+                            </content>
+                        </ScrollPane>
+                    </VBox>
 
-                        <VBox fx:id="listsColumn" spacing="12" GridPane.columnIndex="0">
-                            <VBox fx:id="weekCard" spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
-                                <Label styleClass="card-title" text="Weekly Tasks" />
-                                <Label fx:id="weekRangeLabel" styleClass="page-subtitle" text="Your weekly assignments will appear here." />
-                                <ListView fx:id="weekTasks" focusTraversable="false" prefHeight="210" styleClass="task-list" VBox.vgrow="ALWAYS" />
-                            </VBox>
+                    <Label fx:id="feedbackLabel" styleClass="settings-feedback" wrapText="true" />
 
-                            <VBox fx:id="questTasksCard" spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
-                                <Label styleClass="card-title" text="Quest Tasks" />
-                                <Label fx:id="questTasksLabel" styleClass="page-subtitle" text="Storyline tasks in your current labour." />
-                                <ListView fx:id="questTasks" focusTraversable="false" prefHeight="210" styleClass="task-list" VBox.vgrow="ALWAYS" />
-                            </VBox>
-                        </VBox>
-
-                        <VBox fx:id="detailCard" spacing="14" styleClass="card" GridPane.columnIndex="1">
-                        <HBox alignment="TOP_RIGHT" spacing="12">
-                            <Label fx:id="taskTitleLabel" styleClass="page-title" text="Select a task" wrapText="true" HBox.hgrow="ALWAYS" />
-                            <CheckBox fx:id="progressBox" disable="true" focusTraversable="false" mouseTransparent="true" styleClass="progress-check" />
-                        </HBox>
-                            <Label fx:id="questLabel" styleClass="quest-meta" text="Choose a weekly or quest task to read its details." wrapText="true" />
-                            <Label fx:id="descriptionLabel" styleClass="lore-body" wrapText="true" text="" />
-
-                            <VBox spacing="8" VBox.vgrow="ALWAYS">
-                                <Label styleClass="section-label" text="Reflection" />
-                                <TextArea fx:id="reflectionArea" prefHeight="180" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
-                            </VBox>
-                            
-                            <VBox fx:id="aiFeedbackCard" spacing="8" styleClass="ai-feedback-card" visible="false" managed="false">
-                                <Label styleClass="section-label" text="AI Feedback" />
-                                <ScrollPane fx:id="aiFeedbackScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" prefHeight="180" styleClass="ai-feedback-scroll">
-                                    <content>
-                                        <Label fx:id="aiFeedbackLabel" styleClass="ai-feedback-body" wrapText="true" text="" />
-                                </content>
-                            </ScrollPane>
-                            </VBox>
-
-                            <Label fx:id="feedbackLabel" styleClass="settings-feedback" wrapText="true" />
-
-                            <HBox alignment="CENTER" spacing="12">
-                                <Button fx:id="feedbackButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get Feedback" HBox.hgrow="ALWAYS" />
-                                <Button fx:id="draftButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSaveDraft" styleClass="draft-button" text="Save Draft" HBox.hgrow="ALWAYS" />
-                                <Button fx:id="submitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" HBox.hgrow="ALWAYS" />
-                            </HBox>
-                        </VBox>
-                    </GridPane>
+                    <HBox alignment="CENTER" spacing="12">
+                        <Button fx:id="feedbackButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get Feedback" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="draftButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSaveDraft" styleClass="draft-button" text="Save Draft" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="submitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" HBox.hgrow="ALWAYS" />
+                    </HBox>
                 </VBox>
-            </content>
-        </ScrollPane>
+            </GridPane>
+        </VBox>
     </center>
 </BorderPane>

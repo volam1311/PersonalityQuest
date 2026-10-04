@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ecd2065c-e487-417d-9789-14a34beb0a55" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/JournalEntryDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Model/quest/JournalEntry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Services/quest/JournalEntryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/PersonalityQuest.db" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/PersonalityQuest.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Controllers/navigation/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Controllers/navigation/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Controllers/navigation/NavBarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Controllers/navigation/NavBarController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Controllers/quest/QuestViewerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Controllers/quest/QuestViewerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Controllers/quest/TasksController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Controllers/quest/TasksController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/QuestDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/QuestDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/ReflectionPromptDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/ReflectionPromptDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/TaskDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/TaskDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/UserQuestDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/UserQuestDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/MainApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Model/quest/ReflectionPrompt.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Model/quest/ReflectionPrompt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Model/quest/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Model/quest/Task.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Model/quest/UserQuest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Model/quest/UserQuest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Services/navigation/NavigationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Services/navigation/NavigationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Services/quest/UserQuestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/Services/quest/UserQuestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/Dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/Dashboard.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/NavBar.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/NavBar.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/QuestViewer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/QuestViewer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/Tasks.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/Tasks.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/css/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/css/dashboard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/css/quest.css" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/css/quest.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/css/tasks.css" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalityQuest/src/main/resources/com/example/personalityquest/css/tasks.css" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;dfitt10&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/volam1311/Team-Champions---CAB302.git&quot;,
+    &quot;accountId&quot;: &quot;369ec09d-e3d4-412a-81d8-6676a320c557&quot;
+  }
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0000000000000038" />
+      <entry key="S2" value="1.0003780307074734" />
+      <entry key="S5" value="1.0641663026373314" />
+      <entry key="S10" value="1.357631084468092" />
+      <entry key="S30" value="2.1263422512080017" />
+      <entry key="S60" value="2.5031669891564166" />
+      <entry key="M2" value="2.788206225107187" />
+      <entry key="M5" value="3.5171909996967345" />
+      <entry key="M10" value="5.503338542048462" />
+      <entry key="M15" value="9.018539780815265" />
+      <entry key="M30" value="30.55711550121933" />
+      <entry key="H1" value="114.6762958946572" />
+      <entry key="H2" value="357.59713870619225" />
+      <entry key="H4" value="898.9556564217319" />
+      <entry key="D1" value="3945.2683972904774" />
+      <entry key="W1" value="6135.532293483582" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="8.54502195140422E-149" />
+      <entry key="S10" value="1.283907343504841E-74" />
+      <entry key="S30" value="3.7016548625560075E-25" />
+      <entry key="S60" value="8.599752493222885E-13" />
+      <entry key="M2" value="1.3113883567731363E-6" />
+      <entry key="M5" value="0.006877176364123111" />
+      <entry key="M10" value="0.1405897689707061" />
+      <entry key="M15" value="0.46609345602970176" />
+      <entry key="M30" value="2.3500008603059572" />
+      <entry key="H1" value="9.505060729828198" />
+      <entry key="H2" value="30.148186054497984" />
+      <entry key="H4" value="73.88286098550384" />
+      <entry key="D1" value="272.88250439541497" />
+      <entry key="W1" value="393.39425104994" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9526379980439373" />
+      <entry key="MS500" value="0.9903428719330284" />
+      <entry key="S2" value="0.9979537786698449" />
+      <entry key="S5" value="1.06311635915311" />
+      <entry key="S10" value="1.3569229668281904" />
+      <entry key="S30" value="2.1259461938177835" />
+      <entry key="S60" value="2.502898589475382" />
+      <entry key="M2" value="2.787748605801374" />
+      <entry key="M5" value="3.5230856539400657" />
+      <entry key="M10" value="5.641839523883571" />
+      <entry key="M15" value="9.48069617078942" />
+      <entry key="M30" value="32.89650375188619" />
+      <entry key="H1" value="124.15896747381318" />
+      <entry key="H2" value="387.710820242855" />
+      <entry key="H4" value="972.7977326459678" />
+      <entry key="D1" value="4218.126563097754" />
+      <entry key="W1" value="6528.921534051889" />
+    </decayedShown>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3Hko9QOfbmD3LNFTNfI4omzZiGr" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AccountCreationApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.AccountSignInApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.DashboardApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LaunchApplicationMainFolder.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Launcher.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MainApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ProfileApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.QuestApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.QuizApplication.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AccountRepositoryTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in PersonalityQuest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.com.example.personalityquest in PersonalityQuest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.com.example.personalityquest.Applications in PersonalityQuest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.java in PersonalityQuest.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.PersonalityQuest [test].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;quest-viewer&quot;,
+    &quot;git.auto.fetch.suggestion.counter&quot;: &quot;1&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\danzo\IdeaProjects\Team-Champions---CAB302\docs\Quest context" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.LaunchApplicationMainFolder">
+    <configuration name="LaunchApplicationMainFolder" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.example.personalityquest.Launcher" />
+      <module name="PersonalityQuest" />
+      <option name="VM_PARAMETERS" value="-Dquiz.demo=true" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PersonalityQuest" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in PersonalityQuest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PersonalityQuest" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.example.personalityquest in PersonalityQuest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PersonalityQuest" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.personalityquest.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.personalityquest" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.example.personalityquest.Applications in PersonalityQuest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PersonalityQuest" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.personalityquest.Applications.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.personalityquest.Applications" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="java in PersonalityQuest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PersonalityQuest" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/PersonalityQuest/src/test/java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Python tests in test" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="PersonalityQuest" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PersonalityQuest/src/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/PersonalityQuest/src/test&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.LaunchApplicationMainFolder" />
+      <item itemvalue="JUnit.All in PersonalityQuest" />
+      <item itemvalue="JUnit.com.example.personalityquest.Applications in PersonalityQuest" />
+      <item itemvalue="JUnit.com.example.personalityquest in PersonalityQuest" />
+      <item itemvalue="JUnit.java in PersonalityQuest" />
+      <item itemvalue="Python tests.Python tests in test" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.com.example.personalityquest.Applications in PersonalityQuest" />
+        <item itemvalue="JUnit.java in PersonalityQuest" />
+        <item itemvalue="JUnit.All in PersonalityQuest" />
+        <item itemvalue="Python tests.Python tests in test" />
+        <item itemvalue="JUnit.com.example.personalityquest in PersonalityQuest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.337" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.8665.337" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ecd2065c-e487-417d-9789-14a34beb0a55" name="Changes" comment="" />
+      <created>1786421276303</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1786421276303</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="dev" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/documentation/flow_chart" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="*" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="dev" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="user">
+                    <value>
+                      <list>
+                        <option value="*" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/PersonalityQuest/src/main/java/com/example/personalityquest/DAO/quest/WeeklyTaskDAO.java</url>
+          <line>139</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

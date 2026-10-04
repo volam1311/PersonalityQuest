@@ -7,7 +7,7 @@ import com.example.personalityquest.ApplicationManager;
  * Quest tasks are storyline steps on a labour. 
  */
 public class Task {
-    public Task(int taskId, String name, String description, int labourId) throws Exception {
+    public Task(int taskId, String name, String description, String overview, int labourId) throws Exception {
         if (taskId == 0){
             throw new Exception("Task Id is == 0 or is null");
         }
@@ -28,12 +28,18 @@ public class Task {
         this.name = name;
         this.description = description;
         this.labourId = labourId;
+        this.overview = ApplicationManager.isEmpty(overview) ? "":overview;
+    }
+
+    public Task(int taskId, String name, String description, int labourId) throws Exception {
+        this(taskId, name, description, "", labourId);
     }
 
 
     private final int taskId;
     private final String name;
     private final String description;
+    private final String overview;
     private final int labourId;
 
     public int getTaskId(){
@@ -51,6 +57,8 @@ public class Task {
     public int getLabourId(){
         return this.labourId;
     }
+
+    public String getOverview(){return this.overview;}
 
     @Override
     public String toString() {

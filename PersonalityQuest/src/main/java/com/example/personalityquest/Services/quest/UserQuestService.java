@@ -211,4 +211,12 @@ public class UserQuestService {
 
         return SetUserQuesStatusAsActive(target, email);
     }
+
+    public static UserQuest SetUserQuestReactionType(UserQuest quest, String email, String reactionType) throws SQLException {
+        if (quest == null || ApplicationManager.isEmpty(reactionType) || ApplicationManager.isEmpty(email)){
+            throw new IllegalArgumentException("Quest or email is null");
+        }
+        UserQuestDAO.UpdateUserQuestReactionType(quest, email ,reactionType);
+        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());
+    }
 }

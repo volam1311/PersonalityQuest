@@ -82,11 +82,11 @@ public class QuestDAO {
 
     private static final String[] LABOUR_DECISION_QUESTIONS = {
             // 1  Innocent
-            "What would you do?\nThe hind is caught and bound across your shoulders. As you turn for home, Apollo appears at Artemis's side, angered that you have laid hands on her sacred beast. You will not abandon the labour — but how do you carry it through?",
+            "The hind is caught and bound across your shoulders. As you turn for home, Apollo appears at Artemis's side, angered that you have laid hands on her sacred beast. You will not abandon the labour — but how do you carry it through?",
             // 2  Everyman
-            "What would you do?\nAugeas has broken his word, and the dispute goes before the judges. You did the work fairly and in the open — but now a king's word stands against yours, and only Phyleus can confirm the truth. How do you carry it through?",
+            "Augeas has broken his word, and the dispute goes before the judges. You did the work fairly and in the open — but now a king's word stands against yours, and only Phyleus can confirm the truth. How do you carry it through?",
             // 3  Hero
-            "What would you do?\nYour arrows are useless and your club cannot pierce its hide. The lion turns on you, and the fear rises. Your weapons have failed — how do you meet it?",
+            "Your arrows are useless and your club cannot pierce its hide. The lion turns on you, and the fear rises. Your weapons have failed — how do you meet it?",
             "", // 4  Caregiver
             "", // 5  Magician
             "", // 6  Sage

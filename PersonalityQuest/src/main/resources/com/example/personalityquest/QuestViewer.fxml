@@ -51,6 +51,10 @@
                         <ProgressBar fx:id="storylineProgress" maxWidth="1.7976931348623157E308" progress="0" HBox.hgrow="ALWAYS" />
                         <Label fx:id="storylineProgressLabel" styleClass="progress-label" text="0% Complete" />
                     </HBox>
+                </VBox>
+                <VBox fx:id="reactionPane" spacing="16" styleClass="card quiz-card">
+                    <Label fx:id="reactionQuestionLabel" styleClass="quiz-question" wrapText="true" text="How would you react in this moment?" />
+                    <VBox fx:id="reactionOptionsBox" spacing="12" />
                     <VBox fx:id="resolutionCard" spacing="8" styleClass="resolution-card" visible="false" managed="false">
                         <Label styleClass="section-label" text="How It Ended" />
                         <ScrollPane fx:id="resolutionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll">
@@ -60,11 +64,6 @@
                         </ScrollPane>
                     </VBox>
                 </VBox>
-                <VBox fx:id="reactionPane" spacing="16" styleClass="card quiz-card">
-                    <Label fx:id="reactionQuestionLabel" styleClass="quiz-question" wrapText="true" text="How would you react in this moment?" />
-                    <VBox fx:id="reactionOptionsBox" spacing="12" />
-                    <Label fx:id="reactionFeedbackLabel" styleClass="quiz-feedback" wrapText="true" />
-                </VBox>
                 <VBox fx:id="challengePane" spacing="12" styleClass="card quest-card">
                     <Label styleClass="card-title" text="Challenge for this quest" />
                     <ScrollPane fx:id="challengeScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" prefHeight="160">
@@ -72,7 +71,8 @@
                             <Label fx:id="challengeDetailsLabel" styleClass="quest-description" wrapText="true" text="Your challenge will appear here once a quest is active." />
                         </content>
                     </ScrollPane>
-                    <TextArea fx:id="challengeJournalEntryArea" promptText="Write your journal entry here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
+                    <Label fx:id="challengeOverviewLabel" styleClass="quest-description" style="-fx-font-weight: bold;" wrapText="true" text="" />
+                    <TextArea fx:id="challengeJournalEntryArea" promptText="Write your challenge focus" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
                     <HBox alignment="CENTER_LEFT" spacing="12">
                         <Button fx:id="challengeJournalButton" mnemonicParsing="false" onAction="#OnAddToJournal" styleClass="pill-button" text="Add to Journal" />
                         <Label fx:id="challengeJournalFeedbackLabel" styleClass="quiz-feedback" wrapText="true" />
@@ -80,12 +80,13 @@
                 </VBox>
                 <VBox fx:id="reflectionPane" spacing="12" styleClass="card quest-card">
                     <Label styleClass="card-title" text="Reflection" />
-                    <ScrollPane fx:id="reflectionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" VBox.vgrow="ALWAYS">
+                    <ScrollPane fx:id="reflectionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" prefHeight="160">
                         <content>
                             <Label fx:id="reflectionPromptLabel" styleClass="quest-description" wrapText="true" text="Your reflection prompt will appear here once a quest is active." />
                         </content>
                     </ScrollPane>
-                    <TextArea fx:id="reflectionEntryArea" prefHeight="150" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" />
+                    <Label fx:id="reflectionOverviewLabel" styleClass="quest-description" style="-fx-font-weight: bold;" wrapText="true" text="" />
+                    <TextArea fx:id="reflectionEntryArea" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
 
                     <VBox fx:id="reflectionAiFeedbackCard" spacing="8" styleClass="ai-feedback-card" visible="false" managed="false">
                         <Label styleClass="section-label" text="AI Feedback" />

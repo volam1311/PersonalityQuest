@@ -5,63 +5,57 @@ import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.Task;
 import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quest.WeeklyTask;
-import com.example.personalityquest.Model.profile.UserProfile;
+import com.example.personalityquest.Model.quiz.Archetype;
+import com.example.personalityquest.Model.quiz.QuizResult;
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
-import com.example.personalityquest.Services.navigation.NavigationService;
-import com.example.personalityquest.Services.profile.AchievementService;
 import com.example.personalityquest.Services.profile.StreakService;
-import com.example.personalityquest.Services.profile.UserProfileService;
+import com.example.personalityquest.Services.quest.JournalEntryService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.Services.quest.WeeklyTaskService;
+import com.example.personalityquest.Services.quiz.QuizService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
-    private static final double STACKED_BREAKPOINT = 760;
-    private static final double FULL_PERCENT = 100;
-    private static final double HIDDEN_PERCENT = 0;
-    private static final double PRIMARY_CARD_PERCENT = 65;
-    private static final double SECONDARY_CARD_PERCENT = 35;
-    private static final double DEFAULT_QUEST_PROGRESS = 0.2;
-    private static final String DEFAULT_QUEST_PROGRESS_LABEL = "20% Complete";
-    private static final int RADAR_AXIS_COUNT = 5;
+
+    // ---- Archetype balance radar chart constants (copied from ProfileController) ----
+    private static final int RADAR_AXIS_COUNT = Archetype.values().length;
     private static final int RADAR_LEVEL_COUNT = 5;
     private static final double RADAR_CENTER_Y_OFFSET = 8;
-    private static final double RADAR_RADIUS_RATIO = 0.36;
-    private static final String[] RADAR_LABELS = {
-            "Quest progress",
-            "Weekly tasks",
-            "Streak",
-            "Labours complete",
-            "Tasks finished"
-    };
+    private static final double RADAR_RADIUS_RATIO = 0.26;
+    private static final String[] RADAR_LABELS = BuildRadarLabels();
+
+    private static String[] BuildRadarLabels() {
+        Archetype[] archetypes = Archetype.values();
+        String[] labels = new String[archetypes.length];
+        for (int index = 0; index < archetypes.length; index++) {
+            labels[index] = archetypes[index].getName();
+        }
+        return labels;
+    }
 
     @FXML
     private NavBarController navBarController;
@@ -70,31 +64,26 @@ public class DashboardController implements Initializable {
     @FXML
     private Label welcomeMessage, streakLabel;
     @FXML
-    private GridPane topGrid, lowerGrid;
+    private Canvas progressChart;
     @FXML
-    private VBox dailiesCard, progressCard, tasksCard;
+    private VBox progressCard, traitCard, historyCard, challengeCard, verticalProgressCard;
     @FXML
-    private ListView<WeeklyTask> weeklyTasks;
+    private HBox thermometerRow;
     @FXML
-    private ListView<Task> questTasks;
+    private Label traitLabel, reflectionPromptLabel, challengeLabel;
     @FXML
-    private ProgressBar questProgress;
+    private ListView<QuestListItem> questHistory;
     @FXML
-    private Label questTitleLabel, questProgressLabel, questDescriptionLabel;
-    @FXML
-    private BarChart<String, Number> progressChart;
+    private ProgressBar challengesProgress, reflectionsProgress, weeklyProgress;
 
     private double[] radarValues = new double[RADAR_AXIS_COUNT];
+    private boolean isRefreshingQuestline = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
-        ConfigureWeeklyTaskList(weeklyTasks);
-        ConfigureQuestTaskList(questTasks);
-        radarValues = LoadRadarValues();
-
-        dashboardRoot.widthProperty().addListener((observable, oldWidth, newWidth) ->
-                ApplyResponsiveLayout(newWidth.doubleValue()));
+        ConfigureHistoryList();
+        ConfigureResponsiveSizing();
 
         try {
             SetWelcome();
@@ -104,28 +93,111 @@ public class DashboardController implements Initializable {
             streakLabel.setText("Day 0");
         }
 
-        PopulateQuestline();
+        radarValues = QuizService.ArchetypeScores(
+                QuizService.LoadStoredResult(ApplicationManager.CurrentAccount.getCurrentEmail()));
 
-        try {
-            PopulateWeeklyTasks();
-        } catch (Exception exception) {
-            System.err.println("Could not load weekly tasks: " + exception.getMessage());
-        }
+        LoadQuestline();
+        UpdateThermometers();
 
-        PopulateQuestTasks();
-
-        Platform.runLater(() -> ApplyResponsiveLayout(dashboardRoot.getWidth()));
-        PopulateProgressChart();
+        Platform.runLater(this::DrawProgressGraph);
     }
 
-    private void PopulateProgressChart() {
-        XYChart.Series<String,Number> series = new XYChart.Series<>();
-        for (int i = 0; i < RADAR_AXIS_COUNT; i++) {
-            series.getData().add(new XYChart.Data<>(RADAR_LABELS[i], radarValues[i]));
+    /**
+     * Fills the three thermometers: Quest Challenges, Quest Reflections, and
+     * Weekly Challenges.
+     */
+    private void UpdateThermometers() {
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        double challengesRatio = 0;
+        double reflectionsRatio = 0;
+        double weeklyRatio = 0;
+
+        if (!ApplicationManager.isEmpty(email)) {
+            try {
+                List<UserQuest> userQuests = UserQuestService.GetUserQuestsForEmail(email);
+                int totalLabours = userQuests.size();
+
+                int completedChallenges = JournalEntryService.GetChallengesForEmail(email).size();
+                challengesRatio = RatioOf(completedChallenges, totalLabours);
+
+                long completedReflections = userQuests.stream()
+                        .filter(userQuest -> "Finished".equalsIgnoreCase(userQuest.getReflectionStatus()))
+                        .count();
+                reflectionsRatio = RatioOf((int) completedReflections, totalLabours);
+            } catch (Exception exception) {
+                challengesRatio = 0;
+                reflectionsRatio = 0;
+            }
+
+            try {
+                WeeklyTask[] weeklyTasks = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
+                if (weeklyTasks == null) {
+                    weeklyTasks = WeeklyTaskService.GenerateTasksForThisWeek(email);
+                }
+                if (weeklyTasks != null) {
+                    long completedWeekly = Arrays.stream(weeklyTasks)
+                            .filter(task -> "Finished".equalsIgnoreCase(task.getStatus()))
+                            .count();
+                    weeklyRatio = RatioOf((int) completedWeekly, weeklyTasks.length);
+                }
+            } catch (Exception exception) {
+                weeklyRatio = 0;
+            }
         }
 
-        progressChart.getData().clear();
-        progressChart.getData().add(series);
+        challengesProgress.setProgress(challengesRatio);
+        reflectionsProgress.setProgress(reflectionsRatio);
+        weeklyProgress.setProgress(weeklyRatio);
+    }
+
+    private double RatioOf(int completed, int total) {
+        return total > 0 ? Math.min(1.0, (double) completed / total) : 0;
+    }
+
+    /**
+     * Keeps the radar chart canvas and the rotated vertical progress bar sized
+     * to the window instead of a fixed pixel size, so the home grid scales
+     * with the open window rather than overflowing it.
+     */
+    private void ConfigureResponsiveSizing() {
+        progressCard.widthProperty().addListener((observable, oldValue, newValue) ->
+                UpdateRadarChartSize(newValue.doubleValue(), progressCard.getHeight()));
+        progressCard.heightProperty().addListener((observable, oldValue, newValue) ->
+                UpdateRadarChartSize(progressCard.getWidth(), newValue.doubleValue()));
+
+        // Bind off the outer card's height (not thermometerRow's) - the rotated progress
+        // bars report their unrotated (small) size to the layout system, so the HBox never
+        // reports a large preferred/actual height of its own. The card, however, is already
+        // stretched to fill its GridPane cell correctly, so it gives us a reliable height
+        // to size the bars from.
+        verticalProgressCard.heightProperty().addListener((observable, oldValue, newValue) ->
+                UpdateThermometerLengths(newValue.doubleValue()));
+        Platform.runLater(() -> {
+            UpdateRadarChartSize(progressCard.getWidth(), progressCard.getHeight());
+            UpdateThermometerLengths(verticalProgressCard.getHeight());
+        });
+    }
+
+    private void UpdateRadarChartSize(double cardWidth, double cardHeight) {
+        double width = Math.max(120, cardWidth - 24);
+        double height = Math.max(120, cardHeight - 70);
+        if (width == progressChart.getWidth() && height == progressChart.getHeight()) {
+            return;
+        }
+        progressChart.setWidth(width);
+        progressChart.setHeight(height);
+        DrawProgressGraph();
+    }
+
+    private void UpdateThermometerLengths(double cardHeight) {
+        // Reserves space for: card padding (24), the "Progress" title (~34) and the
+        // spacing below it (10), plus each column's own label (~24) and the spacing
+        // around the bar inside thermometerRow (20).
+        double reservedSpace = 130;
+        double length = Math.max(60, cardHeight - reservedSpace);
+        challengesProgress.setPrefWidth(length);
+        reflectionsProgress.setPrefWidth(length);
+        weeklyProgress.setPrefWidth(length);
     }
 
     private void SetWelcome() throws Exception {
@@ -140,19 +212,6 @@ public class DashboardController implements Initializable {
         welcomeMessage.setText("Welcome back, " + emailDetails.getFirstName() + "!");
     }
 
-    private double[] LoadRadarValues() {
-        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
-        if (ApplicationManager.isEmpty(email)) {
-            return UserProfileService.RadarValues(UserProfile.empty());
-        }
-
-        try {
-            return UserProfileService.RadarValues(AchievementService.GetProgress(email));
-        } catch (Exception exception) {
-            return UserProfileService.RadarValues(UserProfile.empty());
-        }
-    }
-
     private void UpdateStreakLabel() {
         try {
             int streak = StreakService.GetCurrentStreak(
@@ -163,240 +222,264 @@ public class DashboardController implements Initializable {
         }
     }
 
-    private void PopulateQuestline() {
-        try{
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(ApplicationManager.CurrentAccount.getCurrentEmail());
-            Quest trueQuest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+    // ---- "Your quests" / "Why this labour" / "This week's challenge" (copied from QuestController) ----
 
-            //List<Task> labourTasks = TaskService.GetTasksForLabourId(trueQuest.getLabourId());
-            //String taskSummary = TaskService.JoinTaskNames(labourTasks);
+    private void LoadQuestline() {
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        questHistory.getItems().clear();
 
-            float truePercentageComplete = userQuest.getPercentageComplete() * 100;
-            String formatedPercentageString = String.format("%.0f", truePercentageComplete);
-            questTitleLabel.setText("Active Quest: " + trueQuest.getName());
-            questDescriptionLabel.setText(trueQuest.getNarrative());
-            questProgress.setProgress(userQuest.getPercentageComplete());
-            questProgressLabel.setText(formatedPercentageString + "% Complete");
-        }
-        catch (Exception e){
-            questTitleLabel.setText("No active quest");
-            questDescriptionLabel.setText("Complete the quiz to begin a labour.");
-            questProgress.setProgress(DEFAULT_QUEST_PROGRESS);
-            questProgressLabel.setText(DEFAULT_QUEST_PROGRESS_LABEL);
-        }
-    }
-
-    private void PopulateWeeklyTasks() throws Exception {
-        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek(
-                ApplicationManager.CurrentAccount.getCurrentEmail());
-
-        if (tasks == null) {
-            tasks = WeeklyTaskService.GenerateTasksForThisWeek(
-                    ApplicationManager.CurrentAccount.getCurrentEmail());
-        }
-
-        weeklyTasks.getItems().clear();
-
-        if (tasks != null) {
-            weeklyTasks.getItems().addAll(tasks);
-        }
-    }
-
-    private void PopulateQuestTasks() {
-        questTasks.getItems().clear();
-        try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(
-                    ApplicationManager.CurrentAccount.getCurrentEmail());
-            if (userQuest == null) {
-                return;
-            }
-            List<Task> tasks = TaskService.GetTasksForLabourId(userQuest.getLabourId());
-            questTasks.getItems().addAll(tasks);
-        } catch (Exception exception) {
-            System.err.println("Could not load quest tasks: " + exception.getMessage());
-        }
-    }
-
-    private void ConfigureWeeklyTaskList(ListView<WeeklyTask> taskList) {
-        taskList.setCellFactory(list -> new ListCell<>() {
-            private final CheckBox completedBox = new CheckBox();
-            private final Label taskLabel = new Label();
-            private final HBox row = new HBox(10, completedBox, taskLabel);
-
-            {
-                row.getStyleClass().add("task-row");
-                completedBox.setMouseTransparent(true);
-                completedBox.setFocusTraversable(false);
-            }
-
-            @Override
-            protected void updateItem(WeeklyTask task, boolean empty) {
-                super.updateItem(task, empty);
-
-                if (empty || task == null) {
-                    setText(null);
-                    setGraphic(null);
-                    return;
-                }
-
-                taskLabel.setText(task.toString());
-                completedBox.setSelected("Finished".equalsIgnoreCase(task.getStatus()));
-                setText(null);
-                setGraphic(row);
-            }
-        });
-    }
-
-    private void ConfigureQuestTaskList(ListView<Task> taskList) {
-        taskList.setCellFactory(list -> new ListCell<>() {
-            private final Label taskLabel = new Label();
-            private final HBox row = new HBox(10, taskLabel);
-
-            {
-                row.getStyleClass().add("task-row");
-            }
-
-            @Override
-            protected void updateItem(Task task, boolean empty) {
-                super.updateItem(task, empty);
-
-                if (empty || task == null) {
-                    setText(null);
-                    setGraphic(null);
-                    return;
-                }
-
-                taskLabel.setText(task.getName());
-                setText(null);
-                setGraphic(row);
-            }
-        });
-    }
-
-    private void ApplyResponsiveLayout(double width) {
-        if (width <= 0) {
+        if (ApplicationManager.isEmpty(email)) {
+            ShowEmptyQuest("Sign in to see your questline.");
             return;
         }
 
-        boolean stacked = width < STACKED_BREAKPOINT;
-        SetGridCardLayout(topGrid, tasksCard, stacked);
-        SetGridCardLayout(lowerGrid, dailiesCard, stacked);
+        EnsureSecondArchetypeQuestIsAvailable(email);
+
+        try {
+            List<UserQuest> userQuests = UserQuestService.GetUserQuestsForEmail(email);
+            QuestListItem selected = null;
+
+            for (UserQuest userQuest : userQuests) {
+                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+                if (quest == null) {
+                    continue;
+                }
+
+                String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
+                QuestListItem item = new QuestListItem(userQuest, quest, archetypeName);
+                questHistory.getItems().add(item);
+
+                if (selected == null || "Active".equalsIgnoreCase(userQuest.getStatus())) {
+                    selected = item;
+                }
+            }
+
+            if (selected == null) {
+                ShowEmptyQuest("No quests have been assigned yet.");
+                return;
+            }
+
+            questHistory.getSelectionModel().select(selected);
+            ShowQuest(selected);
+        } catch (Exception exception) {
+            ShowEmptyQuest("Could not load your questline right now.");
+        }
     }
 
-    private void SetGridCardLayout(GridPane grid, VBox secondaryCard, boolean stacked) {
-        if (stacked) {
-            GridPane.setColumnIndex(secondaryCard, 0);
-            GridPane.setRowIndex(secondaryCard, 1);
-            grid.getColumnConstraints().get(0).setPercentWidth(FULL_PERCENT);
-            grid.getColumnConstraints().get(1).setPercentWidth(HIDDEN_PERCENT);
+    /**
+     * Makes sure the user's second-highest scoring archetype has a quest sitting
+     * in "Your quests" ready to switch to, even if they haven't started it yet.
+     */
+    private void EnsureSecondArchetypeQuestIsAvailable(String email) {
+        try {
+            QuizResult quizResult = QuizService.LoadStoredResult(email);
+            if (quizResult == null) {
+                return;
+            }
+
+            List<Archetype> ranked = QuizService.RankedArchetypes(quizResult);
+            if (ranked.size() < 2) {
+                return;
+            }
+
+            Archetype secondArchetype = ranked.get(1);
+            Quest secondQuest = QuestService.GetRandomQuestForArchetypeId(secondArchetype.getArchetypeId());
+            if (secondQuest == null) {
+                return;
+            }
+
+            UserQuest existing = UserQuestService.GetUserQuestForEmailAndLabourId(email, secondQuest.getLabourId());
+            if (existing == null) {
+                UserQuestService.InsertNewQuestForEmail(secondQuest, email);
+            }
+        } catch (Exception exception) {
+            System.err.println("Could not prepare second archetype quest: " + exception.getMessage());
+        }
+    }
+
+    private void ShowQuest(QuestListItem item) {
+        if (item == null) {
+            ShowEmptyQuest("Select a quest to read its story.");
+            return;
+        }
+
+        Quest quest = item.quest();
+        List<Task> tasks;
+        try {
+            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
+        } catch (Exception exception) {
+            tasks = List.of();
+        }
+
+        String taskDetails = TaskService.JoinTaskDetails(tasks);
+
+        challengeLabel.setText(taskDetails.isEmpty()
+                ? "No tasks are stored for this labour yet."
+                : taskDetails);
+        traitLabel.setText(item.archetypeName());
+        reflectionPromptLabel.setText("Weekly practices are on the Tasks page. These storyline tasks belong to the labour itself.");
+    }
+
+    private void ShowEmptyQuest(String message) {
+        challengeLabel.setText("Your challenge will appear here once a quest is active.");
+        traitLabel.setText("—");
+        reflectionPromptLabel.setText(message);
+    }
+
+    private void ConfigureHistoryList() {
+        questHistory.setPlaceholder(new Label("No quests assigned yet."));
+        questHistory.setCellFactory(list -> new ListCell<>() {
+            private final Label nameLabel = new Label();
+            private final Label detailLabel = new Label();
+            private final Region spacer = new Region();
+            private final Label percentLabel = new Label();
+            private final HBox header = new HBox(8, nameLabel, spacer, percentLabel);
+            private final VBox row = new VBox(2, header, detailLabel);
+
+            {
+                row.getStyleClass().add("history-row");
+                nameLabel.getStyleClass().add("history-name");
+                detailLabel.getStyleClass().add("history-detail");
+                percentLabel.getStyleClass().add("history-detail");
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+            }
+
+            @Override
+            protected void updateItem(QuestListItem item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+
+                nameLabel.setText(item.quest().getName());
+                detailLabel.setText(item.userQuest().getStatus() + " · " + item.archetypeName());
+                percentLabel.setText(String.format("%.0f%%", item.userQuest().getPercentageComplete() * 100));
+                setText(null);
+                setGraphic(row);
+            }
+        });
+
+        questHistory.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldItem, newItem) -> {
+                    if (newItem == null || isRefreshingQuestline) {
+                        return;
+                    }
+                    ShowQuest(newItem);
+                    ActivateQuest(newItem);
+                });
+    }
+
+    /**
+     * Switches the active quest to the one the user clicked on in "Your quests".
+     */
+    private void ActivateQuest(QuestListItem item) {
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        if (ApplicationManager.isEmpty(email)) {
+            return;
+        }
+
+        try {
+            UserQuestService.ChangeActiveQuest(item.quest(), email);
+            isRefreshingQuestline = true;
+            LoadQuestline();
+        } catch (Exception exception) {
+            System.err.println("Could not switch active quest: " + exception.getMessage());
+        } finally {
+            isRefreshingQuestline = false;
+        }
+    }
+
+    private record QuestListItem(UserQuest userQuest, Quest quest, String archetypeName) {
+    }
+
+    // ---- Archetype balance radar chart (copied from ProfileController) ----
+
+    private void DrawProgressGraph() {
+        GraphicsContext graphics = progressChart.getGraphicsContext2D();
+        double width = progressChart.getWidth();
+        double height = progressChart.getHeight();
+        double centerX = width / 2;
+        double centerY = height / 2 + RADAR_CENTER_Y_OFFSET;
+        double radius = Math.min(width, height) * RADAR_RADIUS_RATIO;
+        int axes = RADAR_AXIS_COUNT;
+
+        graphics.clearRect(0, 0, width, height);
+        graphics.setLineWidth(1);
+        graphics.setStroke(Color.web("#777777"));
+
+        for (int level = 1; level <= RADAR_LEVEL_COUNT; level++) {
+            double levelRadius = radius * level / RADAR_LEVEL_COUNT;
+            double[] xPoints = new double[axes];
+            double[] yPoints = new double[axes];
+
+            for (int axis = 0; axis < axes; axis++) {
+                xPoints[axis] = PointX(centerX, levelRadius, axis, axes);
+                yPoints[axis] = PointY(centerY, levelRadius, axis, axes);
+            }
+
+            graphics.strokePolygon(xPoints, yPoints, axes);
+        }
+
+        for (int axis = 0; axis < axes; axis++) {
+            graphics.strokeLine(centerX, centerY,
+                    PointX(centerX, radius, axis, axes),
+                    PointY(centerY, radius, axis, axes));
+        }
+
+        double[] xPoints = new double[axes];
+        double[] yPoints = new double[axes];
+        for (int axis = 0; axis < axes; axis++) {
+            xPoints[axis] = PointX(centerX, radius * radarValues[axis], axis, axes);
+            yPoints[axis] = PointY(centerY, radius * radarValues[axis], axis, axes);
+        }
+
+        graphics.setFill(Color.rgb(46, 135, 207, 0.45));
+        graphics.fillPolygon(xPoints, yPoints, axes);
+        graphics.setStroke(Color.web("#43a9f2"));
+        graphics.setLineWidth(2);
+        graphics.strokePolygon(xPoints, yPoints, axes);
+
+        graphics.setFill(Color.web("#c4b5fd"));
+        graphics.setFont(Font.font("Poppins", 10));
+        graphics.setTextAlign(TextAlignment.CENTER);
+        for (int axis = 0; axis < axes; axis++) {
+            DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);
+        }
+    }
+
+    private void DrawAxisLabel(
+            GraphicsContext graphics,
+            String label,
+            double centerX,
+            double centerY,
+            double radius,
+            int axis,
+            int axes) {
+        double labelRadius = radius + 22;
+        double x = PointX(centerX, labelRadius, axis, axes);
+        double y = PointY(centerY, labelRadius, axis, axes);
+
+        if (x < centerX - 8) {
+            graphics.setTextAlign(TextAlignment.RIGHT);
+            x -= 4;
+        } else if (x > centerX + 8) {
+            graphics.setTextAlign(TextAlignment.LEFT);
+            x += 4;
         } else {
-            GridPane.setColumnIndex(secondaryCard, 1);
-            GridPane.setRowIndex(secondaryCard, 0);
-            grid.getColumnConstraints().get(0).setPercentWidth(PRIMARY_CARD_PERCENT);
-            grid.getColumnConstraints().get(1).setPercentWidth(SECONDARY_CARD_PERCENT);
+            graphics.setTextAlign(TextAlignment.CENTER);
         }
-    }
-//
-//    private void DrawProgressGraph() {
-//        GraphicsContext graphics = progressChart.getGraphicsContext2D();
-//        double width = progressChart.getWidth();
-//        double height = progressChart.getHeight();
-//        double centerX = width / 2;
-//        double centerY = height / 2 + RADAR_CENTER_Y_OFFSET;
-//        double radius = Math.min(width, height) * RADAR_RADIUS_RATIO;
-//        int axes = RADAR_AXIS_COUNT;
-//
-//        graphics.clearRect(0, 0, width, height);
-//        graphics.setLineWidth(1);
-//        graphics.setStroke(Color.web("#777777"));
-//
-//        for (int level = 1; level <= RADAR_LEVEL_COUNT; level++) {
-//            double levelRadius = radius * level / RADAR_LEVEL_COUNT;
-//            double[] xPoints = new double[axes];
-//            double[] yPoints = new double[axes];
-//
-//            for (int axis = 0; axis < axes; axis++) {
-//                xPoints[axis] = PointX(centerX, levelRadius, axis, axes);
-//                yPoints[axis] = PointY(centerY, levelRadius, axis, axes);
-//            }
-//
-//            graphics.strokePolygon(xPoints, yPoints, axes);
-//        }
-//
-//        for (int axis = 0; axis < axes; axis++) {
-//            graphics.strokeLine(centerX, centerY,
-//                    PointX(centerX, radius, axis, axes),
-//                    PointY(centerY, radius, axis, axes));
-//        }
-//
-//        double[] xPoints = new double[axes];
-//        double[] yPoints = new double[axes];
-//
-//        for (int axis = 0; axis < axes; axis++) {
-//            xPoints[axis] = PointX(centerX, radius * radarValues[axis], axis, axes);
-//            yPoints[axis] = PointY(centerY, radius * radarValues[axis], axis, axes);
-//        }
-//
-//        graphics.setFill(Color.rgb(46, 135, 207, 0.45));
-//        graphics.fillPolygon(xPoints, yPoints, axes);
-//        graphics.setStroke(Color.web("#43a9f2"));
-//        graphics.setLineWidth(2);
-//        graphics.strokePolygon(xPoints, yPoints, axes);
-//
-//        graphics.setFill(Color.web("#c4b5fd"));
-//        graphics.setFont(Font.font("Poppins", 12));
-//        graphics.setTextAlign(TextAlignment.CENTER);
-//        for (int axis = 0; axis < axes; axis++) {
-//            DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);
-//        }
-//    }
-//
-//    private void DrawAxisLabel(
-//            GraphicsContext graphics,
-//            String label,
-//            double centerX,
-//            double centerY,
-//            double radius,
-//            int axis,
-//            int axes) {
-//        double labelRadius = radius + 22;
-//        double x = PointX(centerX, labelRadius, axis, axes);
-//        double y = PointY(centerY, labelRadius, axis, axes);
-//
-//        if (x < centerX - 8) {
-//            graphics.setTextAlign(TextAlignment.RIGHT);
-//            x -= 4;
-//        } else if (x > centerX + 8) {
-//            graphics.setTextAlign(TextAlignment.LEFT);
-//            x += 4;
-//        } else {
-//            graphics.setTextAlign(TextAlignment.CENTER);
-//        }
-//
-//        graphics.fillText(label, x, y);
-//    }
-//
-//    private double PointX(double centerX, double radius, int axis, int axes) {
-//        return centerX + radius * Math.cos(-Math.PI / 2 + axis * 2 * Math.PI / axes);
-//    }
-//
-//    private double PointY(double centerY, double radius, int axis, int axes) {
-//        return centerY + radius * Math.sin(-Math.PI / 2 + axis * 2 * Math.PI / axes);
-//    }
 
-    @FXML
-    private void OnWeeklyTaskClick(MouseEvent event) throws IOException {
-        WeeklyTask selectedTask = weeklyTasks.getSelectionModel().getSelectedItem();
-        if (selectedTask != null) {
-            NavigationService.LoadScreen(ScreenEnum.TASKS);
-        }
+        graphics.fillText(label, x, y);
     }
 
-    @FXML
-    private void OnQuestTaskClick(MouseEvent event) throws IOException {
-        Task selectedTask = questTasks.getSelectionModel().getSelectedItem();
-        if (selectedTask != null) {
-            NavigationService.LoadScreen(ScreenEnum.TASKS);
-        }
+    private double PointX(double centerX, double radius, int axis, int axes) {
+        return centerX + radius * Math.cos(-Math.PI / 2 + axis * 2 * Math.PI / axes);
+    }
+
+    private double PointY(double centerY, double radius, int axis, int axes) {
+        return centerY + radius * Math.sin(-Math.PI / 2 + axis * 2 * Math.PI / axes);
     }
 }
