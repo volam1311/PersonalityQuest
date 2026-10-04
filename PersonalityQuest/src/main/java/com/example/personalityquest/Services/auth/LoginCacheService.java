@@ -10,6 +10,16 @@ import java.util.prefs.Preferences;
 
 public class LoginCacheService {
 
+
+    public Preferences preferences;
+
+    public LoginCacheService(){
+        preferences = Preferences.userRoot();
+    }
+
+    public LoginCacheService(Preferences preferences){
+        this.preferences = preferences;
+    }
     private final static int days = 7;
 
 
@@ -17,10 +27,10 @@ public class LoginCacheService {
      * Gets the current Login Caches details
      * @return A Login Cache object containing an email and the last time the user logged in
      */
-    public static LoginCache GetLoginCache(){
+    public LoginCache GetLoginCache(){
         return new LoginCache(
-                Preferences.userRoot().get("LoginEmail", ""),
-                LocalDate.parse(Preferences.userRoot().get("TimeOfLogin", LocalDate.now().toString()))
+                preferences.get("LoginEmail", ""),
+                LocalDate.parse(preferences.get("TimeOfLogin", LocalDate.now().toString()))
         );
     }
 
@@ -28,24 +38,24 @@ public class LoginCacheService {
      * Updates the Login Cache with the new email and current date time
      * @param email The email you want to set the login cache to
      */
-    public static void UpdateCache(String email){
-        Preferences.userRoot().put("LoginEmail", email);
-        Preferences.userRoot().put("TimeOfLogin", LocalDate.now().toString());
+    public void UpdateCache(String email){
+        preferences.put("LoginEmail", email);
+        preferences.put("TimeOfLogin", LocalDate.now().toString());
     }
 
     /**
      * Clears the current login data from the cache
      */
-    public static void ClearCache(){
-        Preferences.userRoot().put("LoginEmail", "");
-        Preferences.userRoot().put("TimeOfLogin", LocalDate.now().toString());
+    public void ClearCache(){
+        preferences.put("LoginEmail", "");
+        preferences.put("TimeOfLogin", LocalDate.now().toString());
     }
 
     /**
      * Checks to see if the given parsed date is past the allowed cache time. Clears the cache if it is past expired time.
      * @return Whether the login cache is now expired
      */
-    public static boolean IsPastTimeLimit(LocalDate parsedDate){
+    public boolean IsPastTimeLimit(LocalDate parsedDate){
         if (ChronoUnit.DAYS.between(parsedDate, LocalDate.now()) > days){
             ClearCache();
             return true;

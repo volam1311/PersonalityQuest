@@ -132,7 +132,9 @@ public class AccountSignInController {
         ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
 
         Preferences preferences = Preferences.userRoot();
-        LoginCacheService.UpdateCache(emailEntry.getText());
+        LoginCacheService loginCacheService = new LoginCacheService();
+
+        loginCacheService.UpdateCache(emailEntry.getText());
 
         NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
 
