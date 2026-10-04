@@ -2,6 +2,8 @@ package com.example.personalityquest.Controllers.auth;
 
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
+import com.example.personalityquest.Services.auth.HashingService;
+import com.example.personalityquest.Services.auth.LoginCacheService;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import com.example.personalityquest.Services.auth.PasswordService;
 import com.example.personalityquest.ApplicationManager;
@@ -17,6 +19,8 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.prefs.Preferences;
 
 /** Controls account sign-in */
 public class AccountSignInController {
@@ -112,6 +116,7 @@ public class AccountSignInController {
         }
     }
 
+
     /*
      * When "Sign In" Button is clicked
      * */
@@ -126,6 +131,9 @@ public class AccountSignInController {
          * Set currently logged in account
          * */
         ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
+
+        Preferences preferences = Preferences.userRoot();
+        LoginCacheService.UpdateCache(emailEntry.getText());
 
         NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
 
