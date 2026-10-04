@@ -133,69 +133,71 @@ import java.util.prefs.Preferences;
 <span class="nc" id="L133">        ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());</span>
 
 <span class="nc" id="L135">        Preferences preferences = Preferences.userRoot();</span>
-<span class="nc" id="L136">        LoginCacheService.UpdateCache(emailEntry.getText());</span>
+<span class="nc" id="L136">        LoginCacheService loginCacheService = new LoginCacheService();</span>
 
-<span class="nc" id="L138">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
+<span class="nc" id="L138">        loginCacheService.UpdateCache(emailEntry.getText());</span>
+
+<span class="nc" id="L140">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
 
 
-<span class="nc" id="L141">        System.out.println(&quot;Sign in complete&quot;);</span>
-<span class="nc" id="L142">    }</span>
+<span class="nc" id="L143">        System.out.println(&quot;Sign in complete&quot;);</span>
+<span class="nc" id="L144">    }</span>
 
     /*
      * Checks to see if the given email and password will work as a valid
      * sign in
      * */
     private boolean isValidSignIn() throws SQLException {
-<span class="nc" id="L149">        clearFieldError(emailEntry);</span>
-<span class="nc" id="L150">        clearFieldError(passwordEntry);</span>
+<span class="nc" id="L151">        clearFieldError(emailEntry);</span>
+<span class="nc" id="L152">        clearFieldError(passwordEntry);</span>
 
-<span class="nc" id="L152">        boolean emailMissing = isBlank(emailEntry.getText());</span>
-<span class="nc" id="L153">        boolean passwordMissing = isBlank(passwordEntry.getText());</span>
-<span class="nc bnc" id="L154" title="All 4 branches missed.">        if (emailMissing || passwordMissing) {</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (emailMissing) {</span>
-<span class="nc" id="L156">                markFieldError(emailEntry);</span>
+<span class="nc" id="L154">        boolean emailMissing = isBlank(emailEntry.getText());</span>
+<span class="nc" id="L155">        boolean passwordMissing = isBlank(passwordEntry.getText());</span>
+<span class="nc bnc" id="L156" title="All 4 branches missed.">        if (emailMissing || passwordMissing) {</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            if (emailMissing) {</span>
+<span class="nc" id="L158">                markFieldError(emailEntry);</span>
             }
-<span class="nc bnc" id="L158" title="All 2 branches missed.">            if (passwordMissing) {</span>
-<span class="nc" id="L159">                markFieldError(passwordEntry);</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (passwordMissing) {</span>
+<span class="nc" id="L161">                markFieldError(passwordEntry);</span>
             }
-<span class="nc" id="L161">            Message.setText(&quot;*Required&quot;);</span>
-<span class="nc" id="L162">            return false;</span>
+<span class="nc" id="L163">            Message.setText(&quot;*Required&quot;);</span>
+<span class="nc" id="L164">            return false;</span>
         }
 
         // Does the email exist and does the password match the email
-<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (!EmailService.DoesAccountWithEmailExist(emailEntry.getText())</span>
-<span class="nc bnc" id="L167" title="All 2 branches missed.">        || !PasswordService.isPasswordForEmail(emailEntry.getText(), passwordEntry.getText())){</span>
-<span class="nc" id="L168">            markFieldError(emailEntry);</span>
-<span class="nc" id="L169">            markFieldError(passwordEntry);</span>
-<span class="nc" id="L170">            Message.setText(&quot;Email or Password Was entered incorrectly&quot;);</span>
-<span class="nc" id="L171">            return false;</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (!EmailService.DoesAccountWithEmailExist(emailEntry.getText())</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        || !PasswordService.isPasswordForEmail(emailEntry.getText(), passwordEntry.getText())){</span>
+<span class="nc" id="L170">            markFieldError(emailEntry);</span>
+<span class="nc" id="L171">            markFieldError(passwordEntry);</span>
+<span class="nc" id="L172">            Message.setText(&quot;Email or Password Was entered incorrectly&quot;);</span>
+<span class="nc" id="L173">            return false;</span>
         }
 
-<span class="nc" id="L174">        Message.setText(&quot;&quot;);</span>
-<span class="nc" id="L175">        return true;</span>
+<span class="nc" id="L176">        Message.setText(&quot;&quot;);</span>
+<span class="nc" id="L177">        return true;</span>
     }
 
     private boolean isBlank(String value) {
-<span class="nc bnc" id="L179" title="All 4 branches missed.">        return value == null || value.isBlank();</span>
+<span class="nc bnc" id="L181" title="All 4 branches missed.">        return value == null || value.isBlank();</span>
     }
 
     private void markFieldError(TextField field) {
-<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (!field.getStyleClass().contains(&quot;error&quot;)) {</span>
-<span class="nc" id="L184">            field.getStyleClass().add(&quot;error&quot;);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if (!field.getStyleClass().contains(&quot;error&quot;)) {</span>
+<span class="nc" id="L186">            field.getStyleClass().add(&quot;error&quot;);</span>
         }
-<span class="nc" id="L186">    }</span>
+<span class="nc" id="L188">    }</span>
 
     private void clearFieldError(TextField field) {
-<span class="nc" id="L189">        field.getStyleClass().remove(&quot;error&quot;);</span>
-<span class="nc" id="L190">    }</span>
+<span class="nc" id="L191">        field.getStyleClass().remove(&quot;error&quot;);</span>
+<span class="nc" id="L192">    }</span>
 
     /*
     * When &quot;Click here to Sign Up&quot; label is clicked
     * */
     @FXML
     private void OnSignUp(MouseEvent event) throws IOException {
-<span class="nc" id="L197">        Stage currentStage = (Stage)((Node) event.getSource()).getScene().getWindow();</span>
-<span class="nc" id="L198">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
-<span class="nc" id="L199">    }</span>
+<span class="nc" id="L199">        Stage currentStage = (Stage)((Node) event.getSource()).getScene().getWindow();</span>
+<span class="nc" id="L200">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
+<span class="nc" id="L201">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

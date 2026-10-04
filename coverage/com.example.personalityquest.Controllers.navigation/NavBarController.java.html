@@ -228,32 +228,33 @@ import java.util.ResourceBundle;
 
     @FXML
     private void OnLogout() throws IOException {
-<span class="nc" id="L231">        LoginCacheService.ClearCache();</span>
-<span class="nc" id="L232">        ApplicationManager.CurrentAccount.setCurrentEmail(&quot;&quot;);</span>
+<span class="nc" id="L231">        LoginCacheService loginCacheService = new LoginCacheService();</span>
+<span class="nc" id="L232">        loginCacheService.ClearCache();</span>
+<span class="nc" id="L233">        ApplicationManager.CurrentAccount.setCurrentEmail(&quot;&quot;);</span>
 
-<span class="nc" id="L234">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);</span>
-<span class="nc" id="L235">    }</span>
+<span class="nc" id="L235">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);</span>
+<span class="nc" id="L236">    }</span>
 
     private NavDestination DestinationFor(Button button) {
-<span class="nc bnc" id="L238" title="All 2 branches missed.">        if (button == homeButton) {</span>
-<span class="nc" id="L239">            return NavDestination.HOME;</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">        if (button == homeButton) {</span>
+<span class="nc" id="L240">            return NavDestination.HOME;</span>
         }
-<span class="nc bnc" id="L241" title="All 2 branches missed.">        if (button == questsButton) {</span>
-<span class="nc" id="L242">            return NavDestination.QUESTS;</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (button == questsButton) {</span>
+<span class="nc" id="L243">            return NavDestination.QUESTS;</span>
         }
-<span class="nc bnc" id="L244" title="All 2 branches missed.">        if (button == tasksButton) {</span>
-<span class="nc" id="L245">            return NavDestination.TASKS;</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        if (button == tasksButton) {</span>
+<span class="nc" id="L246">            return NavDestination.TASKS;</span>
         }
-<span class="nc bnc" id="L247" title="All 2 branches missed.">        if (button == archetypeButton) {</span>
-<span class="nc" id="L248">            return NavDestination.ARCHETYPE;</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        if (button == archetypeButton) {</span>
+<span class="nc" id="L249">            return NavDestination.ARCHETYPE;</span>
         }
-<span class="nc bnc" id="L250" title="All 2 branches missed.">        if (button == settingsButton) {</span>
-<span class="nc" id="L251">            return NavDestination.SETTINGS;</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (button == settingsButton) {</span>
+<span class="nc" id="L252">            return NavDestination.SETTINGS;</span>
         }
-<span class="nc bnc" id="L253" title="All 2 branches missed.">        if (button == profileButton) {</span>
-<span class="nc" id="L254">            return NavDestination.PROFILE;</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">        if (button == profileButton) {</span>
+<span class="nc" id="L255">            return NavDestination.PROFILE;</span>
         }
-<span class="nc" id="L256">        return null;</span>
+<span class="nc" id="L257">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

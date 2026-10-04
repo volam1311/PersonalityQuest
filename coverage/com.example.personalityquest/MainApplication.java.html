@@ -25,68 +25,70 @@ import java.util.prefs.Preferences;
 
 /** Starts the JavaFX application and opens its initial screen */
 <span class="nc" id="L27">public class MainApplication extends Application {</span>
+
+<span class="nc" id="L29">    private final LoginCacheService loginCacheService = new LoginCacheService();</span>
     /** Initialises application resources and displays the account screen
      * @param stage the primary JavaFX stage
      * @throws IOException if the screen resource cannot be loaded
      */
     @Override
     public void start(Stage stage) throws IOException{
-<span class="nc" id="L34">        AppFonts.load();</span>
+<span class="nc" id="L36">        AppFonts.load();</span>
 
         // Runs once, before any other DB call has a chance to leave an open
         // statement on the shared connection. Doing this here (rather than on
         // every visit to the Archetype screen) avoids SQLITE_LOCKED errors caused
         // by other DAOs not closing their statements/result sets.
         try {
-<span class="nc" id="L41">            ArchetypeDAO.ResetAndSeedCatalog();</span>
-<span class="nc" id="L42">            QuestDAO.ResetAndSeedCatalog();</span>
-<span class="nc" id="L43">            initialiseUserQuestData();</span>
-<span class="nc" id="L44">        } catch (Exception exception) {</span>
-<span class="nc" id="L45">            exception.printStackTrace();</span>
-<span class="nc" id="L46">        }</span>
+<span class="nc" id="L43">            ArchetypeDAO.ResetAndSeedCatalog();</span>
+<span class="nc" id="L44">            QuestDAO.ResetAndSeedCatalog();</span>
+<span class="nc" id="L45">            initialiseUserQuestData();</span>
+<span class="nc" id="L46">        } catch (Exception exception) {</span>
+<span class="nc" id="L47">            exception.printStackTrace();</span>
+<span class="nc" id="L48">        }</span>
 
         try {
-<span class="nc" id="L49">            NavigationService.Init(stage);</span>
+<span class="nc" id="L51">            NavigationService.Init(stage);</span>
 
-<span class="nc" id="L51">            LocalDate now = LocalDate.now();</span>
+<span class="nc" id="L53">            LocalDate now = LocalDate.now();</span>
 
-<span class="nc" id="L53">            LoginCache loginCache = LoginCacheService.GetLoginCache();</span>
+<span class="nc" id="L55">            LoginCache loginCache = loginCacheService.GetLoginCache();</span>
 
             // do we have login details
-<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (loginCache.GetEmail().isEmpty()){</span>
-<span class="nc" id="L57">                NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
-<span class="nc" id="L58">                return;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (loginCache.GetEmail().isEmpty()){</span>
+<span class="nc" id="L59">                NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
+<span class="nc" id="L60">                return;</span>
             }
 
             try{
-<span class="nc" id="L62">                AttemptLogin(loginCache);</span>
+<span class="nc" id="L64">                AttemptLogin(loginCache);</span>
             }
-<span class="nc" id="L64">            catch (Exception e) {</span>
-<span class="nc" id="L65">                System.out.println(e.getMessage());</span>
-<span class="nc" id="L66">                NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
-<span class="nc" id="L67">            }</span>
+<span class="nc" id="L66">            catch (Exception e) {</span>
+<span class="nc" id="L67">                System.out.println(e.getMessage());</span>
+<span class="nc" id="L68">                NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
+<span class="nc" id="L69">            }</span>
         }
-<span class="nc" id="L69">        catch (IOException e){</span>
-<span class="nc" id="L70">            System.out.println(e.getMessage());</span>
-<span class="nc" id="L71">        }</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L71">        catch (IOException e){</span>
+<span class="nc" id="L72">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L73">        }</span>
+<span class="nc" id="L74">    }</span>
 
     static void initialiseUserQuestData() throws Exception{
-<span class="fc" id="L75">        UserQuestDAO.EnsureTables();</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L77">        UserQuestDAO.EnsureTables();</span>
+<span class="fc" id="L78">    }</span>
 
-    static void AttemptLogin(LoginCache loginCache) throws Exception {
+    void AttemptLogin(LoginCache loginCache) throws Exception {
 
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (LoginCacheService.IsPastTimeLimit(loginCache.GetLastLoginDate())){</span>
-<span class="nc" id="L81">            throw new Exception(&quot;Login Cache Expired&quot;);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (loginCacheService.IsPastTimeLimit(loginCache.GetLastLoginDate())){</span>
+<span class="nc" id="L83">            throw new Exception(&quot;Login Cache Expired&quot;);</span>
         }
 
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (!EmailService.DoesAccountWithEmailExist(loginCache.GetEmail())){</span>
-<span class="nc" id="L85">            throw new Exception(&quot;Account does not exist with this email&quot;);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (!EmailService.DoesAccountWithEmailExist(loginCache.GetEmail())){</span>
+<span class="nc" id="L87">            throw new Exception(&quot;Account does not exist with this email&quot;);</span>
         }
 
-<span class="nc" id="L88">        ApplicationManager.CurrentAccount.setCurrentEmail(loginCache.GetEmail());</span>
-<span class="nc" id="L89">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
-<span class="nc" id="L90">    }</span>
+<span class="nc" id="L90">        ApplicationManager.CurrentAccount.setCurrentEmail(loginCache.GetEmail());</span>
+<span class="nc" id="L91">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
+<span class="nc" id="L92">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

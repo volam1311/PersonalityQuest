@@ -8,8 +8,18 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.prefs.Preferences;
 
-<span class="nc" id="L11">public class LoginCacheService {</span>
+public class LoginCacheService {
 
+
+    public Preferences preferences;
+
+<span class="nc" id="L16">    public LoginCacheService(){</span>
+<span class="nc" id="L17">        preferences = Preferences.userRoot();</span>
+<span class="nc" id="L18">    }</span>
+
+<span class="fc" id="L20">    public LoginCacheService(Preferences preferences){</span>
+<span class="fc" id="L21">        this.preferences = preferences;</span>
+<span class="fc" id="L22">    }</span>
     private final static int days = 7;
 
 
@@ -17,10 +27,10 @@ import java.util.prefs.Preferences;
      * Gets the current Login Caches details
      * @return A Login Cache object containing an email and the last time the user logged in
      */
-    public static LoginCache GetLoginCache(){
-<span class="nc" id="L21">        return new LoginCache(</span>
-<span class="nc" id="L22">                Preferences.userRoot().get(&quot;LoginEmail&quot;, &quot;&quot;),</span>
-<span class="nc" id="L23">                LocalDate.parse(Preferences.userRoot().get(&quot;TimeOfLogin&quot;, LocalDate.now().toString()))</span>
+    public LoginCache GetLoginCache(){
+<span class="fc" id="L31">        return new LoginCache(</span>
+<span class="fc" id="L32">                preferences.get(&quot;LoginEmail&quot;, &quot;&quot;),</span>
+<span class="fc" id="L33">                LocalDate.parse(preferences.get(&quot;TimeOfLogin&quot;, LocalDate.now().toString()))</span>
         );
     }
 
@@ -28,30 +38,30 @@ import java.util.prefs.Preferences;
      * Updates the Login Cache with the new email and current date time
      * @param email The email you want to set the login cache to
      */
-    public static void UpdateCache(String email){
-<span class="nc" id="L32">        Preferences.userRoot().put(&quot;LoginEmail&quot;, email);</span>
-<span class="nc" id="L33">        Preferences.userRoot().put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
-<span class="nc" id="L34">    }</span>
+    public void UpdateCache(String email){
+<span class="fc" id="L42">        preferences.put(&quot;LoginEmail&quot;, email);</span>
+<span class="fc" id="L43">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
+<span class="fc" id="L44">    }</span>
 
     /**
      * Clears the current login data from the cache
      */
-    public static void ClearCache(){
-<span class="nc" id="L40">        Preferences.userRoot().put(&quot;LoginEmail&quot;, &quot;&quot;);</span>
-<span class="nc" id="L41">        Preferences.userRoot().put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
-<span class="nc" id="L42">    }</span>
+    public void ClearCache(){
+<span class="fc" id="L50">        preferences.put(&quot;LoginEmail&quot;, &quot;&quot;);</span>
+<span class="fc" id="L51">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
+<span class="fc" id="L52">    }</span>
 
     /**
      * Checks to see if the given parsed date is past the allowed cache time. Clears the cache if it is past expired time.
      * @return Whether the login cache is now expired
      */
-    public static boolean IsPastTimeLimit(LocalDate parsedDate){
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (ChronoUnit.DAYS.between(parsedDate, LocalDate.now()) &gt; days){</span>
-<span class="nc" id="L50">            ClearCache();</span>
-<span class="nc" id="L51">            return true;</span>
+    public boolean IsPastTimeLimit(LocalDate parsedDate){
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (ChronoUnit.DAYS.between(parsedDate, LocalDate.now()) &gt; days){</span>
+<span class="fc" id="L60">            ClearCache();</span>
+<span class="fc" id="L61">            return true;</span>
         }
 
-<span class="nc" id="L54">        return false;</span>
+<span class="fc" id="L64">        return false;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
