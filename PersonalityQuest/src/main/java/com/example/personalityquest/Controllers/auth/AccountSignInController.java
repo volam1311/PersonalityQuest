@@ -2,6 +2,7 @@ package com.example.personalityquest.Controllers.auth;
 
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
+import com.example.personalityquest.Services.auth.HashingService;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import com.example.personalityquest.Services.auth.PasswordService;
 import com.example.personalityquest.ApplicationManager;
@@ -17,6 +18,8 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.prefs.Preferences;
 
 public class AccountSignInController {
     private static final double COMPACT_BREAKPOINT = 700;
@@ -111,6 +114,7 @@ public class AccountSignInController {
         }
     }
 
+
     /*
      * When "Sign In" Button is clicked
      * */
@@ -125,6 +129,10 @@ public class AccountSignInController {
          * Set currently logged in account
          * */
         ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
+
+        Preferences preferences = Preferences.userRoot();
+        preferences.put("LoginEmail", emailEntry.getText());
+        Preferences.userRoot().get("TimeOfLogin", LocalDate.now().toString());
 
         NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
 
