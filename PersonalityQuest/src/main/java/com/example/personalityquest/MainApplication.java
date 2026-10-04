@@ -25,6 +25,8 @@ import java.util.prefs.Preferences;
 
 /** Starts the JavaFX application and opens its initial screen */
 public class MainApplication extends Application {
+
+    private final LoginCacheService loginCacheService = new LoginCacheService();
     /** Initialises application resources and displays the account screen
      * @param stage the primary JavaFX stage
      * @throws IOException if the screen resource cannot be loaded
@@ -50,7 +52,7 @@ public class MainApplication extends Application {
 
             LocalDate now = LocalDate.now();
 
-            LoginCache loginCache = LoginCacheService.GetLoginCache();
+            LoginCache loginCache = loginCacheService.GetLoginCache();
 
             // do we have login details
             if (loginCache.GetEmail().isEmpty()){
@@ -75,9 +77,9 @@ public class MainApplication extends Application {
         UserQuestDAO.EnsureTables();
     }
 
-    static void AttemptLogin(LoginCache loginCache) throws Exception {
+    void AttemptLogin(LoginCache loginCache) throws Exception {
 
-        if (LoginCacheService.IsPastTimeLimit(loginCache.GetLastLoginDate())){
+        if (loginCacheService.IsPastTimeLimit(loginCache.GetLastLoginDate())){
             throw new Exception("Login Cache Expired");
         }
 

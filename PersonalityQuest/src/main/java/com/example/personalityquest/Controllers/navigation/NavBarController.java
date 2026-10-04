@@ -228,7 +228,8 @@ public class NavBarController implements Initializable {
 
     @FXML
     private void OnLogout() throws IOException {
-        LoginCacheService.ClearCache();
+        LoginCacheService loginCacheService = new LoginCacheService();
+        loginCacheService.ClearCache();
         ApplicationManager.CurrentAccount.setCurrentEmail("");
 
         NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);
