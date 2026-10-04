@@ -10,6 +10,7 @@ import javafx.scene.control.ToggleGroup;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/** Controls settings interactions */
 public class SettingsController implements Initializable {
     @FXML
     private NavBarController navBarController;
@@ -24,6 +25,10 @@ public class SettingsController implements Initializable {
     private ToggleButton languageEnglishButton, languageVietnameseButton,
             languageSpanishButton;
 
+    /** Initialises the settings controls
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.SETTINGS);

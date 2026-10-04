@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/** Controls quiz questions and answers */
 public class QuizController implements Initializable {
     @FXML
     private NavBarController navBarController;
@@ -32,6 +33,10 @@ public class QuizController implements Initializable {
 
     private Integer selectedOption;
 
+    /** Initialises quiz controls and loads the first question
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (!QuizService.HasActiveAttempt()) {

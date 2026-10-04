@@ -22,6 +22,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.prefs.Preferences;
 
+/** Controls account sign-in */
 public class AccountSignInController {
     private static final double COMPACT_BREAKPOINT = 700;
 

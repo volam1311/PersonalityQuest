@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 
+/** Controls account password updates */
 public class UpdateAccountPasswordController {
 
     private final static String updatePasswordSql = "";

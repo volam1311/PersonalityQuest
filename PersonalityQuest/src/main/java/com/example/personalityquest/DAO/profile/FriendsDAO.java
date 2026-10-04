@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Stores and retrieves account friendship relationships */
 public class FriendsDAO {
     public static final String GET_FRIENDS = """
         SELECT friendsEmail
@@ -28,6 +29,11 @@ public class FriendsDAO {
         WHERE accountEmail = ?
         AND friendsEmail = ?
     """;
+    /** Returns account details for the friends of the supplied account
+     * @param email the account email whose friends should be loaded
+     * @return the friend's account details
+     * @throws Exception if the friend records cannot be loaded
+     */
     public static List<EmailDetails> GetFriendsForEmail(String email) throws Exception {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(GET_FRIENDS);
@@ -43,6 +49,11 @@ public class FriendsDAO {
         return detailsForFriends;
     }
 
+    /** Adds a friendship between two accounts
+     * @param yourEmail the email address of the account adding the friend
+     * @param friendsEmail the email address of the account to add
+     * @throws SQLException if the friendship cannot be stored
+     */
     public static void AddFriend(String yourEmail, String friendsEmail) throws SQLException {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(INSERT_FRIEND);
@@ -52,6 +63,11 @@ public class FriendsDAO {
         statement.executeUpdate();
     }
 
+    /** Removes a friendship between two accounts
+     * @param yourEmail the email address of the account removing the friend
+     * @param friendsEmail the email address of the friend to remove
+     * @throws SQLException if the friendship cannot be removed
+     */
     public static void RemoveFriend(String yourEmail, String friendsEmail) throws SQLException {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(REMOVE_FRIEND);

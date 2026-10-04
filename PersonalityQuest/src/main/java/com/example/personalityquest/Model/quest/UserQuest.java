@@ -17,6 +17,13 @@ public class UserQuest {
     // Either 'Active', 'Completed'
     private String status;
 
+    /** Creates quest progress for an account
+     * @param labourId the quest ID
+     * @param accountEmail the account email
+     * @param percentageComplete progress from zero to one
+     * @param status the quest status
+     * @throws IllegalArgumentException if an ID, email, status, or progress value is invalid
+     */
     public UserQuest(int labourId, String accountEmail, float percentageComplete, String status){
         if (labourId <= 0){
             throw new IllegalArgumentException("Labour Id is null");
@@ -37,26 +44,44 @@ public class UserQuest {
         this.status = status;
     }
 
+    /** Returns the quest ID
+     * @return the quest ID
+     */
     public int getLabourId() {
         return labourId;
     }
 
+    /** Returns the quest progress as a value from zero to one
+     * @return the completion ratio
+     */
     public float getPercentageComplete() {
         return percentageComplete;
     }
 
+    /** Returns the email of the account assigned to the quest
+     * @return the account email
+     */
     public String getAccountEmail() {
         return accountEmail;
     }
 
+    /** Returns the quest status
+     * @return the current status
+     */
     public String getStatus() {
         return status;
     }
 
+    /** Sets the quest progress ratio
+     * @param percentageComplete progress from zero to one
+     */
     public void setPercentageComplete(float percentageComplete) {
         this.percentageComplete = percentageComplete;
     }
 
+    /** Sets the quest status
+     * @param status the new status
+     */
     public void setStatus(String status) {
         this.status = status;
     }

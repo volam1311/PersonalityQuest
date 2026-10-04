@@ -28,7 +28,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/** Controls navigation destinations and their selected state */
 public class NavBarController implements Initializable {
+    /** Lists the destinations available in the navigation bar */
     public enum NavDestination {
         HOME, QUESTS, TASKS, ARCHETYPE, PROFILE, SETTINGS
     }
@@ -59,6 +61,10 @@ public class NavBarController implements Initializable {
     private final ChangeListener<Number> sceneWidthListener =
             (observable, oldWidth, newWidth) -> ApplyResponsiveLayout(newWidth.doubleValue());
 
+    /** Initialises the navigation bar controls
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         SetProfileLabel();
@@ -82,6 +88,9 @@ public class NavBarController implements Initializable {
         });
     }
 
+    /** Marks the supplied destination as selected
+     * @param destination the destination to select
+     */
     public void setCurrentDestination(NavDestination destination) {
         currentDestination = destination;
         ApplySelectedStyles();

@@ -7,6 +7,13 @@ import com.example.personalityquest.ApplicationManager;
  * Quest tasks are storyline steps on a labour. 
  */
 public class Task {
+    /** Creates a task definition
+     * @param taskId the task's unique ID
+     * @param name the task name
+     * @param description the task description
+     * @param labourId the ID of the quest associated with the task
+     * @throws Exception if the task ID or quest ID is zero
+     */
     public Task(int taskId, String name, String description, int labourId) throws Exception {
         if (taskId == 0){
             throw new Exception("Task Id is == 0 or is null");
@@ -36,22 +43,37 @@ public class Task {
     private final String description;
     private final int labourId;
 
+    /** Returns the task ID
+     * @return the task ID
+     */
     public int getTaskId(){
         return this.taskId;
     }
 
+    /** Returns the task name
+     * @return the task name
+     */
     public String getName(){
         return this.name;
     }
 
+    /** Returns the task description
+     * @return the task description
+     */
     public String getDescription(){
         return this.description;
     }
 
+    /** Returns the associated quest ID
+     * @return the quest ID
+     */
     public int getLabourId(){
         return this.labourId;
     }
 
+    /** Returns the task name for display
+     * @return the task name
+     */
     @Override
     public String toString() {
         return getName();

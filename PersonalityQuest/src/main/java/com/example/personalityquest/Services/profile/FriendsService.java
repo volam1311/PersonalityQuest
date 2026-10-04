@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Coordinates friendship operations between accounts */
 public class FriendsService {
     /**
      * Gets the List of details for a friend

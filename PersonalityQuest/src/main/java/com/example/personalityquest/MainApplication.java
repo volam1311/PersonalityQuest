@@ -23,9 +23,14 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import java.util.prefs.Preferences;
 
+/** Starts the JavaFX application and opens its initial screen */
 public class MainApplication extends Application {
 
     private final LoginCacheService loginCacheService = new LoginCacheService();
+    /** Initialises application resources and displays the account screen
+     * @param stage the primary JavaFX stage
+     * @throws IOException if the screen resource cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException{
         AppFonts.load();
