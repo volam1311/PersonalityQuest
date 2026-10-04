@@ -25,14 +25,35 @@ public record Option(int optionsID,
     }
 
     // Getters and Setters
+    /** Returns the option set ID
+     * @return the option set ID
+     */
     public int getOptionsID() {return optionsID;}
 
+    /** Returns the archetype ID for the first answer
+     * @return the first answer's archetype ID
+     */
     public int getOption1Archetype() {return option1Archetype;}
+    /** Returns the archetype ID for the second answer
+     * @return the second answer's archetype ID
+     */
     public int getOption2Archetype() {return option2Archetype;}
+    /** Returns the archetype ID for the third answer
+     * @return the third answer's archetype ID
+     */
     public int getOption3Archetype() {return option3Archetype;}
 
+    /** Returns the text of the first answer
+     * @return the first answer text
+     */
     public String getOption1() {return option1;}
+    /** Returns the text of the second answer
+     * @return the second answer text
+     */
     public String getOption2() {return option2;}
+    /** Returns the text of the third answer
+     * @return the third answer text
+     */
     public String getOption3() {return option3;}
 
 }

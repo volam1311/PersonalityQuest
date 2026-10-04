@@ -8,6 +8,7 @@ import com.example.personalityquest.SQLite;
 import java.sql.*;
 import java.util.Locale;
 
+/** Stores and retrieves quest catalog records */
 public class QuestDAO {
     /**
      * Gets an Array of Quests for the given archetypeId
@@ -148,6 +149,9 @@ public class QuestDAO {
         }
     }
 
+    /** Recreates the quest catalog and inserts its default records
+     * @throws SQLException if the catalog cannot be recreated
+     */
     public static void ResetAndSeedCatalog() throws SQLException {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {
@@ -158,6 +162,11 @@ public class QuestDAO {
     }
 
 
+    /** Returns quests assigned to the supplied archetype
+     * @param archetypeId the archetype ID to look up
+     * @return the quests assigned to the archetype
+     * @throws SQLException if the quests cannot be loaded
+     */
     public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
 
         int count = GetCountOfQuestsForArchetypeId(archetypeId);

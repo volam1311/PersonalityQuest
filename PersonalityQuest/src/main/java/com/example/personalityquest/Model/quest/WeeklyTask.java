@@ -14,6 +14,14 @@ import com.example.personalityquest.SQLite;
  * (taskType = WEEKLY). Quest storyline steps stay in Tasks with taskType = QUEST.
  */
 public class WeeklyTask {
+    /** Creates a weekly task assigned to an account
+     * @param email the account email
+     * @param taskId the weekly task ID
+     * @param status the task status
+     * @param reflection the saved reflection text
+     * @param weekStarted the Monday date for the task's week
+     * @throws Exception if the task ID is zero
+     */
     public WeeklyTask(String email, int taskId, String status, String reflection, String weekStarted) throws Exception {
         if (taskId == 0){
             throw new Exception("Task Id is == 0 or is null");
@@ -48,22 +56,43 @@ public class WeeklyTask {
     private String reflection;
     private final String weekStarted;
 
+    /** Returns the weekly task ID
+     * @return the task ID
+     */
     public int getTaskId(){ return this.taskId; }
+    /** Returns the account email
+     * @return the account email
+     */
     public String getEmail(){
         return this.email;
     }
+    /** Returns the saved reflection text
+     * @return the reflection text
+     */
     public String getReflection(){
         return this.reflection;
     }
 
+    /** Returns the weekly task status
+     * @return the current status
+     */
     public String getStatus(){
         return this.status;
     }
+    /** Returns the Monday date associated with the task
+     * @return the week start date as text
+     */
     public String getWeekStarted(){
         return this.weekStarted;
     }
 
+    /** Sets the weekly task status
+     * @param status the new status
+     */
     public void setStatus(String status){ this.status = status; }
+    /** Sets the reflection text
+     * @param reflection the new reflection text
+     */
     public void setReflection(String reflection){ this.reflection = reflection; }
 
     /**

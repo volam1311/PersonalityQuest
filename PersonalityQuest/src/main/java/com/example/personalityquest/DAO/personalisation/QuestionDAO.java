@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
+/** Stores and retrieves quiz question records */
 public class QuestionDAO {
     private static final String CREATE_QUESTIONS = """
             CREATE TABLE IF NOT EXISTS Questions (
@@ -28,6 +29,9 @@ public class QuestionDAO {
     private QuestionDAO() {
     }
 
+    /** Inserts the default question catalog
+     * @throws SQLException if the catalog cannot be inserted
+     */
     public static void SeedCatalog() throws SQLException {
 
         // The Four Realms are Ego, Soul, Self and Mark --> Each Realm contains 3 Archetypes
@@ -62,6 +66,9 @@ public class QuestionDAO {
         InsertQuestion(16, "Mark", "Scenario", "You discover a long-standing rule at work is holding good people back, but plenty of others just quietly follow it. What do you do? (scenario)");
     }
 
+    /** Creates question tables if they do not already exist
+     * @throws SQLException if the tables cannot be created
+     */
     public static void EnsureTables() throws SQLException {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {
@@ -69,6 +76,10 @@ public class QuestionDAO {
         }
     }
 
+    /** Checks whether question catalog records exist
+     * @return true when the catalog contains records
+     * @throws SQLException if the catalog cannot be checked
+     */
     public static boolean HasCatalog() throws SQLException {
         Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
@@ -78,6 +89,15 @@ public class QuestionDAO {
         }
     }
 
+    /**
+     * Inserts a question if its ID is not present
+     *
+     * @param questionID the question's unique ID
+     * @param realmType the realm associated with the question
+     * @param questionType the type of question
+     * @param questionPrompt the text shown to the user
+     * @throws SQLException if the question cannot be inserted
+     */
     public static void InsertQuestion(
             int questionID,
             String realmType,
@@ -101,6 +121,10 @@ public class QuestionDAO {
         }
     }
 
+    /** Returns question records ordered by ID
+     * @return the questions in the catalog
+     * @throws SQLException if the questions cannot be read
+     */
     public static List<Question> GetQuestions() throws SQLException {
         EnsureTables();
         Connection connection = SQLite.getConnection();

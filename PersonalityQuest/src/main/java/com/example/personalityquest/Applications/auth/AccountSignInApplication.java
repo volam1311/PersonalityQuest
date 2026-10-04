@@ -10,7 +10,12 @@ import javafx.stage.*;
 
 import java.io.*;
 
+/** Launches the account sign-in screen */
 public class AccountSignInApplication extends Application {
+    /** Loads the account sign-in screen into the primary stage
+     * @param stage the primary JavaFX stage
+     * @throws IOException if the screen resource cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
             AppFonts.load();

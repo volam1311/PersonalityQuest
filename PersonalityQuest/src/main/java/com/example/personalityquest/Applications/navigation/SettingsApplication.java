@@ -10,7 +10,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/** Launches the settings screen */
 public class SettingsApplication extends Application {
+    /** Loads the settings screen into the primary stage
+     * @param stage the primary JavaFX stage
+     * @throws IOException if the screen resource cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
         AppFonts.load();

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/** Controls the weekly-reflection form */
 public class WeeklyTaskReflectionController implements Initializable {
     @FXML
     private NavBarController navBarController;
@@ -24,11 +25,18 @@ public class WeeklyTaskReflectionController implements Initializable {
 
     private WeeklyTask currentTask;
 
+    /** Initialises the weekly-reflection form
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
     }
 
+    /** Sets the task displayed by the reflection form
+     * @param task the weekly task to display
+     */
     public void setTask(WeeklyTask task){
         this.currentTask = task;
 

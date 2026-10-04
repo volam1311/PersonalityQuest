@@ -4,6 +4,7 @@ import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.auth.AccountDAO;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * This class managers everything to do with password and has utility functions to check
@@ -14,7 +15,7 @@ public class PasswordService {
     /**
      * Checks to see if the given password is for the given email's account
      * @param email "The email of the account that is for the password"
-     * @param password "The password that wants to be checked"
+     * @param password "The plaintext password that wants to be checked"
      * @return "Whether password matches the given account email"
      * @throws SQLException "Database Access Failure"
      */

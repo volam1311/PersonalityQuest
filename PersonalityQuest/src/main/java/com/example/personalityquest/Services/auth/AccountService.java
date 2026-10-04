@@ -6,8 +6,15 @@ import com.example.personalityquest.Model.auth.EmailDetails;
 import java.sql.SQLException;
 import java.util.Objects;
 
+/** Coordinates account profile updates */
 public class AccountService {
 
+    /**
+     * updates an account's details through account data service
+     * @param emailDetails the new account details
+     * @param currentEmail the email address associated with the account
+     * @throws SQLException if account details cannot be updated
+     */
     public static void UpdateEmailDetailsForAccount(EmailDetails emailDetails, String currentEmail) throws SQLException {
         /*
          * Does the new email already exist and is the email being updated

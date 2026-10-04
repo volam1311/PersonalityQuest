@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/** Controls dashboard data and user interactions */
 public class DashboardController implements Initializable {
 
     // ---- Archetype balance radar chart constants (copied from ProfileController) ----
@@ -79,6 +80,10 @@ public class DashboardController implements Initializable {
     private double[] radarValues = new double[RADAR_AXIS_COUNT];
     private boolean isRefreshingQuestline = false;
 
+    /** Initialises dashboard controls and loads account data
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);

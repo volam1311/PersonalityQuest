@@ -407,5 +407,34 @@ public class WeeklyTaskServiceTest {
         assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.UpdateGivenTaskToBeFinished(task, null, "test"));
     }
 
+    @Test
+    public void SavingDraftOnlyUpdatesSelectedWeek() throws Exception {
+        LocalDate thisWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate previousWeek = thisWeek.minusWeeks(1);
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, reflection, weekStart)
+                    VALUES
+                        ('test', 9999, 'Finished', 'Older reflection', ?),
+                        ('test', 9999, 'NotStarted', '', ?)
+                    """)) {
+            statement.setString(1, previousWeek.toString());
+            statement.setString(2, thisWeek.toString());
+            statement.executeUpdate();
+        }
+
+        WeeklyTask currentTask = WeeklyTaskService.GetWeeklyTask("test", 9999, thisWeek);
+        WeeklyTaskService.UpdateGivenTaskToDraft(currentTask, "New reflection", "test");
+        WeeklyTask olderTask = WeeklyTaskService.GetWeeklyTask("test", 9999, previousWeek);
+        WeeklyTask updatedTask = WeeklyTaskService.GetWeeklyTask("test", 9999, thisWeek);
+
+        assertEquals("Older reflection", olderTask.getReflection());
+        assertEquals("Finished", olderTask.getStatus());
+        assertEquals("New reflection", updatedTask.getReflection());
+        assertEquals("Started", updatedTask.getStatus());
+    }
+
 
 }

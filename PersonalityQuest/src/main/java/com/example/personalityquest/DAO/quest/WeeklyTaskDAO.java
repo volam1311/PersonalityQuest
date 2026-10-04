@@ -17,6 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+/** Stores and updates each account's weekly task records */
 public class WeeklyTaskDAO {
     private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
 
@@ -25,13 +26,13 @@ public class WeeklyTaskDAO {
     private final static String SQL_UPDATE_DRAFT = """
             UPDATE WeeklyTasks
             SET reflection = ?, status = 'Started'
-            WHERE accountEmail = ? AND taskId = ?
+            WHERE accountEmail = ? AND taskId = ? AND weekStart = ?
         """;
 
     private final static String SQL_FINISH_TASK = """
             UPDATE WeeklyTasks
             SET reflection = ?, status = 'Finished'
-            WHERE accountEmail = ? AND taskId = ?
+            WHERE accountEmail = ? AND taskId = ? AND weekStart = ?
         """;
 
     private final static String TASK_FOR_EMAIL = """
@@ -230,6 +231,7 @@ public class WeeklyTaskDAO {
         statement.setString(1, reflection);
         statement.setString(2, email);
         statement.setInt(3, task.getTaskId());
+        statement.setString(4, task.getWeekStarted());
 
         statement.executeUpdate();
     }
@@ -246,6 +248,7 @@ public class WeeklyTaskDAO {
         statement.setString(1, reflection);
         statement.setString(2, email);
         statement.setInt(3, task.getTaskId());
+        statement.setString(4, task.getWeekStarted());
 
         statement.executeUpdate();
     }

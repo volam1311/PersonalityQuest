@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Stores and retrieves each account's storyline quest progress */
 public class UserQuestDAO {
 
     private static final String CREATE_USER_QUESTS = """
@@ -23,6 +24,9 @@ public class UserQuestDAO {
             )
             """;
 
+    /** Creates the user quest progress table if it does not already exist
+     * @throws SQLException if the table cannot be created
+     */
     public static void EnsureTables() throws SQLException {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {
@@ -42,6 +46,9 @@ public class UserQuestDAO {
         }
     }
 
+    /** Deletes storyline quest progress for every account
+     * @throws SQLException if the quest progress cannot be deleted
+     */
     public static void ClearAll()  throws SQLException {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {

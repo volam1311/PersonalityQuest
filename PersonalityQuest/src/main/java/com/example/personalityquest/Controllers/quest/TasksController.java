@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 
+/** Controls weekly-task selection and completion */
 public class TasksController implements Initializable {
     private static final double STACKED_BREAKPOINT = 760;
     private static final double FULL_PERCENT = 100;
@@ -78,6 +79,10 @@ public class TasksController implements Initializable {
 
     private boolean updatingJournalSelection;
 
+    /** Initialises quest challenge/reflection controls and loads the active quest's data
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
@@ -88,6 +93,9 @@ public class TasksController implements Initializable {
         LoadQuestReflections();
     }
 
+    /** Selects a weekly task for display
+     * @param weeklyTask the task to select
+     */
     public void selectTask(WeeklyTask weeklyTask) {
         taskToSelect = weeklyTask;
         SelectMatchingTask();

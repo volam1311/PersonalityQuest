@@ -11,15 +11,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/** Loads application screens and manages the primary stage */
 public class NavigationService {
     public final static String fxmlPrefix = "/com/example/personalityquest/";
 
     public static Stage stage;
 
+    /** Sets the primary stage used for navigation
+     * @param currentStage the primary JavaFX stage
+     */
     public static void Init(Stage currentStage){
         stage = currentStage;
     }
 
+    /** Loads the requested screen into the primary stage
+     * @param screen the screen to load
+     * @throws IOException if the screen resource cannot be loaded
+     */
     public static void LoadScreen(ScreenEnum screen) throws IOException {
         String fxmlString = SetFxmlDoc(screen);
 
@@ -30,6 +38,10 @@ public class NavigationService {
         stage.show();
     }
 
+    /** Returns the FXML resource path for a screen
+     * @param screenEnum the screen whose FXML path is requested
+     * @return the FXML resource path
+     */
     public static String SetFxmlDoc(ScreenEnum screenEnum){
         return fxmlPrefix + switch (screenEnum){
             case ScreenEnum.ACCOUNT_CREATION -> "AccountCreation.fxml";

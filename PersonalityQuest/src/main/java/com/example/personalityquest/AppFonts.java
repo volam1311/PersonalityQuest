@@ -5,6 +5,7 @@ import javafx.scene.text.Font;
 import java.io.IOException;
 import java.io.InputStream;
 
+/** Loads fonts used by the application */
 public final class AppFonts {
     private static final String[] FONT_FILES = {
             "/com/example/personalityquest/fonts/Poppins-Regular.ttf",
@@ -20,6 +21,7 @@ public final class AppFonts {
     private AppFonts() {
     }
 
+    /** Registers the bundled fonts with JavaFX */
     public static void load() {
         if (loaded) {
             return;

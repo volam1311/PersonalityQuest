@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/** Controls the display of archetype information */
 public class ArchetypeController implements Initializable {
     private static final String SELECTED_ARCHETYPE = "selected-archetype";
 
@@ -59,6 +60,10 @@ public class ArchetypeController implements Initializable {
     private Map<Archetype, Quest> pinnedQuests = Map.of();
     private Archetype selectedArchetype;
 
+    /** Initialises archetype controls and loads the selected archetype
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);

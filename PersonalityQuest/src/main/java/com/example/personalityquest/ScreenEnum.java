@@ -1,5 +1,6 @@
 package com.example.personalityquest;
 
+/** Identifies the screens available to application navigation */
 public enum ScreenEnum {
     ACCOUNT_CREATION,
     ACCOUNT_SIGN_IN,
