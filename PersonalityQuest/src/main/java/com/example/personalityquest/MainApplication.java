@@ -6,10 +6,8 @@ import com.example.personalityquest.DAO.auth.UserDAO;
 import com.example.personalityquest.DAO.personalisation.ArchetypeDAO;
 import com.example.personalityquest.DAO.quest.QuestDAO;
 import com.example.personalityquest.DAO.quest.UserQuestDAO;
-import com.example.personalityquest.Services.auth.AccountService;
-import com.example.personalityquest.Services.auth.EmailService;
-import com.example.personalityquest.Services.auth.HashingService;
-import com.example.personalityquest.Services.auth.PasswordService;
+import com.example.personalityquest.Model.auth.LoginCache;
+import com.example.personalityquest.Services.auth.*;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -47,20 +45,21 @@ public class MainApplication extends Application {
 
             LocalDate now = LocalDate.now();
 
-            String dateNow = Preferences.userRoot().get("TimeOfLogin", now.toString());
-            String loginEmail = Preferences.userRoot().get("LoginEmail", "");
+            LoginCache loginCache = LoginCacheService.GetLoginCache();
 
             // do we have login details
-            if (!loginEmail.isEmpty()){
-                try{
-                    AttemptLogin(loginEmail, dateNow);
-                    return;
-                }
-                catch (Exception e) {
-                   System.out.println(e.getMessage());
-                }
+            if (loginCache.GetEmail().isEmpty()){
+                NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
+                return;
             }
-            NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
+
+            try{
+                AttemptLogin(loginCache);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
+            }
         }
         catch (IOException e){
             System.out.println(e.getMessage());
@@ -71,22 +70,17 @@ public class MainApplication extends Application {
         UserQuestDAO.EnsureTables();
     }
 
-    static void AttemptLogin(String email, String dateNow) throws Exception {
-        LocalDate parsedDate = LocalDate.parse(dateNow);
+    static void AttemptLogin(LoginCache loginCache) throws Exception {
 
-        if (ChronoUnit.DAYS.between(parsedDate, LocalDate.now()) > 7){
-            Preferences.userRoot().put("LoginEmail", "");
-            Preferences.userRoot().get("TimeOfLogin", LocalDate.now().toString());
-            NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
-            return;
+        if (LoginCacheService.IsPastTimeLimit(loginCache.GetLastLoginDate())){
+            throw new Exception("Login Cache Expired");
         }
 
-
-        if (!EmailService.DoesAccountWithEmailExist(email)){
+        if (!EmailService.DoesAccountWithEmailExist(loginCache.GetEmail())){
             throw new Exception("Account does not exist with this email");
         }
 
-        ApplicationManager.CurrentAccount.setCurrentEmail(email);
+        ApplicationManager.CurrentAccount.setCurrentEmail(loginCache.GetEmail());
         NavigationService.LoadScreen(ScreenEnum.DASHBOARD);
     }
 }

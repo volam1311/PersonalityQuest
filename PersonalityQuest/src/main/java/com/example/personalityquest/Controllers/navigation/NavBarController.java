@@ -6,8 +6,10 @@ import com.example.personalityquest.Applications.quest.QuestApplication;
 import com.example.personalityquest.Applications.navigation.SettingsApplication;
 import com.example.personalityquest.Applications.quest.TasksApplication;
 import com.example.personalityquest.Model.auth.EmailDetails;
+import com.example.personalityquest.Model.auth.LoginCache;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
+import com.example.personalityquest.Services.auth.LoginCacheService;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -217,7 +219,9 @@ public class NavBarController implements Initializable {
 
     @FXML
     private void OnLogout() throws IOException {
+        LoginCacheService.ClearCache();
         ApplicationManager.CurrentAccount.setCurrentEmail("");
+
         NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);
     }
 
