@@ -107,4 +107,4 @@ PersonalityQuest,com.example.personalityquest.Model.auth,EmailDetails,0,59,0,8,0
 PersonalityQuest,com.example.personalityquest.Model.auth,LoginCache,0,15,0,0,0,6,0,3,0,3
 PersonalityQuest,com.example.personalityquest.Model.auth,User,8,60,0,0,2,25,1,13,1,13
 PersonalityQuest,com.example.personalityquest.Services.navigation,NavigationService,102,0,28,0,40,0,31,0,5,0
-PersonalityQuest,com.example.personalityquest.Services.quiz,QuizService,241,359,52,44,63,109,41,35,7,21
+PersonalityQuest,com.example.personalityquest.Services.quiz,QuizService,241,361,52,44,63,109,41,36,7,22
