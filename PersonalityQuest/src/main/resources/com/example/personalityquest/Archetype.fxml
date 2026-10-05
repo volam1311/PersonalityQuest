@@ -37,11 +37,11 @@
                         <Button fx:id="redoQuizButton" mnemonicParsing="false" onAction="#OnRedoQuiz" styleClass="pill-button-small" text="Redo" />
                     </HBox>
 
-                    <GridPane hgap="16" vgap="16">
+                    <GridPane hgap="12" vgap="12">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="37.5" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="37.5" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="25" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="37.5" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="37.5" />
                         </columnConstraints>
                         <rowConstraints>
                             <RowConstraints vgrow="ALWAYS" />
@@ -49,19 +49,19 @@
                         </rowConstraints>
 
                         <!-- Row 1, Column 1: Archetype image (placeholder) -->
-                        <StackPane minHeight="300" styleClass="card, archetype-image-panel" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <ImageView fx:id="archetypeImageView" fitHeight="280" fitWidth="280" preserveRatio="true" smooth="true" visible="false" />
+                        <StackPane minHeight="220" minWidth="0" styleClass="card, archetype-image-panel" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <ImageView fx:id="archetypeImageView" fitHeight="200" fitWidth="200" preserveRatio="true" smooth="true" visible="false" />
                             <Label fx:id="archetypeImageLabel" styleClass="archetype-emoji" text="" />
                         </StackPane>
 
                         <!-- Row 2, Column 1: Quest focus -->
-                        <VBox minHeight="300" spacing="8" styleClass="card, archetype-panel" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <VBox minHeight="170" minWidth="0" spacing="8" styleClass="card, archetype-panel" GridPane.columnIndex="0" GridPane.rowIndex="1">
                             <Label styleClass="section-heading-label" text="Quest focus" />
                             <Label fx:id="questFocusLabel" styleClass="lore-body" wrapText="true" text="Your quest focus will appear here." />
                         </VBox>
 
                         <!-- Row 1 & 2, Column 2: Archetype detail panel -->
-                        <VBox minHeight="620" spacing="14" styleClass="archetype-detail-panel" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="2">
+                        <VBox minHeight="0" minWidth="0" spacing="12" styleClass="archetype-detail-panel" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="2">
                             <HBox alignment="BASELINE_LEFT" spacing="8">
                                 <Label fx:id="archetypeRankLabel" styleClass="archetype-rank" text="#1" />
                                 <Label fx:id="archetypeNameLabel" styleClass="archetype-name" text="The Hero" />
@@ -94,7 +94,7 @@
                         </VBox>
 
                         <!-- Row 1, Column 3: Realm wheel (top scoring archetype per realm) -->
-                        <GridPane minHeight="300" hgap="10" styleClass="realm-wheel" vgap="10" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                        <GridPane minHeight="170" minWidth="0" hgap="8" styleClass="realm-wheel" vgap="8" GridPane.columnIndex="2" GridPane.rowIndex="0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
                                 <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
@@ -111,7 +111,7 @@
                         </GridPane>
 
                         <!-- Row 2, Column 3: All 12 archetypes ranked by score -->
-                        <VBox minHeight="300" spacing="8" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <VBox minHeight="170" minWidth="0" spacing="8" GridPane.columnIndex="2" GridPane.rowIndex="1">
                             <Label styleClass="section-heading-label" text="All archetypes" />
                             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="ranked-list-scroll" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
                                 <content>
