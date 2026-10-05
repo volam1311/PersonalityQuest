@@ -1,20 +1,25 @@
 package com.example.personalityquest.Services.quiz;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.personalisation.OptionDAO;
 import com.example.personalityquest.DAO.personalisation.QuestionDAO;
 import com.example.personalityquest.DAO.quest.QuizResultDAO;
-import com.example.personalityquest.Services.quest.QuestService;
-import com.example.personalityquest.Services.quest.UserQuestService;
-import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.Option;
-import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quiz.Question;
 import com.example.personalityquest.Model.quiz.QuizResult;
-import com.example.personalityquest.Model.quest.UserQuest;
-
-import java.sql.SQLException;
-import java.util.*;
+import com.example.personalityquest.Services.quest.QuestService;
+import com.example.personalityquest.Services.quest.UserQuestService;
 
 /**
  * Runs the archetype quiz: dummy questions, answers, scoring, and quest assignment.
@@ -42,7 +47,9 @@ public class QuizService {
 
     // Defaults to the 7-question demo quiz so every teammate gets it with zero setup.
     // To run the full 16-question quiz instead, pass -Dquiz.demo=false at launch.
-    private static final boolean DEMO_MODE = Boolean.parseBoolean(System.getProperty("quiz.demo", "true"));
+    private static boolean IsDemoMode() {
+    return Boolean.parseBoolean(System.getProperty("quiz.demo", "true"));
+} 
 
     /**
      * Starts a new attempt with the dummy five-question bank.
@@ -51,7 +58,7 @@ public class QuizService {
         try {
             EnsureCatalog();
             questions = QuestionDAO.GetQuestions();
-            if (DEMO_MODE){
+            if (IsDemoMode()){
                 questions = DemoQuestionSet(questions);
             }
         } catch (SQLException exception) {

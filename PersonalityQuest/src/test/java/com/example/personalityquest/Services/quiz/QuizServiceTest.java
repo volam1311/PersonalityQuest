@@ -26,6 +26,7 @@ public class QuizServiceTest {
 
     @BeforeEach
     void setUp() throws SQLException {
+        System.setProperty("quiz.demo", "false");
         QuizService.Reset();
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
         SQLite.setConnection(connection);
@@ -34,6 +35,7 @@ public class QuizServiceTest {
     @AfterEach
     void tearDown() throws SQLException {
         QuizService.Reset();
+        System.clearProperty("quiz.demo");
         if (connection != null) {
             connection.close();
         }
