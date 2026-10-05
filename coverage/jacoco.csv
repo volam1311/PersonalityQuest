@@ -48,8 +48,9 @@ PersonalityQuest,com.example.personalityquest.DAO.profile,StreakDAO,2,155,4,14,0
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,NavBarController.NavDestination,45,0,0,0,2,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,SettingsController,109,0,16,0,35,0,16,0,8,0
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,DashboardController.QuestListItem,12,0,0,0,1,0,1,0,1,0
+PersonalityQuest,com.example.personalityquest.Controllers.navigation,DashboardController.new ListCell() {...},129,0,4,0,23,0,4,0,2,0
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,DashboardController.new ListCell() {...},146,0,4,0,23,0,4,0,2,0
-PersonalityQuest,com.example.personalityquest.Controllers.navigation,DashboardController,873,0,60,0,231,0,59,0,29,0
+PersonalityQuest,com.example.personalityquest.Controllers.navigation,DashboardController,927,0,70,0,248,0,69,0,34,0
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,NavBarController,609,0,71,0,149,0,64,0,23,0
 PersonalityQuest,com.example.personalityquest.Model.profile,StreakProgress,0,21,0,0,0,8,0,4,0,4
 PersonalityQuest,com.example.personalityquest.Model.profile,Achievement,41,0,0,0,2,0,2,0,2,0
@@ -73,21 +74,18 @@ PersonalityQuest,com.example.personalityquest.Services.auth,LoginCacheService,6,
 PersonalityQuest,com.example.personalityquest.Services.auth,HashingService,3,13,0,0,1,2,1,2,1,2
 PersonalityQuest,com.example.personalityquest.Services.auth,AccountService,23,0,4,0,5,0,4,0,2,0
 PersonalityQuest,com.example.personalityquest.Model.chat,ReflectionContext,2,56,1,1,0,11,1,2,0,2
-PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestViewerController,1367,0,181,0,375,0,127,0,35,0
-PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.TaskListItem,26,0,4,0,4,0,4,0,2,0
+PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestViewerController,1388,0,183,0,384,0,128,0,35,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestViewerController.Tab,27,0,0,0,2,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,WeeklyTaskReflectionController,65,0,0,0,21,0,8,0,8,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.ReflectionListItem,12,0,0,0,1,0,1,0,1,0
-PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController,1623,0,174,0,437,0,139,0,52,0
+PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController,1655,0,196,0,436,0,144,0,46,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestController.QuestListItem,12,0,0,0,1,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestController.new ListCell() {...},146,0,4,0,23,0,4,0,2,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestController.new ListCell() {...},86,0,4,0,18,0,4,0,2,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestController,436,0,30,0,111,0,30,0,15,0
-PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.ChallengeListItem,12,0,0,0,1,0,1,0,1,0
-PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.new ListCell() {...},172,0,8,0,28,0,6,0,2,0
+PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.ChallengeListItem,15,0,0,0,1,0,1,0,1,0
+PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.new ListCell() {...},221,0,16,0,36,0,10,0,2,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.new ListCell() {...},174,0,8,0,28,0,6,0,2,0
-PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.new ListCell() {...},153,0,4,0,26,0,4,0,2,0
-PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.new ListCell() {...},61,0,4,0,14,0,4,0,2,0
 PersonalityQuest,com.example.personalityquest.Validators.auth,AccountSignUpValidator,0,65,1,19,0,17,1,12,0,3
 PersonalityQuest,com.example.personalityquest.DAO.personalisation,ArchetypeDAO,216,0,8,0,60,0,10,0,6,0
 PersonalityQuest,com.example.personalityquest.DAO.personalisation,OptionDAO,51,246,5,3,15,53,5,5,1,5
