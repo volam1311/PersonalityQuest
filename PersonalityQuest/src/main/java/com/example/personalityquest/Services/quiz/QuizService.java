@@ -40,7 +40,9 @@ public class QuizService {
         result = null;
     }
 
-    private static final boolean DEMO_MODE = Boolean.getBoolean("quiz.demo");
+    // Defaults to the 7-question demo quiz so every teammate gets it with zero setup.
+    // To run the full 16-question quiz instead, pass -Dquiz.demo=false at launch.
+    private static final boolean DEMO_MODE = Boolean.parseBoolean(System.getProperty("quiz.demo", "true"));
 
     /**
      * Starts a new attempt with the dummy five-question bank.
