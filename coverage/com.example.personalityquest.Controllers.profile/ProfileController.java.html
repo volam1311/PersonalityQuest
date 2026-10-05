@@ -129,7 +129,7 @@ import java.util.ResourceBundle;
 <span class="nc" id="L129">            }</span>
         }
 <span class="nc" id="L131">        streakLabel.setText(&quot;Week &quot; + progress.currentStreak());</span>
-<span class="nc" id="L132">        radarValues = QuizService.ArchetypeScores(QuizService.GetResult());</span>
+<span class="nc" id="L132">        radarValues = QuizService.ArchetypeScores(QuizService.LoadStoredResult(email));</span>
 
 <span class="nc" id="L134">        String archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;</span>
 <span class="nc" id="L135">        String personalityType = UserProfileService.UNKNOWN_TYPE;</span>

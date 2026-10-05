@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuestOptionDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.quest</a> &gt; <span class="el_source">QuestOptionDAO.java</span></div><h1>QuestOptionDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.quest;
+
+import com.example.personalityquest.Model.quest.QuestOption;
+import com.example.personalityquest.SQLite;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class QuestOptionDAO {
+    private static final String CREATE_QUEST_OPTIONS = &quot;&quot;&quot;
+            CREATE TABLE IF NOT EXISTS QuestOptions (
+            questOptionId INTEGER PRIMARY KEY,
+            labourId INTEGER NOT NULL,
+            archetypeId INTEGER NOT NULL,
+            reactionType TEXT NOT NULL,
+            text TEXT NOT NULL
+            )
+            &quot;&quot;&quot;;
+
+    private QuestOptionDAO() {}
+
+    public static void EnsureTables() throws SQLException {
+<span class="nc" id="L24">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L25">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L26">            statement.executeUpdate(CREATE_QUEST_OPTIONS);</span>
+        }
+<span class="nc" id="L28">    }</span>
+
+    public static boolean HasCatalog() throws SQLException {
+<span class="nc" id="L31">        EnsureTables();</span>
+<span class="nc" id="L32">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L33">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;SELECT COUNT(*) FROM QuestOptions&quot;)){
+<span class="nc" id="L35">            ResultSet resultSet = statement.executeQuery();</span>
+<span class="nc bnc" id="L36" title="All 4 branches missed.">            return resultSet.next() &amp;&amp; resultSet.getInt(1) &gt; 0;</span>
+        }
+    }
+
+    public static void InsertQuestOption(int questOptionId, int labourId, int archetypeId,
+                                         QuestOption.ReactionType reactionType, String text) throws SQLException {
+<span class="nc" id="L42">        EnsureTables();</span>
+<span class="nc" id="L43">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L44">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;&quot;&quot;
+                    INSERT OR IGNORE INTO QuestOptions (questOptionId, labourId, archetypeId, reactionType, text)
+                    VALUES (?, ?, ?, ?, ?)
+                    &quot;&quot;&quot;)) {
+<span class="nc" id="L49">            statement.setInt(1, questOptionId);</span>
+<span class="nc" id="L50">            statement.setInt(2, labourId);</span>
+<span class="nc" id="L51">            statement.setInt(3, archetypeId);</span>
+<span class="nc" id="L52">            statement.setString(4, reactionType.name());</span>
+<span class="nc" id="L53">            statement.setString(5, text);</span>
+<span class="nc" id="L54">            statement.executeUpdate();</span>
+        }
+<span class="nc" id="L56">    }</span>
+
+    public static List&lt;QuestOption&gt; GetQuestOptionsForLabourId(int labourId) throws SQLException {
+<span class="nc" id="L59">        EnsureTables();</span>
+<span class="nc" id="L60">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L61">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                    &quot;&quot;&quot;
+                        SELECT * FROM QuestOptions
+                        WHERE labourId = ?
+                        ORDER BY questOptionId
+                        &quot;&quot;&quot;)){
+<span class="nc" id="L67">            statement.setInt(1, labourId);</span>
+<span class="nc" id="L68">            ResultSet resultSet = statement.executeQuery();</span>
+<span class="nc" id="L69">            List&lt;QuestOption&gt; options = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            while (resultSet.next()) {</span>
+<span class="nc" id="L71">                options.add(new QuestOption(</span>
+<span class="nc" id="L72">                        resultSet.getInt(&quot;questOptionId&quot;),</span>
+<span class="nc" id="L73">                        resultSet.getInt(&quot;labourId&quot;),</span>
+<span class="nc" id="L74">                        resultSet.getInt(&quot;archetypeId&quot;),</span>
+<span class="nc" id="L75">                        QuestOption.ReactionType.valueOf(resultSet.getString(&quot;reactionType&quot;)),</span>
+<span class="nc" id="L76">                        resultSet.getString(&quot;text&quot;)</span>
+                ));
+            }
+<span class="nc" id="L79">            return options;</span>
+        }
+    }
+
+    public static void SeedCatalog() throws SQLException {
+
+
+        // Hero Questions
+<span class="nc" id="L87">        InsertQuestOption(1, 3, 3, QuestOption.ReactionType.EXCESS,</span>
+                &quot;Charge it head-on — Throw the weapons aside and rush straight at the beast in the open, trusting raw strength and fury to overpower it before it can overpower you. No time to think; attack now, hard, and don't stop.&quot;);
+<span class="nc" id="L89">        InsertQuestOption(2, 3, 3, QuestOption.ReactionType.EXCESS,</span>
+                &quot;Force the fight now — Press the attack immediately where you stand, trading blows in the open rather than losing momentum — hesitation feels like weakness, and a hero fights the enemy in front of him.&quot;);
+<span class="nc" id="L91">        InsertQuestOption(3, 3, 3, QuestOption.ReactionType.DEFICIT,</span>
+                &quot;Hold at a distance — Keep your weapons up and your ground, looking for the beast to tire or expose a weak point first — there's no sense closing with something you can't wound until you're certain of an opening.&quot;);
+
+        // Everyman Questions
+<span class="nc" id="L95">        InsertQuestOption(10, 2, 2, QuestOption.ReactionType.EXCESS,</span>
+                &quot;Stand on your name — State plainly that you are the son of Zeus and that your word alone should outweigh any king's; the judges need no witness when a hero of your standing gives his account.&quot;);
+<span class="nc" id="L97">        InsertQuestOption(11, 2, 2, QuestOption.ReactionType.EXCESS,</span>
+                &quot;Press your own case hard — Argue the facts forcefully and let your reputation carry the day, speaking over the locals rather than leaning on Phyleus; this is your victory to win, and you'd rather not owe it to anyone else.&quot;);
+<span class="nc" id="L99">        InsertQuestOption(12, 2, 2, QuestOption.ReactionType.DEFICIT,</span>
+                &quot;Defer to the room — Sense that the crowd will side with their king, and hold back from pushing Phyleus to speak; better to let the judgment fall where it may than turn the whole of Elis against you.&quot;);
+
+
+        // Innocent Questions
+<span class="nc" id="L104">        InsertQuestOption(13, 1, 1, QuestOption.ReactionType.EXCESS,</span>
+                &quot;Vow to Apollo — In return for letting you complete the labour, offer to perform a penance for him. You've done the hind no harm, so surely a promise of future service will set things right.&quot;);
+<span class="nc" id="L106">        InsertQuestOption(14, 1, 1, QuestOption.ReactionType.EXCESS,</span>
+                &quot;Assert dominance — Stand tall and remind Apollo that you are the son of Zeus, and that he answers to your father. Insist that no one, god or mortal, will stand against his will.&quot;);
+<span class="nc" id="L108">        InsertQuestOption(15, 1, 1, QuestOption.ReactionType.DEFICIT,</span>
+                &quot;Brace for the worst — Expect them to deny you. Ready your grip and prepare to challenge Artemis to an archery competition to prove your right to finish the labour — this hind is sacred to them, and they won't let it go so easily.&quot;);
+
+
+
+        // Outlaw questions
+<span class="nc" id="L114">        InsertQuestOption(45, 12, 12, QuestOption.ReactionType.DEFICIT,</span>
+                &quot; Option 1 Deficit&quot;);
+<span class="nc" id="L116">        InsertQuestOption(46, 12, 12, QuestOption.ReactionType.EXCESS,</span>
+                &quot; Option 2 Excess&quot;);
+<span class="nc" id="L118">        InsertQuestOption(47, 12, 12, QuestOption.ReactionType.DEFICIT,</span>
+                &quot; Option 1 Deficit&quot;);
+<span class="nc" id="L120">        InsertQuestOption(48, 12, 12, QuestOption.ReactionType.EXCESS,</span>
+                &quot; Option 2 Excess&quot;);
+<span class="nc" id="L122">    }</span>
+
+    public static void ResetAndSeedCatalog() throws SQLException {
+<span class="nc" id="L125">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L126">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L127">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS QuestOptions&quot;);</span>
+        }
+<span class="nc" id="L129">        EnsureTables();</span>
+<span class="nc" id="L130">        SeedCatalog();</span>
+<span class="nc" id="L131">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -145,6 +145,17 @@ import java.util.List;
 <span class="fc" id="L145">        return returnedTaskIds;</span>
     }
 
+    public static List&lt;Task&gt; GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (IsLabourIdNull(labourId)) {</span>
+<span class="nc" id="L150">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+        }
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reactionType)){</span>
+<span class="nc" id="L153">            throw new IllegalArgumentException(&quot;Reaction type is null&quot;);</span>
+        }
+
+<span class="nc" id="L156">        return TaskDAO.GetTasksForLabourIdAndReactionType(labourId, reactionType);</span>
+    }
+
     /// NULL CHECKING
     /**
      * Checks if the given labourId is equal to 0
@@ -152,7 +163,7 @@ import java.util.List;
      * @return Whether the labourId is equal to 0
      */
     private static boolean IsLabourIdNull(int labourId){
-<span class="fc bfc" id="L155" title="All 2 branches covered.">        return labourId == 0;</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        return labourId == 0;</span>
     }
     /**
      * Checks if the given taskId is equal to 0
@@ -160,7 +171,7 @@ import java.util.List;
      * @return Whether the taskId is equal to 0
      */
     private static boolean IsTaskIdNull(int taskId){
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        return taskId == 0;</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        return taskId == 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -43,38 +43,40 @@ import javafx.stage.Stage;
      * @return the FXML resource path
      */
     public static String SetFxmlDoc(ScreenEnum screenEnum){
-<span class="nc bnc" id="L46" title="All 13 branches missed.">        return fxmlPrefix + switch (screenEnum){</span>
+<span class="nc bnc" id="L46" title="All 14 branches missed.">        return fxmlPrefix + switch (screenEnum){</span>
 <span class="nc" id="L47">            case ScreenEnum.ACCOUNT_CREATION -&gt; &quot;AccountCreation.fxml&quot;;</span>
 <span class="nc" id="L48">            case ScreenEnum.ACCOUNT_SIGN_IN -&gt; &quot;AccountSignIn.fxml&quot;;</span>
 <span class="nc" id="L49">            case ScreenEnum.DASHBOARD -&gt; &quot;Dashboard.fxml&quot;;</span>
 <span class="nc" id="L50">            case ScreenEnum.PROFILE -&gt; &quot;Profile.fxml&quot;;</span>
 <span class="nc" id="L51">            case ScreenEnum.ARCHETYPE -&gt; &quot;Archetype.fxml&quot;;</span>
 <span class="nc" id="L52">            case ScreenEnum.QUESTS -&gt; &quot;Quest.fxml&quot;;</span>
-<span class="nc" id="L53">            case ScreenEnum.QUIZ -&gt; &quot;Quiz.fxml&quot;;</span>
-<span class="nc" id="L54">            case ScreenEnum.QUIZ_RESULT -&gt; &quot;QuizResult.fxml&quot;;</span>
-<span class="nc" id="L55">            case ScreenEnum.SETTINGS -&gt; &quot;Settings.fxml&quot;;</span>
-<span class="nc" id="L56">            case ScreenEnum.TASKS -&gt; &quot;Tasks.fxml&quot;;</span>
-<span class="nc" id="L57">            case ScreenEnum.UPDATE_ACCOUNT_PASSWORD -&gt; &quot;UpdateAccountPassword.fxml&quot;;</span>
-<span class="nc" id="L58">            case ScreenEnum.UPDATE_PERSONAL_DETAILS -&gt; &quot;UpdateAccountPersonalDetails.fxml&quot;;</span>
-<span class="nc" id="L59">            case ScreenEnum.WEEKLY_TASK_REFLECTION -&gt; &quot;WeeklyTaskReflection.fxml&quot;;</span>
+<span class="nc" id="L53">            case ScreenEnum.QUEST_VIEWER -&gt;  &quot;QuestViewer.fxml&quot;;</span>
+<span class="nc" id="L54">            case ScreenEnum.QUIZ -&gt; &quot;Quiz.fxml&quot;;</span>
+<span class="nc" id="L55">            case ScreenEnum.QUIZ_RESULT -&gt; &quot;QuizResult.fxml&quot;;</span>
+<span class="nc" id="L56">            case ScreenEnum.SETTINGS -&gt; &quot;Settings.fxml&quot;;</span>
+<span class="nc" id="L57">            case ScreenEnum.TASKS -&gt; &quot;Tasks.fxml&quot;;</span>
+<span class="nc" id="L58">            case ScreenEnum.UPDATE_ACCOUNT_PASSWORD -&gt; &quot;UpdateAccountPassword.fxml&quot;;</span>
+<span class="nc" id="L59">            case ScreenEnum.UPDATE_PERSONAL_DETAILS -&gt; &quot;UpdateAccountPersonalDetails.fxml&quot;;</span>
+<span class="nc" id="L60">            case ScreenEnum.WEEKLY_TASK_REFLECTION -&gt; &quot;WeeklyTaskReflection.fxml&quot;;</span>
         };
     }
 
     private static String TitleFor(ScreenEnum screen) {
-<span class="nc bnc" id="L64" title="All 13 branches missed.">        return switch (screen) {</span>
-<span class="nc" id="L65">            case ACCOUNT_CREATION -&gt; &quot;Create Account&quot;;</span>
-<span class="nc" id="L66">            case ACCOUNT_SIGN_IN -&gt; &quot;Account Login&quot;;</span>
-<span class="nc" id="L67">            case DASHBOARD -&gt; &quot;Dashboard&quot;;</span>
-<span class="nc" id="L68">            case PROFILE -&gt; &quot;Profile&quot;;</span>
-<span class="nc" id="L69">            case ARCHETYPE -&gt; &quot;Archetype&quot;;</span>
-<span class="nc" id="L70">            case QUESTS -&gt; &quot;Questline&quot;;</span>
-<span class="nc" id="L71">            case QUIZ -&gt; &quot;Archetype Quiz&quot;;</span>
-<span class="nc" id="L72">            case QUIZ_RESULT -&gt; &quot;Your Archetype&quot;;</span>
-<span class="nc" id="L73">            case SETTINGS -&gt; &quot;Settings&quot;;</span>
-<span class="nc" id="L74">            case TASKS -&gt; &quot;Tasks&quot;;</span>
-<span class="nc" id="L75">            case UPDATE_ACCOUNT_PASSWORD -&gt; &quot;Update Password&quot;;</span>
-<span class="nc" id="L76">            case UPDATE_PERSONAL_DETAILS -&gt; &quot;Update Details&quot;;</span>
-<span class="nc" id="L77">            case WEEKLY_TASK_REFLECTION -&gt; &quot;Weekly Reflection&quot;;</span>
+<span class="nc bnc" id="L65" title="All 14 branches missed.">        return switch (screen) {</span>
+<span class="nc" id="L66">            case ACCOUNT_CREATION -&gt; &quot;Create Account&quot;;</span>
+<span class="nc" id="L67">            case ACCOUNT_SIGN_IN -&gt; &quot;Account Login&quot;;</span>
+<span class="nc" id="L68">            case DASHBOARD -&gt; &quot;Dashboard&quot;;</span>
+<span class="nc" id="L69">            case PROFILE -&gt; &quot;Profile&quot;;</span>
+<span class="nc" id="L70">            case ARCHETYPE -&gt; &quot;Archetype&quot;;</span>
+<span class="nc" id="L71">            case QUESTS -&gt; &quot;Questline&quot;;</span>
+<span class="nc" id="L72">            case QUEST_VIEWER -&gt; &quot;Quest Viewer&quot;;</span>
+<span class="nc" id="L73">            case QUIZ -&gt; &quot;Archetype Quiz&quot;;</span>
+<span class="nc" id="L74">            case QUIZ_RESULT -&gt; &quot;Your Archetype&quot;;</span>
+<span class="nc" id="L75">            case SETTINGS -&gt; &quot;Settings&quot;;</span>
+<span class="nc" id="L76">            case TASKS -&gt; &quot;Journal&quot;;</span>
+<span class="nc" id="L77">            case UPDATE_ACCOUNT_PASSWORD -&gt; &quot;Update Password&quot;;</span>
+<span class="nc" id="L78">            case UPDATE_PERSONAL_DETAILS -&gt; &quot;Update Details&quot;;</span>
+<span class="nc" id="L79">            case WEEKLY_TASK_REFLECTION -&gt; &quot;Weekly Reflection&quot;;</span>
         };
     }
 }

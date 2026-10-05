@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JournalEntryDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.quest</a> &gt; <span class="el_source">JournalEntryDAO.java</span></div><h1>JournalEntryDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.quest;
+
+import com.example.personalityquest.Model.quest.JournalEntry;
+import com.example.personalityquest.SQLite;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L11">public class JournalEntryDAO {</span>
+
+    private static final String CREATE_JOURNAL_TABLE = &quot;&quot;&quot;
+            CREATE TABLE IF NOT EXISTS JournalEntries(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            accountEmail TEXT NOT NULL,
+            labourId INTEGER,
+            entryType TEXT NOT NULL,
+            title TEXT NOT NULL DEFAULT '',
+            body TEXT NOT NULL DEFAULT '',
+            aiFeedback TEXT NOT NULL DEFAULT '',
+            createdAt TEXT NOT NULL
+            )&quot;&quot;&quot;;
+
+    public static void EnsureTables() throws SQLException {
+<span class="nc" id="L26">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L27">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L28">            statement.executeUpdate(CREATE_JOURNAL_TABLE);</span>
+        }
+<span class="nc" id="L30">    }</span>
+
+    public static JournalEntry Insert(String email, Integer labourId, JournalEntry.EntryType entryType,
+                                      String title, String body) throws SQLException {
+<span class="nc" id="L34">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L35">        String createdAt = LocalDateTime.now().toString();</span>
+<span class="nc" id="L36">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;&quot;&quot;
+                INSERT INTO JournalEntries (accountEmail, labourId, entryType, title, body, aiFeedback, createdAt)
+                VALUES (?, ?, ?, ?, ?, '', ?)
+                &quot;&quot;&quot;, Statement.RETURN_GENERATED_KEYS)) {
+<span class="nc" id="L41">            statement.setString(1, email);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">            if (labourId == null) {</span>
+<span class="nc" id="L43">                statement.setNull(2, Types.INTEGER);</span>
+            } else {
+<span class="nc" id="L45">                statement.setInt(2, labourId);</span>
+            }
+<span class="nc" id="L47">            statement.setString(3, entryType.name());</span>
+<span class="nc" id="L48">            statement.setString(4, title);</span>
+<span class="nc" id="L49">            statement.setString(5, body);</span>
+<span class="nc" id="L50">            statement.setString(6, createdAt);</span>
+<span class="nc" id="L51">            statement.executeUpdate();</span>
+
+<span class="nc" id="L53">            int id = 0;</span>
+<span class="nc" id="L54">            try (ResultSet keys = statement.getGeneratedKeys()) {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                if (keys.next()) id = keys.getInt(1);</span>
+            }
+<span class="nc" id="L57">            return new JournalEntry(id, email, labourId, entryType, title, body, &quot;&quot;, createdAt);</span>
+        }
+    }
+
+    /**
+     * Inserts a new journal entry for this labour/type, or updates the existing one if the
+     * user has already added one - so editing and re-saving updates the same entry instead
+     * of creating duplicates.
+     */
+    public static JournalEntry Upsert(String email, Integer labourId, JournalEntry.EntryType entryType,
+                                       String title, String body) throws SQLException {
+<span class="nc" id="L68">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L69">        Integer existingId = FindId(connection, email, labourId, entryType);</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (existingId == null) {</span>
+<span class="nc" id="L71">            return Insert(email, labourId, entryType, title, body);</span>
+        }
+
+<span class="nc" id="L74">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;UPDATE JournalEntries SET title = ?, body = ? WHERE id = ?&quot;)) {
+<span class="nc" id="L76">            statement.setString(1, title);</span>
+<span class="nc" id="L77">            statement.setString(2, body);</span>
+<span class="nc" id="L78">            statement.setInt(3, existingId);</span>
+<span class="nc" id="L79">            statement.executeUpdate();</span>
+        }
+
+<span class="nc" id="L82">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;SELECT createdAt FROM JournalEntries WHERE id = ?&quot;)) {
+<span class="nc" id="L84">            statement.setInt(1, existingId);</span>
+<span class="nc" id="L85">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            String createdAt = rs.next() ? rs.getString(&quot;createdAt&quot;) : LocalDateTime.now().toString();</span>
+<span class="nc" id="L87">            return new JournalEntry(existingId, email, labourId, entryType, title, body, &quot;&quot;, createdAt);</span>
+        }
+    }
+
+    private static Integer FindId(Connection connection, String email, Integer labourId,
+                                   JournalEntry.EntryType entryType) throws SQLException {
+<span class="nc" id="L93">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;SELECT id FROM JournalEntries WHERE accountEmail = ? AND labourId = ? AND entryType = ?&quot;)) {
+<span class="nc" id="L95">            statement.setString(1, email);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            if (labourId == null) {</span>
+<span class="nc" id="L97">                statement.setNull(2, Types.INTEGER);</span>
+            } else {
+<span class="nc" id="L99">                statement.setInt(2, labourId);</span>
+            }
+<span class="nc" id="L101">            statement.setString(3, entryType.name());</span>
+<span class="nc" id="L102">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            return rs.next() ? rs.getInt(1) : null;</span>
+        }
+    }
+
+    public static List&lt;JournalEntry&gt; GetForEmailAndType(String email, JournalEntry.EntryType entryType) throws SQLException {
+<span class="nc" id="L108">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L109">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;SELECT * FROM JournalEntries WHERE accountEmail = ? AND entryType = ? ORDER BY id DESC&quot;)) {
+<span class="nc" id="L111">            statement.setString(1, email);</span>
+<span class="nc" id="L112">            statement.setString(2, entryType.name());</span>
+<span class="nc" id="L113">            return ReadAll(statement);</span>
+        }
+    }
+
+    public static boolean ExistsForLabourAndType(String email, int labourId, JournalEntry.EntryType entryType) throws SQLException {
+<span class="nc" id="L118">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L119">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;SELECT COUNT(*) FROM JournalEntries WHERE accountEmail = ? AND labourId = ? AND entryType = ?&quot;)) {
+<span class="nc" id="L121">            statement.setString(1, email);</span>
+<span class="nc" id="L122">            statement.setInt(2, labourId);</span>
+<span class="nc" id="L123">            statement.setString(3, entryType.name());</span>
+<span class="nc" id="L124">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt; 0;</span>
+        }
+    }
+
+    private static List&lt;JournalEntry&gt; ReadAll(PreparedStatement statement) throws SQLException {
+<span class="nc" id="L130">        ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L131">        List&lt;JournalEntry&gt; entries = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        while (rs.next()) {</span>
+<span class="nc" id="L133">            int labourIdValue = rs.getInt(&quot;labourId&quot;);</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">            Integer labourId = rs.wasNull() ? null : labourIdValue;</span>
+<span class="nc" id="L135">            entries.add(new JournalEntry(</span>
+<span class="nc" id="L136">                    rs.getInt(&quot;id&quot;),</span>
+<span class="nc" id="L137">                    rs.getString(&quot;accountEmail&quot;),</span>
+                    labourId,
+<span class="nc" id="L139">                    JournalEntry.EntryType.valueOf(rs.getString(&quot;entryType&quot;)),</span>
+<span class="nc" id="L140">                    rs.getString(&quot;title&quot;),</span>
+<span class="nc" id="L141">                    rs.getString(&quot;body&quot;),</span>
+<span class="nc" id="L142">                    rs.getString(&quot;aiFeedback&quot;),</span>
+<span class="nc" id="L143">                    rs.getString(&quot;createdAt&quot;)</span>
+            ));
+<span class="nc" id="L145">        }</span>
+<span class="nc" id="L146">        return entries;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

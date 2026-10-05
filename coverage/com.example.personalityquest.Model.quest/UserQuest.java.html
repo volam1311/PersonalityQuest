@@ -6,9 +6,9 @@ import com.example.personalityquest.ApplicationManager;
  * Holds the details pertaining to UserQuests that have been assigned in the database to users
  */
 /*
-* This is a user quest which is the ones that get assigned to the user for them to complete.
-* Not to be mistaken with a Quest which is only the unassigned information of the quest.
-* */
+ * This is a user quest which is the ones that get assigned to the user for them to complete.
+ * Not to be mistaken with a Quest which is only the unassigned information of the quest.
+ * */
 public class UserQuest {
     private final int labourId;
     private final String accountEmail;
@@ -17,6 +17,12 @@ public class UserQuest {
     // Either 'Active', 'Completed'
     private String status;
 
+    // Either 'Not Started', 'Started', 'Finished'
+    private String reflection;
+    private String reflectionStatus;
+
+    private String reactionType;
+
     /** Creates quest progress for an account
      * @param labourId the quest ID
      * @param accountEmail the account email
@@ -24,66 +30,123 @@ public class UserQuest {
      * @param status the quest status
      * @throws IllegalArgumentException if an ID, email, status, or progress value is invalid
      */
-<span class="fc" id="L27">    public UserQuest(int labourId, String accountEmail, float percentageComplete, String status){</span>
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (labourId &lt;= 0){</span>
-<span class="nc" id="L29">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+    public UserQuest(int labourId, String accountEmail, float percentageComplete, String status){
+<span class="fc" id="L34">        this(labourId, accountEmail, percentageComplete, status, &quot;&quot;, &quot;Not Started&quot;, &quot;&quot;);</span>
+<span class="fc" id="L35">    }</span>
+
+    /** Creates quest progress for an account, including reflection and reaction state
+     * @param labourId the quest ID
+     * @param accountEmail the account email
+     * @param percentageComplete progress from zero to one
+     * @param status the quest status
+     * @param reflection the saved reflection text
+     * @param reflectionStatus either 'Not Started', 'Started', or 'Finished'
+     * @param reactionType the saved &quot;your reaction&quot; choice
+     * @throws IllegalArgumentException if an ID, email, status, or progress value is invalid
+     */
+    public UserQuest(int labourId, String accountEmail, float percentageComplete, String status,
+<span class="fc" id="L48">                     String reflection, String reflectionStatus, String reactionType){</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (labourId &lt;= 0){</span>
+<span class="nc" id="L50">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
         }
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(accountEmail)){</span>
-<span class="nc" id="L32">            throw new IllegalArgumentException(&quot;Email is null&quot;);</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(accountEmail)){</span>
+<span class="nc" id="L53">            throw new IllegalArgumentException(&quot;Email is null&quot;);</span>
         }
-<span class="pc bpc" id="L34" title="2 of 4 branches missed.">        if (percentageComplete &lt; 0 || percentageComplete &gt; 1){</span>
-<span class="nc" id="L35">            throw new IllegalArgumentException(&quot;Percentage complete is out of range of 0 - 1&quot;);</span>
+<span class="pc bpc" id="L55" title="2 of 4 branches missed.">        if (percentageComplete &lt; 0 || percentageComplete &gt; 1){</span>
+<span class="nc" id="L56">            throw new IllegalArgumentException(&quot;Percentage complete is out of range of 0 - 1&quot;);</span>
         }
-<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(status)){</span>
-<span class="nc" id="L38">            throw new IllegalArgumentException(&quot;Status is null&quot;);</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(status)){</span>
+<span class="nc" id="L59">            throw new IllegalArgumentException(&quot;Status is null&quot;);</span>
         }
 
-<span class="fc" id="L41">        this.labourId = labourId;</span>
-<span class="fc" id="L42">        this.accountEmail = accountEmail;</span>
-<span class="fc" id="L43">        this.percentageComplete = percentageComplete;</span>
-<span class="fc" id="L44">        this.status = status;</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L62">        this.labourId = labourId;</span>
+<span class="fc" id="L63">        this.accountEmail = accountEmail;</span>
+<span class="fc" id="L64">        this.percentageComplete = percentageComplete;</span>
+<span class="fc" id="L65">        this.status = status;</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        this.reflection = ApplicationManager.isEmpty(reflection) ? &quot;&quot; : reflection;</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        this.reflectionStatus = ApplicationManager.isEmpty(reflectionStatus) ? &quot;Not Started&quot; : reflectionStatus;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        this.reactionType = ApplicationManager.isEmpty(reactionType) ? &quot;&quot; : reactionType;</span>
+<span class="fc" id="L69">    }</span>
 
     /** Returns the quest ID
      * @return the quest ID
      */
     public int getLabourId() {
-<span class="fc" id="L51">        return labourId;</span>
+<span class="fc" id="L75">        return labourId;</span>
     }
 
     /** Returns the quest progress as a value from zero to one
      * @return the completion ratio
      */
     public float getPercentageComplete() {
-<span class="fc" id="L58">        return percentageComplete;</span>
+<span class="fc" id="L82">        return percentageComplete;</span>
     }
 
     /** Returns the email of the account assigned to the quest
      * @return the account email
      */
     public String getAccountEmail() {
-<span class="fc" id="L65">        return accountEmail;</span>
+<span class="fc" id="L89">        return accountEmail;</span>
     }
 
     /** Returns the quest status
      * @return the current status
      */
     public String getStatus() {
-<span class="fc" id="L72">        return status;</span>
+<span class="fc" id="L96">        return status;</span>
     }
+
+    /** Returns the saved reflection text
+     * @return the reflection text
+     */
+    public String getReflection() {
+<span class="nc" id="L103">        return reflection;</span>
+    }
+
+    /** Returns the reflection status
+     * @return either 'Not Started', 'Started', or 'Finished'
+     */
+    public String getReflectionStatus() {
+<span class="nc" id="L110">        return reflectionStatus;</span>
+    }
+
+    /** Returns the saved &quot;your reaction&quot; choice
+     * @return the reaction type
+     */
+<span class="nc" id="L116">    public String getReactionType() {return reactionType;}</span>
+
+    /** Sets the &quot;your reaction&quot; choice
+     * @param reactionType the new reaction type
+     */
+<span class="nc" id="L121">    public void setReactionType(String reactionType){this.reactionType = reactionType;}</span>
 
     /** Sets the quest progress ratio
      * @param percentageComplete progress from zero to one
      */
     public void setPercentageComplete(float percentageComplete) {
-<span class="nc" id="L79">        this.percentageComplete = percentageComplete;</span>
-<span class="nc" id="L80">    }</span>
+<span class="nc" id="L127">        this.percentageComplete = percentageComplete;</span>
+<span class="nc" id="L128">    }</span>
 
     /** Sets the quest status
      * @param status the new status
      */
     public void setStatus(String status) {
-<span class="nc" id="L86">        this.status = status;</span>
-<span class="nc" id="L87">    }</span>
+<span class="nc" id="L134">        this.status = status;</span>
+<span class="nc" id="L135">    }</span>
+
+    /** Sets the saved reflection text
+     * @param reflection the new reflection text
+     */
+    public void setReflection(String reflection) {
+<span class="nc" id="L141">        this.reflection = reflection;</span>
+<span class="nc" id="L142">    }</span>
+
+    /** Sets the reflection status
+     * @param reflectionStatus either 'Not Started', 'Started', or 'Finished'
+     */
+    public void setReflectionStatus(String reflectionStatus) {
+<span class="nc" id="L148">        this.reflectionStatus = reflectionStatus;</span>
+<span class="nc" id="L149">    }</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

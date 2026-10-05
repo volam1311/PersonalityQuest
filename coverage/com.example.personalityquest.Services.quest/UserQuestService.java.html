@@ -158,8 +158,66 @@ import java.util.List;
      * @return The UserQuest matching the email and labourId given OR null if none could be retrived
      * @throws SQLException Database Access Failure
      */
-    private static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
+    public static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
 <span class="fc" id="L162">        return UserQuestDAO.GetUserQuestForEmailAndLabourId(email, labourId);</span>
+    }
+
+    public static UserQuest UpdateQuestReflectionToDraft(UserQuest quest, String reflection, String email) throws SQLException {
+<span class="nc bnc" id="L166" title="All 6 branches missed.">        if (quest == null || ApplicationManager.isEmpty(reflection) || ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L167">            throw new IllegalArgumentException(&quot;Null quest, reflection or email&quot;);</span>
+        }
+
+<span class="nc" id="L170">        UserQuestDAO.UpdateGivenQuestReflectionToDraft(quest, reflection, email);</span>
+
+<span class="nc" id="L172">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+    }
+
+    public static UserQuest UpdateQuestReflectionToBeFinished(UserQuest quest, String reflection, String email) throws SQLException {
+<span class="nc bnc" id="L176" title="All 6 branches missed.">        if (quest == null || ApplicationManager.isEmpty(reflection) || ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L177">            throw new IllegalArgumentException(&quot;Null quest, reflection or email&quot;);</span>
+        }
+
+<span class="nc" id="L180">        UserQuestDAO.UpdateGivenQuestReflectionToBeFinished(quest, reflection, email);</span>
+
+<span class="nc" id="L182">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+    }
+
+    public static UserQuest DeactivateUserQuest(UserQuest quest, String email) throws SQLException {
+<span class="nc bnc" id="L186" title="All 4 branches missed.">        if (quest == null || ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L187">        throw new IllegalArgumentException(&quot;Quest or email is null&quot;);</span>
+        }
+
+<span class="nc" id="L190">        UserQuestDAO.DeactivateUserQuest(quest, email);</span>
+<span class="nc" id="L191">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+    }
+
+    public static UserQuest ChangeActiveQuest(Quest quest, String email) throws SQLException {
+<span class="pc bpc" id="L195" title="2 of 4 branches missed.">        if (quest == null || ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L196">            throw new IllegalArgumentException(&quot;Quest or email is null&quot;);</span>
+        }
+
+<span class="fc" id="L199">        UserQuest activeQuest = GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="pc bpc" id="L200" title="3 of 4 branches missed.">        if (activeQuest != null &amp;&amp; activeQuest.getLabourId() == quest.getLabourId()) {</span>
+            // Already active on this quest, nothing to change
+<span class="nc" id="L202">            return activeQuest;</span>
+        }
+
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if (activeQuest != null){</span>
+<span class="nc" id="L206">            DeactivateUserQuest(activeQuest, email);</span>
+        }
+
+<span class="fc" id="L209">        UserQuest existing = GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">        UserQuest target = existing != null ? existing : InsertNewQuestForEmail(quest, email);</span>
+
+<span class="fc" id="L212">        return SetUserQuesStatusAsActive(target, email);</span>
+    }
+
+    public static UserQuest SetUserQuestReactionType(UserQuest quest, String email, String reactionType) throws SQLException {
+<span class="nc bnc" id="L216" title="All 6 branches missed.">        if (quest == null || ApplicationManager.isEmpty(reactionType) || ApplicationManager.isEmpty(email)){</span>
+<span class="nc" id="L217">            throw new IllegalArgumentException(&quot;Quest or email is null&quot;);</span>
+        }
+<span class="nc" id="L219">        UserQuestDAO.UpdateUserQuestReactionType(quest, email ,reactionType);</span>
+<span class="nc" id="L220">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

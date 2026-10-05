@@ -22,11 +22,13 @@ import java.util.Locale;
             labourId INTEGER PRIMARY KEY,
             archetypeId INTEGER NOT NULL,
             name TEXT NOT NULL,
-            narrative TEXT NOT NULL Default ''
+            narrative TEXT NOT NULL Default '',
+            decisionQuestion TEXT NOT NULL Default '',
+            resolution TEXT NOT NULL Default ''
             )
             &quot;&quot;&quot;;
 
-<span class="fc" id="L29">    private static final String[] LABOUR_NAMES ={</span>
+<span class="fc" id="L31">    private static final String[] LABOUR_NAMES ={</span>
             &quot;Labour of the Ceryneian Hind&quot;,      // 1  Innocent
             &quot;Labour of the Augean Stables&quot;,      // 2  Everyman
             &quot;Labour of the Nemean Lion&quot;,         // 3  Hero
@@ -41,12 +43,12 @@ import java.util.Locale;
             &quot;Labour of Cerberus&quot;                 // 12 Outlaw
     };
 
-<span class="fc" id="L44">    private static final String[] LABOUR_NARRATIVES = {</span>
+<span class="fc" id="L46">    private static final String[] LABOUR_NARRATIVES = {</span>
             // 1  Innocent — Ceryneian Hind (Apollodorus 2.5.3)
             &quot;As a third labour he ordered him to bring the Cerynitian hind alive to Mycenae. Now the hind was at Oenoe; it had golden horns and was sacred to Artemis; so wishing neither to kill nor wound it, Hercules hunted it a whole year. But when, weary with the chase, the beast took refuge on the mountain called Artemisius, and thence passed to the river Ladon, Hercules shot it just as it was about to cross the stream, and catching it put it on his shoulders and hastened through Arcadia. But Artemis with Apollo met him, and would have wrested the hind from him, and rebuked him for attempting to kill her sacred animal. Howbeit, by pleading necessity and laying the blame on Eurystheus, he appeased the anger of the goddess and carried the beast alive to Mycenae.&quot;,
 
             // 2  Everyman — Augean Stables (Apollodorus 2.5.5)
-            &quot;The fifth labour he laid on him was to carry out the dung of the cattle of Augeas in a single day. Now Augeas was king of Elis; some say that he was a son of the Sun, others that he was a son of Poseidon, and others that he was a son of Phorbas; and he had many herds of cattle. Hercules accosted him, and without revealing the command of Eurystheus, said that he would carry out the dung in one day, if Augeas would give him the tithe of the cattle. Augeas was incredulous, but promised. Having taken Augeas's son Phyleus to witness, Hercules made a breach in the foundations of the cattle-yard, and then, diverting the courses of the Alpheus and Peneus, which flowed near each other, he turned them into the yard, having first made an outlet for the water through another opening. When Augeas learned that this had been accomplished at the command of Eurystheus, he would not pay the reward; nay more, he denied that he had promised to pay it, and on that point he professed himself ready to submit to arbitration. The arbitrators having taken their seats, Phyleus was called by Hercules and bore witness against his father, affirming that he had agreed to give him a reward. In a rage Augeas, before the voting took place, ordered both Phyleus and Hercules to pack out of Elis.&quot;,
+            &quot;For his fifth labour, Eurystheus ordered Hercules to clean the stables of Augeas in a single day — a task meant to humiliate him. Augeas, king of Elis, owned more cattle than any man alive, and their stables had not been cleaned in years. The filth was beyond counting, and the command carried an insult: let the great son of Zeus stoop to shovelling dung like the lowest hand.\n\nHercules could have refused the task as beneath him. Instead, he met Augeas as an equal and struck an honest bargain: clean the stables in one day, and the king would owe him a tenth of his herds. Augeas, certain it was impossible, agreed — and Hercules called the king's own son, Phyleus, to stand as witness to the deal.\n\nThen he set to work, not with his hands but with his wits. He breached the foundations at both ends of the yard, and turned the courses of two rivers, the Alpheus and the Peneus, straight through the stables. The waters surged in and swept the years of filth away before the day was out.\n\nBut when the labour was done, Augeas broke his word. He denied he had ever promised a reward, and demanded the matter go to arbitration.\n\nHere was the pivotal moment. The judges took their seats. Augeas was a king; Hercules a stranger passing through. And the one man who could speak the truth was Phyleus — the king's own son, caught between his father and what was fair.&quot;,
 
             // 3  Hero — Nemean Lion (Apollodorus 2.5.1)
             &quot;First, Eurystheus ordered him to bring the skin of the Nemean lion; now that was an invulnerable beast begotten by Typhon. On his way to attack the lion he came to Cleonae and lodged at the house of a day-laborer, Molorchus; and when his host would have offered a victim in sacrifice, Hercules told him to wait for thirty days, and then, if he had returned safe from the hunt, to sacrifice to Saviour Zeus, but if he were dead, to sacrifice to him as to a hero. And having come to Nemea and tracked the lion, he first shot an arrow at him, but when he perceived that the beast was invulnerable, he heaved up his club and made after him. And when the lion took refuge in a cave with two mouths, Hercules built up the one entrance and came in upon the beast through the other, and putting his arm round its neck held it tight till he had choked it; so laying it on his shoulders he carried it to Cleonae.&quot;,
@@ -79,45 +81,85 @@ import java.util.Locale;
             &quot;A twelfth labour imposed on Hercules was to bring Cerberus from Hades. Now this Cerberus had three heads of dogs, the tail of a dragon, and on his back the heads of all sorts of snakes. And having come to Taenarum in Laconia, where is the mouth of the descent to Hades, he descended through it. But when the souls saw him, they fled, save Meleager and the Gorgon Medusa. And being come near to the gates of Hades he found Theseus and Pirithous. And Theseus, indeed, he took by the hand and raised up, but when he would have brought up Pirithous, the earth quaked and he let go. When Hercules asked Pluto for Cerberus, Pluto ordered him to take the animal provided he mastered him without the use of the weapons which he carried. Hercules found him at the gates of Acheron, and, cased in his cuirass and covered by the lion's skin, he flung his arms round the head of the brute, and though the dragon in its tail bit him, he never relaxed his grip and pressure till it yielded. So he carried it off and ascended through Troezen. And Hercules, after showing Cerberus to Eurystheus, carried him back to Hades.&quot;,
     };
 
+<span class="fc" id="L84">    private static final String[] LABOUR_DECISION_QUESTIONS = {</span>
+            // 1  Innocent
+            &quot;The hind is caught and bound across your shoulders. As you turn for home, Apollo appears at Artemis's side, angered that you have laid hands on her sacred beast. You will not abandon the labour — but how do you carry it through?&quot;,
+            // 2  Everyman
+            &quot;Augeas has broken his word, and the dispute goes before the judges. You did the work fairly and in the open — but now a king's word stands against yours, and only Phyleus can confirm the truth. How do you carry it through?&quot;,
+            // 3  Hero
+            &quot;Your arrows are useless and your club cannot pierce its hide. The lion turns on you, and the fear rises. Your weapons have failed — how do you meet it?&quot;,
+            &quot;&quot;, // 4  Caregiver
+            &quot;&quot;, // 5  Magician
+            &quot;&quot;, // 6  Sage
+            &quot;&quot;, // 7  Lover
+            &quot;&quot;, // 8  Jester
+            &quot;&quot;, // 9  Explorer
+            &quot;&quot;, // 10 Creator
+            &quot;&quot;, // 11 Ruler
+            &quot;&quot;  // 12 Outlaw
+    };
+
+<span class="fc" id="L102">    private static final String[] LABOUR_RESOLUTIONS = {</span>
+            // 1 Innocent
+            &quot;Hercules did not push past the gods, and he did not brace for a fight. He simply spoke the truth. He explained that he meant the hind no harm, that the labour had been forced on him by Eurystheus, and that he would never have raised a hand against something sacred by his own choice. He laid the matter bare and trusted Artemis to see his heart.\n\nAnd she did. The goddess's anger softened, and she let him pass. Hercules carried the hind alive to Mycenae — not by force, not by rank, and not by fear, but by holding honestly to good faith and trusting it would be understood.\n\nThis is the Innocent's lesson. Faith isn't blind, and it isn't armour against the world. It's a grounded trust — in others, and in how things can turn out — held with open eyes. Hercules faced down two gods with nothing but the truth and the belief that it would be enough. The naive over-promise and the cynic braces for a fight; the one who keeps honest faith simply says what is true, and finds that it carries further than either.&quot;,
+            // 2  Everyman
+            &quot;Phyleus chose the truth. Called before the judges, the king's own son testified against his father, affirming that Augeas had indeed promised the reward. It was a brave and fair act — exactly the kind of level, honest bond the labour was built on.\n\nAnd it still wasn't enough. Augeas, enraged, didn't wait for the verdict. Before a single vote was cast, he banished both Hercules and Phyleus from Elis. Hercules lost his reward; Phyleus lost his home for siding with what was right. Worse was to come: Eurystheus later refused to count the labour at all, claiming Hercules had done it for payment rather than pure service.\n\nHere is the Everyman's hardest lesson. You can act fairly, build the honest bond, and trust the group to reach the right decision — and sometimes the decision still goes against you. Fairness is not a guarantee that you'll be treated fairly in return.\n\nBut the story doesn't end there. Years later, Hercules returned to Elis, set things right, and restored Phyleus to his rightful place — and on that ground founded the Olympic Games, a gathering of equals from every city that endures to this day. The fair bond was vindicated in the end; it just took longer than it should have.\n\nThe lesson is not to stop trusting or to stop building with others. It's to hold to fair dealing because it's right — not only because you expect fairness back — and to keep faith that what's just can endure, even when the room gets it wrong today.&quot;,
+            // 3  Hero
+            &quot;Hercules did not win by being fearless, and he did not win by throwing himself at the beast. He won by facing the fear and thinking clearly inside it. When his weapons failed, he didn't freeze and he didn't charge — he changed the fight. He drove the lion into the dark of its own cave, where its speed and claws counted for less, and there he closed his arms around its throat and held on through everything it did to him, until it fell still.\n\nThen he returned to Molorchus on the thirtieth day — the very day the labourer was about to mourn him as dead — and the two sacrificed together to Zeus the Saviour, as they had planned. Hercules had measured the danger honestly from the start, and come back alive because of it.\n\nThis is the Hero's lesson. Courage is not the absence of fear, and it is not rushing in to prove you have none. It's feeling the fear fully, judging the danger clearly, and acting well anyway — choosing the ground where your strength can win, and then committing to it completely. The reckless and the fearful both lose to the lion. The one who faces it with open eyes brings home its skin — and wears it as armour ever after.&quot;,
+            &quot;&quot;, // 4  Caregiver
+            &quot;&quot;, // 5  Magician
+            &quot;&quot;, // 6  Sage
+            &quot;&quot;, // 7  Lover
+            &quot;&quot;, // 8  Jester
+            &quot;&quot;, // 9  Explorer
+            &quot;&quot;, // 10 Creator
+            &quot;&quot;, // 11 Ruler
+            &quot;&quot;  // 12 Outlaw
+    };
+
 
     private static void EnsureTables() throws SQLException {
-<span class="nc" id="L84">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L85">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L86">            statement.executeUpdate(CREATE_QUESTS);</span>
+<span class="nc" id="L122">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L123">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L124">            statement.executeUpdate(CREATE_QUESTS);</span>
         }
-<span class="nc" id="L88">    }</span>
+<span class="nc" id="L126">    }</span>
 
-    private static void InsertQuest(int labourId, int archetypeId, String name, String narrative) throws SQLException {
-<span class="nc" id="L91">        EnsureTables();</span>
-<span class="nc" id="L92">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L93">        try (PreparedStatement statement = connection.prepareStatement(</span>
-                &quot;INSERT OR IGNORE INTO Quests (LabourId, archetypeId, name, narrative) VALUES (?, ?, ?, ?)&quot;)){
-<span class="nc" id="L95">            statement.setInt(1, labourId);</span>
-<span class="nc" id="L96">            statement.setInt(2, archetypeId);</span>
-<span class="nc" id="L97">            statement.setString(3, name);</span>
-<span class="nc" id="L98">            statement.setString(4, narrative);</span>
-<span class="nc" id="L99">            statement.executeUpdate();</span>
+    private static void InsertQuest(int labourId, int archetypeId, String name, String narrative,
+                                    String decisionQuestion, String resolution) throws SQLException {
+<span class="nc" id="L130">        EnsureTables();</span>
+<span class="nc" id="L131">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L132">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;INSERT OR IGNORE INTO Quests (LabourId, archetypeId, name, narrative, decisionQuestion, resolution) VALUES (?, ?, ?, ?, ?, ?)&quot;)){
+<span class="nc" id="L134">            statement.setInt(1, labourId);</span>
+<span class="nc" id="L135">            statement.setInt(2, archetypeId);</span>
+<span class="nc" id="L136">            statement.setString(3, name);</span>
+<span class="nc" id="L137">            statement.setString(4, narrative);</span>
+<span class="nc" id="L138">            statement.setString(5, decisionQuestion);</span>
+<span class="nc" id="L139">            statement.setString(6, resolution);</span>
+<span class="nc" id="L140">            statement.executeUpdate();</span>
         }
-<span class="nc" id="L101">    }</span>
+<span class="nc" id="L142">    }</span>
 
     private static void SeedCatalog() throws SQLException {
-<span class="nc bnc" id="L104" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc" id="L105">            int archetypeId = archetype.getArchetypeId();</span>
-<span class="nc" id="L106">            InsertQuest(archetypeId, archetypeId, LABOUR_NAMES[archetypeId - 1], LABOUR_NARRATIVES[archetypeId - 1]);</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc" id="L146">            int archetypeId = archetype.getArchetypeId();</span>
+<span class="nc" id="L147">            InsertQuest(archetypeId, archetypeId, LABOUR_NAMES[archetypeId - 1], LABOUR_NARRATIVES[archetypeId - 1],</span>
+                    LABOUR_DECISION_QUESTIONS[archetypeId - 1], LABOUR_RESOLUTIONS[archetypeId - 1]);
         }
-<span class="nc" id="L108">    }</span>
+<span class="nc" id="L150">    }</span>
 
     /** Recreates the quest catalog and inserts its default records
      * @throws SQLException if the catalog cannot be recreated
      */
     public static void ResetAndSeedCatalog() throws SQLException {
-<span class="nc" id="L114">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L115">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L116">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS Quests&quot;);</span>
+<span class="nc" id="L156">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L157">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L158">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS Quests&quot;);</span>
         }
-<span class="nc" id="L118">        EnsureTables();</span>
-<span class="nc" id="L119">        SeedCatalog();</span>
-<span class="nc" id="L120">    }</span>
+<span class="nc" id="L160">        EnsureTables();</span>
+<span class="nc" id="L161">        SeedCatalog();</span>
+<span class="nc" id="L162">    }</span>
 
 
     /** Returns quests assigned to the supplied archetype
@@ -127,42 +169,44 @@ import java.util.Locale;
      */
     public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
 
-<span class="fc" id="L130">        int count = GetCountOfQuestsForArchetypeId(archetypeId);</span>
+<span class="fc" id="L172">        int count = GetCountOfQuestsForArchetypeId(archetypeId);</span>
         // no quests exist for this given ID
-<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (count == 0){</span>
-<span class="fc" id="L133">            return null;</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        if (count == 0){</span>
+<span class="fc" id="L175">            return null;</span>
         }
 
-<span class="fc" id="L136">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L137">        PreparedStatement getQuestsForArchetypeId = connection.prepareStatement(</span>
+<span class="fc" id="L178">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L179">        PreparedStatement getQuestsForArchetypeId = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * FROM Quests
                     WHERE archetypeId = ?
                     &quot;&quot;&quot;);
-<span class="fc" id="L142">        getQuestsForArchetypeId.setInt(1, archetypeId);</span>
+<span class="fc" id="L184">        getQuestsForArchetypeId.setInt(1, archetypeId);</span>
 
-<span class="fc" id="L144">        ResultSet rs = getQuestsForArchetypeId.executeQuery();</span>
-<span class="fc" id="L145">        Quest[] quests = new Quest[count];</span>
+<span class="fc" id="L186">        ResultSet rs = getQuestsForArchetypeId.executeQuery();</span>
+<span class="fc" id="L187">        Quest[] quests = new Quest[count];</span>
 
-<span class="fc" id="L147">        int index = 0;</span>
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        while (rs.next()){</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            if (index == count) {</span>
-<span class="nc" id="L150">                System.out.println(&quot;Early break for quests as their where more quests then the count that was gotten&quot;);</span>
-<span class="nc" id="L151">                break;</span>
+<span class="fc" id="L189">        int index = 0;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        while (rs.next()){</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">            if (index == count) {</span>
+<span class="nc" id="L192">                System.out.println(&quot;Early break for quests as their where more quests then the count that was gotten&quot;);</span>
+<span class="nc" id="L193">                break;</span>
             }
 
-<span class="fc" id="L154">            quests[index] = new Quest(</span>
-<span class="fc" id="L155">                    rs.getInt(&quot;labourId&quot;),</span>
-<span class="fc" id="L156">                    rs.getInt(&quot;archetypeId&quot;),</span>
-<span class="fc" id="L157">                    rs.getString(&quot;name&quot;),</span>
-<span class="fc" id="L158">                    rs.getString(&quot;narrative&quot;)</span>
+<span class="fc" id="L196">            quests[index] = new Quest(</span>
+<span class="fc" id="L197">                    rs.getInt(&quot;labourId&quot;),</span>
+<span class="fc" id="L198">                    rs.getInt(&quot;archetypeId&quot;),</span>
+<span class="fc" id="L199">                    rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L200">                    rs.getString(&quot;narrative&quot;),</span>
+<span class="fc" id="L201">                    rs.getString(&quot;decisionQuestion&quot;),</span>
+<span class="fc" id="L202">                    rs.getString(&quot;resolution&quot;)</span>
             );
 
-<span class="fc" id="L161">            index++;</span>
+<span class="fc" id="L205">            index++;</span>
         }
 
 
-<span class="fc" id="L165">        return quests;</span>
+<span class="fc" id="L209">        return quests;</span>
     }
 
     /**
@@ -172,27 +216,29 @@ import java.util.Locale;
      * @throws SQLException Database Access Failure
      */
     public static Quest GetQuestForLabourId(int labourId) throws SQLException {
-<span class="fc" id="L175">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L176">        PreparedStatement getQuestForLabourID = connection.prepareStatement(</span>
+<span class="fc" id="L219">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L220">        PreparedStatement getQuestForLabourID = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * FROM Quests
                     WHERE labourId = ?
                     &quot;&quot;&quot;);
-<span class="fc" id="L181">        getQuestForLabourID.setInt(1, labourId);</span>
+<span class="fc" id="L225">        getQuestForLabourID.setInt(1, labourId);</span>
 
-<span class="fc" id="L183">        ResultSet rs = getQuestForLabourID.executeQuery();</span>
+<span class="fc" id="L227">        ResultSet rs = getQuestForLabourID.executeQuery();</span>
 
-<span class="fc" id="L185">        Quest quest = null;</span>
-<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (rs.next()){</span>
-<span class="fc" id="L187">            quest = new Quest(</span>
-<span class="fc" id="L188">                    rs.getInt(&quot;labourId&quot;),</span>
-<span class="fc" id="L189">                    rs.getInt(&quot;archetypeId&quot;),</span>
-<span class="fc" id="L190">                    rs.getString(&quot;name&quot;),</span>
-<span class="fc" id="L191">                    rs.getString(&quot;narrative&quot;)</span>
+<span class="fc" id="L229">        Quest quest = null;</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        if (rs.next()){</span>
+<span class="fc" id="L231">            quest = new Quest(</span>
+<span class="fc" id="L232">                    rs.getInt(&quot;labourId&quot;),</span>
+<span class="fc" id="L233">                    rs.getInt(&quot;archetypeId&quot;),</span>
+<span class="fc" id="L234">                    rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L235">                    rs.getString(&quot;narrative&quot;),</span>
+<span class="fc" id="L236">                    rs.getString(&quot;decisionQuestion&quot;),</span>
+<span class="fc" id="L237">                    rs.getString(&quot;resolution&quot;)</span>
             );
         }
 
-<span class="fc" id="L195">        return quest;</span>
+<span class="fc" id="L241">        return quest;</span>
     }
 
     /**
@@ -202,12 +248,12 @@ import java.util.Locale;
      * @throws SQLException Database Access Failure
      */
     public static String GetArchetypeName(int archetypeId) throws SQLException {
-<span class="nc bnc" id="L205" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc bnc" id="L206" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
-<span class="nc" id="L207">                return archetype.getName();</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
+<span class="nc" id="L253">                return archetype.getName();</span>
             }
         }
-<span class="nc" id="L210">        return null;</span>
+<span class="nc" id="L256">        return null;</span>
 //        Connection connection = SQLite.getConnection();
 //        try (PreparedStatement statement = connection.prepareStatement(
 //                &quot;&quot;&quot;
@@ -231,18 +277,18 @@ import java.util.Locale;
      */
     public static Integer GetArchetypeIdForName(String name) throws SQLException {
         //Connection connection = SQLite.getConnection();
-<span class="fc" id="L234">        String needle = name.trim().toLowerCase(Locale.ROOT);</span>
-<span class="pc bpc" id="L235" title="1 of 2 branches missed.">        if (needle.startsWith(&quot;the &quot;)) {</span>
-<span class="nc" id="L236">            needle = needle.substring(4).trim();</span>
+<span class="fc" id="L280">        String needle = name.trim().toLowerCase(Locale.ROOT);</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">        if (needle.startsWith(&quot;the &quot;)) {</span>
+<span class="nc" id="L282">            needle = needle.substring(4).trim();</span>
         }
 
-<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="fc" id="L240">            String storedName = archetype.getName().trim().toLowerCase(Locale.ROOT);</span>
-<span class="fc bfc" id="L241" title="All 2 branches covered.">            if (storedName.equals(needle)) {</span>
-<span class="fc" id="L242">                return archetype.getArchetypeId();</span>
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="fc" id="L286">            String storedName = archetype.getName().trim().toLowerCase(Locale.ROOT);</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">            if (storedName.equals(needle)) {</span>
+<span class="fc" id="L288">                return archetype.getArchetypeId();</span>
             }
         }
-<span class="nc" id="L245">        return null;</span>
+<span class="nc" id="L291">        return null;</span>
 
 //        try (PreparedStatement statement = connection.prepareStatement(
 //                &quot;&quot;&quot;
@@ -280,12 +326,12 @@ import java.util.Locale;
      * @throws SQLException Database Access Failure
      */
     public static String GetArchetypeDescription(int archetypeId) throws SQLException {
-<span class="nc bnc" id="L283" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc bnc" id="L284" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
-<span class="nc" id="L285">                return archetype.getSmallDescription();</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
+<span class="nc" id="L331">                return archetype.getSmallDescription();</span>
             }
         }
-<span class="nc" id="L288">        return null;</span>
+<span class="nc" id="L334">        return null;</span>
 //        Connection connection = SQLite.getConnection();
 //        try (PreparedStatement statement = connection.prepareStatement(
 //                &quot;&quot;&quot;
@@ -308,21 +354,21 @@ import java.util.Locale;
      * @throws SQLException Database Access Failure
      */
     private static int GetCountOfQuestsForArchetypeId(int archetypeId) throws SQLException {
-<span class="fc" id="L311">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L312">        PreparedStatement statement = connection.prepareStatement(</span>
+<span class="fc" id="L357">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L358">        PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT COUNT(*) FROM Quests
                     WHERE archetypeId = ?
                     &quot;&quot;&quot;);
-<span class="fc" id="L317">        statement.setInt(1, archetypeId);</span>
-<span class="fc" id="L318">        ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L363">        statement.setInt(1, archetypeId);</span>
+<span class="fc" id="L364">        ResultSet rs = statement.executeQuery();</span>
 
-<span class="fc" id="L320">        int count = 0;</span>
-<span class="pc bpc" id="L321" title="1 of 2 branches missed.">        if (rs.next()){</span>
-<span class="fc" id="L322">            count = rs.getInt(1);</span>
+<span class="fc" id="L366">        int count = 0;</span>
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">        if (rs.next()){</span>
+<span class="fc" id="L368">            count = rs.getInt(1);</span>
         }
 
-<span class="fc" id="L325">        return count;</span>
+<span class="fc" id="L371">        return count;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

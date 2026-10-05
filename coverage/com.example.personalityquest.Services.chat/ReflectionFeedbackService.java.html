@@ -183,5 +183,21 @@ public final class ReflectionFeedbackService {
     private static String Fallback(String value, String fallback) {
 <span class="pc bpc" id="L184" title="1 of 2 branches missed.">        return ApplicationManager.isEmpty(value) ? fallback : value;</span>
     }
+
+    private static final String QUEST_FEEDBACK_KEY =&quot;QUEST&quot;;
+
+    public static void SaveForQuest(String email, int labourId, String feedback) throws SQLException {
+<span class="nc bnc" id="L190" title="All 4 branches missed.">        if (ApplicationManager.isEmpty(email) || ApplicationManager.isEmpty(feedback)) {</span>
+<span class="nc" id="L191">            return;</span>
+        }
+<span class="nc" id="L193">        ReflectionFeedbackDAO.Save(email, labourId, QUEST_FEEDBACK_KEY, feedback.trim());</span>
+<span class="nc" id="L194">    }</span>
+
+    public static String FindForQuest(String email, int labourId) throws SQLException {
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L198">            return &quot;&quot;;</span>
+        }
+<span class="nc" id="L200">        return ReflectionFeedbackDAO.Find(email, labourId, QUEST_FEEDBACK_KEY);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

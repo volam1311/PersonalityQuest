@@ -15,52 +15,79 @@ public class Quest {
     private final int archetypeId;
     private final String name;
     private final String narrative;
+    private final String decisionQuestion;
+    private final String resolution;
 
-    /** Creates an unassigned quest definition
+    /** Creates an unassigned quest definition without a decision question or resolution
      * @param labourId the quest's unique ID
      * @param archetypeId the ID of the archetype associated with the quest
      * @param name the quest name
      * @param narrative the quest narrative
      * @throws IllegalArgumentException if an ID is invalid or the name is empty
      */
-<span class="fc" id="L26">    public Quest(int labourId, int archetypeId, String name, String narrative) {</span>
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(name)){</span>
-<span class="nc" id="L28">            throw new IllegalArgumentException(&quot;Name is null&quot;);</span>
+    public Quest(int labourId, int archetypeId, String name, String narrative){
+<span class="fc" id="L29">        this(labourId, archetypeId, name, narrative, &quot;&quot;, &quot;&quot;);</span>
+<span class="fc" id="L30">    }</span>
+
+    /** Creates an unassigned quest definition
+     * @param labourId the quest's unique ID
+     * @param archetypeId the ID of the archetype associated with the quest
+     * @param name the quest name
+     * @param narrative the quest narrative
+     * @param decisionQuestion the &quot;your reaction&quot; storyline question for this labour
+     * @param resolution the &quot;how it ended&quot; storyline text for this labour
+     * @throws IllegalArgumentException if an ID is invalid or the name is empty
+     */
+<span class="fc" id="L41">    public Quest(int labourId, int archetypeId, String name, String narrative, String decisionQuestion, String resolution) {</span>
+
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(name)){</span>
+<span class="nc" id="L44">            throw new IllegalArgumentException(&quot;Name is null&quot;);</span>
         }
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (labourId &lt;= 0){</span>
-<span class="nc" id="L31">            throw new IllegalArgumentException(&quot;LabourId is null&quot;);</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (labourId &lt;= 0){</span>
+<span class="nc" id="L47">            throw new IllegalArgumentException(&quot;LabourId is null&quot;);</span>
         }
-<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (archetypeId &lt;= 0){</span>
-<span class="nc" id="L34">            throw new IllegalArgumentException(&quot;ArchetypeId is null&quot;);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (archetypeId &lt;= 0){</span>
+<span class="nc" id="L50">            throw new IllegalArgumentException(&quot;ArchetypeId is null&quot;);</span>
         }
 
-<span class="fc" id="L37">        this.labourId = labourId;</span>
-<span class="fc" id="L38">        this.archetypeId = archetypeId;</span>
-<span class="fc" id="L39">        this.name = name;</span>
-<span class="fc" id="L40">        this.narrative = narrative;</span>
-
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L53">        this.labourId = labourId;</span>
+<span class="fc" id="L54">        this.archetypeId = archetypeId;</span>
+<span class="fc" id="L55">        this.name = name;</span>
+<span class="fc" id="L56">        this.narrative = narrative;</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        this.decisionQuestion = decisionQuestion == null ? &quot;&quot; : decisionQuestion;</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        this.resolution = resolution == null ? &quot;&quot; : resolution;</span>
+<span class="fc" id="L59">    }</span>
     /** Returns the associated archetype ID
      * @return the archetype ID
      */
     public int getArchetypeId() {
-<span class="fc" id="L47">        return archetypeId;</span>
+<span class="fc" id="L64">        return archetypeId;</span>
     }
     /** Returns the quest ID
      * @return the quest ID
      */
     public int getLabourId() {
-<span class="fc" id="L53">        return labourId;</span>
+<span class="fc" id="L70">        return labourId;</span>
     }
     /** Returns the quest name
      * @return the quest name
      */
     public String getName() {
-<span class="fc" id="L59">        return name;</span>
+<span class="fc" id="L76">        return name;</span>
     }
     /** Returns the quest narrative
      * @return the quest narrative
      */
-<span class="nc" id="L64">    public String getNarrative() { return narrative; }</span>
+<span class="nc" id="L81">    public String getNarrative() { return narrative; }</span>
+
+    /** Returns the &quot;your reaction&quot; storyline question for this labour
+     * @return the decision question
+     */
+<span class="nc" id="L86">    public String getDecisionQuestion() { return decisionQuestion; }</span>
+
+    /** Returns the &quot;how it ended&quot; storyline text for this labour
+     * @return the resolution text
+     */
+<span class="nc" id="L91">    public String getResolution() { return resolution; }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

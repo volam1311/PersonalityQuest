@@ -11,72 +11,88 @@ public class Task {
      * @param taskId the task's unique ID
      * @param name the task name
      * @param description the task description
+     * @param overview a short bolded call-to-action shown alongside the description
      * @param labourId the ID of the quest associated with the task
      * @throws Exception if the task ID or quest ID is zero
      */
-<span class="fc" id="L17">    public Task(int taskId, String name, String description, int labourId) throws Exception {</span>
-<span class="pc bpc" id="L18" title="1 of 2 branches missed.">        if (taskId == 0){</span>
-<span class="nc" id="L19">            throw new Exception(&quot;Task Id is == 0 or is null&quot;);</span>
+<span class="fc" id="L18">    public Task(int taskId, String name, String description, String overview, int labourId) throws Exception {</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        if (taskId == 0){</span>
+<span class="nc" id="L20">            throw new Exception(&quot;Task Id is == 0 or is null&quot;);</span>
         }
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(name)){</span>
-<span class="nc" id="L22">            System.out.println(&quot;UserName is null&quot;);</span>
-<span class="nc" id="L23">            name = &quot;&quot;;</span>
-        }
-
-<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(description)){</span>
-<span class="nc" id="L27">            System.out.println(&quot;FirstName is null&quot;);</span>
-<span class="nc" id="L28">            description = &quot;&quot;;</span>
-        }
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (labourId == 0){</span>
-<span class="nc" id="L31">            throw new Exception(&quot;Labour Id is == 0 or is null&quot;);</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(name)){</span>
+<span class="nc" id="L23">            System.out.println(&quot;UserName is null&quot;);</span>
+<span class="nc" id="L24">            name = &quot;&quot;;</span>
         }
 
-<span class="fc" id="L34">        this.taskId = taskId;</span>
-<span class="fc" id="L35">        this.name = name;</span>
-<span class="fc" id="L36">        this.description = description;</span>
-<span class="fc" id="L37">        this.labourId = labourId;</span>
-<span class="fc" id="L38">    }</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(description)){</span>
+<span class="nc" id="L28">            System.out.println(&quot;FirstName is null&quot;);</span>
+<span class="nc" id="L29">            description = &quot;&quot;;</span>
+        }
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (labourId == 0){</span>
+<span class="nc" id="L32">            throw new Exception(&quot;Labour Id is == 0 or is null&quot;);</span>
+        }
+
+<span class="fc" id="L35">        this.taskId = taskId;</span>
+<span class="fc" id="L36">        this.name = name;</span>
+<span class="fc" id="L37">        this.description = description;</span>
+<span class="fc" id="L38">        this.labourId = labourId;</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        this.overview = ApplicationManager.isEmpty(overview) ? &quot;&quot;:overview;</span>
+<span class="fc" id="L40">    }</span>
+
+    /** Creates a task definition without an overview
+     * @param taskId the task's unique ID
+     * @param name the task name
+     * @param description the task description
+     * @param labourId the ID of the quest associated with the task
+     * @throws Exception if the task ID or quest ID is zero
+     */
+    public Task(int taskId, String name, String description, int labourId) throws Exception {
+<span class="fc" id="L50">        this(taskId, name, description, &quot;&quot;, labourId);</span>
+<span class="fc" id="L51">    }</span>
 
 
     private final int taskId;
     private final String name;
     private final String description;
+    private final String overview;
     private final int labourId;
 
     /** Returns the task ID
      * @return the task ID
      */
     public int getTaskId(){
-<span class="fc" id="L50">        return this.taskId;</span>
+<span class="fc" id="L64">        return this.taskId;</span>
     }
 
     /** Returns the task name
      * @return the task name
      */
     public String getName(){
-<span class="fc" id="L57">        return this.name;</span>
+<span class="fc" id="L71">        return this.name;</span>
     }
 
     /** Returns the task description
      * @return the task description
      */
     public String getDescription(){
-<span class="fc" id="L64">        return this.description;</span>
+<span class="fc" id="L78">        return this.description;</span>
     }
 
     /** Returns the associated quest ID
      * @return the quest ID
      */
     public int getLabourId(){
-<span class="fc" id="L71">        return this.labourId;</span>
+<span class="fc" id="L85">        return this.labourId;</span>
     }
 
-    /** Returns the task name for display
-     * @return the task name
+    /** Returns the task's short overview/call-to-action text
+     * @return the task overview
      */
+<span class="nc" id="L91">    public String getOverview(){return this.overview;}</span>
+
     @Override
     public String toString() {
-<span class="nc" id="L79">        return getName();</span>
+<span class="nc" id="L95">        return getName();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

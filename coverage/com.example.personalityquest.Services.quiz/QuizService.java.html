@@ -2,6 +2,7 @@
 
 import com.example.personalityquest.DAO.personalisation.OptionDAO;
 import com.example.personalityquest.DAO.personalisation.QuestionDAO;
+import com.example.personalityquest.DAO.quest.QuizResultDAO;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.ApplicationManager;
@@ -19,8 +20,8 @@ import java.util.*;
  * Runs the archetype quiz: dummy questions, answers, scoring, and quest assignment.
  */
 public class QuizService {
-<span class="fc" id="L22">    private static List&lt;Question&gt; questions = List.of();</span>
-<span class="fc" id="L23">    private static Integer[] answers = new Integer[0];</span>
+<span class="fc" id="L23">    private static List&lt;Question&gt; questions = List.of();</span>
+<span class="fc" id="L24">    private static Integer[] answers = new Integer[0];</span>
     private static int currentIndex;
     private static boolean inProgress;
     private static QuizResult result;
@@ -32,126 +33,126 @@ public class QuizService {
      * Clears any in-progress attempt or stored result.
      */
     public static void Reset() {
-<span class="fc" id="L35">        questions = List.of();</span>
-<span class="fc" id="L36">        answers = new Integer[0];</span>
-<span class="fc" id="L37">        currentIndex = 0;</span>
-<span class="fc" id="L38">        inProgress = false;</span>
-<span class="fc" id="L39">        result = null;</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L36">        questions = List.of();</span>
+<span class="fc" id="L37">        answers = new Integer[0];</span>
+<span class="fc" id="L38">        currentIndex = 0;</span>
+<span class="fc" id="L39">        inProgress = false;</span>
+<span class="fc" id="L40">        result = null;</span>
+<span class="fc" id="L41">    }</span>
 
-<span class="fc" id="L42">    private static final boolean DEMO_MODE = Boolean.getBoolean(&quot;quiz.demo&quot;);</span>
+<span class="fc" id="L43">    private static final boolean DEMO_MODE = Boolean.getBoolean(&quot;quiz.demo&quot;);</span>
 
     /**
      * Starts a new attempt with the dummy five-question bank.
      */
     public static void StartQuiz() {
         try {
-<span class="fc" id="L49">            EnsureCatalog();</span>
-<span class="fc" id="L50">            questions = QuestionDAO.GetQuestions();</span>
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            if (DEMO_MODE){</span>
-<span class="nc" id="L52">                questions = FirstQuestionPerRealm(questions);</span>
+<span class="fc" id="L50">            EnsureCatalog();</span>
+<span class="fc" id="L51">            questions = QuestionDAO.GetQuestions();</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            if (DEMO_MODE){</span>
+<span class="nc" id="L53">                questions = DemoQuestionSet(questions);</span>
             }
-<span class="nc" id="L54">        } catch (SQLException exception) {</span>
-<span class="nc" id="L55">            throw new IllegalStateException(&quot;Could not load quiz questions&quot;, exception);</span>
-<span class="fc" id="L56">        }</span>
-<span class="fc" id="L57">        answers = new Integer[questions.size()];</span>
-<span class="fc" id="L58">        currentIndex = 0;</span>
-<span class="fc" id="L59">        inProgress = true;</span>
-<span class="fc" id="L60">        result = null;</span>
-<span class="fc" id="L61">    }</span>
+<span class="nc" id="L55">        } catch (SQLException exception) {</span>
+<span class="nc" id="L56">            throw new IllegalStateException(&quot;Could not load quiz questions&quot;, exception);</span>
+<span class="fc" id="L57">        }</span>
+<span class="fc" id="L58">        answers = new Integer[questions.size()];</span>
+<span class="fc" id="L59">        currentIndex = 0;</span>
+<span class="fc" id="L60">        inProgress = true;</span>
+<span class="fc" id="L61">        result = null;</span>
+<span class="fc" id="L62">    }</span>
 
     private static List&lt;Question&gt; FirstQuestionPerRealm(List&lt;Question&gt; all){
-<span class="nc" id="L64">        List&lt;Question&gt; shortList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L65">        Set&lt;String&gt; seenRealms = new LinkedHashSet&lt;&gt;();</span>
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (Question question : all) {</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">            if (seenRealms.add(question.getRealmType())) {</span>
-<span class="nc" id="L68">                shortList.add(question);</span>
+<span class="nc" id="L65">        List&lt;Question&gt; shortList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L66">        Set&lt;String&gt; seenRealms = new LinkedHashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for (Question question : all) {</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (seenRealms.add(question.getRealmType())) {</span>
+<span class="nc" id="L69">                shortList.add(question);</span>
             }
-<span class="nc" id="L70">        }</span>
-<span class="nc" id="L71">        return shortList;</span>
+<span class="nc" id="L71">        }</span>
+<span class="nc" id="L72">        return shortList;</span>
     }
 
     /** Ensures the quiz catalog is available in the database
      * @throws SQLException if the catalog cannot be prepared
      */
     public static void EnsureCatalog() throws SQLException {
-<span class="fc" id="L78">        QuestionDAO.EnsureTables();</span>
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (!QuestionDAO.HasCatalog()){</span>
-<span class="fc" id="L80">            QuestionDAO.SeedCatalog();</span>
+<span class="fc" id="L79">        QuestionDAO.EnsureTables();</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (!QuestionDAO.HasCatalog()){</span>
+<span class="fc" id="L81">            QuestionDAO.SeedCatalog();</span>
         }
-<span class="fc" id="L82">        OptionDAO.EnsureTables();</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (!OptionDAO.HasCatalog()){</span>
-<span class="fc" id="L84">            OptionDAO.SeedCatalog();</span>
+<span class="fc" id="L83">        OptionDAO.EnsureTables();</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (!OptionDAO.HasCatalog()){</span>
+<span class="fc" id="L85">            OptionDAO.SeedCatalog();</span>
         }
-<span class="fc" id="L86">    }</span>
+<span class="fc" id="L87">    }</span>
 
     /**
      * Whether an attempt is underway and has not been scored yet.
      */
     public static boolean HasActiveAttempt() {
-<span class="pc bpc" id="L92" title="2 of 6 branches missed.">        return inProgress &amp;&amp; result == null &amp;&amp; !questions.isEmpty();</span>
+<span class="pc bpc" id="L93" title="2 of 6 branches missed.">        return inProgress &amp;&amp; result == null &amp;&amp; !questions.isEmpty();</span>
     }
 
     /**
      * The most recent scored result, or null if the quiz has not been finished.
      */
     public static QuizResult GetResult() {
-<span class="fc" id="L99">        return result;</span>
+<span class="fc" id="L100">        return result;</span>
     }
 
     /**
      * The dummy question bank used by the current attempt.
      */
     public static List&lt;Question&gt; GetQuestions() {
-<span class="nc" id="L106">        EnsureInProgress();</span>
-<span class="nc" id="L107">        return questions;</span>
+<span class="nc" id="L107">        EnsureInProgress();</span>
+<span class="nc" id="L108">        return questions;</span>
     }
 
     /**
      * The question currently on screen.
      */
     public static Question GetCurrentQuestion() {
-<span class="fc" id="L114">        EnsureInProgress();</span>
-<span class="fc" id="L115">        return questions.get(currentIndex);</span>
+<span class="fc" id="L115">        EnsureInProgress();</span>
+<span class="fc" id="L116">        return questions.get(currentIndex);</span>
     }
 
     /**
      * Zero-based index of the current question.
      */
     public static int GetCurrentQuestionIndex() {
-<span class="fc" id="L122">        EnsureInProgress();</span>
-<span class="fc" id="L123">        return currentIndex;</span>
+<span class="fc" id="L123">        EnsureInProgress();</span>
+<span class="fc" id="L124">        return currentIndex;</span>
     }
 
     /**
      * How many questions are in the current attempt.
      */
     public static int GetQuestionCount() {
-<span class="fc" id="L130">        EnsureInProgress();</span>
-<span class="fc" id="L131">        return questions.size();</span>
+<span class="fc" id="L131">        EnsureInProgress();</span>
+<span class="fc" id="L132">        return questions.size();</span>
     }
 
     /**
      * Whether the current question is the last one.
      */
     public static boolean IsLastQuestion() {
-<span class="fc" id="L138">        EnsureInProgress();</span>
-<span class="fc bfc" id="L139" title="All 2 branches covered.">        return currentIndex == questions.size() - 1;</span>
+<span class="fc" id="L139">        EnsureInProgress();</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        return currentIndex == questions.size() - 1;</span>
     }
 
     /**
      * Whether the user can move back from the current question.
      */
     public static boolean CanGoBack() {
-<span class="nc bnc" id="L146" title="All 4 branches missed.">        return HasActiveAttempt() &amp;&amp; currentIndex &gt; 0;</span>
+<span class="nc bnc" id="L147" title="All 4 branches missed.">        return HasActiveAttempt() &amp;&amp; currentIndex &gt; 0;</span>
     }
 
     /**
      * Archetype id chosen for the current question, or null if not yet answered
      */
     public static Integer GetAnswerForCurrentQuestion() {
-<span class="fc" id="L153">        EnsureInProgress();</span>
-<span class="fc" id="L154">        return answers[currentIndex];</span>
+<span class="fc" id="L154">        EnsureInProgress();</span>
+<span class="fc" id="L155">        return answers[currentIndex];</span>
     }
 
     /**
@@ -159,56 +160,56 @@ public class QuizService {
      * @param archetypeId The archetypes corresponding with the selected question
      */
     public static void AnswerCurrentQuestion(int archetypeId) {
-<span class="fc" id="L162">        EnsureInProgress();</span>
-<span class="fc" id="L163">        Option option = GetCurrentQuestion().getOptions();</span>
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (archetypeId != option.getOption1Archetype()</span>
-<span class="fc bfc" id="L165" title="All 2 branches covered.">                &amp;&amp; archetypeId != option.getOption2Archetype()</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">                &amp;&amp; archetypeId != option.getOption3Archetype()){</span>
-<span class="fc" id="L167">            throw new IllegalStateException(&quot;Archetype id does not belong to this question&quot;);</span>
+<span class="fc" id="L163">        EnsureInProgress();</span>
+<span class="fc" id="L164">        Option option = GetCurrentQuestion().getOptions();</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (archetypeId != option.getOption1Archetype()</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">                &amp;&amp; archetypeId != option.getOption2Archetype()</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">                &amp;&amp; archetypeId != option.getOption3Archetype()){</span>
+<span class="fc" id="L168">            throw new IllegalStateException(&quot;Archetype id does not belong to this question&quot;);</span>
         }
-<span class="fc" id="L169">        answers[currentIndex] = archetypeId;</span>
-<span class="fc" id="L170">    }</span>
+<span class="fc" id="L170">        answers[currentIndex] = archetypeId;</span>
+<span class="fc" id="L171">    }</span>
 
     /**
      * Moves to the previous question so the user can change an answer.
      */
     public static void GoToPreviousQuestion() {
-<span class="fc" id="L176">        EnsureInProgress();</span>
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (currentIndex == 0) {</span>
-<span class="nc" id="L178">            throw new IllegalStateException(&quot;Already on the first question&quot;);</span>
+<span class="fc" id="L177">        EnsureInProgress();</span>
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (currentIndex == 0) {</span>
+<span class="nc" id="L179">            throw new IllegalStateException(&quot;Already on the first question&quot;);</span>
         }
-<span class="fc" id="L180">        currentIndex--;</span>
-<span class="fc" id="L181">    }</span>
+<span class="fc" id="L181">        currentIndex--;</span>
+<span class="fc" id="L182">    }</span>
 
     /**
      * Moves to the next question after the current one has been answered.
      */
     public static void GoToNextQuestion() {
-<span class="fc" id="L187">        EnsureInProgress();</span>
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (answers[currentIndex] == null) {</span>
-<span class="fc" id="L189">            throw new IllegalStateException(&quot;Current question has not been answered&quot;);</span>
+<span class="fc" id="L188">        EnsureInProgress();</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        if (answers[currentIndex] == null) {</span>
+<span class="fc" id="L190">            throw new IllegalStateException(&quot;Current question has not been answered&quot;);</span>
         }
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (IsLastQuestion()) {</span>
-<span class="nc" id="L192">            throw new IllegalStateException(&quot;Already on the last question&quot;);</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (IsLastQuestion()) {</span>
+<span class="nc" id="L193">            throw new IllegalStateException(&quot;Already on the last question&quot;);</span>
         }
-<span class="fc" id="L194">        currentIndex++;</span>
-<span class="fc" id="L195">    }</span>
+<span class="fc" id="L195">        currentIndex++;</span>
+<span class="fc" id="L196">    }</span>
 
     /**
      * Scores every answer and stores the result.
      * @return The winning archetype and per-archetype counts
      */
     public static QuizResult CompleteQuiz() {
-<span class="fc" id="L202">        EnsureInProgress();</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        for (int index = 0; index &lt; answers.length; index++) {</span>
-<span class="fc bfc" id="L204" title="All 2 branches covered.">            if (answers[index] == null) {</span>
-<span class="fc" id="L205">                throw new IllegalStateException(&quot;Question &quot; + (index + 1) + &quot; has not been answered&quot;);</span>
+<span class="fc" id="L203">        EnsureInProgress();</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        for (int index = 0; index &lt; answers.length; index++) {</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">            if (answers[index] == null) {</span>
+<span class="fc" id="L206">                throw new IllegalStateException(&quot;Question &quot; + (index + 1) + &quot; has not been answered&quot;);</span>
             }
         }
 
-<span class="fc" id="L209">        result = Score(List.of(answers));</span>
-<span class="fc" id="L210">        inProgress = false;</span>
-<span class="fc" id="L211">        return result;</span>
+<span class="fc" id="L210">        result = Score(List.of(answers));</span>
+<span class="fc" id="L211">        inProgress = false;</span>
+<span class="fc" id="L212">        return result;</span>
     }
 
     /**
@@ -218,35 +219,36 @@ public class QuizService {
      * @return The stored result, with an assigned quest when one could be created
      */
     public static QuizResult AssignQuestForCurrentResult(String email) {
-<span class="pc bpc" id="L221" title="1 of 2 branches missed.">        if (result == null) {</span>
-<span class="nc" id="L222">            throw new IllegalStateException(&quot;Quiz has not been completed&quot;);</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">        if (result == null) {</span>
+<span class="nc" id="L223">            throw new IllegalStateException(&quot;Quiz has not been completed&quot;);</span>
         }
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L225">            return result;</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L226">            return result;</span>
         }
 
         try {
-<span class="fc" id="L229">            UserQuest activeQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">            if (activeQuest != null) {</span>
-<span class="nc" id="L231">                return result;</span>
+<span class="fc" id="L230">            QuizResultDAO.SaveResult(email, result);</span>
+<span class="nc" id="L231">        } catch (Exception ignored){</span>
+            // Continue to show result if persistence fails
+<span class="fc" id="L233">        }</span>
+
+        try {
+<span class="fc" id="L236">            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());</span>
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">            if (archetypeId == null) {</span>
+<span class="nc" id="L238">                return result;</span>
             }
 
-<span class="fc" id="L234">            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());</span>
-<span class="pc bpc" id="L235" title="1 of 2 branches missed.">            if (archetypeId == null) {</span>
-<span class="nc" id="L236">                return result;</span>
+<span class="fc" id="L241">            Quest quest = QuestService.GetRandomQuestForArchetypeId(archetypeId);</span>
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">            if (quest == null) {</span>
+<span class="nc" id="L243">                return result;</span>
             }
 
-<span class="fc" id="L239">            Quest quest = QuestService.GetRandomQuestForArchetypeId(archetypeId);</span>
-<span class="pc bpc" id="L240" title="1 of 2 branches missed.">            if (quest == null) {</span>
-<span class="nc" id="L241">                return result;</span>
-            }
+<span class="fc" id="L246">            UserQuestService.ChangeActiveQuest(quest,email);</span>
+<span class="fc" id="L247">            result = result.withAssignedQuest(quest);</span>
+<span class="fc" id="L248">            return result;</span>
 
-<span class="fc" id="L244">            UserQuest inserted = UserQuestService.InsertNewQuestForEmail(quest, email);</span>
-<span class="fc" id="L245">            UserQuestService.SetUserQuesStatusAsActive(inserted, email);</span>
-<span class="fc" id="L246">            result = result.withAssignedQuest(quest);</span>
-<span class="fc" id="L247">            return result;</span>
-<span class="fc" id="L248">        } catch (Exception exception) {</span>
-<span class="fc" id="L249">            return result;</span>
+<span class="fc" id="L250">        } catch (Exception exception) {</span>
+<span class="fc" id="L251">            return result;</span>
         }
     }
 
@@ -254,32 +256,32 @@ public class QuizService {
      * Counts answers per archetype. Ties go to the later answer among the tied winners.
      */
     public static QuizResult Score(List&lt;Integer&gt; selectedArchetypeIds) {
-<span class="pc bpc" id="L257" title="2 of 4 branches missed.">        if (selectedArchetypeIds == null || selectedArchetypeIds.isEmpty()) {</span>
-<span class="nc" id="L258">            throw new IllegalArgumentException(&quot;Quiz answers are empty&quot;);</span>
+<span class="pc bpc" id="L259" title="2 of 4 branches missed.">        if (selectedArchetypeIds == null || selectedArchetypeIds.isEmpty()) {</span>
+<span class="nc" id="L260">            throw new IllegalArgumentException(&quot;Quiz answers are empty&quot;);</span>
         }
 
-<span class="fc" id="L261">        Map&lt;Archetype, Integer&gt; scores = new EnumMap&lt;&gt;(Archetype.class);</span>
-<span class="fc" id="L262">        List&lt;Archetype&gt; order = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L263" title="All 2 branches covered.">        for (Integer archetypeID : selectedArchetypeIds) {</span>
-<span class="pc bpc" id="L264" title="1 of 2 branches missed.">            if (archetypeID == null) {</span>
-<span class="nc" id="L265">                throw new IllegalArgumentException(&quot;Quiz answers contain a null option&quot;);</span>
+<span class="fc" id="L263">        Map&lt;Archetype, Integer&gt; scores = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="fc" id="L264">        List&lt;Archetype&gt; order = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        for (Integer archetypeID : selectedArchetypeIds) {</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">            if (archetypeID == null) {</span>
+<span class="nc" id="L267">                throw new IllegalArgumentException(&quot;Quiz answers contain a null option&quot;);</span>
             }
-<span class="fc" id="L267">            Archetype archetype = ArchetypeById(archetypeID);</span>
-<span class="fc" id="L268">            scores.merge(archetype, 1, Integer::sum);</span>
-<span class="fc" id="L269">            order.add(archetype);</span>
-<span class="fc" id="L270">        }</span>
+<span class="fc" id="L269">            Archetype archetype = ArchetypeById(archetypeID);</span>
+<span class="fc" id="L270">            scores.merge(archetype, 1, Integer::sum);</span>
+<span class="fc" id="L271">            order.add(archetype);</span>
+<span class="fc" id="L272">        }</span>
 
-<span class="fc" id="L272">        Archetype winner = order.get(order.size() - 1);</span>
-<span class="fc" id="L273">        int highest = 0;</span>
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        for (Archetype archetype : order) {</span>
-<span class="fc" id="L275">            int score = scores.get(archetype);</span>
-<span class="fc bfc" id="L276" title="All 2 branches covered.">            if (score &gt;= highest) {</span>
-<span class="fc" id="L277">                highest = score;</span>
-<span class="fc" id="L278">                winner = archetype;</span>
+<span class="fc" id="L274">        Archetype winner = order.get(order.size() - 1);</span>
+<span class="fc" id="L275">        int highest = 0;</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        for (Archetype archetype : order) {</span>
+<span class="fc" id="L277">            int score = scores.get(archetype);</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">            if (score &gt;= highest) {</span>
+<span class="fc" id="L279">                highest = score;</span>
+<span class="fc" id="L280">                winner = archetype;</span>
             }
-<span class="fc" id="L280">        }</span>
+<span class="fc" id="L282">        }</span>
 
-<span class="fc" id="L282">        return new QuizResult(winner, scores);</span>
+<span class="fc" id="L284">        return new QuizResult(winner, scores);</span>
     }
 
     /**
@@ -287,31 +289,31 @@ public class QuizService {
      */
 
     private static Archetype ArchetypeById(int archetypeId) {
-<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        for (Archetype archetype : Archetype.values()){</span>
-<span class="fc bfc" id="L291" title="All 2 branches covered.">            if (archetype.getArchetypeId() == archetypeId){</span>
-<span class="fc" id="L292">                return archetype;</span>
+<span class="pc bpc" id="L292" title="1 of 2 branches missed.">        for (Archetype archetype : Archetype.values()){</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">            if (archetype.getArchetypeId() == archetypeId){</span>
+<span class="fc" id="L294">                return archetype;</span>
             }
         }
-<span class="nc" id="L295">        throw new IllegalArgumentException(&quot;Archetype with id &quot; + archetypeId + &quot; not found&quot;);</span>
+<span class="nc" id="L297">        throw new IllegalArgumentException(&quot;Archetype with id &quot; + archetypeId + &quot; not found&quot;);</span>
     }
 
     /**
      * Archetypes from a quiz result, winner first, then remaining scores high to low.
      */
     public static List&lt;Archetype&gt; RankedArchetypes(QuizResult quizResult) {
-<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        if (quizResult == null) {</span>
-<span class="nc" id="L303">            throw new IllegalArgumentException(&quot;Quiz result is null&quot;);</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">        if (quizResult == null) {</span>
+<span class="nc" id="L305">            throw new IllegalArgumentException(&quot;Quiz result is null&quot;);</span>
         }
 
-<span class="fc" id="L306">        List&lt;Archetype&gt; ranked = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L307">        ranked.add(quizResult.archetype());</span>
-<span class="fc" id="L308">        quizResult.scores().entrySet().stream()</span>
-<span class="fc bfc" id="L309" title="All 2 branches covered.">                .filter(entry -&gt; entry.getKey() != quizResult.archetype())</span>
-<span class="fc" id="L310">                .sorted(Map.Entry.&lt;Archetype, Integer&gt;comparingByValue().reversed()</span>
-<span class="pc" id="L311">                        .thenComparing(entry -&gt; entry.getKey().name()))</span>
-<span class="fc" id="L312">                .map(Map.Entry::getKey)</span>
-<span class="fc" id="L313">                .forEach(ranked::add);</span>
-<span class="fc" id="L314">        return ranked;</span>
+<span class="fc" id="L308">        List&lt;Archetype&gt; ranked = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L309">        ranked.add(quizResult.archetype());</span>
+<span class="fc" id="L310">        quizResult.scores().entrySet().stream()</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">                .filter(entry -&gt; entry.getKey() != quizResult.archetype())</span>
+<span class="fc" id="L312">                .sorted(Map.Entry.&lt;Archetype, Integer&gt;comparingByValue().reversed()</span>
+<span class="pc" id="L313">                        .thenComparing(entry -&gt; entry.getKey().name()))</span>
+<span class="fc" id="L314">                .map(Map.Entry::getKey)</span>
+<span class="fc" id="L315">                .forEach(ranked::add);</span>
+<span class="fc" id="L316">        return ranked;</span>
     }
 
     /**
@@ -320,34 +322,76 @@ public class QuizService {
      * chart. Returns all zeros when there is no quiz result yet.
      */
     public static double[] ArchetypeScores(QuizResult quizResult) {
-<span class="nc" id="L323">        Archetype[] archetypes = Archetype.values();</span>
-<span class="nc" id="L324">        double[] values = new double[archetypes.length];</span>
-<span class="nc bnc" id="L325" title="All 2 branches missed.">        if (quizResult == null) {</span>
-<span class="nc" id="L326">            return values;</span>
+<span class="nc" id="L325">        Archetype[] archetypes = Archetype.values();</span>
+<span class="nc" id="L326">        double[] values = new double[archetypes.length];</span>
+<span class="nc bnc" id="L327" title="All 2 branches missed.">        if (quizResult == null) {</span>
+<span class="nc" id="L328">            return values;</span>
         }
 
-<span class="nc" id="L329">        int max = 0;</span>
-<span class="nc bnc" id="L330" title="All 2 branches missed.">        for (int score : quizResult.scores().values()) {</span>
-<span class="nc bnc" id="L331" title="All 2 branches missed.">            if (score &gt; max) {</span>
-<span class="nc" id="L332">                max = score;</span>
+<span class="nc" id="L331">        int max = 0;</span>
+<span class="nc bnc" id="L332" title="All 2 branches missed.">        for (int score : quizResult.scores().values()) {</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">            if (score &gt; max) {</span>
+<span class="nc" id="L334">                max = score;</span>
             }
-<span class="nc" id="L334">        }</span>
-<span class="nc bnc" id="L335" title="All 2 branches missed.">        if (max == 0) {</span>
-<span class="nc" id="L336">            return values;</span>
+<span class="nc" id="L336">        }</span>
+<span class="nc bnc" id="L337" title="All 2 branches missed.">        if (max == 0) {</span>
+<span class="nc" id="L338">            return values;</span>
         }
 
-<span class="nc bnc" id="L339" title="All 2 branches missed.">        for (int index = 0; index &lt; archetypes.length; index++) {</span>
-<span class="nc" id="L340">            Integer score = quizResult.scores().get(archetypes[index]);</span>
-<span class="nc bnc" id="L341" title="All 2 branches missed.">            values[index] = score == null ? 0 : (double) score / max;</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">        for (int index = 0; index &lt; archetypes.length; index++) {</span>
+<span class="nc" id="L342">            Integer score = quizResult.scores().get(archetypes[index]);</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">            values[index] = score == null ? 0 : (double) score / max;</span>
         }
-<span class="nc" id="L343">        return values;</span>
+<span class="nc" id="L345">        return values;</span>
     }
 
     private static void EnsureInProgress() {
-<span class="fc bfc" id="L347" title="All 2 branches covered.">        if (!HasActiveAttempt()) {</span>
-<span class="fc" id="L348">            throw new IllegalStateException(&quot;Quiz has not been started&quot;);</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">        if (!HasActiveAttempt()) {</span>
+<span class="fc" id="L350">            throw new IllegalStateException(&quot;Quiz has not been started&quot;);</span>
         }
-<span class="fc" id="L350">    }</span>
+<span class="fc" id="L352">    }</span>
+
+    public static QuizResult LoadStoredResult(String email){
+<span class="nc bnc" id="L355" title="All 2 branches missed.">        if (result != null){</span>
+<span class="nc" id="L356">            return result;</span>
+        }
+<span class="nc bnc" id="L358" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)){</span>
+<span class="nc" id="L359">            return null;</span>
+        }
+        try {
+<span class="nc" id="L362">            QuizResult stored = QuizResultDAO.LoadResult(email);</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">            if (stored != null){</span>
+<span class="nc" id="L364">            UserQuest activeQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">            if (activeQuest != null){</span>
+<span class="nc" id="L366">                Quest quest = QuestService.GetQuestForLabourId(activeQuest.getLabourId());</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">                if (quest != null){</span>
+<span class="nc" id="L368">                    stored = stored.withAssignedQuest(quest);</span>
+                }
+            }
+<span class="nc" id="L371">            result = stored;</span>
+            }
+<span class="nc" id="L373">            return result;</span>
+<span class="nc" id="L374">        } catch (Exception exception) {</span>
+<span class="nc" id="L375">            return null;</span>
+        }
+    }
+
+    // Use Quiz questions for hero, Everyman and Innocent
+    private static final String FEATURED_DEMO_REALM = &quot;Ego&quot;;
+
+    private static List&lt;Question&gt; DemoQuestionSet(List&lt;Question&gt; all){
+<span class="nc" id="L383">        List&lt;Question&gt; selected = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L384">        Set&lt;String&gt; seenOtherRealms = new LinkedHashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L385" title="All 2 branches missed.">        for (Question question : all){</span>
+<span class="nc bnc" id="L386" title="All 2 branches missed.">            if (FEATURED_DEMO_REALM.equals(question.getRealmType())){</span>
+<span class="nc" id="L387">                selected.add(question);</span>
+<span class="nc bnc" id="L388" title="All 2 branches missed.">            } else if (seenOtherRealms.add(question.getRealmType())){</span>
+<span class="nc" id="L389">                selected.add(question);</span>
+            }
+<span class="nc" id="L391">        }</span>
+<span class="nc" id="L392">        return selected;</span>
+    }
+
 
 
 
