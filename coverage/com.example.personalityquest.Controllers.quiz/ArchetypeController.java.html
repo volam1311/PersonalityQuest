@@ -22,12 +22,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,7 +40,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /** Controls the display of archetype information */
-<span class="nc" id="L40">public class ArchetypeController implements Initializable {</span>
+<span class="nc" id="L43">public class ArchetypeController implements Initializable {</span>
     private static final String SELECTED_ARCHETYPE = &quot;selected-archetype&quot;;
 
     @FXML
@@ -51,13 +54,15 @@ import java.util.ResourceBundle;
     private VBox rankedListBox;
     @FXML
     private Label archetypeImageLabel;
+    @FXML
+    private ImageView archetypeImageView;
 
     private Map&lt;Button, String&gt; quadrantRealms;
     private QuizResult currentResult;
-<span class="nc" id="L57">    private Map&lt;Archetype, Integer&gt; rankByArchetype = new EnumMap&lt;&gt;(Archetype.class);</span>
-<span class="nc" id="L58">    private Map&lt;Archetype, Integer&gt; scoreByArchetype = Map.of();</span>
-<span class="nc" id="L59">    private List&lt;Archetype&gt; rankedArchetypes = List.of();</span>
-<span class="nc" id="L60">    private Map&lt;Archetype, Quest&gt; pinnedQuests = Map.of();</span>
+<span class="nc" id="L62">    private Map&lt;Archetype, Integer&gt; rankByArchetype = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="nc" id="L63">    private Map&lt;Archetype, Integer&gt; scoreByArchetype = Map.of();</span>
+<span class="nc" id="L64">    private List&lt;Archetype&gt; rankedArchetypes = List.of();</span>
+<span class="nc" id="L65">    private Map&lt;Archetype, Quest&gt; pinnedQuests = Map.of();</span>
     private Archetype selectedArchetype;
 
     /** Initialises archetype controls and loads the selected archetype
@@ -66,102 +71,102 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L69">        navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);</span>
-<span class="nc" id="L70">        quadrantRealms = Map.of(</span>
+<span class="nc" id="L74">        navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);</span>
+<span class="nc" id="L75">        quadrantRealms = Map.of(</span>
                 egoQuadrantButton, &quot;Ego&quot;,
                 soulQuadrantButton, &quot;Soul&quot;,
                 selfQuadrantButton, &quot;Self&quot;,
                 markQuadrantButton, &quot;Mark&quot;);
-<span class="nc" id="L75">        LoadArchetypes();</span>
-<span class="nc" id="L76">    }</span>
+<span class="nc" id="L80">        LoadArchetypes();</span>
+<span class="nc" id="L81">    }</span>
 
     @FXML
     private void OnRedoQuiz() throws IOException {
-<span class="nc" id="L80">        QuizService.StartQuiz();</span>
-<span class="nc" id="L81">        NavigationService.LoadScreen(ScreenEnum.QUIZ);</span>
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L85">        QuizService.StartQuiz();</span>
+<span class="nc" id="L86">        NavigationService.LoadScreen(ScreenEnum.QUIZ);</span>
+<span class="nc" id="L87">    }</span>
 
     private void EnsureCatalog() throws SQLException {
         // Non-destructive: the one-time schema reset/reseed runs once at app
         // startup (MainApplication). Running DROP/CREATE TABLE here on every
         // visit risks SQLITE_LOCKED if any other DAO still has an open
         // statement on the shared connection.
-<span class="nc" id="L89">        ArchetypeDAO.EnsureTables();</span>
-<span class="nc bnc" id="L90" title="All 2 branches missed.">        if (!ArchetypeDAO.HasCatalog()) {</span>
-<span class="nc" id="L91">            ArchetypeDAO.SeedCatalog();</span>
+<span class="nc" id="L94">        ArchetypeDAO.EnsureTables();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (!ArchetypeDAO.HasCatalog()) {</span>
+<span class="nc" id="L96">            ArchetypeDAO.SeedCatalog();</span>
         }
-<span class="nc" id="L93">    }</span>
+<span class="nc" id="L98">    }</span>
 
     private void LoadArchetypes() {
         try {
-<span class="nc" id="L97">            EnsureCatalog();</span>
-<span class="nc" id="L98">        } catch (Exception exception) {</span>
-<span class="nc" id="L99">            exception.printStackTrace();</span>
-<span class="nc" id="L100">            ShowEmptyArchetype(&quot;Could not load your archetypes right now: &quot; + exception.getMessage());</span>
-<span class="nc" id="L101">            return;</span>
-<span class="nc" id="L102">        }</span>
+<span class="nc" id="L102">            EnsureCatalog();</span>
+<span class="nc" id="L103">        } catch (Exception exception) {</span>
+<span class="nc" id="L104">            exception.printStackTrace();</span>
+<span class="nc" id="L105">            ShowEmptyArchetype(&quot;Could not load your archetypes right now: &quot; + exception.getMessage());</span>
+<span class="nc" id="L106">            return;</span>
+<span class="nc" id="L107">        }</span>
 
-<span class="nc" id="L104">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L106">            ShowEmptyArchetype(&quot;Sign in to discover your archetypes.&quot;);</span>
-<span class="nc" id="L107">            return;</span>
+<span class="nc" id="L109">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L111">            ShowEmptyArchetype(&quot;Sign in to discover your archetypes.&quot;);</span>
+<span class="nc" id="L112">            return;</span>
         }
 
         try {
-<span class="nc" id="L111">            QuizResult quizResult = QuizService.LoadStoredResult(email);</span>
-<span class="nc bnc" id="L112" title="All 2 branches missed.">            if (quizResult != null) {</span>
-<span class="nc" id="L113">                ShowQuizResult(quizResult);</span>
-<span class="nc" id="L114">                return;</span>
+<span class="nc" id="L116">            QuizResult quizResult = QuizService.LoadStoredResult(email);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            if (quizResult != null) {</span>
+<span class="nc" id="L118">                ShowQuizResult(quizResult);</span>
+<span class="nc" id="L119">                return;</span>
             }
 
-<span class="nc" id="L117">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (userQuest == null) {</span>
-<span class="nc" id="L119">                ShowEmptyArchetype(&quot;Complete the onboarding quiz to discover your archetype.&quot;);</span>
-<span class="nc" id="L120">                return;</span>
+<span class="nc" id="L122">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            if (userQuest == null) {</span>
+<span class="nc" id="L124">                ShowEmptyArchetype(&quot;Complete the onboarding quiz to discover your archetype.&quot;);</span>
+<span class="nc" id="L125">                return;</span>
             }
 
-<span class="nc" id="L123">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (quest == null) {</span>
-<span class="nc" id="L125">                ShowEmptyArchetype(&quot;Your current quest does not have an archetype yet.&quot;);</span>
-<span class="nc" id="L126">                return;</span>
+<span class="nc" id="L128">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            if (quest == null) {</span>
+<span class="nc" id="L130">                ShowEmptyArchetype(&quot;Your current quest does not have an archetype yet.&quot;);</span>
+<span class="nc" id="L131">                return;</span>
             }
 
-<span class="nc" id="L129">            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
-<span class="nc" id="L130">            Archetype archetype = ArchetypeByName(archetypeName);</span>
-<span class="nc bnc" id="L131" title="All 2 branches missed.">            if (archetype == null) {</span>
-<span class="nc" id="L132">                ShowEmptyArchetype(&quot;Your current quest does not have an archetype yet.&quot;);</span>
-<span class="nc" id="L133">                return;</span>
+<span class="nc" id="L134">            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
+<span class="nc" id="L135">            Archetype archetype = ArchetypeByName(archetypeName);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            if (archetype == null) {</span>
+<span class="nc" id="L137">                ShowEmptyArchetype(&quot;Your current quest does not have an archetype yet.&quot;);</span>
+<span class="nc" id="L138">                return;</span>
             }
 
-<span class="nc" id="L136">            ShowSingleArchetype(archetype, quest);</span>
-<span class="nc" id="L137">        } catch (Exception exception) {</span>
-<span class="nc" id="L138">            exception.printStackTrace();</span>
-<span class="nc" id="L139">            ShowEmptyArchetype(&quot;Could not load your archetypes right now: &quot; + exception.getMessage());</span>
-<span class="nc" id="L140">        }</span>
-<span class="nc" id="L141">    }</span>
+<span class="nc" id="L141">            ShowSingleArchetype(archetype, quest);</span>
+<span class="nc" id="L142">        } catch (Exception exception) {</span>
+<span class="nc" id="L143">            exception.printStackTrace();</span>
+<span class="nc" id="L144">            ShowEmptyArchetype(&quot;Could not load your archetypes right now: &quot; + exception.getMessage());</span>
+<span class="nc" id="L145">        }</span>
+<span class="nc" id="L146">    }</span>
 
     /**
      * Populates the screen from a completed quiz: the full 12-archetype ranking,
      * the realm wheel, the ranked list, and the detail panel for the winner.
      */
     private void ShowQuizResult(QuizResult quizResult) {
-<span class="nc" id="L148">        currentResult = quizResult;</span>
-<span class="nc" id="L149">        scoreByArchetype = quizResult.scores();</span>
-<span class="nc" id="L150">        pinnedQuests = new EnumMap&lt;&gt;(Archetype.class);</span>
-<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (quizResult.assignedQuest() != null) {</span>
-<span class="nc" id="L152">            pinnedQuests.put(quizResult.archetype(), quizResult.assignedQuest());</span>
+<span class="nc" id="L153">        currentResult = quizResult;</span>
+<span class="nc" id="L154">        scoreByArchetype = quizResult.scores();</span>
+<span class="nc" id="L155">        pinnedQuests = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (quizResult.assignedQuest() != null) {</span>
+<span class="nc" id="L157">            pinnedQuests.put(quizResult.archetype(), quizResult.assignedQuest());</span>
         }
 
-<span class="nc" id="L155">        rankedArchetypes = FullRankedArchetypes(quizResult);</span>
-<span class="nc" id="L156">        rankByArchetype = new EnumMap&lt;&gt;(Archetype.class);</span>
-<span class="nc bnc" id="L157" title="All 2 branches missed.">        for (int index = 0; index &lt; rankedArchetypes.size(); index++) {</span>
-<span class="nc" id="L158">            rankByArchetype.put(rankedArchetypes.get(index), index + 1);</span>
+<span class="nc" id="L160">        rankedArchetypes = FullRankedArchetypes(quizResult);</span>
+<span class="nc" id="L161">        rankByArchetype = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        for (int index = 0; index &lt; rankedArchetypes.size(); index++) {</span>
+<span class="nc" id="L163">            rankByArchetype.put(rankedArchetypes.get(index), index + 1);</span>
         }
 
-<span class="nc" id="L161">        ConfigureRealmWheel();</span>
-<span class="nc" id="L162">        ConfigureRankedList();</span>
-<span class="nc" id="L163">        DisplayArchetype(quizResult.archetype());</span>
-<span class="nc" id="L164">    }</span>
+<span class="nc" id="L166">        ConfigureRealmWheel();</span>
+<span class="nc" id="L167">        ConfigureRankedList();</span>
+<span class="nc" id="L168">        DisplayArchetype(quizResult.archetype());</span>
+<span class="nc" id="L169">    }</span>
 
     /**
      * All 12 archetypes ordered by score, winner first. Archetypes the user never
@@ -169,13 +174,13 @@ import java.util.ResourceBundle;
      * at the end in declaration order.
      */
     private List&lt;Archetype&gt; FullRankedArchetypes(QuizResult quizResult) {
-<span class="nc" id="L172">        List&lt;Archetype&gt; ranked = new ArrayList&lt;&gt;(QuizService.RankedArchetypes(quizResult));</span>
-<span class="nc bnc" id="L173" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc bnc" id="L174" title="All 2 branches missed.">            if (!ranked.contains(archetype)) {</span>
-<span class="nc" id="L175">                ranked.add(archetype);</span>
+<span class="nc" id="L177">        List&lt;Archetype&gt; ranked = new ArrayList&lt;&gt;(QuizService.RankedArchetypes(quizResult));</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">            if (!ranked.contains(archetype)) {</span>
+<span class="nc" id="L180">                ranked.add(archetype);</span>
             }
         }
-<span class="nc" id="L178">        return ranked;</span>
+<span class="nc" id="L183">        return ranked;</span>
     }
 
     /**
@@ -183,62 +188,62 @@ import java.util.ResourceBundle;
      * that one archetype, with the wheel/list reduced to what we actually know.
      */
     private void ShowSingleArchetype(Archetype archetype, Quest quest) {
-<span class="nc" id="L186">        currentResult = null;</span>
-<span class="nc" id="L187">        scoreByArchetype = Map.of();</span>
-<span class="nc" id="L188">        pinnedQuests = new EnumMap&lt;&gt;(Archetype.class);</span>
-<span class="nc" id="L189">        pinnedQuests.put(archetype, quest);</span>
+<span class="nc" id="L191">        currentResult = null;</span>
+<span class="nc" id="L192">        scoreByArchetype = Map.of();</span>
+<span class="nc" id="L193">        pinnedQuests = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="nc" id="L194">        pinnedQuests.put(archetype, quest);</span>
 
-<span class="nc" id="L191">        rankedArchetypes = List.of(archetype);</span>
-<span class="nc" id="L192">        rankByArchetype = new EnumMap&lt;&gt;(Archetype.class);</span>
-<span class="nc" id="L193">        rankByArchetype.put(archetype, 1);</span>
+<span class="nc" id="L196">        rankedArchetypes = List.of(archetype);</span>
+<span class="nc" id="L197">        rankByArchetype = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="nc" id="L198">        rankByArchetype.put(archetype, 1);</span>
 
-<span class="nc" id="L195">        ConfigureRealmWheel();</span>
-<span class="nc" id="L196">        ConfigureRankedList();</span>
-<span class="nc" id="L197">        DisplayArchetype(archetype);</span>
-<span class="nc" id="L198">    }</span>
+<span class="nc" id="L200">        ConfigureRealmWheel();</span>
+<span class="nc" id="L201">        ConfigureRankedList();</span>
+<span class="nc" id="L202">        DisplayArchetype(archetype);</span>
+<span class="nc" id="L203">    }</span>
 
     private Archetype ArchetypeByName(String archetypeName) {
-<span class="nc bnc" id="L201" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(archetypeName)) {</span>
-<span class="nc" id="L202">            return null;</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(archetypeName)) {</span>
+<span class="nc" id="L207">            return null;</span>
         }
 
-<span class="nc" id="L205">        String needle = archetypeName.trim().toLowerCase();</span>
-<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (needle.startsWith(&quot;the &quot;)) {</span>
-<span class="nc" id="L207">            needle = needle.substring(4).trim();</span>
+<span class="nc" id="L210">        String needle = archetypeName.trim().toLowerCase();</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        if (needle.startsWith(&quot;the &quot;)) {</span>
+<span class="nc" id="L212">            needle = needle.substring(4).trim();</span>
         }
 
-<span class="nc bnc" id="L210" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc bnc" id="L211" title="All 2 branches missed.">            if (archetype.getName().equalsIgnoreCase(needle)) {</span>
-<span class="nc" id="L212">                return archetype;</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">            if (archetype.getName().equalsIgnoreCase(needle)) {</span>
+<span class="nc" id="L217">                return archetype;</span>
             }
         }
-<span class="nc" id="L215">        return null;</span>
+<span class="nc" id="L220">        return null;</span>
     }
 
     private String QuestFocusFromDatabase(Archetype archetype, Quest assignedQuest) {
         try {
-<span class="nc" id="L220">            Quest quest = assignedQuest;</span>
-<span class="nc bnc" id="L221" title="All 2 branches missed.">            if (quest == null) {</span>
-<span class="nc" id="L222">                Integer archetypeId = QuestService.GetArchetypeIdForName(archetype.getName());</span>
-<span class="nc bnc" id="L223" title="All 2 branches missed.">                if (archetypeId == null) {</span>
-<span class="nc" id="L224">                    return &quot;No labour is stored for this archetype yet.&quot;;</span>
-                }
-
-<span class="nc" id="L227">                Quest[] quests = QuestService.GetQuestsForArchetypeId(archetypeId);</span>
-<span class="nc bnc" id="L228" title="All 4 branches missed.">                if (quests == null || quests.length == 0) {</span>
+<span class="nc" id="L225">            Quest quest = assignedQuest;</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">            if (quest == null) {</span>
+<span class="nc" id="L227">                Integer archetypeId = QuestService.GetArchetypeIdForName(archetype.getName());</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">                if (archetypeId == null) {</span>
 <span class="nc" id="L229">                    return &quot;No labour is stored for this archetype yet.&quot;;</span>
                 }
-<span class="nc" id="L231">                quest = quests[0];</span>
+
+<span class="nc" id="L232">                Quest[] quests = QuestService.GetQuestsForArchetypeId(archetypeId);</span>
+<span class="nc bnc" id="L233" title="All 4 branches missed.">                if (quests == null || quests.length == 0) {</span>
+<span class="nc" id="L234">                    return &quot;No labour is stored for this archetype yet.&quot;;</span>
+                }
+<span class="nc" id="L236">                quest = quests[0];</span>
             }
 
-<span class="nc" id="L234">            List&lt;Task&gt; tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
-<span class="nc" id="L235">            String names = TaskService.JoinTaskNames(tasks);</span>
-<span class="nc bnc" id="L236" title="All 2 branches missed.">            if (names.isEmpty()) {</span>
-<span class="nc" id="L237">                return quest.getName();</span>
+<span class="nc" id="L239">            List&lt;Task&gt; tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L240">            String names = TaskService.JoinTaskNames(tasks);</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">            if (names.isEmpty()) {</span>
+<span class="nc" id="L242">                return quest.getName();</span>
             }
-<span class="nc" id="L239">            return quest.getName() + &quot;\n&quot; + names;</span>
-<span class="nc" id="L240">        } catch (Exception exception) {</span>
-<span class="nc" id="L241">            return &quot;Could not load this archetype's labour from the database.&quot;;</span>
+<span class="nc" id="L244">            return quest.getName() + &quot;\n&quot; + names;</span>
+<span class="nc" id="L245">        } catch (Exception exception) {</span>
+<span class="nc" id="L246">            return &quot;Could not load this archetype's labour from the database.&quot;;</span>
         }
     }
 
@@ -247,125 +252,163 @@ import java.util.ResourceBundle;
      * when we have no data for that realm at all.
      */
     private void ConfigureRealmWheel() {
-<span class="nc" id="L250">        quadrantRealms.forEach(this::ConfigureQuadrant);</span>
-<span class="nc" id="L251">    }</span>
+<span class="nc" id="L255">        quadrantRealms.forEach(this::ConfigureQuadrant);</span>
+<span class="nc" id="L256">    }</span>
 
     private void ConfigureQuadrant(Button button, String realm) {
-<span class="nc" id="L254">        Archetype best = TopArchetypeForRealm(realm);</span>
-<span class="nc" id="L255">        button.setUserData(best);</span>
-<span class="nc bnc" id="L256" title="All 2 branches missed.">        button.setDisable(best == null);</span>
-<span class="nc bnc" id="L257" title="All 2 branches missed.">        button.setText(best == null</span>
-<span class="nc" id="L258">                ? realm + &quot;\n—&quot;</span>
-<span class="nc" id="L259">                : realm + &quot;\n&quot; + UserProfileService.FormatArchetypeName(best.getName()));</span>
-<span class="nc" id="L260">    }</span>
+<span class="nc" id="L259">        Archetype best = TopArchetypeForRealm(realm);</span>
+<span class="nc" id="L260">        button.setUserData(best);</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        button.setDisable(best == null);</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        button.setText(best == null</span>
+<span class="nc" id="L263">                ? realm + &quot;\n—&quot;</span>
+<span class="nc" id="L264">                : realm + &quot;\n&quot; + UserProfileService.FormatArchetypeName(best.getName()));</span>
+<span class="nc" id="L265">    }</span>
 
     private Archetype TopArchetypeForRealm(String realm) {
-<span class="nc" id="L263">        Archetype best = null;</span>
-<span class="nc bnc" id="L264" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc bnc" id="L265" title="All 4 branches missed.">            if (!archetype.getRealm().equals(realm) || !rankByArchetype.containsKey(archetype)) {</span>
-<span class="nc" id="L266">                continue;</span>
+<span class="nc" id="L268">        Archetype best = null;</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc bnc" id="L270" title="All 4 branches missed.">            if (!archetype.getRealm().equals(realm) || !rankByArchetype.containsKey(archetype)) {</span>
+<span class="nc" id="L271">                continue;</span>
             }
-<span class="nc bnc" id="L268" title="All 4 branches missed.">            if (best == null || rankByArchetype.get(archetype) &lt; rankByArchetype.get(best)) {</span>
-<span class="nc" id="L269">                best = archetype;</span>
+<span class="nc bnc" id="L273" title="All 4 branches missed.">            if (best == null || rankByArchetype.get(archetype) &lt; rankByArchetype.get(best)) {</span>
+<span class="nc" id="L274">                best = archetype;</span>
             }
         }
-<span class="nc" id="L272">        return best;</span>
+<span class="nc" id="L277">        return best;</span>
     }
 
     @FXML
     private void OnRealmQuadrantClick(ActionEvent event) {
-<span class="nc bnc" id="L277" title="All 4 branches missed.">        if (event.getSource() instanceof Button button &amp;&amp; button.getUserData() instanceof Archetype archetype) {</span>
-<span class="nc" id="L278">            DisplayArchetype(archetype);</span>
+<span class="nc bnc" id="L282" title="All 4 branches missed.">        if (event.getSource() instanceof Button button &amp;&amp; button.getUserData() instanceof Archetype archetype) {</span>
+<span class="nc" id="L283">            DisplayArchetype(archetype);</span>
         }
-<span class="nc" id="L280">    }</span>
+<span class="nc" id="L285">    }</span>
 
     /**
      * Rebuilds the scrollable list of all 12 archetypes in ranked order.
      */
     private void ConfigureRankedList() {
-<span class="nc" id="L286">        rankedListBox.getChildren().clear();</span>
-<span class="nc bnc" id="L287" title="All 2 branches missed.">        for (int index = 0; index &lt; rankedArchetypes.size(); index++) {</span>
-<span class="nc" id="L288">            Archetype archetype = rankedArchetypes.get(index);</span>
-<span class="nc" id="L289">            int rank = index + 1;</span>
+<span class="nc" id="L291">        rankedListBox.getChildren().clear();</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">        for (int index = 0; index &lt; rankedArchetypes.size(); index++) {</span>
+<span class="nc" id="L293">            Archetype archetype = rankedArchetypes.get(index);</span>
+<span class="nc" id="L294">            int rank = index + 1;</span>
 
-<span class="nc" id="L291">            Label nameLabel = new Label(&quot;#&quot; + rank + &quot;  &quot; + UserProfileService.FormatArchetypeName(archetype.getName()));</span>
-<span class="nc" id="L292">            nameLabel.getStyleClass().add(&quot;ranked-archetype-name&quot;);</span>
+<span class="nc" id="L296">            Label nameLabel = new Label(&quot;#&quot; + rank + &quot;  &quot; + UserProfileService.FormatArchetypeName(archetype.getName()));</span>
+<span class="nc" id="L297">            nameLabel.getStyleClass().add(&quot;ranked-archetype-name&quot;);</span>
 
-<span class="nc" id="L294">            Integer points = scoreByArchetype.get(archetype);</span>
-<span class="nc bnc" id="L295" title="All 2 branches missed.">            Label pointsLabel = new Label(points != null ? points + &quot; pts&quot; : &quot;&quot;);</span>
-<span class="nc" id="L296">            pointsLabel.getStyleClass().add(&quot;ranked-archetype-points&quot;);</span>
+<span class="nc" id="L299">            Integer points = scoreByArchetype.get(archetype);</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">            Label pointsLabel = new Label(points != null ? points + &quot; pts&quot; : &quot;&quot;);</span>
+<span class="nc" id="L301">            pointsLabel.getStyleClass().add(&quot;ranked-archetype-points&quot;);</span>
 
-<span class="nc" id="L298">            Region spacer = new Region();</span>
-<span class="nc" id="L299">            HBox.setHgrow(spacer, Priority.ALWAYS);</span>
+<span class="nc" id="L303">            Region spacer = new Region();</span>
+<span class="nc" id="L304">            HBox.setHgrow(spacer, Priority.ALWAYS);</span>
 
-<span class="nc" id="L301">            HBox row = new HBox(8, nameLabel, spacer, pointsLabel);</span>
-<span class="nc" id="L302">            row.setAlignment(Pos.CENTER_LEFT);</span>
+<span class="nc" id="L306">            HBox row = new HBox(8, nameLabel, spacer, pointsLabel);</span>
+<span class="nc" id="L307">            row.setAlignment(Pos.CENTER_LEFT);</span>
 
-<span class="nc" id="L304">            Button button = new Button();</span>
-<span class="nc" id="L305">            button.setGraphic(row);</span>
-<span class="nc" id="L306">            button.setMaxWidth(Double.MAX_VALUE);</span>
-<span class="nc" id="L307">            button.setMnemonicParsing(false);</span>
-<span class="nc" id="L308">            button.getStyleClass().add(&quot;ranked-archetype-button&quot;);</span>
-<span class="nc" id="L309">            button.setUserData(archetype);</span>
-<span class="nc" id="L310">            button.setOnAction(event -&gt; DisplayArchetype(archetype));</span>
-<span class="nc" id="L311">            row.prefWidthProperty().bind(button.widthProperty().subtract(28));</span>
+<span class="nc" id="L309">            Button button = new Button();</span>
+<span class="nc" id="L310">            button.setGraphic(row);</span>
+<span class="nc" id="L311">            button.setMaxWidth(Double.MAX_VALUE);</span>
+<span class="nc" id="L312">            button.setMnemonicParsing(false);</span>
+<span class="nc" id="L313">            button.getStyleClass().add(&quot;ranked-archetype-button&quot;);</span>
+<span class="nc" id="L314">            button.setUserData(archetype);</span>
+<span class="nc" id="L315">            button.setOnAction(event -&gt; DisplayArchetype(archetype));</span>
+<span class="nc" id="L316">            row.prefWidthProperty().bind(button.widthProperty().subtract(28));</span>
 
-<span class="nc" id="L313">            rankedListBox.getChildren().add(button);</span>
+<span class="nc" id="L318">            rankedListBox.getChildren().add(button);</span>
         }
-<span class="nc" id="L315">    }</span>
+<span class="nc" id="L320">    }</span>
 
     private void DisplayArchetype(Archetype archetype) {
-<span class="nc" id="L318">        selectedArchetype = archetype;</span>
+<span class="nc" id="L323">        selectedArchetype = archetype;</span>
 
-<span class="nc" id="L320">        Integer rank = rankByArchetype.get(archetype);</span>
-<span class="nc bnc" id="L321" title="All 2 branches missed.">        archetypeRankLabel.setText(rank != null ? &quot;#&quot; + rank : &quot;—&quot;);</span>
-<span class="nc" id="L322">        archetypeNameLabel.setText(UserProfileService.FormatArchetypeName(archetype.getName()));</span>
-<span class="nc" id="L323">        overviewLabel.setText(archetype.getSmallDescription());</span>
-<span class="nc" id="L324">        valueLabel.setText(archetype.getValue() + &quot; — &quot; + archetype.getValueDefinition());</span>
-<span class="nc" id="L325">        strengthsLabel.setText(archetype.getStrengths());</span>
-<span class="nc" id="L326">        weaknessesLabel.setText(archetype.getWeaknesses());</span>
-<span class="nc" id="L327">        descriptionLabel.setText(archetype.getLongDescription());</span>
-<span class="nc" id="L328">        questFocusLabel.setText(QuestFocusFromDatabase(archetype, pinnedQuests.get(archetype)));</span>
-<span class="nc" id="L329">        archetypeImageLabel.setText(archetype.getEmoji());</span>
+<span class="nc" id="L325">        Integer rank = rankByArchetype.get(archetype);</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">        archetypeRankLabel.setText(rank != null ? &quot;#&quot; + rank : &quot;—&quot;);</span>
+<span class="nc" id="L327">        archetypeNameLabel.setText(UserProfileService.FormatArchetypeName(archetype.getName()));</span>
+<span class="nc" id="L328">        overviewLabel.setText(archetype.getSmallDescription());</span>
+<span class="nc" id="L329">        valueLabel.setText(archetype.getValue() + &quot; — &quot; + archetype.getValueDefinition());</span>
+<span class="nc" id="L330">        strengthsLabel.setText(archetype.getStrengths());</span>
+<span class="nc" id="L331">        weaknessesLabel.setText(archetype.getWeaknesses());</span>
+<span class="nc" id="L332">        descriptionLabel.setText(archetype.getLongDescription());</span>
+<span class="nc" id="L333">        questFocusLabel.setText(QuestFocusFromDatabase(archetype, pinnedQuests.get(archetype)));</span>
+<span class="nc" id="L334">        DisplayArchetypeImage(archetype);</span>
 
-<span class="nc" id="L331">        HighlightSelection();</span>
-<span class="nc" id="L332">    }</span>
+<span class="nc" id="L336">        HighlightSelection();</span>
+<span class="nc" id="L337">    }</span>
+
+    private void DisplayArchetypeImage(Archetype archetype) {
+<span class="nc bnc" id="L340" title="All 4 branches missed.">        String resourcePath = switch (archetype) {</span>
+<span class="nc" id="L341">            case HERO -&gt; &quot;/com/example/personalityquest/img/archetypes/hero.png&quot;;</span>
+<span class="nc" id="L342">            case INNOCENT -&gt; &quot;/com/example/personalityquest/img/archetypes/innocent.png&quot;;</span>
+<span class="nc" id="L343">            case EVERYMAN -&gt; &quot;/com/example/personalityquest/img/archetypes/everyman.png&quot;;</span>
+<span class="nc" id="L344">            default -&gt; null;</span>
+        };
+
+<span class="nc bnc" id="L347" title="All 2 branches missed.">        if (resourcePath == null) {</span>
+<span class="nc" id="L348">            ShowArchetypeEmoji(archetype);</span>
+<span class="nc" id="L349">            return;</span>
+        }
+
+<span class="nc" id="L352">        try (InputStream stream = getClass().getResourceAsStream(resourcePath)) {</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">            if (stream == null) {</span>
+<span class="nc" id="L354">                ShowArchetypeEmoji(archetype);</span>
+<span class="nc" id="L355">                return;</span>
+            }
+
+<span class="nc" id="L358">            archetypeImageView.setImage(new Image(stream));</span>
+<span class="nc" id="L359">            archetypeImageView.setVisible(true);</span>
+<span class="nc" id="L360">            archetypeImageLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L361">            archetypeImageLabel.setVisible(false);</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">        } catch (Exception exception) {</span>
+<span class="nc" id="L363">            ShowArchetypeEmoji(archetype);</span>
+<span class="nc" id="L364">        }</span>
+<span class="nc" id="L365">    }</span>
+
+    private void ShowArchetypeEmoji(Archetype archetype) {
+<span class="nc" id="L368">        archetypeImageView.setImage(null);</span>
+<span class="nc" id="L369">        archetypeImageView.setVisible(false);</span>
+<span class="nc" id="L370">        archetypeImageLabel.setText(archetype.getEmoji());</span>
+<span class="nc" id="L371">        archetypeImageLabel.setVisible(true);</span>
+<span class="nc" id="L372">    }</span>
 
     private void HighlightSelection() {
-<span class="nc bnc" id="L335" title="All 2 branches missed.">        for (Button button : quadrantRealms.keySet()) {</span>
-<span class="nc" id="L336">            button.getStyleClass().remove(SELECTED_ARCHETYPE);</span>
-<span class="nc bnc" id="L337" title="All 2 branches missed.">            if (button.getUserData() == selectedArchetype) {</span>
-<span class="nc" id="L338">                button.getStyleClass().add(SELECTED_ARCHETYPE);</span>
+<span class="nc bnc" id="L375" title="All 2 branches missed.">        for (Button button : quadrantRealms.keySet()) {</span>
+<span class="nc" id="L376">            button.getStyleClass().remove(SELECTED_ARCHETYPE);</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">            if (button.getUserData() == selectedArchetype) {</span>
+<span class="nc" id="L378">                button.getStyleClass().add(SELECTED_ARCHETYPE);</span>
             }
-<span class="nc" id="L340">        }</span>
-<span class="nc bnc" id="L341" title="All 2 branches missed.">        for (Node node : rankedListBox.getChildren()) {</span>
-<span class="nc" id="L342">            node.getStyleClass().remove(SELECTED_ARCHETYPE);</span>
-<span class="nc bnc" id="L343" title="All 2 branches missed.">            if (node.getUserData() == selectedArchetype) {</span>
-<span class="nc" id="L344">                node.getStyleClass().add(SELECTED_ARCHETYPE);</span>
+<span class="nc" id="L380">        }</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">        for (Node node : rankedListBox.getChildren()) {</span>
+<span class="nc" id="L382">            node.getStyleClass().remove(SELECTED_ARCHETYPE);</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">            if (node.getUserData() == selectedArchetype) {</span>
+<span class="nc" id="L384">                node.getStyleClass().add(SELECTED_ARCHETYPE);</span>
             }
-<span class="nc" id="L346">        }</span>
-<span class="nc" id="L347">    }</span>
+<span class="nc" id="L386">        }</span>
+<span class="nc" id="L387">    }</span>
 
     private void ShowEmptyArchetype(String message) {
-<span class="nc" id="L350">        currentResult = null;</span>
-<span class="nc" id="L351">        scoreByArchetype = Map.of();</span>
-<span class="nc" id="L352">        pinnedQuests = Map.of();</span>
-<span class="nc" id="L353">        rankedArchetypes = List.of();</span>
-<span class="nc" id="L354">        rankByArchetype = new EnumMap&lt;&gt;(Archetype.class);</span>
-<span class="nc" id="L355">        selectedArchetype = null;</span>
+<span class="nc" id="L390">        currentResult = null;</span>
+<span class="nc" id="L391">        scoreByArchetype = Map.of();</span>
+<span class="nc" id="L392">        pinnedQuests = Map.of();</span>
+<span class="nc" id="L393">        rankedArchetypes = List.of();</span>
+<span class="nc" id="L394">        rankByArchetype = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="nc" id="L395">        selectedArchetype = null;</span>
 
-<span class="nc" id="L357">        archetypeRankLabel.setText(&quot;—&quot;);</span>
-<span class="nc" id="L358">        archetypeNameLabel.setText(&quot;Unassigned&quot;);</span>
-<span class="nc" id="L359">        overviewLabel.setText(message);</span>
-<span class="nc" id="L360">        valueLabel.setText(&quot;—&quot;);</span>
-<span class="nc" id="L361">        strengthsLabel.setText(&quot;—&quot;);</span>
-<span class="nc" id="L362">        weaknessesLabel.setText(&quot;—&quot;);</span>
-<span class="nc" id="L363">        descriptionLabel.setText(&quot;—&quot;);</span>
-<span class="nc" id="L364">        questFocusLabel.setText(&quot;Your quest focus will appear here once an archetype is assigned.&quot;);</span>
-<span class="nc" id="L365">        archetypeImageLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L397">        archetypeRankLabel.setText(&quot;—&quot;);</span>
+<span class="nc" id="L398">        archetypeNameLabel.setText(&quot;Unassigned&quot;);</span>
+<span class="nc" id="L399">        overviewLabel.setText(message);</span>
+<span class="nc" id="L400">        valueLabel.setText(&quot;—&quot;);</span>
+<span class="nc" id="L401">        strengthsLabel.setText(&quot;—&quot;);</span>
+<span class="nc" id="L402">        weaknessesLabel.setText(&quot;—&quot;);</span>
+<span class="nc" id="L403">        descriptionLabel.setText(&quot;—&quot;);</span>
+<span class="nc" id="L404">        questFocusLabel.setText(&quot;Your quest focus will appear here once an archetype is assigned.&quot;);</span>
+<span class="nc" id="L405">        archetypeImageView.setImage(null);</span>
+<span class="nc" id="L406">        archetypeImageView.setVisible(false);</span>
+<span class="nc" id="L407">        archetypeImageLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L408">        archetypeImageLabel.setVisible(false);</span>
 
-<span class="nc" id="L367">        ConfigureRealmWheel();</span>
-<span class="nc" id="L368">        rankedListBox.getChildren().clear();</span>
-<span class="nc" id="L369">    }</span>
+<span class="nc" id="L410">        ConfigureRealmWheel();</span>
+<span class="nc" id="L411">        rankedListBox.getChildren().clear();</span>
+<span class="nc" id="L412">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
