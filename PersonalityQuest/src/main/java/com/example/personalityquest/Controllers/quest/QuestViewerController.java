@@ -83,6 +83,7 @@ public class QuestViewerController implements Initializable {
     private Tab currentTab;
     private boolean reactionAnswered;
     private boolean challengeVisited;
+    private boolean reflectionAdded;
 
     private static final String FLASHING_TAB = "flashing-tab";
 
@@ -129,13 +130,7 @@ public class QuestViewerController implements Initializable {
             boolean wasAlreadyVisited = challengeVisited;
             challengeVisited = true;
             challengeJournalFeedbackLabel.setText(wasAlreadyVisited ? "Updated your journal entry" : "Added to your journal");
-            UpdateTabLocks();
             navBarController.FlashTasksButtonOnce();
-
-            Quest quest = QuestService.GetQuestForLabourId(activeUserQuest.getLabourId());
-            if (quest != null) {
-                ShowResolutionIfAvailable(quest, !wasAlreadyVisited);
-            }
         } catch (Exception exception) {
             challengeJournalFeedbackLabel.setText("Could not save this to your journal right now.");
         }
@@ -276,7 +271,7 @@ public class QuestViewerController implements Initializable {
                 AddReactionOptionButton(option);
             }
 
-            // Restore a previously saved reaction so the Challenge tab stays unlocked
+            // Restore a previously saved reaction so the Reflection tab stays unlocked
             if (!ApplicationManager.isEmpty(userQuest.getReactionType())) {
                 try {
                     selectedReaction = QuestOption.ReactionType.valueOf(userQuest.getReactionType());
@@ -291,14 +286,14 @@ public class QuestViewerController implements Initializable {
                     }
                 }
                 reactionAnswered = true;
-                UpdateTabLocks();
-            }
 
-            // Persist "How It Ended" in this tab once the challenge has been journaled, regardless
-            // of app restarts or screen changes. No flash here - the user is already on this tab.
-            if (JournalEntryService.HasAddedChallengeForLabour(email, quest.getLabourId())) {
+                // Persist "How It Ended" in this tab once a reaction has been chosen, regardless
+                // of app restarts or screen changes. No flash here - the user is already on this tab.
                 ShowResolutionIfAvailable(quest, false);
             }
+
+            reflectionAdded = !ApplicationManager.isEmpty(userQuest.getReflection());
+            UpdateTabLocks();
 
         } catch (Exception exception) {
             reactionQuestionLabel.setText("Could not load your questline right now.");
@@ -343,6 +338,17 @@ public class QuestViewerController implements Initializable {
 
         reactionAnswered = true;
         UpdateTabLocks();
+
+        if (activeUserQuest != null) {
+            try {
+                Quest quest = QuestService.GetQuestForLabourId(activeUserQuest.getLabourId());
+                if (quest != null) {
+                    ShowResolutionIfAvailable(quest, false);
+                }
+            } catch (Exception ignored) {
+                // Non fatal - "How It Ended" just won't show yet
+            }
+        }
     }
 
     private void LoadChallenge(){
@@ -368,6 +374,11 @@ public class QuestViewerController implements Initializable {
 
             if (selectedReaction == null){
                 challengeDetailsLabel.setText("Answer \"Your Reaction\" first to unlock your challenge.");
+                return;
+            }
+
+            if (!reflectionAdded){
+                challengeDetailsLabel.setText("Write and save a reflection first to unlock your challenge.");
                 return;
             }
 
@@ -476,8 +487,8 @@ public class QuestViewerController implements Initializable {
     }
 
     private void UpdateTabLocks() {
-        challengeTabButton.setDisable(!reactionAnswered);
-        reflectionTabButton.setDisable(!challengeVisited);
+        reflectionTabButton.setDisable(!reactionAnswered);
+        challengeTabButton.setDisable(!reflectionAdded);
     }
 
     private void DisableReflectionActions(){
@@ -508,6 +519,8 @@ public class QuestViewerController implements Initializable {
             activeUserQuest = UserQuestService.UpdateQuestReflectionToDraft(
                     activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
             reflectionStatusLabel.setText("Draft Saved");
+            reflectionAdded = true;
+            UpdateTabLocks();
         } catch (Exception exception) {
             reflectionStatusLabel.setText("Could not save your reflection right now.");
         }
@@ -528,6 +541,8 @@ public class QuestViewerController implements Initializable {
                     activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
             reflectionSubmitButton.setText("Update Submission");
             navBarController.FlashTasksButtonOnce();
+            reflectionAdded = true;
+            UpdateTabLocks();
             RequestAiFeedback(reflection, "Reflection submitted. Generating AI feedback...");
         } catch (Exception exception) {
             reflectionStatusLabel.setText("Could not submit this reflection right now.");

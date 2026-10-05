@@ -57,7 +57,7 @@
                 <!-- Row 1, Col 0: Quest Challenges -->
                 <VBox fx:id="questChallengesCard" spacing="10" styleClass="card"
                       GridPane.columnIndex="0" GridPane.rowIndex="1">
-                    <Label styleClass="card-title centered-title" text="Quest Challenges" style="-fx-font-size: 24px; -fx-text-fill: #ffffff; -fx-font-weight: 900;" />
+                    <Label styleClass="card-title centered-title" text="Challenges" style="-fx-font-size: 24px; -fx-text-fill: #ffffff; -fx-font-weight: 900;" />
                     <ListView fx:id="questChallengesList" focusTraversable="false" styleClass="task-list" VBox.vgrow="ALWAYS" />
                 </VBox>
 

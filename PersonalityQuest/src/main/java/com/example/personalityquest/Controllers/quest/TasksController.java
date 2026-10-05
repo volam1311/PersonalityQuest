@@ -14,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -23,36 +22,22 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 
-/** Controls weekly-task selection and completion */
+/** Controls the Journal screen: quest challenges, weekly challenges, and reflections */
 public class TasksController implements Initializable {
-    private static final double STACKED_BREAKPOINT = 760;
-    private static final double FULL_PERCENT = 100;
-    private static final double HIDDEN_PERCENT = 0;
-    private static final DateTimeFormatter WEEK_FORMAT =
-            DateTimeFormatter.ofPattern("d MMM yyyy", Locale.UK);
 
     @FXML
     private NavBarController navBarController;
     @FXML
     private BorderPane tasksRoot;
     @FXML
-    private GridPane tasksGrid;
+    private VBox detailCard;
     @FXML
-    private VBox listsColumn, detailCard;
-    @FXML
-    private Label weekSummaryLabel, weekRangeLabel, questTasksLabel, taskTitleLabel, questLabel,
-            descriptionLabel, feedbackLabel, aiFeedbackLabel;
-    @FXML
-    private ListView<TaskListItem> weekTasks;
-    @FXML
-    private ListView<Task> questTasks;
+    private Label taskTitleLabel, questLabel, descriptionLabel, feedbackLabel, aiFeedbackLabel;
     @FXML
     private CheckBox progressBox;
     @FXML
@@ -70,10 +55,15 @@ public class TasksController implements Initializable {
     @FXML
     private ListView<ReflectionListItem> questReflectionsList;
 
-    private record ChallengeListItem(JournalEntry entry, Quest quest, Task task){}
+    private record ChallengeListItem(JournalEntry entry, Quest quest, Task task, WeeklyTask weeklyTask){}
     private record ReflectionListItem(UserQuest userQuest, Quest quest, ReflectionPrompt prompt){}
-    private WeeklyTask taskToSelect;
-    private boolean updatingSelection;
+
+    /** The weekly-challenge list item currently shown in the detail panel, or null if a quest challenge/reflection is shown instead */
+    private ChallengeListItem selectedWeeklyChallenge;
+    /** The journaled quest-challenge entry currently shown in the detail panel, or null otherwise */
+    private ChallengeListItem selectedJournalChallenge;
+    /** The quest reflection currently shown in the detail panel, or null if a challenge is shown instead */
+    private ReflectionListItem selectedReflectionItem;
     private boolean generatingFeedback;
     private int feedbackRequestId;
 
@@ -93,146 +83,53 @@ public class TasksController implements Initializable {
         LoadQuestReflections();
     }
 
-    /** Selects a weekly task for display
-     * @param weeklyTask the task to select
-     */
-    public void selectTask(WeeklyTask weeklyTask) {
-        taskToSelect = weeklyTask;
-        SelectMatchingTask();
-    }
-
-    private void LoadTasks() {
-        LoadWeeklyTasks();
-        LoadQuestTasks();
-        SelectInitialTask();
-    }
-
-    private void LoadWeeklyTasks() {
-        weekTasks.getItems().clear();
-        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
-
-        if (ApplicationManager.isEmpty(email)) {
-            weekSummaryLabel.setText("Sign in to see this week's tasks.");
-            weekRangeLabel.setText("Your weekly assignments will appear here.");
+    private void ShowJournalChallenge(ChallengeListItem item){
+        if (item.weeklyTask() != null) {
+            ShowWeeklyChallenge(item);
             return;
         }
 
-        try {
-            WeeklyTask[] weekly = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
-            if (weekly == null) {
-                weekly = WeeklyTaskService.GenerateTasksForThisWeek(email);
-            }
+        selectedWeeklyChallenge = null;
+        selectedReflectionItem = null;
+        selectedJournalChallenge = item;
 
-            if (weekly == null || weekly.length == 0) {
-                weekSummaryLabel.setText("No weekly tasks have been assigned yet.");
-                weekRangeLabel.setText("Weekly practices are assigned separately from the storyline.");
-                return;
-            }
-
-            int finished = 0;
-            for (WeeklyTask weeklyTask : weekly) {
-                weekTasks.getItems().add(ToListItem(weeklyTask));
-                if (IsFinished(weeklyTask.getStatus())) {
-                    finished++;
-                }
-            }
-
-            weekSummaryLabel.setText(finished + " of " + weekly.length + " finished this week.");
-            weekRangeLabel.setText("Week of " + FormatWeek(weekly[0].getWeekStarted()));
-        } catch (Exception exception) {
-            weekSummaryLabel.setText("Could not load this week's tasks right now.");
-        }
+        JournalEntry entry = item.entry();
+        Task task = item.task();
+        String questName = item.quest() == null ? "Quest challenge" : item.quest().getName();
+        String challengeName = task == null ? entry.getTitle() : task.getName();
+        taskTitleLabel.setText(questName + ": " + challengeName);
+        questLabel.setText(questName);
+        descriptionLabel.setText(task == null || ApplicationManager.isEmpty(task.getDescription())
+                ? "Write what you plan to do for this challenge."
+                : task.getDescription());
+        progressBox.setSelected(true);
+        SetReflectionAreaCompact(true);
+        reflectionArea.setText(entry.getBody() == null ? "" : entry.getBody());
+        reflectionArea.setDisable(false);
+        draftButton.setDisable(false);
+        submitButton.setDisable(true);
+        submitButton.setText("Submit");
+        feedbackButton.setDisable(true);
+        feedbackLabel.setText("");
+        HideAiFeedback();
     }
 
-    private void LoadQuestTasks() {
-        questTasks.getItems().clear();
-        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
-
-        if (ApplicationManager.isEmpty(email)) {
-            questTasksLabel.setText("Sign in to see your current labour.");
-            return;
-        }
-
-        try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
-            if (userQuest == null) {
-                questTasksLabel.setText("No active labour has been assigned yet.");
-                return;
-            }
-
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
-            List<Task> tasks = TaskService.GetTasksForLabourId(userQuest.getLabourId());
-            questTasks.getItems().addAll(tasks);
-
-            String questName = quest == null ? "your current labour" : quest.getName();
-            questTasksLabel.setText(tasks.size() + " storyline tasks in " + questName + ".");
-        } catch (Exception exception) {
-            questTasksLabel.setText("Could not load this labour's tasks right now.");
-        }
-    }
-
-    private void SelectInitialTask() {
-        if (SelectMatchingTask()) {
-            return;
-        }
-        if (!weekTasks.getItems().isEmpty()) {
-            weekTasks.getSelectionModel().selectFirst();
-            return;
-        }
-        if (!questTasks.getItems().isEmpty()) {
-            questTasks.getSelectionModel().selectFirst();
-            return;
-        }
-        ShowEmptyDetail("Choose a weekly or quest task to read its details.");
-    }
-
-    private TaskListItem ToListItem(WeeklyTask weeklyTask) {
-        Task task = null;
-        String questName = "your current quest";
-
-        try {
-            task = TaskService.GetTaskForId(weeklyTask.getTaskId());
-            Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());
-            if (quest != null && !ApplicationManager.isEmpty(quest.getName())) {
-                questName = quest.getName();
-            }
-        } catch (Exception exception) {
-            questName = "your current quest";
-        }
-
-        return new TaskListItem(weeklyTask, task, questName);
-    }
-
-    private boolean SelectMatchingTask() {
-        if (taskToSelect == null) {
-            return false;
-        }
-
-        for (TaskListItem item : weekTasks.getItems()) {
-            if (SameTask(item.weeklyTask(), taskToSelect)) {
-                weekTasks.getSelectionModel().select(item);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void ShowWeeklyTask(TaskListItem item) {
-        if (item == null) {
-            ShowEmptyDetail("Choose a weekly task to read its details and write a reflection.");
-            return;
-        }
+    private void ShowWeeklyChallenge(ChallengeListItem item){
+        selectedReflectionItem = null;
+        selectedJournalChallenge = null;
+        selectedWeeklyChallenge = item;
 
         WeeklyTask weeklyTask = item.weeklyTask();
         Task task = item.task();
         boolean finished = IsFinished(weeklyTask.getStatus());
 
-        taskTitleLabel.setText(item.displayName());
-        questLabel.setText("Weekly task · " + item.questName());
+        taskTitleLabel.setText(task == null ? "Weekly challenge" : "Weekly: " + task.getName());
+        questLabel.setText("Weekly challenge · " + DisplayStatus(weeklyTask.getStatus()));
         descriptionLabel.setText(task == null || ApplicationManager.isEmpty(task.getDescription())
                 ? "Complete this week's challenge, then write an honest reflection."
                 : task.getDescription());
         progressBox.setSelected(finished);
+        SetReflectionAreaCompact(true);
         reflectionArea.setText(weeklyTask.getReflection() == null ? "" : weeklyTask.getReflection());
         reflectionArea.setDisable(false);
         draftButton.setDisable(finished);
@@ -240,8 +137,8 @@ public class TasksController implements Initializable {
         submitButton.setText(finished ? "Submitted" : "Submit");
 
         boolean keepGenerating = generatingFeedback
-                && taskToSelect != null
-                && SameTask(weeklyTask, taskToSelect);
+                && selectedWeeklyChallenge != null
+                && SameTask(selectedWeeklyChallenge.weeklyTask(), weeklyTask);
         feedbackButton.setDisable(keepGenerating);
         if (keepGenerating) {
             feedbackLabel.setText("Generating AI feedback...");
@@ -252,60 +149,16 @@ public class TasksController implements Initializable {
         }
     }
 
-    private void ShowQuestTask(Task task) {
-        if (task == null) {
-            ShowEmptyDetail("Choose a quest task to read its details.");
-            return;
-        }
-
-        String questName = "your current labour";
-        try {
-            Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());
-            if (quest != null && !ApplicationManager.isEmpty(quest.getName())) {
-                questName = quest.getName();
-            }
-        } catch (Exception exception) {
-            questName = "your current labour";
-        }
-
-        taskTitleLabel.setText(task.getName());
-        questLabel.setText("Quest task · " + questName);
-        descriptionLabel.setText(ApplicationManager.isEmpty(task.getDescription())
-                ? "This storyline task belongs to your current labour."
-                : task.getDescription());
-        progressBox.setSelected(false);
-        reflectionArea.clear();
-        reflectionArea.setDisable(true);
-        draftButton.setDisable(true);
-        submitButton.setDisable(true);
-        submitButton.setText("Submit");
-        feedbackButton.setDisable(true);
-        feedbackLabel.setText("Reflections are submitted from weekly practices, not storyline quest tasks.");
-        HideAiFeedback();
-    }
-
-    private void ShowJournalChallenge(ChallengeListItem item){
-        JournalEntry entry = item.entry();
-        String questName = item.quest() == null ? "Quest challenge" : item.quest().getName();
-        taskTitleLabel.setText(item.task() == null ? entry.getTitle() : item.task().getName());
-        questLabel.setText(questName);
-        descriptionLabel.setText(entry.getBody());
-        progressBox.setSelected(true);
-        reflectionArea.clear();
-        reflectionArea.setDisable(true);
-        draftButton.setDisable(true);
-        submitButton.setDisable(true);
-        submitButton.setText("Submit");
-        feedbackButton.setDisable(true);
-        feedbackLabel.setText("");
-        HideAiFeedback();
-    }
-
     private void ShowEmptyDetail(String message) {
+        selectedWeeklyChallenge = null;
+        selectedReflectionItem = null;
+        selectedJournalChallenge = null;
+
         taskTitleLabel.setText("Select a task");
         questLabel.setText(message);
         descriptionLabel.setText("");
         progressBox.setSelected(false);
+        SetReflectionAreaCompact(false);
         reflectionArea.clear();
         reflectionArea.setDisable(true);
         draftButton.setDisable(true);
@@ -314,100 +167,6 @@ public class TasksController implements Initializable {
         feedbackButton.setDisable(true);
         feedbackLabel.setText("");
         HideAiFeedback();
-    }
-
-    private void ConfigureWeeklyTaskList() {
-        weekTasks.setPlaceholder(new Label("No weekly tasks assigned yet."));
-        weekTasks.setCellFactory(list -> new ListCell<>() {
-            private final CheckBox completedBox = new CheckBox();
-            private final Label nameLabel = new Label();
-            private final Label statusLabel = new Label();
-            private final Region spacer = new Region();
-            private final HBox header = new HBox(8, nameLabel, spacer, statusLabel);
-            private final VBox textColumn = new VBox(2, header);
-            private final HBox row = new HBox(10, completedBox, textColumn);
-
-            {
-                row.getStyleClass().add("week-task-row");
-                nameLabel.getStyleClass().add("week-task-name");
-                statusLabel.getStyleClass().add("week-task-status");
-                HBox.setHgrow(spacer, Priority.ALWAYS);
-                HBox.setHgrow(textColumn, Priority.ALWAYS);
-                completedBox.setMouseTransparent(true);
-                completedBox.setFocusTraversable(false);
-            }
-
-            @Override
-            protected void updateItem(TaskListItem item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                    return;
-                }
-
-                nameLabel.setText(item.displayName());
-                statusLabel.setText(DisplayStatus(item.weeklyTask().getStatus()));
-                completedBox.setSelected(IsFinished(item.weeklyTask().getStatus()));
-                setText(null);
-                setGraphic(row);
-            }
-        });
-
-        weekTasks.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldItem, newItem) -> {
-                    if (updatingSelection || newItem == null) {
-                        return;
-                    }
-                    if (oldItem != null && !SameTask(oldItem.weeklyTask(), newItem.weeklyTask())) {
-                        CancelPendingFeedback();
-                    }
-                    updatingSelection = true;
-                    questTasks.getSelectionModel().clearSelection();
-                    updatingSelection = false;
-                    ShowWeeklyTask(newItem);
-                });
-    }
-
-    private void ConfigureQuestTaskList() {
-        questTasks.setPlaceholder(new Label("No quest tasks assigned yet."));
-        questTasks.setCellFactory(list -> new ListCell<>() {
-            private final Label nameLabel = new Label();
-            private final HBox row = new HBox(10, nameLabel);
-
-            {
-                row.getStyleClass().add("week-task-row");
-                nameLabel.getStyleClass().add("week-task-name");
-            }
-
-            @Override
-            protected void updateItem(Task task, boolean empty) {
-                super.updateItem(task, empty);
-
-                if (empty || task == null) {
-                    setText(null);
-                    setGraphic(null);
-                    return;
-                }
-
-                nameLabel.setText(task.getName());
-                setText(null);
-                setGraphic(row);
-            }
-        });
-
-        questTasks.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldItem, newItem) -> {
-                    if (updatingSelection || newItem == null) {
-                        return;
-                    }
-                    updatingSelection = true;
-                    weekTasks.getSelectionModel().clearSelection();
-                    updatingSelection = false;
-                    CancelPendingFeedback();
-                    ShowQuestTask(newItem);
-                });
     }
 
     @FXML
@@ -417,105 +176,180 @@ public class TasksController implements Initializable {
 
     @FXML
     private void OnSaveDraft() {
-        TaskListItem selected = weekTasks.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            return;
-        }
-
         String reflection = CurrentReflection();
         if (ApplicationManager.isEmpty(reflection)) {
             feedbackLabel.setText("Write something before saving a draft.");
             return;
         }
 
-        try {
-            WeeklyTask updated = WeeklyTaskService.UpdateGivenTaskToDraft(
-                    selected.weeklyTask(),
-                    reflection,
-                    ApplicationManager.CurrentAccount.getCurrentEmail());
-            taskToSelect = updated;
-            feedbackLabel.setText("Draft saved.");
-            LoadTasks();
-        } catch (Exception exception) {
-            feedbackLabel.setText("Could not save this draft right now.");
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+
+        if (selectedJournalChallenge != null) {
+            ChallengeListItem item = selectedJournalChallenge;
+            try {
+                String title = item.task() == null ? item.entry().getTitle() : item.task().getName();
+                JournalEntryService.AddChallengeEntry(email, item.entry().getLabourId(), title, reflection);
+                feedbackLabel.setText("Saved.");
+                LoadQuestChallenges();
+                ReselectJournalChallenge(item.entry().getLabourId());
+            } catch (Exception exception) {
+                feedbackLabel.setText("Could not save this right now.");
+            }
+            return;
+        }
+
+        if (selectedWeeklyChallenge != null) {
+            WeeklyTask weeklyTask = selectedWeeklyChallenge.weeklyTask();
+            try {
+                WeeklyTaskService.UpdateGivenTaskToDraft(weeklyTask, reflection, email);
+                feedbackLabel.setText("Draft saved.");
+                LoadQuestChallenges();
+                ReselectWeeklyChallenge(weeklyTask);
+            } catch (Exception exception) {
+                feedbackLabel.setText("Could not save this draft right now.");
+            }
+            return;
+        }
+
+        if (selectedReflectionItem != null) {
+            UserQuest userQuest = selectedReflectionItem.userQuest();
+            try {
+                UserQuestService.UpdateQuestReflectionToDraft(userQuest, reflection, email);
+                feedbackLabel.setText("Draft saved.");
+                LoadQuestReflections();
+                ReselectReflection(userQuest);
+            } catch (Exception exception) {
+                feedbackLabel.setText("Could not save this draft right now.");
+            }
         }
     }
 
     @FXML
     private void OnSubmit() {
-        TaskListItem selected = weekTasks.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            return;
-        }
-
         String reflection = CurrentReflection();
         if (ApplicationManager.isEmpty(reflection)) {
             feedbackLabel.setText("Write a reflection before submitting.");
             return;
         }
 
-        try {
-            WeeklyTask updated = WeeklyTaskService.UpdateGivenTaskToBeFinished(
-                    selected.weeklyTask(),
-                    reflection,
-                    ApplicationManager.CurrentAccount.getCurrentEmail());
-            taskToSelect = updated;
-            RequestAiFeedback(selected, reflection, "Task submitted. Generating AI feedback...");
-            LoadTasks();
-        } catch (Exception exception) {
-            feedbackLabel.setText("Could not submit this task right now.");
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+
+        if (selectedWeeklyChallenge != null) {
+            ChallengeListItem submitted = selectedWeeklyChallenge;
+            WeeklyTask weeklyTask = submitted.weeklyTask();
+            try {
+                WeeklyTaskService.UpdateGivenTaskToBeFinished(weeklyTask, reflection, email);
+                RequestWeeklyAiFeedback(submitted, reflection, "Task submitted. Generating AI feedback...");
+                LoadQuestChallenges();
+                ReselectWeeklyChallenge(weeklyTask);
+                MaybeRecordWeekCompletion(email);
+            } catch (Exception exception) {
+                feedbackLabel.setText("Could not submit this task right now.");
+            }
+            return;
         }
 
+        if (selectedReflectionItem != null) {
+            ReflectionListItem submitted = selectedReflectionItem;
+            try {
+                UserQuest updated = UserQuestService.UpdateQuestReflectionToBeFinished(
+                        submitted.userQuest(), reflection, email);
+                RequestQuestAiFeedback(submitted, reflection, "Reflection submitted. Generating AI feedback...");
+                LoadQuestReflections();
+                ReselectReflection(updated);
+            } catch (Exception exception) {
+                feedbackLabel.setText("Could not submit this reflection right now.");
+            }
+        }
+    }
+
+    /**
+     * Once every weekly challenge assigned this week is finished, counts it as the
+     * week's streak and nudges the active quest's completion percentage forward.
+     */
+    private void MaybeRecordWeekCompletion(String email) {
         try {
-            int amountOfTasksAssigned = weekTasks.getItems().size();
-            int count = 0;
-            for (TaskListItem taskListItem : weekTasks.getItems()) {
-                if (IsFinished(taskListItem.weeklyTask().getStatus())) {
-                    count++;
+            int total = 0;
+            int finished = 0;
+            for (ChallengeListItem item : questChallengesList.getItems()) {
+                if (item.weeklyTask() == null) {
+                    continue;
+                }
+                total++;
+                if (IsFinished(item.weeklyTask().getStatus())) {
+                    finished++;
                 }
             }
 
-            if (count != amountOfTasksAssigned) {
-                throw new Exception("Week not finished");
+            if (total == 0 || finished != total) {
+                return;
             }
 
-            StreakService.RecordCompletion(ApplicationManager.CurrentAccount.getCurrentEmail(), LocalDate.now());
-            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(
-                    ApplicationManager.CurrentAccount.getCurrentEmail());
+            StreakService.RecordCompletion(email, LocalDate.now());
+            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
 
             UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(
-                    currentActiveQuest,
-                    ApplicationManager.CurrentAccount.getCurrentEmail(),
-                    currentActiveQuest.getPercentageComplete() + 0.1f);
+                    currentActiveQuest, email, currentActiveQuest.getPercentageComplete() + 0.1f);
 
             if (updatedQuest.getPercentageComplete() >= 1.0f) {
-                UserQuestService.SetUserQuestStatusAsComplete(
-                        updatedQuest, ApplicationManager.CurrentAccount.getCurrentEmail());
-                StreakService.IncreaseTotalQuestsCompleted(ApplicationManager.CurrentAccount.getCurrentEmail());
+                UserQuestService.SetUserQuestStatusAsComplete(updatedQuest, email);
+                StreakService.IncreaseTotalQuestsCompleted(email);
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
         }
     }
 
     @FXML
     private void OnGetFeedback() {
-        TaskListItem selected = weekTasks.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            return;
-        }
-
         String reflection = CurrentReflection();
         if (ApplicationManager.isEmpty(reflection)) {
             feedbackLabel.setText("Write a reflection before requesting AI feedback.");
             return;
         }
 
-        taskToSelect = selected.weeklyTask();
-        RequestAiFeedback(selected, reflection, "Generating AI feedback...");
+        if (selectedWeeklyChallenge != null) {
+            RequestWeeklyAiFeedback(selectedWeeklyChallenge, reflection, "Generating AI feedback...");
+            return;
+        }
+
+        if (selectedReflectionItem != null) {
+            RequestQuestAiFeedback(selectedReflectionItem, reflection, "Generating AI feedback...");
+        }
     }
 
-    private void RequestAiFeedback(TaskListItem item, String reflection, String statusMessage) {
+    private void ReselectWeeklyChallenge(WeeklyTask weeklyTask) {
+        for (ChallengeListItem item : questChallengesList.getItems()) {
+            if (item.weeklyTask() != null && SameTask(item.weeklyTask(), weeklyTask)) {
+                questChallengesList.getSelectionModel().select(item);
+                return;
+            }
+        }
+    }
+
+    private void ReselectJournalChallenge(int labourId) {
+        for (ChallengeListItem item : questChallengesList.getItems()) {
+            if (item.weeklyTask() == null && item.entry() != null && item.entry().getLabourId() == labourId) {
+                questChallengesList.getSelectionModel().select(item);
+                return;
+            }
+        }
+    }
+
+    private void ReselectReflection(UserQuest userQuest) {
+        for (ReflectionListItem item : questReflectionsList.getItems()) {
+            if (item.userQuest().getLabourId() == userQuest.getLabourId()) {
+                questReflectionsList.getSelectionModel().select(item);
+                return;
+            }
+        }
+    }
+
+    private void RequestWeeklyAiFeedback(ChallengeListItem item, String reflection, String statusMessage) {
+        WeeklyTask weeklyTask = item.weeklyTask();
+        Task task = item.task();
+        String questName = QuestNameForTask(task);
+
         int requestId = ++feedbackRequestId;
         generatingFeedback = true;
         feedbackButton.setDisable(true);
@@ -525,7 +359,7 @@ public class TasksController implements Initializable {
         CompletableFuture.supplyAsync(() -> {
             try {
                 return ReflectionFeedbackService.FeedbackFor(
-                        ReflectionFeedbackService.ContextFor(item.task(), item.questName(), reflection));
+                        ReflectionFeedbackService.ContextFor(task, questName, reflection));
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -535,9 +369,8 @@ public class TasksController implements Initializable {
             }
 
             generatingFeedback = false;
-            TaskListItem current = weekTasks.getSelectionModel().getSelectedItem();
-            if (current == null || !SameTask(current.weeklyTask(), item.weeklyTask())) {
-                feedbackButton.setDisable(current == null);
+            if (selectedWeeklyChallenge == null || !SameTask(selectedWeeklyChallenge.weeklyTask(), weeklyTask)) {
+                feedbackButton.setDisable(selectedWeeklyChallenge == null);
                 return;
             }
 
@@ -548,7 +381,7 @@ public class TasksController implements Initializable {
             }
 
             try {
-                ReflectionFeedbackService.Save(current.weeklyTask(), text);
+                ReflectionFeedbackService.Save(weeklyTask, text);
             } catch (Exception ignored) {
                 // Showing the reply still helps even if it cannot be stored.
             }
@@ -556,6 +389,67 @@ public class TasksController implements Initializable {
             feedbackLabel.setText("AI feedback is ready.");
             feedbackButton.setDisable(false);
         }));
+    }
+
+    private void RequestQuestAiFeedback(ReflectionListItem item, String reflection, String statusMessage) {
+        UserQuest userQuest = item.userQuest();
+        String questName = item.quest() == null ? "your current quest" : item.quest().getName();
+
+        int requestId = ++feedbackRequestId;
+        generatingFeedback = true;
+        feedbackButton.setDisable(true);
+        feedbackLabel.setText(statusMessage);
+        ShowAiFeedback("Writing feedback from your reflection...");
+
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                return ReflectionFeedbackService.FeedbackFor(
+                        ReflectionFeedbackService.ContextFor(null, questName, reflection));
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
+        }).whenComplete((text, error) -> Platform.runLater(() -> {
+            if (requestId != feedbackRequestId) {
+                return;
+            }
+
+            generatingFeedback = false;
+            if (selectedReflectionItem == null
+                    || selectedReflectionItem.userQuest().getLabourId() != userQuest.getLabourId()) {
+                feedbackButton.setDisable(selectedReflectionItem == null);
+                return;
+            }
+
+            if (error != null) {
+                feedbackLabel.setText(FriendlyFeedbackError(error));
+                feedbackButton.setDisable(false);
+                return;
+            }
+
+            try {
+                ReflectionFeedbackService.SaveForQuest(userQuest.getAccountEmail(), userQuest.getLabourId(), text);
+            } catch (Exception ignored) {
+                // Showing the reply still helps even if it cannot be stored.
+            }
+            ShowAiFeedback(text);
+            feedbackLabel.setText("AI feedback is ready.");
+            feedbackButton.setDisable(false);
+        }));
+    }
+
+    private String QuestNameForTask(Task task) {
+        if (task == null) {
+            return "your current quest";
+        }
+        try {
+            Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());
+            if (quest != null && !ApplicationManager.isEmpty(quest.getName())) {
+                return quest.getName();
+            }
+        } catch (Exception ignored) {
+            // fall through to the default name below
+        }
+        return "your current quest";
     }
 
     private void ShowStoredFeedback(WeeklyTask weeklyTask) {
@@ -600,32 +494,17 @@ public class TasksController implements Initializable {
         return "Could not get AI feedback right now.";
     }
 
+    /** Shrinks the shared text area to a compact 2-line box for challenge entries,
+     * or restores its normal expanding height for reflections. */
+    private void SetReflectionAreaCompact(boolean compact) {
+        reflectionArea.setPrefRowCount(compact ? 2 : 10);
+        reflectionArea.setPrefHeight(compact ? Region.USE_COMPUTED_SIZE : 0);
+        VBox.setVgrow(reflectionArea, compact ? Priority.NEVER : Priority.ALWAYS);
+    }
+
     private String CurrentReflection() {
         String reflection = reflectionArea.getText();
         return reflection == null ? "" : reflection.trim();
-    }
-
-    private void ApplyResponsiveLayout(double width) {
-        if (width <= 0) {
-            return;
-        }
-
-        boolean stacked = width < STACKED_BREAKPOINT;
-        if (stacked) {
-            GridPane.setColumnIndex(listsColumn, 0);
-            GridPane.setRowIndex(listsColumn, 0);
-            GridPane.setColumnIndex(detailCard, 0);
-            GridPane.setRowIndex(detailCard, 1);
-            tasksGrid.getColumnConstraints().get(0).setPercentWidth(FULL_PERCENT);
-            tasksGrid.getColumnConstraints().get(1).setPercentWidth(HIDDEN_PERCENT);
-        } else {
-            GridPane.setColumnIndex(listsColumn, 0);
-            GridPane.setRowIndex(listsColumn, 0);
-            GridPane.setColumnIndex(detailCard, 1);
-            GridPane.setRowIndex(detailCard, 0);
-            tasksGrid.getColumnConstraints().get(0).setPercentWidth(38);
-            tasksGrid.getColumnConstraints().get(1).setPercentWidth(62);
-        }
     }
 
     private static boolean SameTask(WeeklyTask first, WeeklyTask second) {
@@ -646,23 +525,6 @@ public class TasksController implements Initializable {
             return "Draft";
         }
         return "Not started";
-    }
-
-    private static String FormatWeek(String weekStarted) {
-        try {
-            return LocalDate.parse(weekStarted).format(WEEK_FORMAT);
-        } catch (Exception exception) {
-            return weekStarted == null ? "this week" : weekStarted;
-        }
-    }
-
-    private record TaskListItem(WeeklyTask weeklyTask, Task task, String questName) {
-        private String displayName() {
-            if (task != null && !ApplicationManager.isEmpty(task.getName())) {
-                return task.getName();
-            }
-            return "Weekly task";
-        }
     }
 
     private void PopulateActiveQuestHeader(){
@@ -717,9 +579,19 @@ public class TasksController implements Initializable {
                     setGraphic(null);
                     return;
                 }
-                nameLabel.setText(item.task() == null ? item.entry().getTitle() : item.task().getName());
-                overviewLabel.setText(item.task() == null ? "" : item.task().getOverview());
-                doneBox.setSelected(true);
+
+                if (item.weeklyTask() != null) {
+                    String challengeName = item.task() == null ? "Weekly challenge" : item.task().getName();
+                    nameLabel.setText("Weekly: " + challengeName);
+                    overviewLabel.setText(item.task() == null ? "" : item.task().getOverview());
+                    doneBox.setSelected(IsFinished(item.weeklyTask().getStatus()));
+                } else {
+                    String questName = item.quest() == null ? "Quest" : item.quest().getName();
+                    String challengeName = item.task() == null ? item.entry().getTitle() : item.task().getName();
+                    nameLabel.setText(questName + ": " + challengeName);
+                    overviewLabel.setText(item.task() == null ? "" : item.task().getOverview());
+                    doneBox.setSelected(true);
+                }
                 setText(null);
                 setGraphic(row);
             }
@@ -728,6 +600,7 @@ public class TasksController implements Initializable {
         questChallengesList.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldItem, newItem) -> {
                     if (updatingJournalSelection || newItem == null) return;
+                    CancelPendingFeedback();
                     updatingJournalSelection = true;
                     questReflectionsList.getSelectionModel().clearSelection();
                     updatingJournalSelection = false;
@@ -744,10 +617,25 @@ public class TasksController implements Initializable {
             for (JournalEntry entry : JournalEntryService.GetChallengesForEmail(email)) {
                 Quest quest = QuestService.GetQuestForLabourId(entry.getLabourId());
                 Task task = FindChallengeTask(email, entry.getLabourId());
-                questChallengesList.getItems().add(new ChallengeListItem(entry, quest, task));
+                questChallengesList.getItems().add(new ChallengeListItem(entry, quest, task, null));
             }
         } catch (Exception exception) {
             System.err.println("Could not load quest challenges" + exception.getMessage());
+        }
+
+        try {
+            WeeklyTask[] weekly = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
+            if (weekly == null) {
+                weekly = WeeklyTaskService.GenerateTasksForThisWeek(email);
+            }
+            if (weekly != null) {
+                for (WeeklyTask weeklyTask : weekly) {
+                    Task task = TaskService.GetTaskForId(weeklyTask.getTaskId());
+                    questChallengesList.getItems().add(new ChallengeListItem(null, null, task, weeklyTask));
+                }
+            }
+        } catch (Exception exception) {
+            System.err.println("Could not load weekly challenges" + exception.getMessage());
         }
     }
 
@@ -845,6 +733,7 @@ public class TasksController implements Initializable {
         questReflectionsList.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldItem, newItem) -> {
                     if (updatingJournalSelection || newItem == null) return;
+                    CancelPendingFeedback();
                     updatingJournalSelection = true;
                     questChallengesList.getSelectionModel().clearSelection();
                     updatingJournalSelection = false;
@@ -852,16 +741,51 @@ public class TasksController implements Initializable {
                 });
     }
 
-private void ShowReflection(TasksController.ReflectionListItem item){
-    String questName = item.quest() == null ? "General" : item.quest().getName();
-    taskTitleLabel.setText(item.prompt() == null ? "Reflection" : item.prompt().name());
-    questLabel.setText("Quest reflection · " + questName);
-    descriptionLabel.setText(item.prompt() == null ? "Reflection prompt not available yet." : item.prompt().prompt());
-    progressBox.setSelected("Finished".equalsIgnoreCase(item.userQuest().getReflectionStatus()));
-    String answer = item.userQuest().getReflection();
-    reflectionArea.setText(ApplicationManager.isEmpty(answer) ? "" : answer);
-    reflectionArea.setDisable(false);
-}
+    private void ShowReflection(ReflectionListItem item){
+        selectedWeeklyChallenge = null;
+        selectedJournalChallenge = null;
+        selectedReflectionItem = item;
+
+        String questName = item.quest() == null ? "General" : item.quest().getName();
+        boolean finished = "Finished".equalsIgnoreCase(item.userQuest().getReflectionStatus());
+
+        taskTitleLabel.setText(item.prompt() == null ? "Reflection" : item.prompt().name());
+        questLabel.setText("Quest reflection · " + questName);
+        descriptionLabel.setText(item.prompt() == null ? "Reflection prompt not available yet." : item.prompt().prompt());
+        progressBox.setSelected(finished);
+        SetReflectionAreaCompact(false);
+        String answer = item.userQuest().getReflection();
+        reflectionArea.setText(ApplicationManager.isEmpty(answer) ? "" : answer);
+        reflectionArea.setDisable(false);
+        draftButton.setDisable(finished);
+        submitButton.setDisable(finished);
+        submitButton.setText(finished ? "Submitted" : "Submit");
+
+        boolean keepGenerating = generatingFeedback
+                && selectedReflectionItem != null
+                && selectedReflectionItem.userQuest().getLabourId() == item.userQuest().getLabourId();
+        feedbackButton.setDisable(keepGenerating);
+        if (keepGenerating) {
+            feedbackLabel.setText("Generating AI feedback...");
+            ShowAiFeedback("Writing feedback from your reflection...");
+        } else {
+            feedbackLabel.setText(finished ? "This reflection is already finished." : "");
+            ShowStoredQuestFeedback(item.userQuest());
+        }
+    }
+
+    private void ShowStoredQuestFeedback(UserQuest userQuest) {
+        try {
+            String stored = ReflectionFeedbackService.FindForQuest(userQuest.getAccountEmail(), userQuest.getLabourId());
+            if (ApplicationManager.isEmpty(stored)) {
+                HideAiFeedback();
+                return;
+            }
+            ShowAiFeedback(stored);
+        } catch (Exception exception) {
+            HideAiFeedback();
+        }
+    }
 
 
 

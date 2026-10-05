@@ -98,10 +98,10 @@
                             <ListView fx:id="questHistory" focusTraversable="false" prefHeight="280" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
 
-                        <!-- Row 2, Col 2: This week's challenge (copied from Quest.fxml challengeCard) -->
-                        <VBox fx:id="challengeCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <Label styleClass="card-title" text="This week's challenge" />
-                            <Label fx:id="challengeLabel" styleClass="lore-body" wrapText="true" text="Your challenge will appear here once a quest is active." />
+                        <!-- Row 2, Col 2: Weekly Tasks (tick-box list) -->
+                        <VBox fx:id="weeklyTasksCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label styleClass="card-title" text="Weekly Tasks" />
+                            <ListView fx:id="weeklyTasksList" focusTraversable="false" onMouseClicked="#OnWeeklyTaskClick" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
                     </GridPane>
                 </VBox>

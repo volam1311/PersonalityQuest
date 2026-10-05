@@ -35,8 +35,8 @@
             <HBox fx:id="tabBar" alignment="CENTER" spacing="8" styleClass="card, viewer-tab-bar" GridPane.rowIndex="0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.fillWidth="false" GridPane.fillHeight="false">
                 <Button fx:id="storylineTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Storyline" />
                 <Button fx:id="reactionTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Your Reaction" />
-                <Button fx:id="challengeTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Challenge" />
                 <Button fx:id="reflectionTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Reflection" />
+                <Button fx:id="challengeTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Challenge" />
             </HBox>
 
             <StackPane fx:id="displayStack" GridPane.rowIndex="1">
@@ -64,20 +64,6 @@
                         </ScrollPane>
                     </VBox>
                 </VBox>
-                <VBox fx:id="challengePane" spacing="12" styleClass="card quest-card">
-                    <Label styleClass="card-title" text="Challenge for this quest" />
-                    <ScrollPane fx:id="challengeScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" prefHeight="160">
-                        <content>
-                            <Label fx:id="challengeDetailsLabel" styleClass="quest-description" wrapText="true" text="Your challenge will appear here once a quest is active." />
-                        </content>
-                    </ScrollPane>
-                    <Label fx:id="challengeOverviewLabel" styleClass="quest-description" style="-fx-font-weight: bold;" wrapText="true" text="" />
-                    <TextArea fx:id="challengeJournalEntryArea" promptText="Write your challenge focus" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <Button fx:id="challengeJournalButton" mnemonicParsing="false" onAction="#OnAddToJournal" styleClass="pill-button" text="Add to Journal" />
-                        <Label fx:id="challengeJournalFeedbackLabel" styleClass="quiz-feedback" wrapText="true" />
-                    </HBox>
-                </VBox>
                 <VBox fx:id="reflectionPane" spacing="12" styleClass="card quest-card">
                     <Label styleClass="card-title" text="Reflection" />
                     <ScrollPane fx:id="reflectionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" prefHeight="160">
@@ -103,6 +89,20 @@
                         <Button fx:id="reflectionFeedbackButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get Feedback" HBox.hgrow="ALWAYS" />
                         <Button fx:id="reflectionDraftButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSaveDraft" styleClass="draft-button" text="Save Draft" HBox.hgrow="ALWAYS" />
                         <Button fx:id="reflectionSubmitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </VBox>
+                <VBox fx:id="challengePane" spacing="12" styleClass="card quest-card">
+                    <Label styleClass="card-title" text="Challenge for this quest" />
+                    <ScrollPane fx:id="challengeScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" prefHeight="160">
+                        <content>
+                            <Label fx:id="challengeDetailsLabel" styleClass="quest-description" wrapText="true" text="Your challenge will appear here once a quest is active." />
+                        </content>
+                    </ScrollPane>
+                    <Label fx:id="challengeOverviewLabel" styleClass="quest-description" style="-fx-font-weight: bold;" wrapText="true" text="" />
+                    <TextArea fx:id="challengeJournalEntryArea" promptText="Write your challenge focus" styleClass="reflection-area" wrapText="true" prefRowCount="2" />
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Button fx:id="challengeJournalButton" mnemonicParsing="false" onAction="#OnAddToJournal" styleClass="pill-button" text="Add to Journal" />
+                        <Label fx:id="challengeJournalFeedbackLabel" styleClass="quiz-feedback" wrapText="true" />
                     </HBox>
                 </VBox>
             </StackPane>

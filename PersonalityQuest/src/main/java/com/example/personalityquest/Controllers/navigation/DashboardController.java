@@ -13,7 +13,9 @@ import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quest.WeeklyTask;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.QuizResult;
+import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
+import com.example.personalityquest.Services.navigation.NavigationService;
 import com.example.personalityquest.Services.profile.StreakService;
 import com.example.personalityquest.Services.quest.JournalEntryService;
 import com.example.personalityquest.Services.quest.QuestService;
@@ -27,10 +29,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -39,6 +43,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+
+import java.io.IOException;
 
 /** Controls dashboard data and user interactions */
 public class DashboardController implements Initializable {
@@ -68,13 +74,15 @@ public class DashboardController implements Initializable {
     @FXML
     private Canvas progressChart;
     @FXML
-    private VBox progressCard, traitCard, historyCard, challengeCard, verticalProgressCard;
+    private VBox progressCard, traitCard, historyCard, weeklyTasksCard, verticalProgressCard;
     @FXML
     private HBox thermometerRow;
     @FXML
-    private Label traitLabel, reflectionPromptLabel, challengeLabel;
+    private Label traitLabel, reflectionPromptLabel;
     @FXML
     private ListView<QuestListItem> questHistory;
+    @FXML
+    private ListView<WeeklyTask> weeklyTasksList;
     @FXML
     private ProgressBar challengesProgress, reflectionsProgress, weeklyProgress;
 
@@ -89,6 +97,7 @@ public class DashboardController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
         ConfigureHistoryList();
+        ConfigureWeeklyTaskList();
         ConfigureResponsiveSizing();
 
         try {
@@ -104,6 +113,12 @@ public class DashboardController implements Initializable {
 
         LoadQuestline();
         UpdateThermometers();
+
+        try {
+            PopulateWeeklyTasks();
+        } catch (Exception exception) {
+            System.err.println("Could not load weekly tasks: " + exception.getMessage());
+        }
 
         Platform.runLater(this::DrawProgressGraph);
     }
@@ -158,6 +173,91 @@ public class DashboardController implements Initializable {
 
     private double RatioOf(int completed, int total) {
         return total > 0 ? Math.min(1.0, (double) completed / total) : 0;
+    }
+
+    // ---- Weekly Tasks tile (tick-box list) ----
+
+    /**
+     * Loads this week's weekly practices into the home screen's tick-box list,
+     * generating a fresh set for the week if none have been assigned yet.
+     */
+    private void PopulateWeeklyTasks() throws Exception {
+        weeklyTasksList.getItems().clear();
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+
+        if (ApplicationManager.isEmpty(email)) {
+            return;
+        }
+
+        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
+        if (tasks == null) {
+            tasks = WeeklyTaskService.GenerateTasksForThisWeek(email);
+        }
+
+        if (tasks != null) {
+            weeklyTasksList.getItems().addAll(tasks);
+        }
+    }
+
+    /**
+     * Gives each weekly task row a checkbox reflecting whether it's finished,
+     * alongside the task's name and status.
+     */
+    private void ConfigureWeeklyTaskList() {
+        weeklyTasksList.setPlaceholder(new Label("No weekly tasks assigned yet."));
+        weeklyTasksList.setCellFactory(list -> new ListCell<>() {
+            private final CheckBox completedBox = new CheckBox();
+            private final Label nameLabel = new Label();
+            private final Label statusLabel = new Label();
+            private final VBox textColumn = new VBox(2, nameLabel, statusLabel);
+            private final HBox row = new HBox(10, completedBox, textColumn);
+
+            {
+                row.getStyleClass().add("history-row");
+                nameLabel.getStyleClass().add("history-name");
+                statusLabel.getStyleClass().add("history-detail");
+                completedBox.setMouseTransparent(true);
+                completedBox.setFocusTraversable(false);
+                HBox.setHgrow(textColumn, Priority.ALWAYS);
+            }
+
+            @Override
+            protected void updateItem(WeeklyTask item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+
+                nameLabel.setText(WeeklyTaskDisplayName(item));
+                statusLabel.setText(item.getStatus());
+                completedBox.setSelected("Finished".equalsIgnoreCase(item.getStatus()));
+                setText(null);
+                setGraphic(row);
+            }
+        });
+    }
+
+    private String WeeklyTaskDisplayName(WeeklyTask weeklyTask) {
+        try {
+            Task task = TaskService.GetTaskForId(weeklyTask.getTaskId());
+            if (task != null && !ApplicationManager.isEmpty(task.getName())) {
+                return task.getName();
+            }
+        } catch (Exception exception) {
+            // fall through to the default label below
+        }
+        return "Weekly task";
+    }
+
+    /** Opens the Tasks/Journal screen when a weekly task row is clicked */
+    @FXML
+    private void OnWeeklyTaskClick(MouseEvent event) throws IOException {
+        if (weeklyTasksList.getSelectionModel().getSelectedItem() != null) {
+            NavigationService.LoadScreen(ScreenEnum.TASKS);
+        }
     }
 
     /**
@@ -309,25 +409,11 @@ public class DashboardController implements Initializable {
             return;
         }
 
-        Quest quest = item.quest();
-        List<Task> tasks;
-        try {
-            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
-        } catch (Exception exception) {
-            tasks = List.of();
-        }
-
-        String taskDetails = TaskService.JoinTaskDetails(tasks);
-
-        challengeLabel.setText(taskDetails.isEmpty()
-                ? "No tasks are stored for this labour yet."
-                : taskDetails);
         traitLabel.setText(item.archetypeName());
         reflectionPromptLabel.setText("Weekly practices are on the Tasks page. These storyline tasks belong to the labour itself.");
     }
 
     private void ShowEmptyQuest(String message) {
-        challengeLabel.setText("Your challenge will appear here once a quest is active.");
         traitLabel.setText("—");
         reflectionPromptLabel.setText(message);
     }
