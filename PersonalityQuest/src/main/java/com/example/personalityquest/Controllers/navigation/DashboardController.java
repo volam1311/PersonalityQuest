@@ -1,5 +1,11 @@
 package com.example.personalityquest.Controllers.navigation;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.Task;
@@ -7,7 +13,6 @@ import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quest.WeeklyTask;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.QuizResult;
-import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.Services.profile.StreakService;
 import com.example.personalityquest.Services.quest.JournalEntryService;
@@ -16,6 +21,7 @@ import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.Services.quest.WeeklyTaskService;
 import com.example.personalityquest.Services.quiz.QuizService;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,11 +39,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /** Controls dashboard data and user interactions */
 public class DashboardController implements Initializable {
@@ -95,7 +96,7 @@ public class DashboardController implements Initializable {
             UpdateStreakLabel();
         } catch (Exception exception) {
             welcomeMessage.setText("Welcome back!");
-            streakLabel.setText("Day 0");
+            streakLabel.setText("Week 0");
         }
 
         radarValues = QuizService.ArchetypeScores(
@@ -221,9 +222,9 @@ public class DashboardController implements Initializable {
         try {
             int streak = StreakService.GetCurrentStreak(
                     ApplicationManager.CurrentAccount.getCurrentEmail());
-            streakLabel.setText("Day " + streak);
+            streakLabel.setText("Week " + streak);
         } catch (Exception exception) {
-            streakLabel.setText("Day 0");
+            streakLabel.setText("Week 0");
         }
     }
 
