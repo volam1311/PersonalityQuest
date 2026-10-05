@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -49,7 +50,8 @@
 
                         <!-- Row 1, Column 1: Archetype image (placeholder) -->
                         <StackPane minHeight="300" styleClass="card, archetype-image-panel" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label fx:id="archetypeImageLabel" styleClass="archetype-emoji" text="Archetype image" />
+                            <ImageView fx:id="archetypeImageView" fitHeight="280" fitWidth="280" preserveRatio="true" smooth="true" visible="false" />
+                            <Label fx:id="archetypeImageLabel" styleClass="archetype-emoji" text="" />
                         </StackPane>
 
                         <!-- Row 2, Column 1: Quest focus -->

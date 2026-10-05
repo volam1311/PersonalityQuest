@@ -22,12 +22,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -51,6 +54,8 @@ public class ArchetypeController implements Initializable {
     private VBox rankedListBox;
     @FXML
     private Label archetypeImageLabel;
+    @FXML
+    private ImageView archetypeImageView;
 
     private Map<Button, String> quadrantRealms;
     private QuizResult currentResult;
@@ -326,9 +331,44 @@ public class ArchetypeController implements Initializable {
         weaknessesLabel.setText(archetype.getWeaknesses());
         descriptionLabel.setText(archetype.getLongDescription());
         questFocusLabel.setText(QuestFocusFromDatabase(archetype, pinnedQuests.get(archetype)));
-        archetypeImageLabel.setText(archetype.getEmoji());
+        DisplayArchetypeImage(archetype);
 
         HighlightSelection();
+    }
+
+    private void DisplayArchetypeImage(Archetype archetype) {
+        String resourcePath = switch (archetype) {
+            case HERO -> "/com/example/personalityquest/img/archetypes/hero.png";
+            case INNOCENT -> "/com/example/personalityquest/img/archetypes/innocent.png";
+            case EVERYMAN -> "/com/example/personalityquest/img/archetypes/everyman.png";
+            default -> null;
+        };
+
+        if (resourcePath == null) {
+            ShowArchetypeEmoji(archetype);
+            return;
+        }
+
+        try (InputStream stream = getClass().getResourceAsStream(resourcePath)) {
+            if (stream == null) {
+                ShowArchetypeEmoji(archetype);
+                return;
+            }
+
+            archetypeImageView.setImage(new Image(stream));
+            archetypeImageView.setVisible(true);
+            archetypeImageLabel.setText("");
+            archetypeImageLabel.setVisible(false);
+        } catch (Exception exception) {
+            ShowArchetypeEmoji(archetype);
+        }
+    }
+
+    private void ShowArchetypeEmoji(Archetype archetype) {
+        archetypeImageView.setImage(null);
+        archetypeImageView.setVisible(false);
+        archetypeImageLabel.setText(archetype.getEmoji());
+        archetypeImageLabel.setVisible(true);
     }
 
     private void HighlightSelection() {
@@ -362,7 +402,10 @@ public class ArchetypeController implements Initializable {
         weaknessesLabel.setText("—");
         descriptionLabel.setText("—");
         questFocusLabel.setText("Your quest focus will appear here once an archetype is assigned.");
+        archetypeImageView.setImage(null);
+        archetypeImageView.setVisible(false);
         archetypeImageLabel.setText("");
+        archetypeImageLabel.setVisible(false);
 
         ConfigureRealmWheel();
         rankedListBox.getChildren().clear();
