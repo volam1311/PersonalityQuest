@@ -41,6 +41,7 @@ public class TaskServiceTest {
                         taskID INT PRIMARY KEY,
                         name TEXT NOT NULL,
                         description TEXT NOT NULL,
+                        overview TEXT NOT NULL DEFAULT '',
                         labourID INT NOT NULL,
                         taskType TEXT NOT NULL DEFAULT 'QUEST'
                     )

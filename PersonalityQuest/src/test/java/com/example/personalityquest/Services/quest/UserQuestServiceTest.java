@@ -63,6 +63,9 @@ public class UserQuestServiceTest {
                         labourId INT NOT NULL,
                         percentageComplete FLOAT NOT NULL,
                         status TEXT NOT NULL,
+                        reflection TEXT NOT NULL DEFAULT '',
+                        reflectionStatus TEXT NOT NULL DEFAULT 'Not Started',
+                        reactionType TEXT NOT NULL DEFAULT '',
                         PRIMARY KEY(accountEmail, labourId)
                         FOREIGN KEY(labourId) REFERENCES Quests(labourId)
                     )
