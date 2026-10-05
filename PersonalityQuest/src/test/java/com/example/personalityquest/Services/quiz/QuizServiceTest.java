@@ -210,7 +210,9 @@ public class QuizServiceTest {
                         labourId INT PRIMARY KEY,
                         archetypeId INT NOT NULL,
                         name TEXT NOT NULL,
-                        narrative TEXT NOT NULL DEFAULT ''
+                        narrative TEXT NOT NULL DEFAULT '',
+                        decisionQuestion TEXT NOT NULL DEFAULT '',
+                        resolution TEXT NOT NULL DEFAULT ''
                     )
                     """);
             statement.execute("""
@@ -219,10 +221,13 @@ public class QuizServiceTest {
                         labourId INT NOT NULL,
                         percentageComplete FLOAT NOT NULL,
                         status TEXT NOT NULL,
+                        reflection TEXT NOT NULL DEFAULT '',
+                        reflectionStatus TEXT NOT NULL DEFAULT 'Not Started',
+                        reactionType TEXT NOT NULL DEFAULT 'None',
                         PRIMARY KEY(accountEmail, labourId),
                         FOREIGN KEY(labourId) REFERENCES Quests(labourId)
                     )
-                    """);
+                """);
         }
 
         try (PreparedStatement statement = connection.prepareStatement(

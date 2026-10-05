@@ -51,6 +51,8 @@ public class QuestServiceTest {
                         archetypeId INT NOT NULL,
                         name TEXT NOT NULL,
                         narrative TEXT NOT NULL DEFAULT '',
+                        decisionQuestion TEXT NOT NULL DEFAULT '',
+                        resolution TEXT NOT NULL DEFAULT '',
                         FOREIGN KEY(archetypeId) REFERENCES Arechtype(archetypeId)
                     )
                     """);
