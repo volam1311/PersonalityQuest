@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DashboardController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Controllers.navigation</a> &gt; <span class="el_source">DashboardController.java</span></div><h1>DashboardController.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Controllers.navigation;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.Task;
@@ -7,7 +13,6 @@ import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quest.WeeklyTask;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.QuizResult;
-import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.Services.profile.StreakService;
 import com.example.personalityquest.Services.quest.JournalEntryService;
@@ -16,6 +21,7 @@ import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.Services.quest.WeeklyTaskService;
 import com.example.personalityquest.Services.quiz.QuizService;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,28 +40,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-
 /** Controls dashboard data and user interactions */
-<span class="nc" id="L43">public class DashboardController implements Initializable {</span>
+<span class="nc" id="L44">public class DashboardController implements Initializable {</span>
 
     // ---- Archetype balance radar chart constants (copied from ProfileController) ----
-<span class="nc" id="L46">    private static final int RADAR_AXIS_COUNT = Archetype.values().length;</span>
+<span class="nc" id="L47">    private static final int RADAR_AXIS_COUNT = Archetype.values().length;</span>
     private static final int RADAR_LEVEL_COUNT = 5;
     private static final double RADAR_CENTER_Y_OFFSET = 8;
     private static final double RADAR_RADIUS_RATIO = 0.26;
-<span class="nc" id="L50">    private static final String[] RADAR_LABELS = BuildRadarLabels();</span>
+<span class="nc" id="L51">    private static final String[] RADAR_LABELS = BuildRadarLabels();</span>
 
     private static String[] BuildRadarLabels() {
-<span class="nc" id="L53">        Archetype[] archetypes = Archetype.values();</span>
-<span class="nc" id="L54">        String[] labels = new String[archetypes.length];</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">        for (int index = 0; index &lt; archetypes.length; index++) {</span>
-<span class="nc" id="L56">            labels[index] = archetypes[index].getName();</span>
+<span class="nc" id="L54">        Archetype[] archetypes = Archetype.values();</span>
+<span class="nc" id="L55">        String[] labels = new String[archetypes.length];</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for (int index = 0; index &lt; archetypes.length; index++) {</span>
+<span class="nc" id="L57">            labels[index] = archetypes[index].getName();</span>
         }
-<span class="nc" id="L58">        return labels;</span>
+<span class="nc" id="L59">        return labels;</span>
     }
 
     @FXML
@@ -77,8 +78,8 @@ import java.util.ResourceBundle;
     @FXML
     private ProgressBar challengesProgress, reflectionsProgress, weeklyProgress;
 
-<span class="nc" id="L80">    private double[] radarValues = new double[RADAR_AXIS_COUNT];</span>
-<span class="nc" id="L81">    private boolean isRefreshingQuestline = false;</span>
+<span class="nc" id="L81">    private double[] radarValues = new double[RADAR_AXIS_COUNT];</span>
+<span class="nc" id="L82">    private boolean isRefreshingQuestline = false;</span>
 
     /** Initialises dashboard controls and loads account data
      * @param location the location used to resolve relative paths
@@ -86,77 +87,77 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L89">        navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);</span>
-<span class="nc" id="L90">        ConfigureHistoryList();</span>
-<span class="nc" id="L91">        ConfigureResponsiveSizing();</span>
+<span class="nc" id="L90">        navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);</span>
+<span class="nc" id="L91">        ConfigureHistoryList();</span>
+<span class="nc" id="L92">        ConfigureResponsiveSizing();</span>
 
         try {
-<span class="nc" id="L94">            SetWelcome();</span>
-<span class="nc" id="L95">            UpdateStreakLabel();</span>
-<span class="nc" id="L96">        } catch (Exception exception) {</span>
-<span class="nc" id="L97">            welcomeMessage.setText(&quot;Welcome back!&quot;);</span>
-<span class="nc" id="L98">            streakLabel.setText(&quot;Day 0&quot;);</span>
-<span class="nc" id="L99">        }</span>
+<span class="nc" id="L95">            SetWelcome();</span>
+<span class="nc" id="L96">            UpdateStreakLabel();</span>
+<span class="nc" id="L97">        } catch (Exception exception) {</span>
+<span class="nc" id="L98">            welcomeMessage.setText(&quot;Welcome back!&quot;);</span>
+<span class="nc" id="L99">            streakLabel.setText(&quot;Week 0&quot;);</span>
+<span class="nc" id="L100">        }</span>
 
-<span class="nc" id="L101">        radarValues = QuizService.ArchetypeScores(</span>
-<span class="nc" id="L102">                QuizService.LoadStoredResult(ApplicationManager.CurrentAccount.getCurrentEmail()));</span>
+<span class="nc" id="L102">        radarValues = QuizService.ArchetypeScores(</span>
+<span class="nc" id="L103">                QuizService.LoadStoredResult(ApplicationManager.CurrentAccount.getCurrentEmail()));</span>
 
-<span class="nc" id="L104">        LoadQuestline();</span>
-<span class="nc" id="L105">        UpdateThermometers();</span>
+<span class="nc" id="L105">        LoadQuestline();</span>
+<span class="nc" id="L106">        UpdateThermometers();</span>
 
-<span class="nc" id="L107">        Platform.runLater(this::DrawProgressGraph);</span>
-<span class="nc" id="L108">    }</span>
+<span class="nc" id="L108">        Platform.runLater(this::DrawProgressGraph);</span>
+<span class="nc" id="L109">    }</span>
 
     /**
      * Fills the three thermometers: Quest Challenges, Quest Reflections, and
      * Weekly Challenges.
      */
     private void UpdateThermometers() {
-<span class="nc" id="L115">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
-<span class="nc" id="L116">        double challengesRatio = 0;</span>
-<span class="nc" id="L117">        double reflectionsRatio = 0;</span>
-<span class="nc" id="L118">        double weeklyRatio = 0;</span>
+<span class="nc" id="L116">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc" id="L117">        double challengesRatio = 0;</span>
+<span class="nc" id="L118">        double reflectionsRatio = 0;</span>
+<span class="nc" id="L119">        double weeklyRatio = 0;</span>
 
-<span class="nc bnc" id="L120" title="All 2 branches missed.">        if (!ApplicationManager.isEmpty(email)) {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (!ApplicationManager.isEmpty(email)) {</span>
             try {
-<span class="nc" id="L122">                List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
-<span class="nc" id="L123">                int totalLabours = userQuests.size();</span>
+<span class="nc" id="L123">                List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
+<span class="nc" id="L124">                int totalLabours = userQuests.size();</span>
 
-<span class="nc" id="L125">                int completedChallenges = JournalEntryService.GetChallengesForEmail(email).size();</span>
-<span class="nc" id="L126">                challengesRatio = RatioOf(completedChallenges, totalLabours);</span>
+<span class="nc" id="L126">                int completedChallenges = JournalEntryService.GetChallengesForEmail(email).size();</span>
+<span class="nc" id="L127">                challengesRatio = RatioOf(completedChallenges, totalLabours);</span>
 
-<span class="nc" id="L128">                long completedReflections = userQuests.stream()</span>
-<span class="nc" id="L129">                        .filter(userQuest -&gt; &quot;Finished&quot;.equalsIgnoreCase(userQuest.getReflectionStatus()))</span>
-<span class="nc" id="L130">                        .count();</span>
-<span class="nc" id="L131">                reflectionsRatio = RatioOf((int) completedReflections, totalLabours);</span>
-<span class="nc" id="L132">            } catch (Exception exception) {</span>
-<span class="nc" id="L133">                challengesRatio = 0;</span>
-<span class="nc" id="L134">                reflectionsRatio = 0;</span>
-<span class="nc" id="L135">            }</span>
+<span class="nc" id="L129">                long completedReflections = userQuests.stream()</span>
+<span class="nc" id="L130">                        .filter(userQuest -&gt; &quot;Finished&quot;.equalsIgnoreCase(userQuest.getReflectionStatus()))</span>
+<span class="nc" id="L131">                        .count();</span>
+<span class="nc" id="L132">                reflectionsRatio = RatioOf((int) completedReflections, totalLabours);</span>
+<span class="nc" id="L133">            } catch (Exception exception) {</span>
+<span class="nc" id="L134">                challengesRatio = 0;</span>
+<span class="nc" id="L135">                reflectionsRatio = 0;</span>
+<span class="nc" id="L136">            }</span>
 
             try {
-<span class="nc" id="L138">                WeeklyTask[] weeklyTasks = WeeklyTaskService.GetTasksForEmailForThisWeek(email);</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">                if (weeklyTasks == null) {</span>
-<span class="nc" id="L140">                    weeklyTasks = WeeklyTaskService.GenerateTasksForThisWeek(email);</span>
+<span class="nc" id="L139">                WeeklyTask[] weeklyTasks = WeeklyTaskService.GetTasksForEmailForThisWeek(email);</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                if (weeklyTasks == null) {</span>
+<span class="nc" id="L141">                    weeklyTasks = WeeklyTaskService.GenerateTasksForThisWeek(email);</span>
                 }
-<span class="nc bnc" id="L142" title="All 2 branches missed.">                if (weeklyTasks != null) {</span>
-<span class="nc" id="L143">                    long completedWeekly = Arrays.stream(weeklyTasks)</span>
-<span class="nc" id="L144">                            .filter(task -&gt; &quot;Finished&quot;.equalsIgnoreCase(task.getStatus()))</span>
-<span class="nc" id="L145">                            .count();</span>
-<span class="nc" id="L146">                    weeklyRatio = RatioOf((int) completedWeekly, weeklyTasks.length);</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                if (weeklyTasks != null) {</span>
+<span class="nc" id="L144">                    long completedWeekly = Arrays.stream(weeklyTasks)</span>
+<span class="nc" id="L145">                            .filter(task -&gt; &quot;Finished&quot;.equalsIgnoreCase(task.getStatus()))</span>
+<span class="nc" id="L146">                            .count();</span>
+<span class="nc" id="L147">                    weeklyRatio = RatioOf((int) completedWeekly, weeklyTasks.length);</span>
                 }
-<span class="nc" id="L148">            } catch (Exception exception) {</span>
-<span class="nc" id="L149">                weeklyRatio = 0;</span>
-<span class="nc" id="L150">            }</span>
+<span class="nc" id="L149">            } catch (Exception exception) {</span>
+<span class="nc" id="L150">                weeklyRatio = 0;</span>
+<span class="nc" id="L151">            }</span>
         }
 
-<span class="nc" id="L153">        challengesProgress.setProgress(challengesRatio);</span>
-<span class="nc" id="L154">        reflectionsProgress.setProgress(reflectionsRatio);</span>
-<span class="nc" id="L155">        weeklyProgress.setProgress(weeklyRatio);</span>
-<span class="nc" id="L156">    }</span>
+<span class="nc" id="L154">        challengesProgress.setProgress(challengesRatio);</span>
+<span class="nc" id="L155">        reflectionsProgress.setProgress(reflectionsRatio);</span>
+<span class="nc" id="L156">        weeklyProgress.setProgress(weeklyRatio);</span>
+<span class="nc" id="L157">    }</span>
 
     private double RatioOf(int completed, int total) {
-<span class="nc bnc" id="L159" title="All 2 branches missed.">        return total &gt; 0 ? Math.min(1.0, (double) completed / total) : 0;</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        return total &gt; 0 ? Math.min(1.0, (double) completed / total) : 0;</span>
     }
 
     /**
@@ -165,111 +166,111 @@ import java.util.ResourceBundle;
      * with the open window rather than overflowing it.
      */
     private void ConfigureResponsiveSizing() {
-<span class="nc" id="L168">        progressCard.widthProperty().addListener((observable, oldValue, newValue) -&gt;</span>
-<span class="nc" id="L169">                UpdateRadarChartSize(newValue.doubleValue(), progressCard.getHeight()));</span>
-<span class="nc" id="L170">        progressCard.heightProperty().addListener((observable, oldValue, newValue) -&gt;</span>
-<span class="nc" id="L171">                UpdateRadarChartSize(progressCard.getWidth(), newValue.doubleValue()));</span>
+<span class="nc" id="L169">        progressCard.widthProperty().addListener((observable, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L170">                UpdateRadarChartSize(newValue.doubleValue(), progressCard.getHeight()));</span>
+<span class="nc" id="L171">        progressCard.heightProperty().addListener((observable, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L172">                UpdateRadarChartSize(progressCard.getWidth(), newValue.doubleValue()));</span>
 
         // Bind off the outer card's height (not thermometerRow's) - the rotated progress
         // bars report their unrotated (small) size to the layout system, so the HBox never
         // reports a large preferred/actual height of its own. The card, however, is already
         // stretched to fill its GridPane cell correctly, so it gives us a reliable height
         // to size the bars from.
-<span class="nc" id="L178">        verticalProgressCard.heightProperty().addListener((observable, oldValue, newValue) -&gt;</span>
-<span class="nc" id="L179">                UpdateThermometerLengths(newValue.doubleValue()));</span>
-<span class="nc" id="L180">        Platform.runLater(() -&gt; {</span>
-<span class="nc" id="L181">            UpdateRadarChartSize(progressCard.getWidth(), progressCard.getHeight());</span>
-<span class="nc" id="L182">            UpdateThermometerLengths(verticalProgressCard.getHeight());</span>
-<span class="nc" id="L183">        });</span>
-<span class="nc" id="L184">    }</span>
+<span class="nc" id="L179">        verticalProgressCard.heightProperty().addListener((observable, oldValue, newValue) -&gt;</span>
+<span class="nc" id="L180">                UpdateThermometerLengths(newValue.doubleValue()));</span>
+<span class="nc" id="L181">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L182">            UpdateRadarChartSize(progressCard.getWidth(), progressCard.getHeight());</span>
+<span class="nc" id="L183">            UpdateThermometerLengths(verticalProgressCard.getHeight());</span>
+<span class="nc" id="L184">        });</span>
+<span class="nc" id="L185">    }</span>
 
     private void UpdateRadarChartSize(double cardWidth, double cardHeight) {
-<span class="nc" id="L187">        double width = Math.max(120, cardWidth - 24);</span>
-<span class="nc" id="L188">        double height = Math.max(120, cardHeight - 70);</span>
-<span class="nc bnc" id="L189" title="All 4 branches missed.">        if (width == progressChart.getWidth() &amp;&amp; height == progressChart.getHeight()) {</span>
-<span class="nc" id="L190">            return;</span>
+<span class="nc" id="L188">        double width = Math.max(120, cardWidth - 24);</span>
+<span class="nc" id="L189">        double height = Math.max(120, cardHeight - 70);</span>
+<span class="nc bnc" id="L190" title="All 4 branches missed.">        if (width == progressChart.getWidth() &amp;&amp; height == progressChart.getHeight()) {</span>
+<span class="nc" id="L191">            return;</span>
         }
-<span class="nc" id="L192">        progressChart.setWidth(width);</span>
-<span class="nc" id="L193">        progressChart.setHeight(height);</span>
-<span class="nc" id="L194">        DrawProgressGraph();</span>
-<span class="nc" id="L195">    }</span>
+<span class="nc" id="L193">        progressChart.setWidth(width);</span>
+<span class="nc" id="L194">        progressChart.setHeight(height);</span>
+<span class="nc" id="L195">        DrawProgressGraph();</span>
+<span class="nc" id="L196">    }</span>
 
     private void UpdateThermometerLengths(double cardHeight) {
         // Reserves space for: card padding (24), the &quot;Progress&quot; title (~34) and the
         // spacing below it (10), plus each column's own label (~24) and the spacing
         // around the bar inside thermometerRow (20).
-<span class="nc" id="L201">        double reservedSpace = 130;</span>
-<span class="nc" id="L202">        double length = Math.max(60, cardHeight - reservedSpace);</span>
-<span class="nc" id="L203">        challengesProgress.setPrefWidth(length);</span>
-<span class="nc" id="L204">        reflectionsProgress.setPrefWidth(length);</span>
-<span class="nc" id="L205">        weeklyProgress.setPrefWidth(length);</span>
-<span class="nc" id="L206">    }</span>
+<span class="nc" id="L202">        double reservedSpace = 130;</span>
+<span class="nc" id="L203">        double length = Math.max(60, cardHeight - reservedSpace);</span>
+<span class="nc" id="L204">        challengesProgress.setPrefWidth(length);</span>
+<span class="nc" id="L205">        reflectionsProgress.setPrefWidth(length);</span>
+<span class="nc" id="L206">        weeklyProgress.setPrefWidth(length);</span>
+<span class="nc" id="L207">    }</span>
 
     private void SetWelcome() throws Exception {
-<span class="nc" id="L209">        EmailDetails emailDetails = EmailService.GetDetailsForEmail(</span>
-<span class="nc" id="L210">                ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+<span class="nc" id="L210">        EmailDetails emailDetails = EmailService.GetDetailsForEmail(</span>
+<span class="nc" id="L211">                ApplicationManager.CurrentAccount.getCurrentEmail());</span>
 
-<span class="nc bnc" id="L212" title="All 2 branches missed.">        if (emailDetails == null) {</span>
-<span class="nc" id="L213">            welcomeMessage.setText(&quot;Welcome back!&quot;);</span>
-<span class="nc" id="L214">            return;</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (emailDetails == null) {</span>
+<span class="nc" id="L214">            welcomeMessage.setText(&quot;Welcome back!&quot;);</span>
+<span class="nc" id="L215">            return;</span>
         }
 
-<span class="nc" id="L217">        welcomeMessage.setText(&quot;Welcome back, &quot; + emailDetails.getFirstName() + &quot;!&quot;);</span>
-<span class="nc" id="L218">    }</span>
+<span class="nc" id="L218">        welcomeMessage.setText(&quot;Welcome back, &quot; + emailDetails.getFirstName() + &quot;!&quot;);</span>
+<span class="nc" id="L219">    }</span>
 
     private void UpdateStreakLabel() {
         try {
-<span class="nc" id="L222">            int streak = StreakService.GetCurrentStreak(</span>
-<span class="nc" id="L223">                    ApplicationManager.CurrentAccount.getCurrentEmail());</span>
-<span class="nc" id="L224">            streakLabel.setText(&quot;Day &quot; + streak);</span>
-<span class="nc" id="L225">        } catch (Exception exception) {</span>
-<span class="nc" id="L226">            streakLabel.setText(&quot;Day 0&quot;);</span>
-<span class="nc" id="L227">        }</span>
-<span class="nc" id="L228">    }</span>
+<span class="nc" id="L223">            int streak = StreakService.GetCurrentStreak(</span>
+<span class="nc" id="L224">                    ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+<span class="nc" id="L225">            streakLabel.setText(&quot;Week &quot; + streak);</span>
+<span class="nc" id="L226">        } catch (Exception exception) {</span>
+<span class="nc" id="L227">            streakLabel.setText(&quot;Week 0&quot;);</span>
+<span class="nc" id="L228">        }</span>
+<span class="nc" id="L229">    }</span>
 
     // ---- &quot;Your quests&quot; / &quot;Why this labour&quot; / &quot;This week's challenge&quot; (copied from QuestController) ----
 
     private void LoadQuestline() {
-<span class="nc" id="L233">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
-<span class="nc" id="L234">        questHistory.getItems().clear();</span>
+<span class="nc" id="L234">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc" id="L235">        questHistory.getItems().clear();</span>
 
-<span class="nc bnc" id="L236" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L237">            ShowEmptyQuest(&quot;Sign in to see your questline.&quot;);</span>
-<span class="nc" id="L238">            return;</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L238">            ShowEmptyQuest(&quot;Sign in to see your questline.&quot;);</span>
+<span class="nc" id="L239">            return;</span>
         }
 
-<span class="nc" id="L241">        EnsureSecondArchetypeQuestIsAvailable(email);</span>
+<span class="nc" id="L242">        EnsureSecondArchetypeQuestIsAvailable(email);</span>
 
         try {
-<span class="nc" id="L244">            List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
-<span class="nc" id="L245">            QuestListItem selected = null;</span>
+<span class="nc" id="L245">            List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
+<span class="nc" id="L246">            QuestListItem selected = null;</span>
 
-<span class="nc bnc" id="L247" title="All 2 branches missed.">            for (UserQuest userQuest : userQuests) {</span>
-<span class="nc" id="L248">                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
-<span class="nc bnc" id="L249" title="All 2 branches missed.">                if (quest == null) {</span>
-<span class="nc" id="L250">                    continue;</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">            for (UserQuest userQuest : userQuests) {</span>
+<span class="nc" id="L249">                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">                if (quest == null) {</span>
+<span class="nc" id="L251">                    continue;</span>
                 }
 
-<span class="nc" id="L253">                String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
-<span class="nc" id="L254">                QuestListItem item = new QuestListItem(userQuest, quest, archetypeName);</span>
-<span class="nc" id="L255">                questHistory.getItems().add(item);</span>
+<span class="nc" id="L254">                String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
+<span class="nc" id="L255">                QuestListItem item = new QuestListItem(userQuest, quest, archetypeName);</span>
+<span class="nc" id="L256">                questHistory.getItems().add(item);</span>
 
-<span class="nc bnc" id="L257" title="All 4 branches missed.">                if (selected == null || &quot;Active&quot;.equalsIgnoreCase(userQuest.getStatus())) {</span>
-<span class="nc" id="L258">                    selected = item;</span>
+<span class="nc bnc" id="L258" title="All 4 branches missed.">                if (selected == null || &quot;Active&quot;.equalsIgnoreCase(userQuest.getStatus())) {</span>
+<span class="nc" id="L259">                    selected = item;</span>
                 }
-<span class="nc" id="L260">            }</span>
+<span class="nc" id="L261">            }</span>
 
-<span class="nc bnc" id="L262" title="All 2 branches missed.">            if (selected == null) {</span>
-<span class="nc" id="L263">                ShowEmptyQuest(&quot;No quests have been assigned yet.&quot;);</span>
-<span class="nc" id="L264">                return;</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">            if (selected == null) {</span>
+<span class="nc" id="L264">                ShowEmptyQuest(&quot;No quests have been assigned yet.&quot;);</span>
+<span class="nc" id="L265">                return;</span>
             }
 
-<span class="nc" id="L267">            questHistory.getSelectionModel().select(selected);</span>
-<span class="nc" id="L268">            ShowQuest(selected);</span>
-<span class="nc" id="L269">        } catch (Exception exception) {</span>
-<span class="nc" id="L270">            ShowEmptyQuest(&quot;Could not load your questline right now.&quot;);</span>
-<span class="nc" id="L271">        }</span>
-<span class="nc" id="L272">    }</span>
+<span class="nc" id="L268">            questHistory.getSelectionModel().select(selected);</span>
+<span class="nc" id="L269">            ShowQuest(selected);</span>
+<span class="nc" id="L270">        } catch (Exception exception) {</span>
+<span class="nc" id="L271">            ShowEmptyQuest(&quot;Could not load your questline right now.&quot;);</span>
+<span class="nc" id="L272">        }</span>
+<span class="nc" id="L273">    }</span>
 
     /**
      * Makes sure the user's second-highest scoring archetype has a quest sitting
@@ -277,183 +278,183 @@ import java.util.ResourceBundle;
      */
     private void EnsureSecondArchetypeQuestIsAvailable(String email) {
         try {
-<span class="nc" id="L280">            QuizResult quizResult = QuizService.LoadStoredResult(email);</span>
-<span class="nc bnc" id="L281" title="All 2 branches missed.">            if (quizResult == null) {</span>
-<span class="nc" id="L282">                return;</span>
+<span class="nc" id="L281">            QuizResult quizResult = QuizService.LoadStoredResult(email);</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">            if (quizResult == null) {</span>
+<span class="nc" id="L283">                return;</span>
             }
 
-<span class="nc" id="L285">            List&lt;Archetype&gt; ranked = QuizService.RankedArchetypes(quizResult);</span>
-<span class="nc bnc" id="L286" title="All 2 branches missed.">            if (ranked.size() &lt; 2) {</span>
-<span class="nc" id="L287">                return;</span>
+<span class="nc" id="L286">            List&lt;Archetype&gt; ranked = QuizService.RankedArchetypes(quizResult);</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">            if (ranked.size() &lt; 2) {</span>
+<span class="nc" id="L288">                return;</span>
             }
 
-<span class="nc" id="L290">            Archetype secondArchetype = ranked.get(1);</span>
-<span class="nc" id="L291">            Quest secondQuest = QuestService.GetRandomQuestForArchetypeId(secondArchetype.getArchetypeId());</span>
-<span class="nc bnc" id="L292" title="All 2 branches missed.">            if (secondQuest == null) {</span>
-<span class="nc" id="L293">                return;</span>
+<span class="nc" id="L291">            Archetype secondArchetype = ranked.get(1);</span>
+<span class="nc" id="L292">            Quest secondQuest = QuestService.GetRandomQuestForArchetypeId(secondArchetype.getArchetypeId());</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            if (secondQuest == null) {</span>
+<span class="nc" id="L294">                return;</span>
             }
 
-<span class="nc" id="L296">            UserQuest existing = UserQuestService.GetUserQuestForEmailAndLabourId(email, secondQuest.getLabourId());</span>
-<span class="nc bnc" id="L297" title="All 2 branches missed.">            if (existing == null) {</span>
-<span class="nc" id="L298">                UserQuestService.InsertNewQuestForEmail(secondQuest, email);</span>
+<span class="nc" id="L297">            UserQuest existing = UserQuestService.GetUserQuestForEmailAndLabourId(email, secondQuest.getLabourId());</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">            if (existing == null) {</span>
+<span class="nc" id="L299">                UserQuestService.InsertNewQuestForEmail(secondQuest, email);</span>
             }
-<span class="nc" id="L300">        } catch (Exception exception) {</span>
-<span class="nc" id="L301">            System.err.println(&quot;Could not prepare second archetype quest: &quot; + exception.getMessage());</span>
-<span class="nc" id="L302">        }</span>
-<span class="nc" id="L303">    }</span>
+<span class="nc" id="L301">        } catch (Exception exception) {</span>
+<span class="nc" id="L302">            System.err.println(&quot;Could not prepare second archetype quest: &quot; + exception.getMessage());</span>
+<span class="nc" id="L303">        }</span>
+<span class="nc" id="L304">    }</span>
 
     private void ShowQuest(QuestListItem item) {
-<span class="nc bnc" id="L306" title="All 2 branches missed.">        if (item == null) {</span>
-<span class="nc" id="L307">            ShowEmptyQuest(&quot;Select a quest to read its story.&quot;);</span>
-<span class="nc" id="L308">            return;</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">        if (item == null) {</span>
+<span class="nc" id="L308">            ShowEmptyQuest(&quot;Select a quest to read its story.&quot;);</span>
+<span class="nc" id="L309">            return;</span>
         }
 
-<span class="nc" id="L311">        Quest quest = item.quest();</span>
+<span class="nc" id="L312">        Quest quest = item.quest();</span>
         List&lt;Task&gt; tasks;
         try {
-<span class="nc" id="L314">            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
-<span class="nc" id="L315">        } catch (Exception exception) {</span>
-<span class="nc" id="L316">            tasks = List.of();</span>
-<span class="nc" id="L317">        }</span>
+<span class="nc" id="L315">            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L316">        } catch (Exception exception) {</span>
+<span class="nc" id="L317">            tasks = List.of();</span>
+<span class="nc" id="L318">        }</span>
 
-<span class="nc" id="L319">        String taskDetails = TaskService.JoinTaskDetails(tasks);</span>
+<span class="nc" id="L320">        String taskDetails = TaskService.JoinTaskDetails(tasks);</span>
 
-<span class="nc bnc" id="L321" title="All 2 branches missed.">        challengeLabel.setText(taskDetails.isEmpty()</span>
-<span class="nc" id="L322">                ? &quot;No tasks are stored for this labour yet.&quot;</span>
-<span class="nc" id="L323">                : taskDetails);</span>
-<span class="nc" id="L324">        traitLabel.setText(item.archetypeName());</span>
-<span class="nc" id="L325">        reflectionPromptLabel.setText(&quot;Weekly practices are on the Tasks page. These storyline tasks belong to the labour itself.&quot;);</span>
-<span class="nc" id="L326">    }</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">        challengeLabel.setText(taskDetails.isEmpty()</span>
+<span class="nc" id="L323">                ? &quot;No tasks are stored for this labour yet.&quot;</span>
+<span class="nc" id="L324">                : taskDetails);</span>
+<span class="nc" id="L325">        traitLabel.setText(item.archetypeName());</span>
+<span class="nc" id="L326">        reflectionPromptLabel.setText(&quot;Weekly practices are on the Tasks page. These storyline tasks belong to the labour itself.&quot;);</span>
+<span class="nc" id="L327">    }</span>
 
     private void ShowEmptyQuest(String message) {
-<span class="nc" id="L329">        challengeLabel.setText(&quot;Your challenge will appear here once a quest is active.&quot;);</span>
-<span class="nc" id="L330">        traitLabel.setText(&quot;—&quot;);</span>
-<span class="nc" id="L331">        reflectionPromptLabel.setText(message);</span>
-<span class="nc" id="L332">    }</span>
+<span class="nc" id="L330">        challengeLabel.setText(&quot;Your challenge will appear here once a quest is active.&quot;);</span>
+<span class="nc" id="L331">        traitLabel.setText(&quot;—&quot;);</span>
+<span class="nc" id="L332">        reflectionPromptLabel.setText(message);</span>
+<span class="nc" id="L333">    }</span>
 
     private void ConfigureHistoryList() {
-<span class="nc" id="L335">        questHistory.setPlaceholder(new Label(&quot;No quests assigned yet.&quot;));</span>
-<span class="nc" id="L336">        questHistory.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
-<span class="nc" id="L337">            private final Label nameLabel = new Label();</span>
-<span class="nc" id="L338">            private final Label detailLabel = new Label();</span>
-<span class="nc" id="L339">            private final Region spacer = new Region();</span>
-<span class="nc" id="L340">            private final Label percentLabel = new Label();</span>
-<span class="nc" id="L341">            private final HBox header = new HBox(8, nameLabel, spacer, percentLabel);</span>
-<span class="nc" id="L342">            private final VBox row = new VBox(2, header, detailLabel);</span>
+<span class="nc" id="L336">        questHistory.setPlaceholder(new Label(&quot;No quests assigned yet.&quot;));</span>
+<span class="nc" id="L337">        questHistory.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
+<span class="nc" id="L338">            private final Label nameLabel = new Label();</span>
+<span class="nc" id="L339">            private final Label detailLabel = new Label();</span>
+<span class="nc" id="L340">            private final Region spacer = new Region();</span>
+<span class="nc" id="L341">            private final Label percentLabel = new Label();</span>
+<span class="nc" id="L342">            private final HBox header = new HBox(8, nameLabel, spacer, percentLabel);</span>
+<span class="nc" id="L343">            private final VBox row = new VBox(2, header, detailLabel);</span>
 
             {
-<span class="nc" id="L345">                row.getStyleClass().add(&quot;history-row&quot;);</span>
-<span class="nc" id="L346">                nameLabel.getStyleClass().add(&quot;history-name&quot;);</span>
-<span class="nc" id="L347">                detailLabel.getStyleClass().add(&quot;history-detail&quot;);</span>
-<span class="nc" id="L348">                percentLabel.getStyleClass().add(&quot;history-detail&quot;);</span>
-<span class="nc" id="L349">                HBox.setHgrow(spacer, Priority.ALWAYS);</span>
+<span class="nc" id="L346">                row.getStyleClass().add(&quot;history-row&quot;);</span>
+<span class="nc" id="L347">                nameLabel.getStyleClass().add(&quot;history-name&quot;);</span>
+<span class="nc" id="L348">                detailLabel.getStyleClass().add(&quot;history-detail&quot;);</span>
+<span class="nc" id="L349">                percentLabel.getStyleClass().add(&quot;history-detail&quot;);</span>
+<span class="nc" id="L350">                HBox.setHgrow(spacer, Priority.ALWAYS);</span>
             }
 
             @Override
             protected void updateItem(QuestListItem item, boolean empty) {
-<span class="nc" id="L354">                super.updateItem(item, empty);</span>
+<span class="nc" id="L355">                super.updateItem(item, empty);</span>
 
-<span class="nc bnc" id="L356" title="All 4 branches missed.">                if (empty || item == null) {</span>
-<span class="nc" id="L357">                    setText(null);</span>
-<span class="nc" id="L358">                    setGraphic(null);</span>
-<span class="nc" id="L359">                    return;</span>
+<span class="nc bnc" id="L357" title="All 4 branches missed.">                if (empty || item == null) {</span>
+<span class="nc" id="L358">                    setText(null);</span>
+<span class="nc" id="L359">                    setGraphic(null);</span>
+<span class="nc" id="L360">                    return;</span>
                 }
 
-<span class="nc" id="L362">                nameLabel.setText(item.quest().getName());</span>
-<span class="nc" id="L363">                detailLabel.setText(item.userQuest().getStatus() + &quot; · &quot; + item.archetypeName());</span>
-<span class="nc" id="L364">                percentLabel.setText(String.format(&quot;%.0f%%&quot;, item.userQuest().getPercentageComplete() * 100));</span>
-<span class="nc" id="L365">                setText(null);</span>
-<span class="nc" id="L366">                setGraphic(row);</span>
-<span class="nc" id="L367">            }</span>
+<span class="nc" id="L363">                nameLabel.setText(item.quest().getName());</span>
+<span class="nc" id="L364">                detailLabel.setText(item.userQuest().getStatus() + &quot; · &quot; + item.archetypeName());</span>
+<span class="nc" id="L365">                percentLabel.setText(String.format(&quot;%.0f%%&quot;, item.userQuest().getPercentageComplete() * 100));</span>
+<span class="nc" id="L366">                setText(null);</span>
+<span class="nc" id="L367">                setGraphic(row);</span>
+<span class="nc" id="L368">            }</span>
         });
 
-<span class="nc" id="L370">        questHistory.getSelectionModel().selectedItemProperty().addListener(</span>
+<span class="nc" id="L371">        questHistory.getSelectionModel().selectedItemProperty().addListener(</span>
                 (observable, oldItem, newItem) -&gt; {
-<span class="nc bnc" id="L372" title="All 4 branches missed.">                    if (newItem == null || isRefreshingQuestline) {</span>
-<span class="nc" id="L373">                        return;</span>
+<span class="nc bnc" id="L373" title="All 4 branches missed.">                    if (newItem == null || isRefreshingQuestline) {</span>
+<span class="nc" id="L374">                        return;</span>
                     }
-<span class="nc" id="L375">                    ShowQuest(newItem);</span>
-<span class="nc" id="L376">                    ActivateQuest(newItem);</span>
-<span class="nc" id="L377">                });</span>
-<span class="nc" id="L378">    }</span>
+<span class="nc" id="L376">                    ShowQuest(newItem);</span>
+<span class="nc" id="L377">                    ActivateQuest(newItem);</span>
+<span class="nc" id="L378">                });</span>
+<span class="nc" id="L379">    }</span>
 
     /**
      * Switches the active quest to the one the user clicked on in &quot;Your quests&quot;.
      */
     private void ActivateQuest(QuestListItem item) {
-<span class="nc" id="L384">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
-<span class="nc bnc" id="L385" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L386">            return;</span>
+<span class="nc" id="L385">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc bnc" id="L386" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L387">            return;</span>
         }
 
         try {
-<span class="nc" id="L390">            UserQuestService.ChangeActiveQuest(item.quest(), email);</span>
-<span class="nc" id="L391">            isRefreshingQuestline = true;</span>
-<span class="nc" id="L392">            LoadQuestline();</span>
-<span class="nc" id="L393">        } catch (Exception exception) {</span>
-<span class="nc" id="L394">            System.err.println(&quot;Could not switch active quest: &quot; + exception.getMessage());</span>
+<span class="nc" id="L391">            UserQuestService.ChangeActiveQuest(item.quest(), email);</span>
+<span class="nc" id="L392">            isRefreshingQuestline = true;</span>
+<span class="nc" id="L393">            LoadQuestline();</span>
+<span class="nc" id="L394">        } catch (Exception exception) {</span>
+<span class="nc" id="L395">            System.err.println(&quot;Could not switch active quest: &quot; + exception.getMessage());</span>
         } finally {
-<span class="nc" id="L396">            isRefreshingQuestline = false;</span>
+<span class="nc" id="L397">            isRefreshingQuestline = false;</span>
         }
-<span class="nc" id="L398">    }</span>
+<span class="nc" id="L399">    }</span>
 
-<span class="nc" id="L400">    private record QuestListItem(UserQuest userQuest, Quest quest, String archetypeName) {</span>
+<span class="nc" id="L401">    private record QuestListItem(UserQuest userQuest, Quest quest, String archetypeName) {</span>
     }
 
     // ---- Archetype balance radar chart (copied from ProfileController) ----
 
     private void DrawProgressGraph() {
-<span class="nc" id="L406">        GraphicsContext graphics = progressChart.getGraphicsContext2D();</span>
-<span class="nc" id="L407">        double width = progressChart.getWidth();</span>
-<span class="nc" id="L408">        double height = progressChart.getHeight();</span>
-<span class="nc" id="L409">        double centerX = width / 2;</span>
-<span class="nc" id="L410">        double centerY = height / 2 + RADAR_CENTER_Y_OFFSET;</span>
-<span class="nc" id="L411">        double radius = Math.min(width, height) * RADAR_RADIUS_RATIO;</span>
-<span class="nc" id="L412">        int axes = RADAR_AXIS_COUNT;</span>
+<span class="nc" id="L407">        GraphicsContext graphics = progressChart.getGraphicsContext2D();</span>
+<span class="nc" id="L408">        double width = progressChart.getWidth();</span>
+<span class="nc" id="L409">        double height = progressChart.getHeight();</span>
+<span class="nc" id="L410">        double centerX = width / 2;</span>
+<span class="nc" id="L411">        double centerY = height / 2 + RADAR_CENTER_Y_OFFSET;</span>
+<span class="nc" id="L412">        double radius = Math.min(width, height) * RADAR_RADIUS_RATIO;</span>
+<span class="nc" id="L413">        int axes = RADAR_AXIS_COUNT;</span>
 
-<span class="nc" id="L414">        graphics.clearRect(0, 0, width, height);</span>
-<span class="nc" id="L415">        graphics.setLineWidth(1);</span>
-<span class="nc" id="L416">        graphics.setStroke(Color.web(&quot;#777777&quot;));</span>
+<span class="nc" id="L415">        graphics.clearRect(0, 0, width, height);</span>
+<span class="nc" id="L416">        graphics.setLineWidth(1);</span>
+<span class="nc" id="L417">        graphics.setStroke(Color.web(&quot;#777777&quot;));</span>
 
-<span class="nc bnc" id="L418" title="All 2 branches missed.">        for (int level = 1; level &lt;= RADAR_LEVEL_COUNT; level++) {</span>
-<span class="nc" id="L419">            double levelRadius = radius * level / RADAR_LEVEL_COUNT;</span>
-<span class="nc" id="L420">            double[] xPoints = new double[axes];</span>
-<span class="nc" id="L421">            double[] yPoints = new double[axes];</span>
+<span class="nc bnc" id="L419" title="All 2 branches missed.">        for (int level = 1; level &lt;= RADAR_LEVEL_COUNT; level++) {</span>
+<span class="nc" id="L420">            double levelRadius = radius * level / RADAR_LEVEL_COUNT;</span>
+<span class="nc" id="L421">            double[] xPoints = new double[axes];</span>
+<span class="nc" id="L422">            double[] yPoints = new double[axes];</span>
 
-<span class="nc bnc" id="L423" title="All 2 branches missed.">            for (int axis = 0; axis &lt; axes; axis++) {</span>
-<span class="nc" id="L424">                xPoints[axis] = PointX(centerX, levelRadius, axis, axes);</span>
-<span class="nc" id="L425">                yPoints[axis] = PointY(centerY, levelRadius, axis, axes);</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">            for (int axis = 0; axis &lt; axes; axis++) {</span>
+<span class="nc" id="L425">                xPoints[axis] = PointX(centerX, levelRadius, axis, axes);</span>
+<span class="nc" id="L426">                yPoints[axis] = PointY(centerY, levelRadius, axis, axes);</span>
             }
 
-<span class="nc" id="L428">            graphics.strokePolygon(xPoints, yPoints, axes);</span>
+<span class="nc" id="L429">            graphics.strokePolygon(xPoints, yPoints, axes);</span>
         }
 
-<span class="nc bnc" id="L431" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
-<span class="nc" id="L432">            graphics.strokeLine(centerX, centerY,</span>
-<span class="nc" id="L433">                    PointX(centerX, radius, axis, axes),</span>
-<span class="nc" id="L434">                    PointY(centerY, radius, axis, axes));</span>
+<span class="nc bnc" id="L432" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
+<span class="nc" id="L433">            graphics.strokeLine(centerX, centerY,</span>
+<span class="nc" id="L434">                    PointX(centerX, radius, axis, axes),</span>
+<span class="nc" id="L435">                    PointY(centerY, radius, axis, axes));</span>
         }
 
-<span class="nc" id="L437">        double[] xPoints = new double[axes];</span>
-<span class="nc" id="L438">        double[] yPoints = new double[axes];</span>
-<span class="nc bnc" id="L439" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
-<span class="nc" id="L440">            xPoints[axis] = PointX(centerX, radius * radarValues[axis], axis, axes);</span>
-<span class="nc" id="L441">            yPoints[axis] = PointY(centerY, radius * radarValues[axis], axis, axes);</span>
+<span class="nc" id="L438">        double[] xPoints = new double[axes];</span>
+<span class="nc" id="L439">        double[] yPoints = new double[axes];</span>
+<span class="nc bnc" id="L440" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
+<span class="nc" id="L441">            xPoints[axis] = PointX(centerX, radius * radarValues[axis], axis, axes);</span>
+<span class="nc" id="L442">            yPoints[axis] = PointY(centerY, radius * radarValues[axis], axis, axes);</span>
         }
 
-<span class="nc" id="L444">        graphics.setFill(Color.rgb(46, 135, 207, 0.45));</span>
-<span class="nc" id="L445">        graphics.fillPolygon(xPoints, yPoints, axes);</span>
-<span class="nc" id="L446">        graphics.setStroke(Color.web(&quot;#43a9f2&quot;));</span>
-<span class="nc" id="L447">        graphics.setLineWidth(2);</span>
-<span class="nc" id="L448">        graphics.strokePolygon(xPoints, yPoints, axes);</span>
+<span class="nc" id="L445">        graphics.setFill(Color.rgb(46, 135, 207, 0.45));</span>
+<span class="nc" id="L446">        graphics.fillPolygon(xPoints, yPoints, axes);</span>
+<span class="nc" id="L447">        graphics.setStroke(Color.web(&quot;#43a9f2&quot;));</span>
+<span class="nc" id="L448">        graphics.setLineWidth(2);</span>
+<span class="nc" id="L449">        graphics.strokePolygon(xPoints, yPoints, axes);</span>
 
-<span class="nc" id="L450">        graphics.setFill(Color.web(&quot;#c4b5fd&quot;));</span>
-<span class="nc" id="L451">        graphics.setFont(Font.font(&quot;Poppins&quot;, 10));</span>
-<span class="nc" id="L452">        graphics.setTextAlign(TextAlignment.CENTER);</span>
-<span class="nc bnc" id="L453" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
-<span class="nc" id="L454">            DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);</span>
+<span class="nc" id="L451">        graphics.setFill(Color.web(&quot;#c4b5fd&quot;));</span>
+<span class="nc" id="L452">        graphics.setFont(Font.font(&quot;Poppins&quot;, 10));</span>
+<span class="nc" id="L453">        graphics.setTextAlign(TextAlignment.CENTER);</span>
+<span class="nc bnc" id="L454" title="All 2 branches missed.">        for (int axis = 0; axis &lt; axes; axis++) {</span>
+<span class="nc" id="L455">            DrawAxisLabel(graphics, RADAR_LABELS[axis], centerX, centerY, radius, axis, axes);</span>
         }
-<span class="nc" id="L456">    }</span>
+<span class="nc" id="L457">    }</span>
 
     private void DrawAxisLabel(
             GraphicsContext graphics,
@@ -463,29 +464,29 @@ import java.util.ResourceBundle;
             double radius,
             int axis,
             int axes) {
-<span class="nc" id="L466">        double labelRadius = radius + 22;</span>
-<span class="nc" id="L467">        double x = PointX(centerX, labelRadius, axis, axes);</span>
-<span class="nc" id="L468">        double y = PointY(centerY, labelRadius, axis, axes);</span>
+<span class="nc" id="L467">        double labelRadius = radius + 22;</span>
+<span class="nc" id="L468">        double x = PointX(centerX, labelRadius, axis, axes);</span>
+<span class="nc" id="L469">        double y = PointY(centerY, labelRadius, axis, axes);</span>
 
-<span class="nc bnc" id="L470" title="All 2 branches missed.">        if (x &lt; centerX - 8) {</span>
-<span class="nc" id="L471">            graphics.setTextAlign(TextAlignment.RIGHT);</span>
-<span class="nc" id="L472">            x -= 4;</span>
-<span class="nc bnc" id="L473" title="All 2 branches missed.">        } else if (x &gt; centerX + 8) {</span>
-<span class="nc" id="L474">            graphics.setTextAlign(TextAlignment.LEFT);</span>
-<span class="nc" id="L475">            x += 4;</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">        if (x &lt; centerX - 8) {</span>
+<span class="nc" id="L472">            graphics.setTextAlign(TextAlignment.RIGHT);</span>
+<span class="nc" id="L473">            x -= 4;</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">        } else if (x &gt; centerX + 8) {</span>
+<span class="nc" id="L475">            graphics.setTextAlign(TextAlignment.LEFT);</span>
+<span class="nc" id="L476">            x += 4;</span>
         } else {
-<span class="nc" id="L477">            graphics.setTextAlign(TextAlignment.CENTER);</span>
+<span class="nc" id="L478">            graphics.setTextAlign(TextAlignment.CENTER);</span>
         }
 
-<span class="nc" id="L480">        graphics.fillText(label, x, y);</span>
-<span class="nc" id="L481">    }</span>
+<span class="nc" id="L481">        graphics.fillText(label, x, y);</span>
+<span class="nc" id="L482">    }</span>
 
     private double PointX(double centerX, double radius, int axis, int axes) {
-<span class="nc" id="L484">        return centerX + radius * Math.cos(-Math.PI / 2 + axis * 2 * Math.PI / axes);</span>
+<span class="nc" id="L485">        return centerX + radius * Math.cos(-Math.PI / 2 + axis * 2 * Math.PI / axes);</span>
     }
 
     private double PointY(double centerY, double radius, int axis, int axes) {
-<span class="nc" id="L488">        return centerY + radius * Math.sin(-Math.PI / 2 + axis * 2 * Math.PI / axes);</span>
+<span class="nc" id="L489">        return centerY + radius * Math.sin(-Math.PI / 2 + axis * 2 * Math.PI / axes);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
