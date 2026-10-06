@@ -242,11 +242,15 @@ public class TasksController implements Initializable {
             ChallengeListItem submitted = selectedWeeklyChallenge;
             WeeklyTask weeklyTask = submitted.weeklyTask();
             try {
+                boolean alreadyFinished = IsFinished(weeklyTask.getStatus());
                 WeeklyTaskService.UpdateGivenTaskToBeFinished(weeklyTask, reflection, email);
                 RequestWeeklyAiFeedback(submitted, reflection, "Task submitted. Generating AI feedback...");
                 LoadQuestChallenges();
                 ReselectWeeklyChallenge(weeklyTask);
-                MaybeRecordWeekCompletion(email);
+
+                if (!alreadyFinished){
+                    MaybeRecordWeekCompletion(email);
+                }
             } catch (Exception exception) {
                 feedbackLabel.setText("Could not submit this task right now.");
             }
