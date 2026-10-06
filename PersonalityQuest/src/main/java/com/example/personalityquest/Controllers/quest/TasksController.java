@@ -45,7 +45,7 @@ public class TasksController implements Initializable {
     @FXML
     private VBox aiFeedbackCard;
     @FXML
-    private Button draftButton, submitButton, feedbackButton;
+    private Button editButton, submitButton, feedbackButton;
     @FXML
     private Label questTitleLabel, questProgressLabel;
     @FXML
@@ -93,7 +93,9 @@ public class TasksController implements Initializable {
         selectedReflectionItem = null;
         selectedJournalChallenge = item;
 
+
         JournalEntry entry = item.entry();
+
         Task task = item.task();
         String questName = item.quest() == null ? "Quest challenge" : item.quest().getName();
         String challengeName = task == null ? entry.getTitle() : task.getName();
@@ -105,8 +107,8 @@ public class TasksController implements Initializable {
         progressBox.setSelected(true);
         SetReflectionAreaCompact(true);
         reflectionArea.setText(entry.getBody() == null ? "" : entry.getBody());
-        reflectionArea.setDisable(false);
-        draftButton.setDisable(false);
+        reflectionArea.setDisable(true);
+        editButton.setDisable(true);
         submitButton.setDisable(true);
         submitButton.setText("Submit");
         feedbackButton.setDisable(true);
@@ -131,11 +133,9 @@ public class TasksController implements Initializable {
         progressBox.setSelected(finished);
         SetReflectionAreaCompact(true);
         reflectionArea.setText(weeklyTask.getReflection() == null ? "" : weeklyTask.getReflection());
-        reflectionArea.setDisable(false);
-        draftButton.setDisable(finished);
+        reflectionArea.setDisable(finished);
+        editButton.setDisable(!finished);
         submitButton.setDisable(finished);
-        submitButton.setText(finished ? "Submitted" : "Submit");
-
         boolean keepGenerating = generatingFeedback
                 && selectedWeeklyChallenge != null
                 && SameTask(selectedWeeklyChallenge.weeklyTask(), weeklyTask);
@@ -161,7 +161,7 @@ public class TasksController implements Initializable {
         SetReflectionAreaCompact(false);
         reflectionArea.clear();
         reflectionArea.setDisable(true);
-        draftButton.setDisable(true);
+        editButton.setDisable(true);
         submitButton.setDisable(true);
         submitButton.setText("Submit");
         feedbackButton.setDisable(true);
@@ -175,13 +175,16 @@ public class TasksController implements Initializable {
     }
 
     @FXML
-    private void OnSaveDraft() {
+    private void OnEditReflection() {
         String reflection = CurrentReflection();
+        reflectionArea.setDisable(false);
+        submitButton.setDisable(false);
+        editButton.setDisable(true);
+        /*
         if (ApplicationManager.isEmpty(reflection)) {
             feedbackLabel.setText("Write something before saving a draft.");
             return;
         }
-
         String email = ApplicationManager.CurrentAccount.getCurrentEmail();
 
         if (selectedJournalChallenge != null) {
@@ -222,6 +225,7 @@ public class TasksController implements Initializable {
                 feedbackLabel.setText("Could not save this draft right now.");
             }
         }
+        */
     }
 
     @FXML
@@ -756,10 +760,9 @@ public class TasksController implements Initializable {
         SetReflectionAreaCompact(false);
         String answer = item.userQuest().getReflection();
         reflectionArea.setText(ApplicationManager.isEmpty(answer) ? "" : answer);
-        reflectionArea.setDisable(false);
-        draftButton.setDisable(finished);
+        reflectionArea.setDisable(finished);
+        editButton.setDisable(!finished);
         submitButton.setDisable(finished);
-        submitButton.setText(finished ? "Submitted" : "Submit");
 
         boolean keepGenerating = generatingFeedback
                 && selectedReflectionItem != null
