@@ -78,7 +78,7 @@ PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestViewerContr
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestViewerController.Tab,27,0,0,0,2,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,WeeklyTaskReflectionController,65,0,0,0,21,0,8,0,8,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.ReflectionListItem,12,0,0,0,1,0,1,0,1,0
-PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController,1655,0,196,0,436,0,144,0,46,0
+PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController,1574,0,190,0,410,0,141,0,46,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestController.QuestListItem,12,0,0,0,1,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestController.new ListCell() {...},146,0,4,0,23,0,4,0,2,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestController.new ListCell() {...},86,0,4,0,18,0,4,0,2,0
