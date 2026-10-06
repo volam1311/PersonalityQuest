@@ -144,7 +144,7 @@ public class TasksController implements Initializable {
             feedbackLabel.setText("Generating AI feedback...");
             ShowAiFeedback("Writing feedback from your reflection...");
         } else {
-            feedbackLabel.setText(finished ? "This task is already finished." : "");
+            feedbackLabel.setText(finished ? "Click Edit, to change the reflection you have written for this" : "");
             ShowStoredFeedback(weeklyTask);
         }
     }
@@ -251,6 +251,10 @@ public class TasksController implements Initializable {
                 if (!alreadyFinished){
                     MaybeRecordWeekCompletion(email);
                 }
+                if (alreadyFinished)
+                    feedbackLabel.setText("Re-Submitted!");
+                else
+                    feedbackLabel.setText("Submitted!");
             } catch (Exception exception) {
                 feedbackLabel.setText("Could not submit this task right now.");
             }
@@ -265,6 +269,7 @@ public class TasksController implements Initializable {
                 RequestQuestAiFeedback(submitted, reflection, "Reflection submitted. Generating AI feedback...");
                 LoadQuestReflections();
                 ReselectReflection(updated);
+                feedbackLabel.setText("Re-Submitted!");
             } catch (Exception exception) {
                 feedbackLabel.setText("Could not submit this reflection right now.");
             }
@@ -776,7 +781,7 @@ public class TasksController implements Initializable {
             feedbackLabel.setText("Generating AI feedback...");
             ShowAiFeedback("Writing feedback from your reflection...");
         } else {
-            feedbackLabel.setText(finished ? "This reflection is already finished." : "");
+            feedbackLabel.setText(finished ? "Click Edit, to change the reflection you have written" : "");
             ShowStoredQuestFeedback(item.userQuest());
         }
     }
