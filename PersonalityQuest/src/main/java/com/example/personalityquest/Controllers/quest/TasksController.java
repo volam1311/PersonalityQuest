@@ -180,6 +180,7 @@ public class TasksController implements Initializable {
         reflectionArea.setDisable(false);
         submitButton.setDisable(false);
         editButton.setDisable(true);
+        feedbackLabel.setText("Re-enter you reflection");
         /*
         if (ApplicationManager.isEmpty(reflection)) {
             feedbackLabel.setText("Write something before saving a draft.");
@@ -252,7 +253,7 @@ public class TasksController implements Initializable {
                     MaybeRecordWeekCompletion(email);
                 }
                 if (alreadyFinished)
-                    feedbackLabel.setText("Re-Submitted!");
+                    feedbackLabel.setText("Re-Submitted Reflection for this Weekly Task!");
                 else
                     feedbackLabel.setText("Submitted!");
             } catch (Exception exception) {
@@ -269,7 +270,7 @@ public class TasksController implements Initializable {
                 RequestQuestAiFeedback(submitted, reflection, "Reflection submitted. Generating AI feedback...");
                 LoadQuestReflections();
                 ReselectReflection(updated);
-                feedbackLabel.setText("Re-Submitted!");
+                feedbackLabel.setText("Re-Submitted your Reflection!");
             } catch (Exception exception) {
                 feedbackLabel.setText("Could not submit this reflection right now.");
             }
