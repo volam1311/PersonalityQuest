@@ -43,8 +43,12 @@ public class AccountSignInController {
     @FXML
     private Label Message;
 
+    private PasswordService PasswordService;
+    private EmailService EmailService;
     @FXML
     private void initialize() {
+        PasswordService = new PasswordService();
+        EmailService = new EmailService();
         Rectangle clip = new Rectangle();
         clip.setArcWidth(56);
         clip.setArcHeight(56);

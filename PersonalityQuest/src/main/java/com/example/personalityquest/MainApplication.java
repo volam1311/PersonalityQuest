@@ -92,7 +92,8 @@ public class MainApplication extends Application {
             throw new Exception("Login Cache Expired");
         }
 
-        if (!EmailService.DoesAccountWithEmailExist(loginCache.GetEmail())){
+        EmailService emailService = new EmailService();
+        if (!emailService.DoesAccountWithEmailExist(loginCache.GetEmail())){
             throw new Exception("Account does not exist with this email");
         }
 

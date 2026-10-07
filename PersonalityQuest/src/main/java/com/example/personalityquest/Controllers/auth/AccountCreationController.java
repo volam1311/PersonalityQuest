@@ -189,7 +189,8 @@ public class AccountCreationController {
             return;
         }
 
-        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText())) {
+        EmailService emailService = new EmailService();
+        if (emailService.DoesAccountWithEmailExist(emailEntry.getText())) {
             markFieldError(emailEntry);
             Message.setText("An account with this email already exists");
             return;

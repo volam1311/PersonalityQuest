@@ -59,6 +59,10 @@ public class WeeklyTaskDAO {
         this.connection = connection;
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     /**
      * Gets a Weekly Task for a given taskId, email and weekStart
      * @param email The email of the acccount you want to get the WeeklyTask from

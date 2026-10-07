@@ -11,13 +11,22 @@ import java.sql.SQLException;
  * if account exist for them or retrieve the EmailDetails matching the email
  */
 public class EmailService {
+
+    private AccountDAO AccountDAO;
+    public EmailService(){
+        this.AccountDAO = new AccountDAO();
+    }
+
+    public EmailService(AccountDAO accountDAO){
+        this.AccountDAO = accountDAO;
+    }
     /**
      * Checks to see whether an account exists in the database with the given email
      * @param email "The email for the presumed account you want to check"
      * @return "Whether the account exists in the database"
      * @throws SQLException "Database Access"
      */
-    public static boolean DoesAccountWithEmailExist(String email) throws SQLException {
+    public boolean DoesAccountWithEmailExist(String email) throws SQLException {
         // check nulls
         if (ApplicationManager.isEmpty(email)) {
             System.out.println("Email is null therefor it does not exist");
@@ -32,7 +41,7 @@ public class EmailService {
      * @return "Email, UserName FirstName, LastName"
      * @throws Exception "Database Access Failure"
      */
-    public static EmailDetails GetDetailsForEmail(String email) throws Exception {
+    public EmailDetails GetDetailsForEmail(String email) throws Exception {
         // check nulls
         if (ApplicationManager.isEmpty(email)) {
             System.out.println("Email is null therefore details can not be gotten");

@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services.quest;
 
+import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.DAO.quest.WeeklyTaskDAO;
 import com.example.personalityquest.Model.quest.Task;
@@ -18,12 +19,18 @@ import java.time.temporal.TemporalAdjusters;
  */
 public class WeeklyTaskService {
     private final WeeklyTaskDAO WeeklyTaskDAO;
+    private EmailService EmailService;
     public WeeklyTaskService(){
         WeeklyTaskDAO = new WeeklyTaskDAO();
+        EmailService = new EmailService();
+
     }
 
     public WeeklyTaskService(WeeklyTaskDAO WeeklyTaskDAO){
         this.WeeklyTaskDAO = WeeklyTaskDAO;
+
+        AccountDAO accountDAO = new AccountDAO(WeeklyTaskDAO.getConnection());
+        EmailService = new EmailService(accountDAO);
     }
 
     /// RETRIEVING

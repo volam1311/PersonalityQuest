@@ -21,6 +21,7 @@ public class UpdateAccountPasswordController {
     @FXML
     private Label Message;
 
+
     @FXML
     private void OnUpdatePassword() throws SQLException {
         // new password does not match with reentry
@@ -29,7 +30,8 @@ public class UpdateAccountPasswordController {
             return;
         }
 
-        PasswordService.UpdatePasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), currentPasswordEntry.getText(), newPasswordEntry.getText());
+        PasswordService passwordService = new PasswordService();
+        passwordService.UpdatePasswordForEmail(ApplicationManager.CurrentAccount.getCurrentEmail(), currentPasswordEntry.getText(), newPasswordEntry.getText());
         Message.setText("Password Updated for account");
 
         OnExit();

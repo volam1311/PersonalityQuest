@@ -28,6 +28,21 @@ public class AccountDAO {
                         WHERE email = ?
             """;
 
+
+    private final Connection connection;
+
+    public AccountDAO(){
+        connection = SQLite.getConnection();
+    }
+
+    public AccountDAO(Connection connection){
+        this.connection = connection;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
     // EMAIL
     /**
      * Checks to see whether an account exists in the database with the given email
@@ -35,7 +50,7 @@ public class AccountDAO {
      * @return "Whether the account exists in the database"
      * @throws SQLException "Database Access"
      */
-    public static boolean DoesAccountWithEmailExist(String email) throws SQLException {
+    public boolean DoesAccountWithEmailExist(String email) throws SQLException {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
         // assign parameters
@@ -61,7 +76,7 @@ public class AccountDAO {
      * @return "Email, UserName FirstName, LastName"
      * @throws Exception "Database Access Failure"
      */
-    public static EmailDetails GetDetailsForEmail(String email) throws Exception {
+    public EmailDetails GetDetailsForEmail(String email) throws Exception {
 
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
@@ -95,7 +110,7 @@ public class AccountDAO {
      * @return The hashed string of the password
      * @throws SQLException Database Access Failure
      */
-    public static String GetHashedPasswordForEmail(String email) throws SQLException {
+    public  String GetHashedPasswordForEmail(String email) throws SQLException {
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
         // assign parameters
@@ -113,7 +128,7 @@ public class AccountDAO {
      * @return "Whether the update to the database was successful"
      * @throws SQLException "Database Access Failure"
      */
-    public static boolean UpdatePasswordForEmail(String email, String newPassword) throws SQLException {
+    public boolean UpdatePasswordForEmail(String email, String newPassword) throws SQLException {
 
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(updatePassword);
@@ -131,7 +146,7 @@ public class AccountDAO {
      * @param currentEmail the email address identifying the account to update
      * @throws SQLException if account details cannot be updated
      */
-    public static void UpdateAccountDetails(EmailDetails emailDetails, String currentEmail) throws SQLException {
+    public void UpdateAccountDetails(EmailDetails emailDetails, String currentEmail) throws SQLException {
 
         Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(saveQuery);
