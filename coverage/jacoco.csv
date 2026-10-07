@@ -74,7 +74,7 @@ PersonalityQuest,com.example.personalityquest.Services.auth,LoginCacheService,6,
 PersonalityQuest,com.example.personalityquest.Services.auth,HashingService,3,13,0,0,1,2,1,2,1,2
 PersonalityQuest,com.example.personalityquest.Services.auth,AccountService,23,0,4,0,5,0,4,0,2,0
 PersonalityQuest,com.example.personalityquest.Model.chat,ReflectionContext,2,56,1,1,0,11,1,2,0,2
-PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestViewerController,1388,0,183,0,384,0,128,0,35,0
+PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestViewerController,1393,0,181,0,379,0,127,0,35,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,QuestViewerController.Tab,27,0,0,0,2,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,WeeklyTaskReflectionController,65,0,0,0,21,0,8,0,8,0
 PersonalityQuest,com.example.personalityquest.Controllers.quest,TasksController.ReflectionListItem,12,0,0,0,1,0,1,0,1,0

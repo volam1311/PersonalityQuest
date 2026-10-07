@@ -64,7 +64,7 @@ import javafx.util.Duration;
     @FXML
     private TextArea reflectionEntryArea;
     @FXML
-    private Button reflectionFeedbackButton, reflectionDraftButton, reflectionSubmitButton;
+    private Button reflectionFeedbackButton, reflectionEditButton, reflectionSubmitButton;
     @FXML
     private Label reflectionStatusLabel;
     @FXML
@@ -471,10 +471,10 @@ import javafx.util.Duration;
 <span class="nc" id="L471">            activeUserQuest = userQuest;</span>
 <span class="nc" id="L472">            boolean finished = &quot;Finished&quot;.equalsIgnoreCase(activeUserQuest.getReflectionStatus());</span>
 <span class="nc bnc" id="L473" title="All 2 branches missed.">            reflectionEntryArea.setText(userQuest.getReflection() == null ? &quot;&quot; : activeUserQuest.getReflection());</span>
-<span class="nc" id="L474">            reflectionEntryArea.setDisable(false);</span>
-<span class="nc" id="L475">            reflectionDraftButton.setDisable(false);</span>
-<span class="nc" id="L476">            reflectionSubmitButton.setDisable(false);</span>
-<span class="nc bnc" id="L477" title="All 2 branches missed.">            reflectionSubmitButton.setText(finished ? &quot;Update Submission&quot; : &quot;Submit&quot;);</span>
+<span class="nc" id="L474">            reflectionEntryArea.setDisable(finished);</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">            reflectionEditButton.setDisable(!finished);</span>
+<span class="nc" id="L476">            reflectionSubmitButton.setDisable(finished);</span>
+<span class="nc" id="L477">            reflectionSubmitButton.setText(&quot;Submit&quot;);</span>
 <span class="nc" id="L478">            reflectionFeedbackButton.setDisable(false);</span>
 <span class="nc bnc" id="L479" title="All 2 branches missed.">            reflectionStatusLabel.setText(finished ? &quot;Submitted - you can still edit and resubmit.&quot; : &quot;&quot;);</span>
 <span class="nc" id="L480">            ShowStoredQuestFeedback(activeUserQuest.getAccountEmail(), activeUserQuest.getLabourId());</span>
@@ -495,7 +495,7 @@ import javafx.util.Duration;
 <span class="nc" id="L495">        activeUserQuest = null;</span>
 <span class="nc" id="L496">        reflectionEntryArea.clear();</span>
 <span class="nc" id="L497">        reflectionEntryArea.setDisable(true);</span>
-<span class="nc" id="L498">        reflectionDraftButton.setDisable(true);</span>
+<span class="nc" id="L498">        reflectionEditButton.setDisable(true);</span>
 <span class="nc" id="L499">        reflectionSubmitButton.setDisable(true);</span>
 <span class="nc" id="L500">        reflectionSubmitButton.setText(&quot;Submit&quot;);</span>
 <span class="nc" id="L501">        reflectionFeedbackButton.setDisable(true);</span>
@@ -504,153 +504,167 @@ import javafx.util.Duration;
 <span class="nc" id="L504">    }</span>
 
     @FXML
-    private void OnSaveDraft(){
-<span class="nc bnc" id="L508" title="All 2 branches missed.">        if (activeUserQuest == null){</span>
-<span class="nc" id="L509">            return;</span>
+    private void OnEdit(){
+
+<span class="nc" id="L509">        reflectionEditButton.setDisable(true);</span>
+<span class="nc" id="L510">        reflectionSubmitButton.setDisable(false);</span>
+<span class="nc" id="L511">        reflectionEntryArea.setDisable(false);</span>
+<span class="nc" id="L512">        reflectionStatusLabel.setText(&quot;Re-enter/Update your reflection then click submit to save&quot;);</span>
+<span class="nc" id="L513">        return;</span>
+        /*
+        if (activeUserQuest == null){
+            return;
         }
 
-<span class="nc" id="L512">        String reflection = CurrentReflection();</span>
-<span class="nc bnc" id="L513" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)){</span>
-<span class="nc" id="L514">            reflectionStatusLabel.setText(&quot;Write something before saving a draft&quot;);</span>
-<span class="nc" id="L515">            return;</span>
+        String reflection = CurrentReflection();
+        if (ApplicationManager.isEmpty(reflection)){
+            reflectionStatusLabel.setText(&quot;Write something before saving a draft&quot;);
+            return;
         }
 
         try{
-<span class="nc" id="L519">            activeUserQuest = UserQuestService.UpdateQuestReflectionToDraft(</span>
-<span class="nc" id="L520">                    activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());</span>
-<span class="nc" id="L521">            reflectionStatusLabel.setText(&quot;Draft Saved&quot;);</span>
-<span class="nc" id="L522">            reflectionAdded = true;</span>
-<span class="nc" id="L523">            UpdateTabLocks();</span>
-<span class="nc" id="L524">        } catch (Exception exception) {</span>
-<span class="nc" id="L525">            reflectionStatusLabel.setText(&quot;Could not save your reflection right now.&quot;);</span>
-<span class="nc" id="L526">        }</span>
-<span class="nc" id="L527">    }</span>
+            activeUserQuest = UserQuestService.UpdateQuestReflectionToDraft(
+                    activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
+            reflectionStatusLabel.setText(&quot;Draft Saved&quot;);
+            reflectionAdded = true;
+            UpdateTabLocks();
+        } catch (Exception exception) {
+            reflectionStatusLabel.setText(&quot;Could not save your reflection right now.&quot;);
+        }
+        */
+
+    }
 
     @FXML
     private void OnSubmit() {
-<span class="nc bnc" id="L531" title="All 2 branches missed.">        if (activeUserQuest == null) {</span>
-<span class="nc" id="L532">            return;</span>
+<span class="nc bnc" id="L540" title="All 2 branches missed.">        if (activeUserQuest == null) {</span>
+<span class="nc" id="L541">            return;</span>
         }
-<span class="nc" id="L534">        String reflection = CurrentReflection();</span>
-<span class="nc bnc" id="L535" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)) {</span>
-<span class="nc" id="L536">            reflectionStatusLabel.setText(&quot;Write a reflection before submitting.&quot;);</span>
-<span class="nc" id="L537">            return;</span>
+<span class="nc" id="L543">        String reflection = CurrentReflection();</span>
+<span class="nc bnc" id="L544" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)) {</span>
+<span class="nc" id="L545">            reflectionStatusLabel.setText(&quot;Write a reflection before submitting.&quot;);</span>
+<span class="nc" id="L546">            return;</span>
         }
         try {
-<span class="nc" id="L540">            activeUserQuest = UserQuestService.UpdateQuestReflectionToBeFinished(</span>
-<span class="nc" id="L541">                    activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());</span>
-<span class="nc" id="L542">            reflectionSubmitButton.setText(&quot;Update Submission&quot;);</span>
-<span class="nc" id="L543">            navBarController.FlashTasksButtonOnce();</span>
-<span class="nc" id="L544">            reflectionAdded = true;</span>
-<span class="nc" id="L545">            UpdateTabLocks();</span>
-<span class="nc" id="L546">            RequestAiFeedback(reflection, &quot;Reflection submitted. Generating AI feedback...&quot;);</span>
-<span class="nc" id="L547">        } catch (Exception exception) {</span>
-<span class="nc" id="L548">            reflectionStatusLabel.setText(&quot;Could not submit this reflection right now.&quot;);</span>
-<span class="nc" id="L549">        }</span>
-<span class="nc" id="L550">    }</span>
+<span class="nc" id="L549">            boolean finished = &quot;Finished&quot;.equalsIgnoreCase(activeUserQuest.getReflectionStatus());</span>
+<span class="nc" id="L550">            activeUserQuest = UserQuestService.UpdateQuestReflectionToBeFinished(</span>
+<span class="nc" id="L551">                    activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+<span class="nc" id="L552">            reflectionSubmitButton.setText(&quot;Submit&quot;);</span>
+<span class="nc" id="L553">            navBarController.FlashTasksButtonOnce();</span>
+<span class="nc" id="L554">            reflectionAdded = true;</span>
+<span class="nc" id="L555">            UpdateTabLocks();</span>
+<span class="nc" id="L556">            RequestAiFeedback(reflection, &quot;Reflection submitted. Generating AI feedback...&quot;);</span>
+<span class="nc" id="L557">            reflectionEditButton.setDisable(false);</span>
+<span class="nc" id="L558">            reflectionSubmitButton.setDisable(true);</span>
+<span class="nc" id="L559">            reflectionEntryArea.setDisable(true);</span>
+<span class="nc bnc" id="L560" title="All 2 branches missed.">            reflectionStatusLabel.setText(finished ? &quot;Reflection Re-Submitted&quot; : &quot;Reflection Submitted&quot;);</span>
+<span class="nc" id="L561">        } catch (Exception exception) {</span>
+<span class="nc" id="L562">            reflectionStatusLabel.setText(&quot;Could not submit this reflection right now.&quot;);</span>
+<span class="nc" id="L563">        }</span>
+<span class="nc" id="L564">    }</span>
     @FXML
     private void OnGetFeedback() {
-<span class="nc bnc" id="L553" title="All 2 branches missed.">        if (activeUserQuest == null) {</span>
-<span class="nc" id="L554">            return;</span>
+<span class="nc bnc" id="L567" title="All 2 branches missed.">        if (activeUserQuest == null) {</span>
+<span class="nc" id="L568">            return;</span>
         }
-<span class="nc" id="L556">        String reflection = CurrentReflection();</span>
-<span class="nc bnc" id="L557" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)) {</span>
-<span class="nc" id="L558">            reflectionStatusLabel.setText(&quot;Write a reflection before requesting AI feedback.&quot;);</span>
-<span class="nc" id="L559">            return;</span>
+<span class="nc" id="L570">        String reflection = CurrentReflection();</span>
+<span class="nc bnc" id="L571" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)) {</span>
+<span class="nc" id="L572">            reflectionStatusLabel.setText(&quot;Write a reflection before requesting AI feedback.&quot;);</span>
+<span class="nc" id="L573">            return;</span>
         }
-<span class="nc" id="L561">        RequestAiFeedback(reflection, &quot;Generating AI feedback...&quot;);</span>
-<span class="nc" id="L562">    }</span>
+<span class="nc" id="L575">        RequestAiFeedback(reflection, &quot;Generating AI feedback...&quot;);</span>
+<span class="nc" id="L576">    }</span>
     private void RequestAiFeedback(String reflection, String statusMessage) {
-<span class="nc" id="L564">        UserQuest quest = activeUserQuest;</span>
-<span class="nc" id="L565">        reflectionFeedbackButton.setDisable(true);</span>
-<span class="nc" id="L566">        reflectionStatusLabel.setText(statusMessage);</span>
-<span class="nc" id="L567">        CompletableFuture.supplyAsync(() -&gt; {</span>
+<span class="nc" id="L578">        UserQuest quest = activeUserQuest;</span>
+<span class="nc" id="L579">        reflectionFeedbackButton.setDisable(true);</span>
+<span class="nc" id="L580">        reflectionStatusLabel.setText(statusMessage);</span>
+<span class="nc" id="L581">        CompletableFuture.supplyAsync(() -&gt; {</span>
             try {
-<span class="nc" id="L569">                Quest questDetails = QuestService.GetQuestForLabourId(quest.getLabourId());</span>
-<span class="nc" id="L570">                List&lt;Task&gt; tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
-<span class="nc bnc" id="L571" title="All 2 branches missed.">                Task firstTask = tasks.isEmpty() ? null : tasks.get(0);</span>
-<span class="nc bnc" id="L572" title="All 2 branches missed.">                String questName = questDetails == null ? &quot;&quot; : questDetails.getName();</span>
-<span class="nc" id="L573">                return ReflectionFeedbackService.FeedbackFor(</span>
-<span class="nc" id="L574">                        ReflectionFeedbackService.ContextFor(firstTask, questName, reflection));</span>
-<span class="nc" id="L575">            } catch (Exception exception) {</span>
-<span class="nc" id="L576">                throw new RuntimeException(exception);</span>
+<span class="nc" id="L583">                Quest questDetails = QuestService.GetQuestForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L584">                List&lt;Task&gt; tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
+<span class="nc bnc" id="L585" title="All 2 branches missed.">                Task firstTask = tasks.isEmpty() ? null : tasks.get(0);</span>
+<span class="nc bnc" id="L586" title="All 2 branches missed.">                String questName = questDetails == null ? &quot;&quot; : questDetails.getName();</span>
+<span class="nc" id="L587">                return ReflectionFeedbackService.FeedbackFor(</span>
+<span class="nc" id="L588">                        ReflectionFeedbackService.ContextFor(firstTask, questName, reflection));</span>
+<span class="nc" id="L589">            } catch (Exception exception) {</span>
+<span class="nc" id="L590">                throw new RuntimeException(exception);</span>
             }
-<span class="nc" id="L578">        }).whenComplete((text, error) -&gt; Platform.runLater(() -&gt; {</span>
-<span class="nc" id="L579">            reflectionFeedbackButton.setDisable(false);</span>
-<span class="nc bnc" id="L580" title="All 2 branches missed.">            if (error != null) {</span>
-<span class="nc" id="L581">                reflectionStatusLabel.setText(&quot;Could not get AI feedback right now.&quot;);</span>
-<span class="nc" id="L582">                return;</span>
+<span class="nc" id="L592">        }).whenComplete((text, error) -&gt; Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L593">            reflectionFeedbackButton.setDisable(false);</span>
+<span class="nc bnc" id="L594" title="All 2 branches missed.">            if (error != null) {</span>
+<span class="nc" id="L595">                reflectionStatusLabel.setText(&quot;Could not get AI feedback right now.&quot;);</span>
+<span class="nc" id="L596">                return;</span>
             }
             try {
-<span class="nc" id="L585">                ReflectionFeedbackService.SaveForQuest(quest.getAccountEmail(), quest.getLabourId(), text);</span>
-<span class="nc" id="L586">            } catch (Exception ignored) {</span>
+<span class="nc" id="L599">                ReflectionFeedbackService.SaveForQuest(quest.getAccountEmail(), quest.getLabourId(), text);</span>
+<span class="nc" id="L600">            } catch (Exception ignored) {</span>
                 // Showing the reply still helps even if it cannot be stored.
-<span class="nc" id="L588">            }</span>
-<span class="nc" id="L589">            reflectionAiFeedbackLabel.setText(text);</span>
-<span class="nc" id="L590">            reflectionAiFeedbackCard.setVisible(true);</span>
-<span class="nc" id="L591">            reflectionAiFeedbackCard.setManaged(true);</span>
-<span class="nc" id="L592">            reflectionStatusLabel.setText(&quot;AI feedback is ready.&quot;);</span>
-<span class="nc" id="L593">        }));</span>
-<span class="nc" id="L594">    }</span>
+<span class="nc" id="L602">            }</span>
+<span class="nc" id="L603">            reflectionAiFeedbackLabel.setText(text);</span>
+<span class="nc" id="L604">            reflectionAiFeedbackCard.setVisible(true);</span>
+<span class="nc" id="L605">            reflectionAiFeedbackCard.setManaged(true);</span>
+<span class="nc" id="L606">            reflectionStatusLabel.setText(&quot;AI feedback is ready.&quot;);</span>
+<span class="nc" id="L607">        }));</span>
+<span class="nc" id="L608">    }</span>
     private void ShowStoredQuestFeedback(String email, int labourId) {
         try {
-<span class="nc" id="L597">            String stored = ReflectionFeedbackService.FindForQuest(email, labourId);</span>
-<span class="nc bnc" id="L598" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
-<span class="nc" id="L599">                HideQuestAiFeedback();</span>
-<span class="nc" id="L600">                return;</span>
+<span class="nc" id="L611">            String stored = ReflectionFeedbackService.FindForQuest(email, labourId);</span>
+<span class="nc bnc" id="L612" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
+<span class="nc" id="L613">                HideQuestAiFeedback();</span>
+<span class="nc" id="L614">                return;</span>
             }
-<span class="nc" id="L602">            reflectionAiFeedbackLabel.setText(stored);</span>
-<span class="nc" id="L603">            reflectionAiFeedbackCard.setVisible(true);</span>
-<span class="nc" id="L604">            reflectionAiFeedbackCard.setManaged(true);</span>
-<span class="nc" id="L605">        } catch (Exception exception) {</span>
-<span class="nc" id="L606">            HideQuestAiFeedback();</span>
-<span class="nc" id="L607">        }</span>
-<span class="nc" id="L608">    }</span>
+<span class="nc" id="L616">            reflectionAiFeedbackLabel.setText(stored);</span>
+<span class="nc" id="L617">            reflectionAiFeedbackCard.setVisible(true);</span>
+<span class="nc" id="L618">            reflectionAiFeedbackCard.setManaged(true);</span>
+<span class="nc" id="L619">        } catch (Exception exception) {</span>
+<span class="nc" id="L620">            HideQuestAiFeedback();</span>
+<span class="nc" id="L621">        }</span>
+<span class="nc" id="L622">    }</span>
     private void HideQuestAiFeedback() {
-<span class="nc" id="L610">        reflectionAiFeedbackLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L611">        reflectionAiFeedbackCard.setVisible(false);</span>
-<span class="nc" id="L612">        reflectionAiFeedbackCard.setManaged(false);</span>
-<span class="nc" id="L613">    }</span>
+<span class="nc" id="L624">        reflectionAiFeedbackLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L625">        reflectionAiFeedbackCard.setVisible(false);</span>
+<span class="nc" id="L626">        reflectionAiFeedbackCard.setManaged(false);</span>
+<span class="nc" id="L627">    }</span>
     private String CurrentReflection() {
-<span class="nc" id="L615">        String reflection = reflectionEntryArea.getText();</span>
-<span class="nc bnc" id="L616" title="All 2 branches missed.">        return reflection == null ? &quot;&quot; : reflection.trim();</span>
+<span class="nc" id="L629">        String reflection = reflectionEntryArea.getText();</span>
+<span class="nc bnc" id="L630" title="All 2 branches missed.">        return reflection == null ? &quot;&quot; : reflection.trim();</span>
     }
 
     private void ShowResolutionIfAvailable(Quest quest, boolean flash) {
-<span class="nc" id="L620">        String resolution = quest.getResolution();</span>
-<span class="nc bnc" id="L621" title="All 2 branches missed.">        if (!ApplicationManager.isEmpty(resolution)) {</span>
-<span class="nc" id="L622">            resolutionLabel.setText(resolution);</span>
-<span class="nc" id="L623">            resolutionCard.setVisible(true);</span>
-<span class="nc" id="L624">            resolutionCard.setManaged(true);</span>
-<span class="nc bnc" id="L625" title="All 2 branches missed.">            if (flash) {</span>
-<span class="nc" id="L626">                StartReactionFlash();</span>
+<span class="nc" id="L634">        String resolution = quest.getResolution();</span>
+<span class="nc bnc" id="L635" title="All 2 branches missed.">        if (!ApplicationManager.isEmpty(resolution)) {</span>
+<span class="nc" id="L636">            resolutionLabel.setText(resolution);</span>
+<span class="nc" id="L637">            resolutionCard.setVisible(true);</span>
+<span class="nc" id="L638">            resolutionCard.setManaged(true);</span>
+<span class="nc bnc" id="L639" title="All 2 branches missed.">            if (flash) {</span>
+<span class="nc" id="L640">                StartReactionFlash();</span>
             }
         }
-<span class="nc" id="L629">    }</span>
+<span class="nc" id="L643">    }</span>
 
     private void StartReactionFlash() {
-<span class="nc" id="L632">        StopReactionFlash();</span>
-<span class="nc" id="L633">        reactionFlashTimeline = new Timeline(</span>
-<span class="nc" id="L634">                new KeyFrame(Duration.seconds(0.5), event -&gt; ToggleStyleClass(reactionTabButton, FLASHING_TAB)));</span>
-<span class="nc" id="L635">        reactionFlashTimeline.setCycleCount(Timeline.INDEFINITE);</span>
-<span class="nc" id="L636">        reactionFlashTimeline.play();</span>
-<span class="nc" id="L637">    }</span>
+<span class="nc" id="L646">        StopReactionFlash();</span>
+<span class="nc" id="L647">        reactionFlashTimeline = new Timeline(</span>
+<span class="nc" id="L648">                new KeyFrame(Duration.seconds(0.5), event -&gt; ToggleStyleClass(reactionTabButton, FLASHING_TAB)));</span>
+<span class="nc" id="L649">        reactionFlashTimeline.setCycleCount(Timeline.INDEFINITE);</span>
+<span class="nc" id="L650">        reactionFlashTimeline.play();</span>
+<span class="nc" id="L651">    }</span>
 
     public void ToggleStyleClass(Button button, String styleClass) {
-<span class="nc bnc" id="L640" title="All 2 branches missed.">        if (button.getStyleClass().contains(styleClass)) {</span>
-<span class="nc" id="L641">            button.getStyleClass().remove(styleClass);</span>
+<span class="nc bnc" id="L654" title="All 2 branches missed.">        if (button.getStyleClass().contains(styleClass)) {</span>
+<span class="nc" id="L655">            button.getStyleClass().remove(styleClass);</span>
         } else {
-<span class="nc" id="L643">            button.getStyleClass().add(styleClass);</span>
+<span class="nc" id="L657">            button.getStyleClass().add(styleClass);</span>
         }
-<span class="nc" id="L645">    }</span>
+<span class="nc" id="L659">    }</span>
 
     private void StopReactionFlash() {
-<span class="nc bnc" id="L648" title="All 2 branches missed.">        if (reactionFlashTimeline != null) {</span>
-<span class="nc" id="L649">            reactionFlashTimeline.stop();</span>
-<span class="nc" id="L650">            reactionFlashTimeline = null;</span>
+<span class="nc bnc" id="L662" title="All 2 branches missed.">        if (reactionFlashTimeline != null) {</span>
+<span class="nc" id="L663">            reactionFlashTimeline.stop();</span>
+<span class="nc" id="L664">            reactionFlashTimeline = null;</span>
         }
-<span class="nc" id="L652">        reactionTabButton.getStyleClass().remove(FLASHING_TAB);</span>
-<span class="nc" id="L653">    }</span>
+<span class="nc" id="L666">        reactionTabButton.getStyleClass().remove(FLASHING_TAB);</span>
+<span class="nc" id="L667">    }</span>
 
 
 }
