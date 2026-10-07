@@ -32,6 +32,8 @@ import java.util.Objects;
 public class AccountCreationController {
     private static final double COMPACT_BREAKPOINT = 700;
 
+    private static final String USERNAME_FAIL_STR = "[SQLITE_CONSTRAINT_UNIQUE] " +
+            " A UNIQUE constraint failed (UNIQUE constraint failed: Accounts.userName)";
     @FXML
     private StackPane root;
     @FXML
@@ -202,9 +204,15 @@ public class AccountCreationController {
                     lastNameEntry.getText(),
                     passwordEntry.getText());
         } catch (SQLException e) {
+            if (Objects.equals(e.getMessage(), USERNAME_FAIL_STR)){
+                System.out.println(e.getMessage());
+                markFieldError(userNameEntry);
+                Message.setText("Username is already in use. Please try again");
+                return;
+            }
 
-            markFieldError(userNameEntry);
-            Message.setText("Username is already in use. Please try again");
+            markFieldError(emailEntry);
+            Message.setText("Could not create account. Email may already be in use, Please Try Again.");
             return;
         }
 
