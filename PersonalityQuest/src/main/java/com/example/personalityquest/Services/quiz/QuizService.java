@@ -31,11 +31,7 @@ public class QuizService {
     private static boolean inProgress;
     private static QuizResult result;
 
-    private final UserQuestService UserQuestService;
-    private final QuestService QuestService;
     private QuizService() {
-        UserQuestService = new UserQuestService();
-        QuestService = new QuestService();Z
     }
 
     /**
@@ -246,6 +242,8 @@ public class QuizService {
         }
 
         try {
+            UserQuestService UserQuestService = new UserQuestService();
+            QuestService QuestService = new QuestService();
             Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());
             if (archetypeId == null) {
                 return result;
@@ -372,6 +370,8 @@ public class QuizService {
             return null;
         }
         try {
+            UserQuestService UserQuestService = new UserQuestService();
+            QuestService QuestService = new QuestService();
             QuizResult stored = QuizResultDAO.LoadResult(email);
             if (stored != null){
             UserQuest activeQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
