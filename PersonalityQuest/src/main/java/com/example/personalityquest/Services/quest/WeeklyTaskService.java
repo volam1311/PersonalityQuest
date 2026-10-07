@@ -17,7 +17,14 @@ import java.time.temporal.TemporalAdjusters;
  * tasks
  */
 public class WeeklyTaskService {
+    private final WeeklyTaskDAO WeeklyTaskDAO;
+    public WeeklyTaskService(){
+        WeeklyTaskDAO = new WeeklyTaskDAO();
+    }
 
+    public WeeklyTaskService(WeeklyTaskDAO WeeklyTaskDAO){
+        this.WeeklyTaskDAO = WeeklyTaskDAO;
+    }
 
     /// RETRIEVING
     /**
@@ -29,7 +36,7 @@ public class WeeklyTaskService {
      * the database
      * @throws Exception From GetTaskId's SQL Exception to Database Access Failure.
      */
-    public static WeeklyTask[] GetTasksForEmailForThisWeek(String email) throws Exception {
+    public WeeklyTask[] GetTasksForEmailForThisWeek(String email) throws Exception {
         if (IsEmailNull(email) || !EmailService.DoesAccountWithEmailExist(email)) {
             throw new IllegalArgumentException("Null Email or this account does not exist");
         }
@@ -67,7 +74,7 @@ public class WeeklyTaskService {
      * @throws SQLException From a Database Access Failure
      * @throws Exception If a "Bad" Weekly Task is made
      */
-    public static WeeklyTask GetWeeklyTask(String email, int taskId, LocalDate weekStart) throws Exception {
+    public WeeklyTask GetWeeklyTask(String email, int taskId, LocalDate weekStart) throws Exception {
         if (IsWeekStartNull(weekStart) || IsTaskIdNull(taskId) || IsEmailNull(email)){
             throw new IllegalArgumentException("WeekStart, TaskId or Email is Null");
         }
@@ -83,7 +90,7 @@ public class WeeklyTaskService {
      * @throws IllegalArgumentException If Week start or Email is null or empty
      * @throws SQLException Database Access Failure
      */
-    private static int[] GetTaskIdsAssignedForWeek(String email, LocalDate weekStart) throws Exception {
+    private int[] GetTaskIdsAssignedForWeek(String email, LocalDate weekStart) throws Exception {
         if (IsWeekStartNull(weekStart) || IsEmailNull(email)){
             throw new IllegalArgumentException("Week start or email is null");
         }
@@ -99,7 +106,7 @@ public class WeeklyTaskService {
      * @throws IllegalArgumentException If email is null or there is no account for an email
      * @throws Exception For Database Access and Update Failures and for when retrieving tasks with GetTaskIdsAssignedForWeek
      */
-    public static WeeklyTask[] GenerateTasksForThisWeek(String email) throws Exception {
+    public WeeklyTask[] GenerateTasksForThisWeek(String email) throws Exception {
         if (IsEmailNull(email) || !EmailService.DoesAccountWithEmailExist(email)) {
             throw new IllegalArgumentException("Email is null or this account does not exist");
         }
@@ -114,8 +121,9 @@ public class WeeklyTaskService {
         int[] taskIds = GetTaskIdsAssignedForWeek(email, weekStart);
 
         WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
+        TaskService taskService = new TaskService();
         for (int i = 0; i < taskIds.length; i++) {
-            Task task = TaskService.GetTaskForId(taskIds[i]);
+            Task task = taskService.GetTaskForId(taskIds[i]);
             tasks[i] = new WeeklyTask(email, task.getTaskId(), "Not Started", "", String.valueOf(weekStart));
 
         }
@@ -128,7 +136,7 @@ public class WeeklyTaskService {
      * @param weekStart The weekStart you want to insertTasks for
      * @throws Exception For Database Update Failures and if week start or email is null or empty
      */
-    private static void InsertTasks(String email, LocalDate weekStart) throws Exception {
+    private void InsertTasks(String email, LocalDate weekStart) throws Exception {
         if (IsWeekStartNull(weekStart) || IsEmailNull(email)){
             throw new IllegalArgumentException("Week start or email is null");
         }
@@ -152,7 +160,7 @@ public class WeeklyTaskService {
      * @return The updated WeeklyTask with its status as 'Started'
      * @throws Exception If a Database Access Failure Or if the weekly task , reflection or email is null or empty
      */
-    public static WeeklyTask UpdateGivenTaskToDraft(WeeklyTask task, String reflection, String email) throws Exception {
+    public WeeklyTask UpdateGivenTaskToDraft(WeeklyTask task, String reflection, String email) throws Exception {
         if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){
             throw new IllegalArgumentException("Null weekly task, reflection or email");
         }
@@ -171,7 +179,7 @@ public class WeeklyTaskService {
      * @return The updated WeeklyTask with its status as 'Finished'
      * @throws Exception If a Database Access Failure Or if the weekly task , reflection or email is null or empty
      */
-    public static WeeklyTask UpdateGivenTaskToBeFinished(WeeklyTask task, String reflection, String email) throws Exception {
+    public WeeklyTask UpdateGivenTaskToBeFinished(WeeklyTask task, String reflection, String email) throws Exception {
         if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){
             throw new IllegalArgumentException("Null weekly task, reflection or email");
         }
@@ -190,6 +198,7 @@ public class WeeklyTaskService {
     private static boolean IsEmailNull(String email){
         return ApplicationManager.isEmpty(email);
     }
+
     /**
      * Checks if the given weeklyTask is null
      * @param weeklyTask The weeklyTask you want checked

@@ -26,6 +26,7 @@ public final class ReflectionFeedbackService {
 
     private static ChatCompletionClient client = new OpenAiClient();
 
+
     private ReflectionFeedbackService() {
     }
 
@@ -99,6 +100,7 @@ public final class ReflectionFeedbackService {
         String strengths = "";
         String weaknesses = "";
 
+        QuestService QuestService = new QuestService();
         if (task != null) {
             try {
                 Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());

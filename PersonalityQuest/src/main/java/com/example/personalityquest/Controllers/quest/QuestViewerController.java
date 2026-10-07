@@ -89,8 +89,12 @@ public class QuestViewerController implements Initializable {
 
     private Timeline reactionFlashTimeline;
 
+    private UserQuestService UserQuestService;
+    private TaskService TaskService;
     @Override
     public void initialize(URL location, ResourceBundle resources){
+        TaskService = new TaskService();
+        UserQuestService = new UserQuestService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUEST_VIEWER);
         UpdateTabLocks();
         SelectTab(Tab.STORYLINE);

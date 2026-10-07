@@ -22,12 +22,14 @@ public class QuizResultController implements Initializable {
     @FXML
     private Label archetypeNameLabel, archetypeDescriptionLabel, strengthsLabel, weaknessesLabel, questLabel;
 
+    private QuestService QuestService;
     /** Initialises the quiz-results screen
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        QuestService = new QuestService();
         QuizResult result = QuizService.GetResult();
         if (result == null) {
             archetypeNameLabel.setText(UserProfileService.UNASSIGNED_ARCHETYPE);

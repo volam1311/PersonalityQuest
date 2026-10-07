@@ -36,6 +36,14 @@ public class TaskDAO {
             ORDER BY taskId
             """;
 
+    private Connection connection;
+    public TaskDAO(){
+        connection = SQLite.getConnection();
+    }
+
+    public TaskDAO(Connection connection){
+        this.connection = connection;
+    }
     /**
      * Gets a Task from the database that matches the given id
      * @param taskId The taskId you of the Task you want to retrieve
@@ -44,8 +52,7 @@ public class TaskDAO {
      * @throws IllegalArgumentException If the given taskId is equal to 0
      * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
      */
-    public static Task GetTaskForId(int taskId) throws Exception {
-        Connection connection = SQLite.getConnection();
+    public Task GetTaskForId(int taskId) throws Exception {
         PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);
         Task task = null;
 
@@ -74,8 +81,7 @@ public class TaskDAO {
      * @return A list of weekly task ids
      * @throws SQLException Database Access Failure
      */
-    public static List<Integer> GetWeeklyTaskIdsForLabourId(int labourId) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public List<Integer> GetWeeklyTaskIdsForLabourId(int labourId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK_IDS_FOR_LABOURID);
         List<Integer> taskIds = new ArrayList<Integer>();
 
@@ -96,8 +102,7 @@ public class TaskDAO {
      * @return A list of Task objects, empty if none exist
      * @throws Exception If a row cannot be mapped to a Task, or Database Access Failure
      */
-    public static List<Task> GetTasksForLabourId(int labourId) throws Exception {
-        Connection connection = SQLite.getConnection();
+    public List<Task> GetTasksForLabourId(int labourId) throws Exception {
         try (PreparedStatement statement = connection.prepareStatement(GET_QUEST_TASKS_FOR_LABOURID)) {
             statement.setInt(1, labourId);
             ResultSet rs = statement.executeQuery();
@@ -115,8 +120,7 @@ public class TaskDAO {
         }
     }
 
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("ALTER TABLE Tasks ADD Column reactionType TEXT");
         } catch (SQLException alreadyExists) {
@@ -129,8 +133,7 @@ public class TaskDAO {
         }
     }
 
-    public static List<Task> GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception{
-        Connection connection = SQLite.getConnection();
+    public List<Task> GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception{
         try (PreparedStatement statement = connection.prepareStatement(GET_CHALLENGE_FOR_LABOUR_AND_REACTION)) {
             statement.setInt(1, labourId);
             statement.setString(2, reactionType);
@@ -149,8 +152,7 @@ public class TaskDAO {
         }
     }
 
-    public static void SetChallenge(int taskId, int labourId, String name, String description, String overview, String reactionType) throws SQLException{
-        Connection connection = SQLite.getConnection();
+    public void SetChallenge(int taskId, int labourId, String name, String description, String overview, String reactionType) throws SQLException{
         try (PreparedStatement statement = connection.prepareStatement(
                 "UPDATE Tasks SET name = ?, description = ?, overview = ?, labourId = ?, reactionType = ? WHERE taskId = ?")){
             statement.setString(1, name);
@@ -163,16 +165,14 @@ public class TaskDAO {
         }
     }
 
-    public static void DeleteTask(int taskId) throws SQLException{
-        Connection connection = SQLite.getConnection();
+    public void DeleteTask(int taskId) throws SQLException{
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM Tasks WHERE taskId = ?")){
             statement.setInt(1, taskId);
             statement.executeUpdate();
         }
     }
 
-    public static boolean IsLabourAlreadyMigrated(int labourId) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public boolean IsLabourAlreadyMigrated(int labourId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM Tasks WHERE labourId = ? AND reactionType IS NOT NULL")){
             statement.setInt(1, labourId);
             ResultSet rs = statement.executeQuery();
@@ -180,8 +180,7 @@ public class TaskDAO {
         }
     }
 
-    public static List<Integer> GetTaskIdsForLabourId(int labourId) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public List<Integer> GetTaskIdsForLabourId(int labourId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT taskId FROM Tasks WHERE labourId = ? AND IFNULL(taskType, 'QUEST') = 'QUEST' ORDER BY taskId")) {
             statement.setInt(1, labourId);
@@ -194,7 +193,7 @@ public class TaskDAO {
         }
     }
 
-    public static void MigrateLabourChallenges(int labourId,
+    public void MigrateLabourChallenges(int labourId,
                                                String excessName, String excessDescription, String excessOverview,
                                                String deficitName, String deficitDescription, String deficitOverview) throws SQLException {
         List<Integer> taskIds = GetTaskIdsForLabourId(labourId);
@@ -208,7 +207,7 @@ public class TaskDAO {
         }
     }
 
-    public static void PopulateChallenges() throws SQLException {
+    public void PopulateChallenges() throws SQLException {
         MigrateLabourChallenges(2,
                 "Stand Level",
                 "This week, in a group where you'd normally expect to lead or be listened to first, deliberately take the equal seat instead — ask for someone else's account before you give yours, and let the outcome rest on the shared facts rather than your standing.",

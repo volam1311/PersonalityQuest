@@ -31,7 +31,11 @@ public class QuizService {
     private static boolean inProgress;
     private static QuizResult result;
 
+    private final UserQuestService UserQuestService;
+    private final QuestService QuestService;
     private QuizService() {
+        UserQuestService = new UserQuestService();
+        QuestService = new QuestService();Z
     }
 
     /**

@@ -23,11 +23,13 @@ public class WeeklyTaskServiceTest {
 
     private Task[] dummyTasks;
 
+    private WeeklyTaskService WeeklyTaskService;
 
 
     @BeforeEach
     public void setUp() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        WeeklyTaskDAO dao = new WeeklyTaskDAO(DriverManager.getConnection("jdbc:sqlite::memory:"));
+        WeeklyTaskService = new WeeklyTaskService(dao);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (

@@ -69,12 +69,20 @@ public class TasksController implements Initializable {
 
     private boolean updatingJournalSelection;
 
+    private WeeklyTaskService WeeklyTaskService;
+    private UserQuestService UserQuestService;
+    private TaskService TaskService;
+    private QuestService QuestService;
     /** Initialises quest challenge/reflection controls and loads the active quest's data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        QuestService = new QuestService();
+        UserQuestService = new UserQuestService();
+        WeeklyTaskService = new WeeklyTaskService();
+        TaskService = new TaskService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
         ConfigureQuestChallengesList();
         ConfigureQuestReflectionsList();

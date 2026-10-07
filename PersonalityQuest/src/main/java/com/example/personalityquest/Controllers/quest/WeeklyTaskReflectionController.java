@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 
 /** Controls the weekly-reflection form */
 public class WeeklyTaskReflectionController implements Initializable {
+
     @FXML
     private NavBarController navBarController;
     @FXML
@@ -25,12 +26,15 @@ public class WeeklyTaskReflectionController implements Initializable {
 
     private WeeklyTask currentTask;
 
+
+    private WeeklyTaskService WeeklyTaskService;
     /** Initialises the weekly-reflection form
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        WeeklyTaskService = new WeeklyTaskService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
     }
 
