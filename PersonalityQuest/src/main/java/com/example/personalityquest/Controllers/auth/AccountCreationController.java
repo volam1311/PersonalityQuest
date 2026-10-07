@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /** Controls account creation and validation */
 public class AccountCreationController {
@@ -201,8 +202,9 @@ public class AccountCreationController {
                     lastNameEntry.getText(),
                     passwordEntry.getText());
         } catch (SQLException e) {
-            markFieldError(emailEntry);
-            Message.setText("Could not create account. Email may already be in use");
+
+            markFieldError(userNameEntry);
+            Message.setText("Username is already in use. Please try again");
             return;
         }
 
