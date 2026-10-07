@@ -19,7 +19,7 @@ public class TaskService {
     }
 
     public TaskService(TaskDAO taskDAO){
-        this.TaskDAO = new TaskDAO();
+        this.TaskDAO = taskDAO;
     }
     /**
      * Gets a Task from the database that matches the given id

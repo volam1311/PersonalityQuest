@@ -90,12 +90,14 @@ public class ProfileController implements Initializable {
 
     private UserQuestService UserQuestService;
     private QuestService QuestService;
+    private AchievementService AchievementService;
     /** Initialises profile controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        AchievementService = new AchievementService();
         UserQuestService = new UserQuestService();
         QuestService = new QuestService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);

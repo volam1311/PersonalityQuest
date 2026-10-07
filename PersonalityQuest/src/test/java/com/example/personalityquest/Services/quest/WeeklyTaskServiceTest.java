@@ -28,7 +28,8 @@ public class WeeklyTaskServiceTest {
 
     @BeforeEach
     public void setUp() throws SQLException {
-        WeeklyTaskDAO dao = new WeeklyTaskDAO(DriverManager.getConnection("jdbc:sqlite::memory:"));
+        connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        WeeklyTaskDAO dao = new WeeklyTaskDAO(connection);
         WeeklyTaskService = new WeeklyTaskService(dao);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""

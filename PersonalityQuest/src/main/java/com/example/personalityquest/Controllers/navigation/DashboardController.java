@@ -94,6 +94,7 @@ public class DashboardController implements Initializable {
     private TaskService TaskService;
     private QuestService QuestService;
     private JournalEntryService JournalEntryService;
+    private StreakService StreakService;
     /** Initialises dashboard controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
@@ -105,6 +106,7 @@ public class DashboardController implements Initializable {
         WeeklyTaskService = new WeeklyTaskService();
         QuestService = new QuestService();
         JournalEntryService = new JournalEntryService();
+        StreakService = new StreakService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
         ConfigureHistoryList();
         ConfigureWeeklyTaskList();

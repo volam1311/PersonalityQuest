@@ -74,6 +74,7 @@ public class TasksController implements Initializable {
     private TaskService TaskService;
     private QuestService QuestService;
     private JournalEntryService JournalEntryService;
+    private StreakService StreakService;
     /** Initialises quest challenge/reflection controls and loads the active quest's data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
@@ -85,6 +86,7 @@ public class TasksController implements Initializable {
         WeeklyTaskService = new WeeklyTaskService();
         TaskService = new TaskService();
         JournalEntryService = new JournalEntryService();
+        StreakService = new StreakService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
         ConfigureQuestChallengesList();
         ConfigureQuestReflectionsList();

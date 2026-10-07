@@ -17,7 +17,13 @@ public class StreakService {
     private static final int NO_STREAK = 0;
     private static final int FIRST_STREAK = 1;
 
-    private StreakService() {
+    private final StreakDAO StreakDAO;
+
+    public StreakService(){
+        StreakDAO = new StreakDAO();
+    }
+    public StreakService(StreakDAO streakDAO) {
+        this.StreakDAO = streakDAO;
     }
 
     /**
@@ -38,7 +44,7 @@ public class StreakService {
      * @return The updated current streak
      * @throws SQLException If the progress cannot be read or saved
      */
-    public static int RecordCompletion(String email, LocalDate completionDate)
+    public int RecordCompletion(String email, LocalDate completionDate)
             throws SQLException {
 
         if (ApplicationManager.isEmpty(email) || completionDate == null) {
@@ -100,7 +106,7 @@ public class StreakService {
      * @return The current streak
      * @throws SQLException If the progress cannot be read
      */
-    public static int GetCurrentStreak(String email) throws SQLException {
+    public int GetCurrentStreak(String email) throws SQLException {
         return GetCurrentStreak(email, LocalDate.now());
     }
 
@@ -111,7 +117,7 @@ public class StreakService {
      * @return The current streak, or zero after a missed week
      * @throws SQLException If the progress cannot be read
      */
-    public static int GetCurrentStreak(String email, LocalDate today) throws SQLException {
+    public int GetCurrentStreak(String email, LocalDate today) throws SQLException {
 
         if (ApplicationManager.isEmpty(email) || today == null) {
             return NO_STREAK;
@@ -142,7 +148,7 @@ public class StreakService {
      * @return The best streak
      * @throws SQLException If the progress cannot be read
      */
-    public static int GetBestStreak(String email) throws SQLException {
+    public int GetBestStreak(String email) throws SQLException {
 
         if (ApplicationManager.isEmpty(email)) {
             return NO_STREAK;
@@ -162,7 +168,7 @@ public class StreakService {
      * @param email The email matching the account you want to update
      * @return What the total quest completion is at for the email
      */
-    public static int IncreaseTotalQuestsCompleted(String email) throws SQLException {
+    public int IncreaseTotalQuestsCompleted(String email) throws SQLException {
         if (ApplicationManager.isEmpty(email)){
             throw new IllegalArgumentException("Email is null");
         }
@@ -179,7 +185,7 @@ public class StreakService {
      * @param email The email matching the account you want to update
      * @return What the total quest completion is for the email
      */
-    public static int GetTotalQuestsCompleted(String email) throws SQLException {
+    public int GetTotalQuestsCompleted(String email) throws SQLException {
         if (ApplicationManager.isEmpty(email)){
             throw new IllegalArgumentException("Email is null");
         }

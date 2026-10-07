@@ -8,6 +8,7 @@ import com.example.personalityquest.DAO.quest.*;
 import com.example.personalityquest.Model.auth.LoginCache;
 import com.example.personalityquest.Services.auth.*;
 import com.example.personalityquest.Services.navigation.NavigationService;
+import com.example.personalityquest.Services.quest.QuestService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -34,6 +35,9 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException{
         AppFonts.load();
 
+        QuestDAO QuestDAO = new QuestDAO();
+        TaskDAO TaskDAO = new TaskDAO();
+        JournalEntryDAO JournalEntryDAO = new JournalEntryDAO();
         // Runs once, before any other DB call has a chance to leave an open
         // statement on the shared connection. Doing this here (rather than on
         // every visit to the Archetype screen) avoids SQLITE_LOCKED errors caused
@@ -78,7 +82,8 @@ public class MainApplication extends Application {
     }
 
     static void initialiseUserQuestData() throws Exception{
-        UserQuestDAO.EnsureTables();
+        UserQuestDAO userQuestDAO = new UserQuestDAO();
+        userQuestDAO.EnsureTables();
     }
 
     void AttemptLogin(LoginCache loginCache) throws Exception {

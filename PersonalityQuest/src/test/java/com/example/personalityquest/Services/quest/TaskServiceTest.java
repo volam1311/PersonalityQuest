@@ -27,7 +27,7 @@ public class TaskServiceTest {
     @BeforeEach
     public void setUp() throws Exception {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
-        TaskDAO taskDAO = new TaskDAO();
+        TaskDAO taskDAO = new TaskDAO(connection);
         TaskService = new TaskService(taskDAO);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
@@ -178,13 +178,11 @@ public class TaskServiceTest {
         }
 
         int[] tasks = TaskService.GetRandomAmountOfTaskIdsForLabourId(2);
-
         for(int task: tasks){
             if (task != 8001 && task != 8002){
                 throw new Exception("Didnt have correct Ids");
             }
         }
-
     }
 
     @Test
