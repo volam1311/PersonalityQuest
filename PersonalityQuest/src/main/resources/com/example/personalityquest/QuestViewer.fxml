@@ -87,7 +87,7 @@
 
                     <HBox alignment="CENTER" spacing="12">
                         <Button fx:id="reflectionFeedbackButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get Feedback" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="reflectionDraftButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSaveDraft" styleClass="draft-button" text="Save Draft" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="reflectionEditButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnEdit" styleClass="draft-button" text="Edit" HBox.hgrow="ALWAYS" />
                         <Button fx:id="reflectionSubmitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" HBox.hgrow="ALWAYS" />
                     </HBox>
                 </VBox>

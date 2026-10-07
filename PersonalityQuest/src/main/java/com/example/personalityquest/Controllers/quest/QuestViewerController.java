@@ -64,7 +64,7 @@ public class QuestViewerController implements Initializable {
     @FXML
     private TextArea reflectionEntryArea;
     @FXML
-    private Button reflectionFeedbackButton, reflectionDraftButton, reflectionSubmitButton;
+    private Button reflectionFeedbackButton, reflectionEditButton, reflectionSubmitButton;
     @FXML
     private Label reflectionStatusLabel;
     @FXML
@@ -471,10 +471,10 @@ public class QuestViewerController implements Initializable {
             activeUserQuest = userQuest;
             boolean finished = "Finished".equalsIgnoreCase(activeUserQuest.getReflectionStatus());
             reflectionEntryArea.setText(userQuest.getReflection() == null ? "" : activeUserQuest.getReflection());
-            reflectionEntryArea.setDisable(false);
-            reflectionDraftButton.setDisable(false);
-            reflectionSubmitButton.setDisable(false);
-            reflectionSubmitButton.setText(finished ? "Update Submission" : "Submit");
+            reflectionEntryArea.setDisable(finished);
+            reflectionEditButton.setDisable(!finished);
+            reflectionSubmitButton.setDisable(finished);
+            reflectionSubmitButton.setText("Submit");
             reflectionFeedbackButton.setDisable(false);
             reflectionStatusLabel.setText(finished ? "Submitted - you can still edit and resubmit." : "");
             ShowStoredQuestFeedback(activeUserQuest.getAccountEmail(), activeUserQuest.getLabourId());
@@ -495,7 +495,7 @@ public class QuestViewerController implements Initializable {
         activeUserQuest = null;
         reflectionEntryArea.clear();
         reflectionEntryArea.setDisable(true);
-        reflectionDraftButton.setDisable(true);
+        reflectionEditButton.setDisable(true);
         reflectionSubmitButton.setDisable(true);
         reflectionSubmitButton.setText("Submit");
         reflectionFeedbackButton.setDisable(true);
@@ -504,7 +504,14 @@ public class QuestViewerController implements Initializable {
     }
 
     @FXML
-    private void OnSaveDraft(){
+    private void OnEdit(){
+
+        reflectionEditButton.setDisable(true);
+        reflectionSubmitButton.setDisable(false);
+        reflectionEntryArea.setDisable(false);
+        reflectionStatusLabel.setText("Re-enter/Update your reflection then click submit to save");
+        return;
+        /*
         if (activeUserQuest == null){
             return;
         }
@@ -524,6 +531,8 @@ public class QuestViewerController implements Initializable {
         } catch (Exception exception) {
             reflectionStatusLabel.setText("Could not save your reflection right now.");
         }
+        */
+
     }
 
     @FXML
@@ -537,13 +546,18 @@ public class QuestViewerController implements Initializable {
             return;
         }
         try {
+            boolean finished = "Finished".equalsIgnoreCase(activeUserQuest.getReflectionStatus());
             activeUserQuest = UserQuestService.UpdateQuestReflectionToBeFinished(
                     activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
-            reflectionSubmitButton.setText("Update Submission");
+            reflectionSubmitButton.setText("Submit");
             navBarController.FlashTasksButtonOnce();
             reflectionAdded = true;
             UpdateTabLocks();
             RequestAiFeedback(reflection, "Reflection submitted. Generating AI feedback...");
+            reflectionEditButton.setDisable(false);
+            reflectionSubmitButton.setDisable(true);
+            reflectionEntryArea.setDisable(true);
+            reflectionStatusLabel.setText(finished ? "Reflection Re-Submitted" : "Reflection Submitted");
         } catch (Exception exception) {
             reflectionStatusLabel.setText("Could not submit this reflection right now.");
         }
