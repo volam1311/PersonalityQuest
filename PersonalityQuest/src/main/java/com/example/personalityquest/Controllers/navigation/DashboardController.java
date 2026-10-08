@@ -96,6 +96,7 @@ public class DashboardController implements Initializable {
     private JournalEntryService JournalEntryService;
     private StreakService StreakService;
     private EmailService EmailService;
+    private QuizService QuizService;
     /** Initialises dashboard controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
@@ -109,6 +110,7 @@ public class DashboardController implements Initializable {
         JournalEntryService = new JournalEntryService();
         StreakService = new StreakService();
         EmailService = new EmailService();
+        QuizService = new QuizService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
         ConfigureHistoryList();
         ConfigureWeeklyTaskList();

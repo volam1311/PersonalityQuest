@@ -1,5 +1,8 @@
 package com.example.personalityquest.Services.quiz;
 
+import com.example.personalityquest.DAO.personalisation.OptionDAO;
+import com.example.personalityquest.DAO.personalisation.QuestionDAO;
+import com.example.personalityquest.DAO.quest.QuizResultDAO;
 import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.Option;
@@ -24,11 +27,16 @@ public class QuizServiceTest {
 
     private Connection connection;
 
+    private QuizService QuizService;
     @BeforeEach
     void setUp() throws SQLException {
-        System.setProperty("quiz.demo", "false");
-        QuizService.Reset();
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        QuestionDAO questionDAO = new QuestionDAO(connection);
+        OptionDAO optionDAO = new OptionDAO(connection);
+        QuizResultDAO quizResultDAO = new QuizResultDAO(connection);
+        QuizService = new QuizService(questionDAO, optionDAO, quizResultDAO);
+        QuizService.Reset();
+        System.setProperty("quiz.demo", "false");
         SQLite.setConnection(connection);
     }
 

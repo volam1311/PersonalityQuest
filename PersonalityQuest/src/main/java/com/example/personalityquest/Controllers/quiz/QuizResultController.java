@@ -24,12 +24,14 @@ public class QuizResultController implements Initializable {
 
     private QuestService QuestService;
     private UserProfileService UserProfileService;
+    private QuizService QuizService;
     /** Initialises the quiz-results screen
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        QuizService = new QuizService();
         QuestService = new QuestService();
         UserProfileService = new UserProfileService();
         QuizResult result = QuizService.GetResult();

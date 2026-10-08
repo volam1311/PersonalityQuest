@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.personalisation;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quiz.Option;
 import com.example.personalityquest.Model.quiz.Question;
 import com.example.personalityquest.SQLite;
@@ -17,7 +18,7 @@ import java.sql.Statement;
 
 
 /** Stores and retrieves quiz question records */
-public class QuestionDAO {
+public class QuestionDAO extends ParentDAO {
     private static final String CREATE_QUESTIONS = """
             CREATE TABLE IF NOT EXISTS Questions (
             questionID INTEGER PRIMARY KEY,
@@ -26,13 +27,21 @@ public class QuestionDAO {
             questionPrompt TEXT NOT NULL
             )""";
 
-    private QuestionDAO() {
+    private final OptionDAO OptionDAO;
+    public QuestionDAO() {
+        super();
+        OptionDAO = new OptionDAO();
+    }
+
+    public QuestionDAO(Connection connection){
+        super(connection);
+        OptionDAO = new OptionDAO(connection);
     }
 
     /** Inserts the default question catalog
      * @throws SQLException if the catalog cannot be inserted
      */
-    public static void SeedCatalog() throws SQLException {
+    public void SeedCatalog() throws SQLException {
 
         // The Four Realms are Ego, Soul, Self and Mark --> Each Realm contains 3 Archetypes
         // There are four questions for each Realm, for a total of 16 Questions
@@ -69,8 +78,7 @@ public class QuestionDAO {
     /** Creates question tables if they do not already exist
      * @throws SQLException if the tables cannot be created
      */
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_QUESTIONS);
         }
@@ -80,8 +88,7 @@ public class QuestionDAO {
      * @return true when the catalog contains records
      * @throws SQLException if the catalog cannot be checked
      */
-    public static boolean HasCatalog() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public boolean HasCatalog() throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT COUNT(*) FROM Questions")) {
             ResultSet resultSet = statement.executeQuery();
@@ -98,13 +105,12 @@ public class QuestionDAO {
      * @param questionPrompt the text shown to the user
      * @throws SQLException if the question cannot be inserted
      */
-    public static void InsertQuestion(
+    public void InsertQuestion(
             int questionID,
             String realmType,
             String questionType,
             String questionPrompt) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
 
         try (PreparedStatement statement = connection.prepareStatement(
                 """ 
@@ -125,9 +131,8 @@ public class QuestionDAO {
      * @return the questions in the catalog
      * @throws SQLException if the questions cannot be read
      */
-    public static List<Question> GetQuestions() throws SQLException {
+    public List<Question> GetQuestions() throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try(PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * From Questions ORDER BY questionID

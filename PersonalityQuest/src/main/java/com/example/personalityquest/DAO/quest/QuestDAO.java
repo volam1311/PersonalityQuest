@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.SQLite;
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.Locale;
 
 /** Stores and retrieves quest catalog records */
-public class QuestDAO {
+public class QuestDAO extends ParentDAO {
     /**
      * Gets an Array of Quests for the given archetypeId
      * @param archetypeId The archetypeId you want to get quests for
@@ -118,13 +119,12 @@ public class QuestDAO {
     };
 
 
-    private final Connection connection;
     public QuestDAO(){
-        connection = SQLite.getConnection();
+        super();
     }
 
     public QuestDAO(Connection connection){
-        this.connection = connection;
+        super(connection);
     }
 
     private void EnsureTables() throws SQLException {
