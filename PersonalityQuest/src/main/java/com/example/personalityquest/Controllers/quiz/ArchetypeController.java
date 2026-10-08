@@ -75,6 +75,7 @@ public class ArchetypeController implements Initializable {
     private UserProfileService UserProfileService;
     private ArchetypeDAO ArchetypeDAO;
     private QuizService QuizService;
+    private ReflectionPromptDAO ReflectionPromptDAO;
     /** Initialises archetype controls and loads the selected archetype
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
@@ -87,6 +88,7 @@ public class ArchetypeController implements Initializable {
         QuestService = new QuestService();
         UserProfileService = new UserProfileService();
         ArchetypeDAO = new ArchetypeDAO();
+        ReflectionPromptDAO = new ReflectionPromptDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);
         quadrantRealms = Map.of(
                 egoQuadrantButton, "Ego",

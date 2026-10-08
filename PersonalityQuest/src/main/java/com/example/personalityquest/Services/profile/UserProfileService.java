@@ -113,7 +113,7 @@ public class UserProfileService extends ParentService {
         return (double) numerator / denominator;
     }
 
-    private String SafeTrim(String value) {
+    private static String SafeTrim(String value) {
         return value == null ? "" : value.trim();
     }
 

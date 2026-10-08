@@ -61,10 +61,10 @@ public class ProfileController implements Initializable {
     private static final int RADAR_AXIS_COUNT = Archetype.values().length;
     private static final int RADAR_LEVEL_COUNT = 5;
     private static final double RADAR_CENTER_Y_OFFSET = 0;
-    // Fixed pixel radius (not derived from the canvas size) so the chart keeps the same
-    // visual size even though the canvas height was trimmed to remove empty padding.
     private static final double RADAR_RADIUS = 73;
     private static final String[] RADAR_LABELS = BuildRadarLabels();
+    private JournalEntryService JournalEntryService;
+    private WeeklyTaskService WeeklyTaskService;
 
     private static String[] BuildRadarLabels() {
         Archetype[] archetypes = Archetype.values();
@@ -114,6 +114,8 @@ public class ProfileController implements Initializable {
         UserProfileService = new UserProfileService();
         QuizService = new QuizService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);
+        JournalEntryService = new JournalEntryService();
+        WeeklyTaskService = new WeeklyTaskService();
         ConfigureAchievementsGrid(DEFAULT_ACHIEVEMENT_COLUMNS);
         LoadProfile();
 

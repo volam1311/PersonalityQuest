@@ -93,7 +93,7 @@ public class AchievementService {
         }
 
         List<Achievement> achievements = GetAchievementsForEmail(email);
-        List<Integer> recentIds = com.example.personalityquest.DAO.profile.AchievementDAO.GetRecentlyUnlockedIds(email, limit);
+        List<Integer> recentIds = AchievementDAO.GetRecentlyUnlockedIds(email, limit);
 
         Map<Integer, Achievement> achievementsById = new HashMap<>();
         for (Achievement achievement : achievements) {

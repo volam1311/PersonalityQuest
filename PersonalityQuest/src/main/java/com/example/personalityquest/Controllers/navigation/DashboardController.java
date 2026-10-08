@@ -66,6 +66,7 @@ public class DashboardController implements Initializable {
     private static final double RADAR_CENTER_Y_OFFSET = 8;
     private static final double RADAR_RADIUS_RATIO = 0.26;
     private static final String[] RADAR_LABELS = BuildRadarLabels();
+    private AchievementService AchievementService;
 
     private static String[] BuildRadarLabels() {
         Archetype[] archetypes = Archetype.values();
@@ -132,6 +133,7 @@ public class DashboardController implements Initializable {
         EmailService = new EmailService();
         QuizService = new QuizService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
+        AchievementService = new AchievementService();
         ConfigureHistoryList();
         ConfigureWeeklyTaskList();
         ConfigureResponsiveSizing();

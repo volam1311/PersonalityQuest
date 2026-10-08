@@ -4,6 +4,7 @@ import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.profile.Achievement;
 import com.example.personalityquest.Model.profile.UserProfile;
+import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -215,7 +216,7 @@ public class AchievementDAO extends ParentDAO {
      * @return Achievement ids this account has unlocked, most recently unlocked first
      * @throws SQLException Database Access Failure
      */
-    public static List<Integer> GetRecentlyUnlockedIds(String email, int limit) throws SQLException {
+    public List<Integer> GetRecentlyUnlockedIds(String email, int limit) throws SQLException {
         EnsureTables();
         List<Integer> recentIds = new ArrayList<>();
         if (ApplicationManager.isEmpty(email)) {
