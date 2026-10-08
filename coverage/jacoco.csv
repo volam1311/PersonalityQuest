@@ -15,7 +15,6 @@ PersonalityQuest,com.example.personalityquest.Applications.quest,WeeklyTaskRefle
 PersonalityQuest,com.example.personalityquest.Applications.quest,TasksApplication,16,0,0,0,7,0,2,0,2,0
 PersonalityQuest,com.example.personalityquest.DAO.chat,ReflectionFeedbackDAO,2,94,4,8,0,28,4,7,0,5
 PersonalityQuest,com.example.personalityquest,SQLite,19,10,1,1,8,5,2,3,1,3
-PersonalityQuest,com.example.personalityquest,ApplicationManager.ThemeSettings,18,0,2,0,6,0,6,0,5,0
 PersonalityQuest,com.example.personalityquest,ApplicationManager,3,9,0,4,1,1,1,3,1,1
 PersonalityQuest,com.example.personalityquest,AccountRepository,0,29,0,0,0,8,0,1,0,1
 PersonalityQuest,com.example.personalityquest,AppFonts,103,0,8,0,14,0,6,0,2,0
@@ -26,7 +25,6 @@ PersonalityQuest,com.example.personalityquest,Launcher,7,0,0,0,3,0,2,0,2,0
 PersonalityQuest,com.example.personalityquest,ScreenEnum,87,0,0,0,15,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest,ApplicationManager.CurrentAccount,6,5,0,0,3,2,2,2,2,2
 PersonalityQuest,com.example.personalityquest,EnvLoader,121,114,25,19,34,22,19,9,4,2
-PersonalityQuest,com.example.personalityquest,ApplicationManager.ThemeSettings.Theme,15,0,0,0,1,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest.Applications.profile,ProfileApplication,15,0,0,0,7,0,2,0,2,0
 PersonalityQuest,com.example.personalityquest.Controllers.quiz,QuizController,267,0,20,0,60,0,19,0,9,0
 PersonalityQuest,com.example.personalityquest.Controllers.quiz,QuizResultController,128,0,8,0,34,0,9,0,5,0
@@ -50,7 +48,7 @@ PersonalityQuest,com.example.personalityquest.DAO.profile,AchievementDAO,425,0,3
 PersonalityQuest,com.example.personalityquest.DAO.profile,FriendsDAO,3,81,0,2,2,23,1,5,1,4
 PersonalityQuest,com.example.personalityquest.DAO.profile,StreakDAO,5,157,4,14,2,45,5,11,1,6
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,NavBarController.NavDestination,45,0,0,0,2,0,1,0,1,0
-PersonalityQuest,com.example.personalityquest.Controllers.navigation,SettingsController,115,0,18,0,41,0,17,0,8,0
+PersonalityQuest,com.example.personalityquest.Controllers.navigation,SettingsController,158,0,21,0,58,0,21,0,9,0
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,DashboardController.QuestListItem,12,0,0,0,1,0,1,0,1,0
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,DashboardController.new ListCell() {...},119,0,4,0,21,0,4,0,2,0
 PersonalityQuest,com.example.personalityquest.Controllers.navigation,DashboardController.new ListCell() {...},146,0,4,0,23,0,4,0,2,0
@@ -111,5 +109,7 @@ PersonalityQuest,com.example.personalityquest.Services.chat,OpenAiJson,86,146,21
 PersonalityQuest,com.example.personalityquest.Model.auth,EmailDetails,0,59,0,8,0,22,0,9,0,5
 PersonalityQuest,com.example.personalityquest.Model.auth,LoginCache,0,15,0,0,0,6,0,3,0,3
 PersonalityQuest,com.example.personalityquest.Model.auth,User,8,60,0,0,2,25,1,13,1,13
-PersonalityQuest,com.example.personalityquest.Services.navigation,NavigationService,111,0,28,0,42,0,31,0,5,0
+PersonalityQuest,com.example.personalityquest.Services.navigation,NavigationService,127,0,32,0,47,0,34,0,6,0
+PersonalityQuest,com.example.personalityquest.Services.navigation,ThemeService.Theme,0,49,0,0,0,10,0,3,0,3
+PersonalityQuest,com.example.personalityquest.Services.navigation,ThemeService,12,46,0,0,4,15,1,4,1,4
 PersonalityQuest,com.example.personalityquest.Services.quiz,QuizService,274,416,52,44,70,116,42,37,8,23

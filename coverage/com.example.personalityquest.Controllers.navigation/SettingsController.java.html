@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SettingsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Controllers.navigation</a> &gt; <span class="el_source">SettingsController.java</span></div><h1>SettingsController.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Controllers.navigation;
 
-import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.navigation.NavigationService;
+import com.example.personalityquest.Services.navigation.ThemeService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
     @FXML
     private ToggleButton languageEnglishButton, languageVietnameseButton,
             languageSpanishButton;
+    private ThemeService themeService;
 
     /** Initialises the settings controls
      * @param location the location used to resolve relative paths
@@ -35,70 +36,92 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L38">        navBarController.setCurrentDestination(NavBarController.NavDestination.SETTINGS);</span>
-<span class="nc" id="L39">        KeepToggleSelected(backgroundColorGroup);</span>
-<span class="nc" id="L40">        KeepToggleSelected(languageGroup);</span>
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L39">        themeService = NavigationService.GetThemeService();</span>
+<span class="nc" id="L40">        navBarController.setCurrentDestination(NavBarController.NavDestination.SETTINGS);</span>
+<span class="nc" id="L41">        KeepToggleSelected(backgroundColorGroup);</span>
+<span class="nc" id="L42">        KeepToggleSelected(languageGroup);</span>
+<span class="nc" id="L43">        SelectCurrentTheme();</span>
+<span class="nc" id="L44">    }</span>
 
     private void KeepToggleSelected(ToggleGroup group) {
-<span class="nc" id="L44">        group.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -&gt; {</span>
-<span class="nc bnc" id="L45" title="All 4 branches missed.">            if (newToggle == null &amp;&amp; oldToggle != null) {</span>
-<span class="nc" id="L46">                oldToggle.setSelected(true);</span>
+<span class="nc" id="L47">        group.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -&gt; {</span>
+<span class="nc bnc" id="L48" title="All 4 branches missed.">            if (newToggle == null &amp;&amp; oldToggle != null) {</span>
+<span class="nc" id="L49">                oldToggle.setSelected(true);</span>
             }
-<span class="nc" id="L48">        });</span>
-<span class="nc" id="L49">    }</span>
+<span class="nc" id="L51">        });</span>
+<span class="nc" id="L52">    }</span>
 
     @FXML
     private void OnSave() {
-<span class="nc bnc" id="L53" title="All 2 branches missed.">        ApplicationManager.ThemeSettings.Theme theme = backgroundColorGroup.getSelectedToggle() == colorLightButton</span>
-<span class="nc" id="L54">                ? ApplicationManager.ThemeSettings.Theme.LIGHT</span>
-<span class="nc" id="L55">                : ApplicationManager.ThemeSettings.Theme.DARK;</span>
-<span class="nc" id="L56">        ApplicationManager.ThemeSettings.setCurrentTheme(theme);</span>
+        try {
+<span class="nc" id="L57">            themeService.setCurrentTheme(GetSelectedTheme());</span>
+<span class="nc" id="L58">        } catch (IllegalStateException exception) {</span>
+<span class="nc" id="L59">            feedbackLabel.setText(&quot;Could not save the selected theme.&quot;);</span>
+<span class="nc" id="L60">            return;</span>
+<span class="nc" id="L61">        }</span>
 
         try {
-<span class="nc" id="L59">            NavigationService.LoadScreen(ScreenEnum.SETTINGS);</span>
-<span class="nc" id="L60">        } catch (IOException exception) {</span>
-<span class="nc" id="L61">            feedbackLabel.setText(&quot;Saved, but could not refresh the screen.&quot;);</span>
-<span class="nc" id="L62">            return;</span>
-<span class="nc" id="L63">        }</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L64">            NavigationService.LoadScreen(ScreenEnum.SETTINGS);</span>
+<span class="nc" id="L65">        } catch (IOException exception) {</span>
+<span class="nc" id="L66">            feedbackLabel.setText(&quot;Theme saved, but the screen could not refresh.&quot;);</span>
+<span class="nc" id="L67">        }</span>
+<span class="nc" id="L68">    }</span>
 
     @FXML
     private void OnReset() {
-<span class="nc" id="L68">        colorDarkButton.setSelected(true);</span>
-<span class="nc" id="L69">        languageEnglishButton.setSelected(true);</span>
-<span class="nc" id="L70">        feedbackLabel.setText(&quot;Reset to default&quot;);</span>
-<span class="nc" id="L71">        System.out.println(&quot;Reset settings to default&quot;);</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L72">        colorDarkButton.setSelected(true);</span>
+<span class="nc" id="L73">        languageEnglishButton.setSelected(true);</span>
+        try {
+<span class="nc" id="L75">            themeService.setCurrentTheme(ThemeService.Theme.DARK);</span>
+<span class="nc" id="L76">        } catch (IllegalStateException exception) {</span>
+<span class="nc" id="L77">            feedbackLabel.setText(&quot;Could not reset the theme.&quot;);</span>
+<span class="nc" id="L78">            return;</span>
+<span class="nc" id="L79">        }</span>
+        try {
+<span class="nc" id="L81">            NavigationService.LoadScreen(ScreenEnum.SETTINGS);</span>
+<span class="nc" id="L82">        } catch (IOException exception) {</span>
+<span class="nc" id="L83">            feedbackLabel.setText(&quot;Default theme saved, but the screen could not refresh.&quot;);</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">    }</span>
 
-    private String GetSelectedColorName() {
-<span class="nc" id="L75">        Toggle selected = backgroundColorGroup.getSelectedToggle();</span>
+    private void SelectCurrentTheme() {
+<span class="nc bnc" id="L88" title="All 5 branches missed.">        Toggle selectedTheme = switch (themeService.getCurrentTheme()) {</span>
+<span class="nc" id="L89">            case DARK -&gt; colorDarkButton;</span>
+<span class="nc" id="L90">            case DUSK -&gt; colorDuskButton;</span>
+<span class="nc" id="L91">            case FOREST -&gt; colorForestButton;</span>
+<span class="nc" id="L92">            case OCEAN -&gt; colorOceanButton;</span>
+<span class="nc" id="L93">            case LIGHT -&gt; colorLightButton;</span>
+        };
+<span class="nc" id="L95">        backgroundColorGroup.selectToggle(selectedTheme);</span>
+<span class="nc" id="L96">    }</span>
 
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (selected == colorDuskButton) {</span>
-<span class="nc" id="L78">            return &quot;Dusk&quot;;</span>
+    private ThemeService.Theme GetSelectedTheme() {
+<span class="nc" id="L99">        Toggle selected = backgroundColorGroup.getSelectedToggle();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (selected == colorDuskButton) {</span>
+<span class="nc" id="L101">            return ThemeService.Theme.DUSK;</span>
         }
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (selected == colorForestButton) {</span>
-<span class="nc" id="L81">            return &quot;Forest&quot;;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (selected == colorForestButton) {</span>
+<span class="nc" id="L104">            return ThemeService.Theme.FOREST;</span>
         }
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (selected == colorOceanButton) {</span>
-<span class="nc" id="L84">            return &quot;Ocean&quot;;</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (selected == colorOceanButton) {</span>
+<span class="nc" id="L107">            return ThemeService.Theme.OCEAN;</span>
         }
-<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (selected == colorLightButton) {</span>
-<span class="nc" id="L87">            return &quot;Light&quot;;</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (selected == colorLightButton) {</span>
+<span class="nc" id="L110">            return ThemeService.Theme.LIGHT;</span>
         }
-<span class="nc" id="L89">        return &quot;Dark&quot;;</span>
+<span class="nc" id="L112">        return ThemeService.Theme.DARK;</span>
     }
 
     private String GetSelectedLanguageName() {
-<span class="nc" id="L93">        Toggle selected = languageGroup.getSelectedToggle();</span>
+<span class="nc" id="L116">        Toggle selected = languageGroup.getSelectedToggle();</span>
 
-<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (selected == languageVietnameseButton) {</span>
-<span class="nc" id="L96">            return &quot;Tiếng Việt&quot;;</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (selected == languageVietnameseButton) {</span>
+<span class="nc" id="L119">            return &quot;Tiếng Việt&quot;;</span>
         }
-<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (selected == languageSpanishButton) {</span>
-<span class="nc" id="L99">            return &quot;Español&quot;;</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (selected == languageSpanishButton) {</span>
+<span class="nc" id="L122">            return &quot;Español&quot;;</span>
         }
-<span class="nc" id="L101">        return &quot;English&quot;;</span>
+<span class="nc" id="L124">        return &quot;English&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

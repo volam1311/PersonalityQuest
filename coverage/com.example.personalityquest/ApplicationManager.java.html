@@ -59,42 +59,13 @@
 <span class="nc" id="L59">        }</span>
     }
 
-<span class="nc" id="L62">    public static class ThemeSettings {</span>
-<span class="nc" id="L63">        public enum Theme {DARK, LIGHT}</span>
-
-<span class="nc" id="L65">        private static Theme currentTheme = Theme.DARK;</span>
-
-        /**
-         * Returns the active theme
-         * @return the current theme
-         */
-
-        public static Theme getCurrentTheme(){
-<span class="nc" id="L73">            return currentTheme;</span>
-        }
-
-        /** Sets the active theme
-         * @param theme the theme to switch to
-         */
-        public static void setCurrentTheme(Theme theme){
-<span class="nc" id="L80">            currentTheme = theme;</span>
-<span class="nc" id="L81">        }</span>
-
-        /** Returns the CSS file name for the active theme
-         * @return the theme stylesheet's file name
-         */
-        public static String getStylesheetName(){
-<span class="nc bnc" id="L87" title="All 2 branches missed.">            return currentTheme == Theme.LIGHT ? &quot;theme-light.css&quot; : &quot;theme-dark.css&quot;;</span>
-        }
-    }
-
     /**
      * Checks to see if a given string is null or empty
      * @param value the string you want to check
      * @return Whether a given string isEmpty
      */
     public static boolean isEmpty(String value) {
-<span class="fc bfc" id="L97" title="All 4 branches covered.">        return value == null || value.isEmpty();</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">        return value == null || value.isEmpty();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
