@@ -7,40 +7,27 @@ import com.example.personalityquest.Model.quest.JournalEntry;
 import java.sql.SQLException;
 import java.util.List;
 
-public class JournalEntryService {
+<span class="nc" id="L10">public class JournalEntryService {</span>
 
-    private JournalEntryDAO JournalEntryDAO;
-
-    public JournalEntryService(){
-<span class="nc" id="L15">        super();</span>
-<span class="nc" id="L16">        JournalEntryDAO = new JournalEntryDAO();</span>
-<span class="nc" id="L17">    }</span>
-
-    public JournalEntryService(JournalEntryDAO journalEntryDAO){
-<span class="nc" id="L20">        super();</span>
-<span class="nc" id="L21">        this.JournalEntryDAO = journalEntryDAO;</span>
-<span class="nc" id="L22">    }</span>
-
-
-    public JournalEntry AddChallengeEntry(String email, int labourId, String title, String body) throws SQLException{
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L27">            throw new IllegalArgumentException(&quot;Email is Empty&quot;);</span>
+    public static JournalEntry AddChallengeEntry(String email, int labourId, String title, String body) throws SQLException{
+<span class="nc bnc" id="L13" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L14">            throw new IllegalArgumentException(&quot;Email is Empty&quot;);</span>
         }
-<span class="nc" id="L29">        return JournalEntryDAO.Upsert(email, labourId, JournalEntry.EntryType.CHALLENGE, title, body);</span>
+<span class="nc" id="L16">        return JournalEntryDAO.Upsert(email, labourId, JournalEntry.EntryType.CHALLENGE, title, body);</span>
     }
 
-    public List&lt;JournalEntry&gt; GetChallengesForEmail(String email) throws SQLException{
-<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L34">            throw new IllegalArgumentException(&quot;Email is Empty&quot;);</span>
+    public static List&lt;JournalEntry&gt; GetChallengesForEmail(String email) throws SQLException{
+<span class="nc bnc" id="L20" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L21">            throw new IllegalArgumentException(&quot;Email is Empty&quot;);</span>
         }
-<span class="nc" id="L36">        return JournalEntryDAO.GetForEmailAndType(email, JournalEntry.EntryType.CHALLENGE);</span>
+<span class="nc" id="L23">        return JournalEntryDAO.GetForEmailAndType(email, JournalEntry.EntryType.CHALLENGE);</span>
     }
 
-    public boolean HasAddedChallengeForLabour(String email, int labourId) throws SQLException{
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L41">            throw new IllegalArgumentException(&quot;Email is Empty&quot;);</span>
+    public static boolean HasAddedChallengeForLabour(String email, int labourId) throws SQLException{
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L28">            throw new IllegalArgumentException(&quot;Email is Empty&quot;);</span>
         }
-<span class="nc" id="L43">        return JournalEntryDAO.ExistsForLabourAndType(email, labourId, JournalEntry.EntryType.CHALLENGE);</span>
+<span class="nc" id="L30">        return JournalEntryDAO.ExistsForLabourAndType(email, labourId, JournalEntry.EntryType.CHALLENGE);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

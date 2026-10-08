@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OptionDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.personalisation</a> &gt; <span class="el_source">OptionDAO.java</span></div><h1>OptionDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.personalisation;
 
-import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quiz.Option;
 import com.example.personalityquest.SQLite;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Stores and retrieves quiz answer-option records */
-public class OptionDAO extends ParentDAO {
+public class OptionDAO {
     public static final String CREATE_OPTIONS =
             &quot;&quot;&quot;
             CREATE TABLE IF NOT EXISTS Options (
@@ -22,34 +21,30 @@ public class OptionDAO extends ParentDAO {
             option3 TEXT NOT NULL)
             &quot;&quot;&quot;;
 
-    public OptionDAO() {
-<span class="nc" id="L26">        super();</span>
-<span class="nc" id="L27">    }</span>
-
-    public OptionDAO(Connection connection){
-<span class="fc" id="L30">        super(connection);</span>
-<span class="fc" id="L31">    }</span>
+    private OptionDAO() {}
 
 
     /** Creates option tables if they do not already exist
      * @throws SQLException if the tables cannot be created
      */
-    public void EnsureTables() throws SQLException {
-<span class="fc" id="L38">        try (Statement stmt = connection.createStatement()) {</span>
-<span class="fc" id="L39">            stmt.executeUpdate(CREATE_OPTIONS);</span>
+    public static void EnsureTables() throws SQLException {
+<span class="fc" id="L31">        Connection conn = SQLite.getConnection();</span>
+<span class="fc" id="L32">        try (Statement stmt = conn.createStatement()) {</span>
+<span class="fc" id="L33">            stmt.executeUpdate(CREATE_OPTIONS);</span>
         }
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L35">    }</span>
 
     /** Checks whether option catalog records exist
      * @return true when the catalog contains records
      * @throws SQLException if the catalog cannot be checked
      */
-    public boolean HasCatalog() throws SQLException {
-<span class="fc" id="L48">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static boolean HasCatalog() throws SQLException {
+<span class="fc" id="L42">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L43">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;SELECT COUNT(*) FROM Options&quot;
         )) {
-<span class="fc" id="L51">            ResultSet rs = statement.executeQuery();</span>
-<span class="pc bpc" id="L52" title="2 of 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt; 0;</span>
+<span class="fc" id="L46">            ResultSet rs = statement.executeQuery();</span>
+<span class="pc bpc" id="L47" title="2 of 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt; 0;</span>
         }
     }
 
@@ -65,7 +60,7 @@ public class OptionDAO extends ParentDAO {
      * @param option3 the text of the third answer
      * @throws SQLException if the option set cannot be inserted
      */
-    public void InsertOptions(
+    public static void InsertOptions(
             int optionsID,
             int option1Archetype,
             int option2Archetype,
@@ -73,51 +68,53 @@ public class OptionDAO extends ParentDAO {
             String option1,
             String option2,
             String option3) throws SQLException {
-<span class="fc" id="L76">        EnsureTables();</span>
+<span class="fc" id="L71">        EnsureTables();</span>
 
-<span class="fc" id="L78">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="fc" id="L73">        Connection conn = SQLite.getConnection();</span>
+<span class="fc" id="L74">        try (PreparedStatement statement = conn.prepareStatement(</span>
                 &quot;&quot;&quot;
                    INSERT OR IGNORE INTO Options 
                    (optionsID, option1Archetype, option2Archetype, option3Archetype, option1, option2, option3)
                    VALUES (?, ?, ?, ?, ?, ?, ?)
                    &quot;&quot;&quot;)) {
-<span class="fc" id="L84">            statement.setInt(1, optionsID);</span>
-<span class="fc" id="L85">            statement.setInt(2, option1Archetype);</span>
-<span class="fc" id="L86">            statement.setInt(3, option2Archetype);</span>
-<span class="fc" id="L87">            statement.setInt(4, option3Archetype);</span>
-<span class="fc" id="L88">            statement.setString(5, option1);</span>
-<span class="fc" id="L89">            statement.setString(6, option2);</span>
-<span class="fc" id="L90">            statement.setString(7, option3);</span>
+<span class="fc" id="L80">            statement.setInt(1, optionsID);</span>
+<span class="fc" id="L81">            statement.setInt(2, option1Archetype);</span>
+<span class="fc" id="L82">            statement.setInt(3, option2Archetype);</span>
+<span class="fc" id="L83">            statement.setInt(4, option3Archetype);</span>
+<span class="fc" id="L84">            statement.setString(5, option1);</span>
+<span class="fc" id="L85">            statement.setString(6, option2);</span>
+<span class="fc" id="L86">            statement.setString(7, option3);</span>
 
-<span class="fc" id="L92">            statement.executeUpdate();</span>
+<span class="fc" id="L88">            statement.executeUpdate();</span>
         }
 
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L91">    }</span>
 
     /** Returns option records ordered by ID
      * @return the options in the catalog
      * @throws SQLException if the options cannot be read
      */
-    public List&lt;Option&gt; GetOptions() throws SQLException {
-<span class="nc" id="L102">        EnsureTables();</span>
-<span class="nc" id="L103">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static List&lt;Option&gt; GetOptions() throws SQLException {
+<span class="nc" id="L98">        EnsureTables();</span>
+<span class="nc" id="L99">        Connection conn = SQLite.getConnection();</span>
+<span class="nc" id="L100">        try (PreparedStatement statement = conn.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * FROM Options ORDER BY optionsID
                     &quot;&quot;&quot;)){
-<span class="nc" id="L107">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc" id="L108">            List&lt;Option&gt; options = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L110">                options.add(new Option(</span>
-<span class="nc" id="L111">                        rs.getInt(&quot;optionsID&quot;),</span>
-<span class="nc" id="L112">                        rs.getInt(&quot;option1Archetype&quot;),</span>
-<span class="nc" id="L113">                        rs.getInt(&quot;option2Archetype&quot;),</span>
-<span class="nc" id="L114">                        rs.getInt(&quot;option3Archetype&quot;),</span>
-<span class="nc" id="L115">                        rs.getString(&quot;option1&quot;),</span>
-<span class="nc" id="L116">                        rs.getString(&quot;option2&quot;),</span>
-<span class="nc" id="L117">                        rs.getString(&quot;option3&quot;)</span>
+<span class="nc" id="L104">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L105">            List&lt;Option&gt; options = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L107">                options.add(new Option(</span>
+<span class="nc" id="L108">                        rs.getInt(&quot;optionsID&quot;),</span>
+<span class="nc" id="L109">                        rs.getInt(&quot;option1Archetype&quot;),</span>
+<span class="nc" id="L110">                        rs.getInt(&quot;option2Archetype&quot;),</span>
+<span class="nc" id="L111">                        rs.getInt(&quot;option3Archetype&quot;),</span>
+<span class="nc" id="L112">                        rs.getString(&quot;option1&quot;),</span>
+<span class="nc" id="L113">                        rs.getString(&quot;option2&quot;),</span>
+<span class="nc" id="L114">                        rs.getString(&quot;option3&quot;)</span>
                 ));
             }
-<span class="nc" id="L120">            return options;</span>
+<span class="nc" id="L117">            return options;</span>
         }
     }
 
@@ -126,118 +123,119 @@ public class OptionDAO extends ParentDAO {
      * @return the matching option, or null if no option is found
      * @throws SQLException if the option cannot be read
      */
-    public Option GetOptionById(int optionsID) throws SQLException {
-<span class="fc" id="L130">        EnsureTables();</span>
-<span class="fc" id="L131">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static Option GetOptionById(int optionsID) throws SQLException {
+<span class="fc" id="L127">        EnsureTables();</span>
+<span class="fc" id="L128">        Connection conn = SQLite.getConnection();</span>
+<span class="fc" id="L129">        try (PreparedStatement statement = conn.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * FROM Options WHERE optionsID = ?
                     &quot;&quot;&quot;
         )) {
-<span class="fc" id="L136">            statement.setInt(1, optionsID);</span>
-<span class="fc" id="L137">            ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L134">            statement.setInt(1, optionsID);</span>
+<span class="fc" id="L135">            ResultSet rs = statement.executeQuery();</span>
 
-<span class="fc" id="L139">            Option option = null;</span>
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            if (rs.next()) {</span>
-<span class="fc" id="L141">                option = new Option(</span>
-<span class="fc" id="L142">                        rs.getInt(&quot;optionsID&quot;),</span>
-<span class="fc" id="L143">                        rs.getInt(&quot;option1Archetype&quot;),</span>
-<span class="fc" id="L144">                        rs.getInt(&quot;option2Archetype&quot;),</span>
-<span class="fc" id="L145">                        rs.getInt(&quot;option3Archetype&quot;),</span>
-<span class="fc" id="L146">                        rs.getString(&quot;option1&quot;),</span>
-<span class="fc" id="L147">                        rs.getString(&quot;option2&quot;),</span>
-<span class="fc" id="L148">                        rs.getString(&quot;option3&quot;)</span>
+<span class="fc" id="L137">            Option option = null;</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            if (rs.next()) {</span>
+<span class="fc" id="L139">                option = new Option(</span>
+<span class="fc" id="L140">                        rs.getInt(&quot;optionsID&quot;),</span>
+<span class="fc" id="L141">                        rs.getInt(&quot;option1Archetype&quot;),</span>
+<span class="fc" id="L142">                        rs.getInt(&quot;option2Archetype&quot;),</span>
+<span class="fc" id="L143">                        rs.getInt(&quot;option3Archetype&quot;),</span>
+<span class="fc" id="L144">                        rs.getString(&quot;option1&quot;),</span>
+<span class="fc" id="L145">                        rs.getString(&quot;option2&quot;),</span>
+<span class="fc" id="L146">                        rs.getString(&quot;option3&quot;)</span>
                 );
             }
-<span class="fc" id="L151">            return option;</span>
+<span class="fc" id="L149">            return option;</span>
         }
     }
 
     /** Inserts the default option catalog
      * @throws SQLException if the catalog cannot be inserted
      */
-    public void SeedCatalog() throws SQLException {
+    public static void SeedCatalog() throws SQLException {
 
-<span class="fc" id="L160">        InsertOptions(1, 1, 2, 3,</span>
+<span class="fc" id="L158">        InsertOptions(1, 1, 2, 3,</span>
                 &quot;Trust that things will work out and see the good in people&quot;,
                 &quot;Stand alongside others as an equal and belong&quot;,
                 &quot;Face challenges head-on and prove myself through action&quot;);
 
-<span class="fc" id="L165">        InsertOptions(2, 1,2,3,</span>
+<span class="fc" id="L163">        InsertOptions(2, 1,2,3,</span>
                 &quot;Remind everyone of what's still going right and keep faith it will improve&quot;,
                 &quot;Bring people together so no one carries the setback alone&quot;,
                 &quot;Take the hardest part on yourself and lead the push through it&quot;);
 
-<span class="fc" id="L170">        InsertOptions(3, 1,2,3,</span>
+<span class="fc" id="L168">        InsertOptions(3, 1,2,3,</span>
                 &quot;Keep hope alive and believe it can turn out well&quot;,
                 &quot;Pull together with the people around me&quot;,
                 &quot;Meet the fear directly and act anyway&quot;);
 
-<span class="fc" id="L175">        InsertOptions(4, 1, 2,3,</span>
+<span class="fc" id="L173">        InsertOptions(4, 1, 2,3,</span>
                 &quot;Trust that it's fixable and approach it without assuming the worst&quot;,
                 &quot;Rally the group so it's handled fairly, by everyone together&quot;,
                 &quot;Step up and confront it yourself, even if it's daunting&quot;);
 
-<span class="fc" id="L180">        InsertOptions(5, 4, 5, 6,</span>
+<span class="fc" id="L178">        InsertOptions(5, 4, 5, 6,</span>
                 &quot;Support and protect the people who need it&quot;,
                 &quot;Transform how people see what's possible&quot;,
                 &quot;Seek out the truth and understand how things really work&quot;);
 
-<span class="fc" id="L185">        InsertOptions(6, 4, 5, 6,</span>
+<span class="fc" id="L183">        InsertOptions(6, 4, 5, 6,</span>
                 &quot;Comfort them first and make sure they don't face it alone&quot;,
                 &quot;Help them reframe the whole situation so a new way forward opens up&quot;,
                 &quot;Work through it with them calmly until they understand it clearly&quot;);
 
-<span class="fc" id="L190">        InsertOptions(7, 4, 5, 6,</span>
+<span class="fc" id="L188">        InsertOptions(7, 4, 5, 6,</span>
                 &quot;Meet them with warmth and give what they genuinely need&quot;,
                 &quot;Shift their perspective so the whole picture changes&quot;,
                 &quot;Offer clear understanding they can think with&quot;);
 
-<span class="fc" id="L195">        InsertOptions(8, 4, 5, 6,</span>
+<span class="fc" id="L193">        InsertOptions(8, 4, 5, 6,</span>
                 &quot;Tend to the people affected and steady them first&quot;,
                 &quot;Look for the deeper pattern and imagine what it could become&quot;,
                 &quot;Step back, seek the facts, and keep an open mind until it's clear&quot;);
 
-<span class="fc" id="L200">        InsertOptions(9, 7, 8, 9,</span>
+<span class="fc" id="L198">        InsertOptions(9, 7, 8, 9,</span>
                 &quot;Deep connection with the people and things I cherish&quot;,
                 &quot;Lightness, play, and helping others enjoy the moment&quot;,
                 &quot;Discovery and venturing beyond the familiar&quot;);
 
-<span class="fc" id="L205">        InsertOptions(10, 7, 8, 9,</span>
+<span class="fc" id="L203">        InsertOptions(10, 7, 8, 9,</span>
                 &quot;Bring people close and reconnect them to why it matters&quot;,
                 &quot;Break the tension with humour and remind everyone to enjoy the moment&quot;,
                 &quot;Suggest a change of scene or something new to shake off the rut&quot;);
 
-<span class="fc" id="L210">        InsertOptions(11, 7, 8, 9,</span>
+<span class="fc" id="L208">        InsertOptions(11, 7, 8, 9,</span>
                 &quot;Give myself fully to what and whom I love&quot;,
                 &quot;Bring joy and keep things from getting heavy&quot;,
                 &quot;Keep seeking, learning, and finding what's out there&quot;);
 
-<span class="fc" id="L215">        InsertOptions(12, 7, 8, 9,</span>
+<span class="fc" id="L213">        InsertOptions(12, 7, 8, 9,</span>
                 &quot;Spend it fully present with someone who matters to me&quot;,
                 &quot;Do something spontaneous and let the fun lead&quot;,
                 &quot;Head somewhere unfamiliar just to see what's there&quot;);
 
-<span class="fc" id="L220">        InsertOptions(13, 10, 11, 12,</span>
+<span class="fc" id="L218">        InsertOptions(13, 10, 11, 12,</span>
                 &quot;Create something new based on my own experiences&quot;,
                 &quot;Bring structure and stability to a disordered environment&quot;,
                 &quot;Stand up for what is right to combat injustice around me&quot;);
 
-<span class="fc" id="L225">        InsertOptions(14, 10, 11, 12,</span>
+<span class="fc" id="L223">        InsertOptions(14, 10, 11, 12,</span>
                 &quot;Set the old approach aside and design a fresh process from the ground up&quot;,
                 &quot;Find what's already working and bring everything else up to that standard&quot;,
                 &quot;Identify the patterns and behaviours that caused this mess and focus on removing them&quot;);
 
-<span class="fc" id="L230">        InsertOptions(15, 10, 11, 12,</span>
+<span class="fc" id="L228">        InsertOptions(15, 10, 11, 12,</span>
                 &quot;Make something original that carries my own mark&quot;,
                 &quot;Build something dependable that others can rely on&quot;,
                 &quot;Change what is broken so it serves people better&quot;);
 
-<span class="fc" id="L235">        InsertOptions(16, 10, 11, 12,</span>
+<span class="fc" id="L233">        InsertOptions(16, 10, 11, 12,</span>
                 &quot;Build a better alternative and let its results make the case&quot;,
                 &quot;Reform the rule properly through the system so the change holds&quot;,
                 &quot;Pinpoint exactly why the rule fails people and push to strike it out&quot;);
 
-<span class="fc" id="L240">    }</span>
+<span class="fc" id="L238">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

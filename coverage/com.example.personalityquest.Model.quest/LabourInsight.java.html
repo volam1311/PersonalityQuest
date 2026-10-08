@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LabourInsight.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Model.quest</a> &gt; <span class="el_source">LabourInsight.java</span></div><h1>LabourInsight.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Model.quest;
+
+/**
+ * Hardcoded &quot;Theme&quot; and &quot;Growth&quot; copy shown on the Quest Viewer's &quot;Why this Quest?&quot; cover
+ * page. Not persisted to the database - entries line up 1:1 with the labourId values seeded
+ * by {@code QuestDAO} (which in turn match the twelve {@code Archetype} ids).
+ */
+<span class="nc" id="L8">public enum LabourInsight {</span>
+<span class="nc" id="L9">    CERYNEIAN_HIND(1,</span>
+            &quot;Faith — a grounded trust in goodness and hope, held with open eyes rather than illusions.&quot;,
+            &quot;Working through this labour's reflections and challenges practices trusting people and outcomes &quot;
+                    + &quot;without flinching into cynicism or sliding into naivety.&quot;),
+<span class="nc" id="L13">    AUGEAN_STABLES(2,</span>
+            &quot;Solidarity — belonging as an equal, connecting with others on level footing rather than above or below them.&quot;,
+            &quot;These reflections and challenges build the instinct to meet others as equals - bridging in without &quot;
+                    + &quot;losing your own voice or standing apart as superior.&quot;),
+<span class="nc" id="L17">    NEMEAN_LION(3,</span>
+            &quot;Courage — facing fear and acting well in spite of it, meeting danger with judgment rather than being ruled by it.&quot;,
+            &quot;Facing this labour's challenges trains you to act through fear with judgment, rather than freezing &quot;
+                    + &quot;in cowardice or charging in recklessly.&quot;),
+<span class="nc" id="L21">    ERYMANTHIAN_BOAR(4,</span>
+            &quot;Compassion — tending to others' needs with warmth, and knowing where your care ends and their own strength begins.&quot;,
+            &quot;This labour's reflections help you find the line between caring for others and caring for yourself, &quot;
+                    + &quot;so support doesn't tip into smothering or neglect.&quot;),
+<span class="nc" id="L25">    LERNAEAN_HYDRA(5,</span>
+            &quot;Vision — seeing what could be and working with the deeper patterns of things to change them for the better.&quot;,
+            &quot;Working through these challenges sharpens your ability to turn vision into honest change, without &quot;
+                    + &quot;drifting into rigid habits or manipulative shortcuts.&quot;),
+<span class="nc" id="L29">    HESPERIDEAN_APPLES(6,</span>
+            &quot;Wisdom — seeking truth for its own sake and holding it with an open mind.&quot;,
+            &quot;These reflections sharpen your ability to question carefully and act on what you learn, instead of &quot;
+                    + &quot;believing too easily or retreating into pure thought.&quot;),
+<span class="nc" id="L33">    HIPPOLYTAS_GIRDLE(7,</span>
+            &quot;Passion — loving deeply and appreciating beauty, pleasure, and connection.&quot;,
+            &quot;This labour's challenges help you stay open to connection and beauty, without closing off from &quot;
+                    + &quot;feeling or chasing desire without restraint.&quot;),
+<span class="nc" id="L37">    STYMPHALIAN_BIRDS(8,</span>
+            &quot;Witty — bringing lightness, humour, and play; lifting a moment and helping others enjoy being alive.&quot;,
+            &quot;Reflecting on this labour builds the skill of bringing lightness to hard moments, without going &quot;
+                    + &quot;flat or getting your laughs at someone else's expense.&quot;),
+<span class="nc" id="L41">    CATTLE_OF_GERYON(9,</span>
+            &quot;Curiosity — the pull to seek, learn, and discover beyond the familiar.&quot;,
+            &quot;These challenges build the discipline to keep discovering without drifting into restlessness or &quot;
+                    + &quot;settling for comfort.&quot;),
+<span class="nc" id="L45">    CRETAN_BULL(10,</span>
+            &quot;Craftiness — making something new and real, and shaping it with the skill and discipline to see it through.&quot;,
+            &quot;This labour's reflections build the follow-through to turn ideas into finished work, rather than &quot;
+                    + &quot;leaving things unmade or chasing visions that never land.&quot;),
+<span class="nc" id="L49">    MARES_OF_DIOMEDES(11,</span>
+            &quot;Order — bringing structure and stability, and using authority in service of those you're responsible for.&quot;,
+            &quot;Working through these challenges builds the steady authority to bring order without tipping into &quot;
+                    + &quot;control for its own sake.&quot;),
+<span class="nc" id="L53">    CERBERUS(12,</span>
+            &quot;Liberation — breaking what's unjust to free yourself and others, defying corrupt power for something better.&quot;,
+            &quot;This labour's reflections sharpen your instinct to push back against what's unjust, without &quot;
+                    + &quot;sliding into quiet submission or vengeance for its own sake.&quot;);
+
+    private final int labourId;
+    private final String theme;
+    private final String growth;
+
+<span class="nc" id="L62">    LabourInsight(int labourId, String theme, String growth) {</span>
+<span class="nc" id="L63">        this.labourId = labourId;</span>
+<span class="nc" id="L64">        this.theme = theme;</span>
+<span class="nc" id="L65">        this.growth = growth;</span>
+<span class="nc" id="L66">    }</span>
+
+    /** Returns the labourId this insight belongs to
+     * @return the labourId
+     */
+    public int getLabourId() {
+<span class="nc" id="L72">        return labourId;</span>
+    }
+
+    /** Returns the quest's theme, based on its archetype's balanced value
+     * @return the theme text
+     */
+    public String getTheme() {
+<span class="nc" id="L79">        return theme;</span>
+    }
+
+    /** Returns the personal growth gained from completing this labour's reflections and challenges
+     * @return the growth text
+     */
+    public String getGrowth() {
+<span class="nc" id="L86">        return growth;</span>
+    }
+
+    /** Looks up the insight for a labourId
+     * @param labourId the labourId to look up
+     * @return the matching insight, or null if none is defined
+     */
+    public static LabourInsight ForLabourId(int labourId) {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        for (LabourInsight insight : values()) {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (insight.labourId == labourId) {</span>
+<span class="nc" id="L96">                return insight;</span>
+            }
+        }
+<span class="nc" id="L99">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

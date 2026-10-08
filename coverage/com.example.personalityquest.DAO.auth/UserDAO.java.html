@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.auth</a> &gt; <span class="el_source">UserDAO.java</span></div><h1>UserDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.auth;
 
-import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.DAO.SQLiteConnection;
 import com.example.personalityquest.Model.auth.User;
 
@@ -13,7 +12,7 @@ import java.sql.Statement;
 /**
  * SQLite persistence for {@link User} against the existing Accounts table.
  */
-public class UserDAO extends ParentDAO implements IUserDAO {
+public class UserDAO implements IUserDAO {
     private static final String CREATE_TABLE = &quot;&quot;&quot;
             CREATE TABLE IF NOT EXISTS Accounts (
                 email TEXT NOT NULL,
@@ -37,20 +36,21 @@ public class UserDAO extends ParentDAO implements IUserDAO {
     private static final String SELECT_USER =
             &quot;SELECT rowid AS id, email, userName, firstName, lastName, password FROM Accounts WHERE rowid = ?&quot;;
 
+    private final Connection connection;
 
     /**
      * Creates a DAO that uses the shared application database connection.
      */
     public UserDAO() {
-<span class="nc" id="L45">        super();</span>
+<span class="nc" id="L45">        this(SQLiteConnection.getInstance());</span>
 <span class="nc" id="L46">    }</span>
 
     /**
      * Creates a DAO that uses the given connection. Used by tests with an in-memory database.
      * @param connection The JDBC connection to use
      */
-    public UserDAO(Connection connection) {
-<span class="fc" id="L53">        super(connection);</span>
+<span class="fc" id="L52">    public UserDAO(Connection connection) {</span>
+<span class="fc" id="L53">        this.connection = connection;</span>
 <span class="fc" id="L54">        createTable();</span>
 <span class="fc" id="L55">    }</span>
 

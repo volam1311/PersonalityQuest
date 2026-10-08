@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuizResultDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.quest</a> &gt; <span class="el_source">QuizResultDAO.java</span></div><h1>QuizResultDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.quest;
 
-import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.QuizResult;
 import com.example.personalityquest.SQLite;
@@ -10,7 +9,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuizResultDAO extends ParentDAO {
+<span class="nc" id="L12">public class QuizResultDAO {</span>
     private static final String CREATE_QUIZ_RESULTS = &quot;&quot;&quot;
             CREATE TABLE IF NOT EXISTS QuizResults(
             accountEmail TEXT PRIMARY KEY,
@@ -19,18 +18,12 @@ public class QuizResultDAO extends ParentDAO {
             )
             &quot;&quot;&quot;;
 
-    public QuizResultDAO(){
-<span class="nc" id="L23">        super();</span>
-<span class="nc" id="L24">    }</span>
-
-    public QuizResultDAO(Connection connection){
-<span class="fc" id="L27">        super(connection);</span>
-<span class="fc" id="L28">    }</span>
-    public void EnsureTables() throws SQLException {
-<span class="fc" id="L30">        try (Statement statement = connection.createStatement()){</span>
-<span class="fc" id="L31">            statement.execute(CREATE_QUIZ_RESULTS);</span>
+    public static void EnsureTables() throws SQLException {
+<span class="fc" id="L22">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L23">        try (Statement statement = connection.createStatement()){</span>
+<span class="fc" id="L24">            statement.execute(CREATE_QUIZ_RESULTS);</span>
         }
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L26">    }</span>
 
     /**
      * Save or overwrites the logged in accounts quiz results
@@ -39,16 +32,17 @@ public class QuizResultDAO extends ParentDAO {
      * @throws SQLException Database Access Failure
      */
 
-    public void SaveResult(String email, QuizResult result) throws SQLException {
-<span class="fc" id="L43">        EnsureTables();</span>
-<span class="fc" id="L44">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static void SaveResult(String email, QuizResult result) throws SQLException {
+<span class="fc" id="L36">        EnsureTables();</span>
+<span class="fc" id="L37">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L38">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;INSERT OR REPLACE INTO QuizResults (accountEmail, winnerArchetypeId, scores) VALUES (?, ?, ?)&quot;)){
-<span class="fc" id="L46">            statement.setString(1, email);</span>
-<span class="fc" id="L47">            statement.setInt(2, result.archetype().getArchetypeId());</span>
-<span class="fc" id="L48">            statement.setString(3, SerializeScores(result));</span>
-<span class="fc" id="L49">            statement.executeUpdate();</span>
+<span class="fc" id="L40">            statement.setString(1, email);</span>
+<span class="fc" id="L41">            statement.setInt(2, result.archetype().getArchetypeId());</span>
+<span class="fc" id="L42">            statement.setString(3, SerializeScores(result));</span>
+<span class="fc" id="L43">            statement.executeUpdate();</span>
         }
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L45">    }</span>
 
     /**
      * Loads the signed in accounts stored quiz result.
@@ -57,20 +51,21 @@ public class QuizResultDAO extends ParentDAO {
      * @throws SQLException Database Access Failure
      */
 
-    public QuizResult LoadResult(String email) throws SQLException {
-<span class="nc" id="L61">        EnsureTables();</span>
-<span class="nc" id="L62">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot; +</span>
+    public static QuizResult LoadResult(String email) throws SQLException {
+<span class="nc" id="L55">        EnsureTables();</span>
+<span class="nc" id="L56">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L57">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot; +</span>
                 &quot;SELECT * FROM QuizResults WHERE accountEmail = ?&quot;)){
-<span class="nc" id="L64">            statement.setString(1, email);</span>
-<span class="nc" id="L65">            ResultSet rs = statement .executeQuery();</span>
-<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (!rs.next()) {</span>
-<span class="nc" id="L67">                return null;</span>
+<span class="nc" id="L59">            statement.setString(1, email);</span>
+<span class="nc" id="L60">            ResultSet rs = statement .executeQuery();</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (!rs.next()) {</span>
+<span class="nc" id="L62">                return null;</span>
             }
 
-<span class="nc" id="L70">            Archetype winner = ArchetypeById(rs.getInt(&quot;winnerArchetypeId&quot;));</span>
-<span class="nc" id="L71">            Map&lt;Archetype, Integer&gt; scores = DeserializeScores(rs.getString(&quot;scores&quot;));</span>
-<span class="nc" id="L72">            return new QuizResult(winner, scores);</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">        }</span>
+<span class="nc" id="L65">            Archetype winner = ArchetypeById(rs.getInt(&quot;winnerArchetypeId&quot;));</span>
+<span class="nc" id="L66">            Map&lt;Archetype, Integer&gt; scores = DeserializeScores(rs.getString(&quot;scores&quot;));</span>
+<span class="nc" id="L67">            return new QuizResult(winner, scores);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        }</span>
     }
 
     /**
@@ -79,16 +74,16 @@ public class QuizResultDAO extends ParentDAO {
      */
 
     public static String SerializeScores(QuizResult result){
-<span class="fc" id="L82">        StringBuilder builder = new StringBuilder(&quot;[&quot;);</span>
-<span class="fc" id="L83">        Archetype[] archetypes = Archetype.values();</span>
-<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (int index = 0; index &lt; archetypes.length; index++) {</span>
-<span class="fc bfc" id="L85" title="All 2 branches covered.">            if (index &gt; 0){</span>
-<span class="fc" id="L86">                builder.append(&quot;,&quot;);</span>
+<span class="fc" id="L77">        StringBuilder builder = new StringBuilder(&quot;[&quot;);</span>
+<span class="fc" id="L78">        Archetype[] archetypes = Archetype.values();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (int index = 0; index &lt; archetypes.length; index++) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (index &gt; 0){</span>
+<span class="fc" id="L81">                builder.append(&quot;,&quot;);</span>
             }
-<span class="fc" id="L88">            Integer score = result.scores().get(archetypes[index]);</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">            builder.append(score == null ? 0 : score);</span>
+<span class="fc" id="L83">            Integer score = result.scores().get(archetypes[index]);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">            builder.append(score == null ? 0 : score);</span>
         }
-<span class="fc" id="L91">        return builder.append(&quot;]&quot;).toString();</span>
+<span class="fc" id="L86">        return builder.append(&quot;]&quot;).toString();</span>
     }
 
     /**
@@ -96,23 +91,23 @@ public class QuizResultDAO extends ParentDAO {
      */
 
     private static Map&lt;Archetype, Integer&gt; DeserializeScores(String raw){
-<span class="nc" id="L99">        Map&lt;Archetype, Integer&gt; scores = new EnumMap&lt;&gt;(Archetype.class);</span>
-<span class="nc" id="L100">        String trimmed = raw.replace(&quot;[&quot;, &quot;&quot;).replace(&quot;]&quot;, &quot;&quot;);</span>
-<span class="nc" id="L101">        String[] parts = trimmed.split(&quot;,&quot;);</span>
-<span class="nc" id="L102">        Archetype[] archetypes = Archetype.values();</span>
-<span class="nc bnc" id="L103" title="All 4 branches missed.">        for (int index = 0; index &lt; archetypes.length &amp;&amp; index &lt;parts.length; index++) {</span>
-<span class="nc" id="L104">            scores.put(archetypes[index], Integer.parseInt(parts[index].trim()));</span>
+<span class="nc" id="L94">        Map&lt;Archetype, Integer&gt; scores = new EnumMap&lt;&gt;(Archetype.class);</span>
+<span class="nc" id="L95">        String trimmed = raw.replace(&quot;[&quot;, &quot;&quot;).replace(&quot;]&quot;, &quot;&quot;);</span>
+<span class="nc" id="L96">        String[] parts = trimmed.split(&quot;,&quot;);</span>
+<span class="nc" id="L97">        Archetype[] archetypes = Archetype.values();</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">        for (int index = 0; index &lt; archetypes.length &amp;&amp; index &lt;parts.length; index++) {</span>
+<span class="nc" id="L99">            scores.put(archetypes[index], Integer.parseInt(parts[index].trim()));</span>
         }
-<span class="nc" id="L106">        return scores;</span>
+<span class="nc" id="L101">        return scores;</span>
     }
 
     public static Archetype ArchetypeById(int archetypeId){
-<span class="nc bnc" id="L110" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()){</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
-<span class="nc" id="L112">                return archetype;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()){</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
+<span class="nc" id="L107">                return archetype;</span>
             }
         }
-<span class="nc" id="L115">        throw new IllegalArgumentException(&quot;Archetype with id &quot; + archetypeId + &quot; not found&quot;);</span>
+<span class="nc" id="L110">        throw new IllegalArgumentException(&quot;Archetype with id &quot; + archetypeId + &quot; not found&quot;);</span>
     }
 
 

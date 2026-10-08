@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReflectionPromptDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.quest</a> &gt; <span class="el_source">ReflectionPromptDAO.java</span></div><h1>ReflectionPromptDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.quest;
 
-import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.ReflectionPrompt;
 import com.example.personalityquest.SQLite;
 
@@ -8,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReflectionPromptDAO extends ParentDAO {
+public class ReflectionPromptDAO {
     private static final String CREATE_REFLECTION_PROMPTS = &quot;&quot;&quot;
             CREATE TABLE IF NOT EXISTS ReflectionPrompts (
             reflectionId INTEGER PRIMARY KEY,
@@ -20,129 +19,127 @@ public class ReflectionPromptDAO extends ParentDAO {
             )
             &quot;&quot;&quot;;
 
-    public ReflectionPromptDAO() {
-<span class="nc" id="L24">        super();</span>
-<span class="nc" id="L25">    }</span>
-    public ReflectionPromptDAO(Connection connection) {
-<span class="nc" id="L27">        super(connection);</span>
-<span class="nc" id="L28">    }</span>
+    private ReflectionPromptDAO() {    }
 
-
-    public void EnsureTables() throws SQLException {
-<span class="nc" id="L32">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L33">            statement.executeUpdate(CREATE_REFLECTION_PROMPTS);</span>
+    public static void EnsureTables() throws SQLException {
+<span class="nc" id="L25">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L26">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L27">            statement.executeUpdate(CREATE_REFLECTION_PROMPTS);</span>
         }
-<span class="nc" id="L35">    }</span>
+<span class="nc" id="L29">    }</span>
 
-    public boolean HasCatalog() throws SQLException {
-<span class="nc" id="L38">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static boolean HasCatalog() throws SQLException {
+<span class="nc" id="L32">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L33">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;SELECT COUNT(*) FROM ReflectionPrompts&quot;)){
-<span class="nc" id="L40">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc bnc" id="L41" title="All 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt; 0;</span>
+<span class="nc" id="L35">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L36" title="All 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt; 0;</span>
         }
     }
 
-    public void InsertReflectionPrompt(int reflectionId, int labourId, String reactionType,
+    public static void InsertReflectionPrompt(int reflectionId, int labourId, String reactionType,
                                               String name, String prompt, String overview) throws SQLException {
-<span class="nc" id="L47">        EnsureTables();</span>
-<span class="nc" id="L48">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="nc" id="L42">        EnsureTables();</span>
+<span class="nc" id="L43">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L44">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     INSERT OR IGNORE INTO ReflectionPrompts(reflectionId, labourId, reactionType, name, prompt, overview)
                     VALUES (? , ? , ? , ? , ? , ?)
                     &quot;&quot;&quot;)){
-<span class="nc" id="L53">            statement.setInt(1, reflectionId);</span>
-<span class="nc" id="L54">            statement.setInt(2, labourId);</span>
-<span class="nc" id="L55">            statement.setString(3, reactionType);</span>
-<span class="nc" id="L56">            statement.setString(4, name);</span>
-<span class="nc" id="L57">            statement.setString(5, prompt);</span>
-<span class="nc" id="L58">            statement.setString(6, overview);</span>
-<span class="nc" id="L59">            statement.executeUpdate();</span>
+<span class="nc" id="L49">            statement.setInt(1, reflectionId);</span>
+<span class="nc" id="L50">            statement.setInt(2, labourId);</span>
+<span class="nc" id="L51">            statement.setString(3, reactionType);</span>
+<span class="nc" id="L52">            statement.setString(4, name);</span>
+<span class="nc" id="L53">            statement.setString(5, prompt);</span>
+<span class="nc" id="L54">            statement.setString(6, overview);</span>
+<span class="nc" id="L55">            statement.executeUpdate();</span>
         }
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L57">    }</span>
 
     /**
      * @param labourId The labour to fetch reflection prompts for
      * @return The labour's reflection prompts, empty if none are seeded
      * @throws SQLException Database Access Failure
      */
-    public List&lt;ReflectionPrompt&gt; GetReflectionPromptsForLabourId(int labourId) throws SQLException {
-<span class="nc" id="L69">        EnsureTables();</span>
-<span class="nc" id="L70">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static List&lt;ReflectionPrompt&gt; GetReflectionPromptsForLabourId(int labourId) throws SQLException {
+<span class="nc" id="L65">        EnsureTables();</span>
+<span class="nc" id="L66">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L67">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * FROM ReflectionPrompts 
                     WHERE labourId = ?
                     ORDER BY reflectionId 
                     &quot;&quot;&quot;)) {
-<span class="nc" id="L76">            statement.setInt(1, labourId);</span>
-<span class="nc" id="L77">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc" id="L78">            List&lt;ReflectionPrompt&gt; reflectionPrompts = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L80">                reflectionPrompts.add(new ReflectionPrompt(</span>
-<span class="nc" id="L81">                        rs.getInt(&quot;reflectionId&quot;),</span>
-<span class="nc" id="L82">                        rs.getInt(&quot;labourId&quot;),</span>
-<span class="nc" id="L83">                        rs.getString(&quot;reactionType&quot;),</span>
-<span class="nc" id="L84">                        rs.getString(&quot;name&quot;),</span>
-<span class="nc" id="L85">                        rs.getString(&quot;prompt&quot;),</span>
-<span class="nc" id="L86">                        rs.getString(&quot;overview&quot;)</span>
+<span class="nc" id="L73">            statement.setInt(1, labourId);</span>
+<span class="nc" id="L74">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L75">            List&lt;ReflectionPrompt&gt; reflectionPrompts = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L77">                reflectionPrompts.add(new ReflectionPrompt(</span>
+<span class="nc" id="L78">                        rs.getInt(&quot;reflectionId&quot;),</span>
+<span class="nc" id="L79">                        rs.getInt(&quot;labourId&quot;),</span>
+<span class="nc" id="L80">                        rs.getString(&quot;reactionType&quot;),</span>
+<span class="nc" id="L81">                        rs.getString(&quot;name&quot;),</span>
+<span class="nc" id="L82">                        rs.getString(&quot;prompt&quot;),</span>
+<span class="nc" id="L83">                        rs.getString(&quot;overview&quot;)</span>
                 ));
             }
-<span class="nc" id="L89">            return reflectionPrompts;</span>
+<span class="nc" id="L86">            return reflectionPrompts;</span>
         }
     }
 
-    public void SeedCatalog() throws SQLException {
+    public static void SeedCatalog() throws SQLException {
 
-<span class="nc" id="L95">        InsertReflectionPrompt(23, 12, &quot;DEFICIT&quot;,</span>
+<span class="nc" id="L92">        InsertReflectionPrompt(23, 12, &quot;DEFICIT&quot;,</span>
                 &quot;Deficit Reflection&quot;,
                 &quot;Deficit Reflection Prompt&quot;,
                 &quot;Going forward, write a few honest sentences about how this went for you.&quot;);
 
-<span class="nc" id="L100">        InsertReflectionPrompt(24, 12, &quot;EXCESS&quot;,</span>
+<span class="nc" id="L97">        InsertReflectionPrompt(24, 12, &quot;EXCESS&quot;,</span>
                 &quot;Excess Reflection&quot;,
                 &quot;Excess Reflection Prompt&quot;,
                 &quot;Going forward, write a few honest sentences about how this went for you.&quot;);
 
         // Hero prompts
-<span class="nc" id="L106">        InsertReflectionPrompt(25, 3, &quot;EXCESS&quot;,</span>
+<span class="nc" id="L103">        InsertReflectionPrompt(25, 3, &quot;EXCESS&quot;,</span>
                 &quot;Charging In Blind&quot;,
                 &quot;Hercules felt the fear and acted anyway, but he didn't charge blindly — he changed the ground to one where he could win (Options 1 &amp; 2). Think to a time you met something head-on without stopping to choose your approach, and it cost you more than it needed to. Looking back, what would picking your ground first have changed?&quot;,
                 &quot;Going forward, where is one challenge you can meet with the same drive, but aimed with better judgment?&quot;);
 
-<span class="nc" id="L111">        InsertReflectionPrompt(26, 3, &quot;DEFICIT&quot;,</span>
+<span class="nc" id="L108">        InsertReflectionPrompt(26, 3, &quot;DEFICIT&quot;,</span>
                 &quot;Holding Back&quot;,
                 &quot;Hercules' weapons failed him, and the safe choice was to hold back and wait — but the lion would never have tired, and waiting would have cost him the fight (Option 3). Think to a time you held at a safe distance from something you knew you had to face — what were you waiting to feel before you'd commit?&quot;,
                 &quot;Going forward, when is holding back genuine good judgment, and when is it just fear choosing for you?&quot;);
 
         // Everyman prompts
-<span class="nc" id="L117">        InsertReflectionPrompt(21, 2, &quot;DEFICIT&quot;,</span>
+<span class="nc" id="L114">        InsertReflectionPrompt(21, 2, &quot;DEFICIT&quot;,</span>
                 &quot;Letting the Crowd Decide&quot;,
                 &quot;Hercules had done the work and earned the reward, yet the easy path was to let a king's word and a hometown crowd settle it without a fight (Option 3). Think to a time you let the group decide for you because standing out felt too costly — what were you afraid would happen if you spoke up?&quot;,
                 &quot;Going forward, when does keeping the peace genuinely serve everyone, and when is it just your own voice going missing?&quot;);
 
-<span class="nc" id="L122">        InsertReflectionPrompt(22, 2, &quot;EXCESS&quot;,</span>
+<span class="nc" id="L119">        InsertReflectionPrompt(22, 2, &quot;EXCESS&quot;,</span>
                 &quot;Winning Above Others&quot;,
                 &quot;Hercules did the labour fairly and in the open, with a witness beside him — his strength was never meant to stand above the bond of a fair deal (Options 1 &amp; 2). Think to a time you leaned on your own standing to win something, when the fairer path was to let the truth or another voice carry it. Looking back, what did relying on your own weight cost the people around you?&quot;,
                 &quot;Going forward, where is one place you can win with others on level footing rather than above them?&quot;);
 
         // Innocent prompts
-<span class="nc" id="L128">        InsertReflectionPrompt(27, 1, &quot;EXCESS&quot;,</span>
+<span class="nc" id="L125">        InsertReflectionPrompt(27, 1, &quot;EXCESS&quot;,</span>
                 &quot;The Hasty Commitment&quot;,
                 &quot;You already have a massive twelve labours to complete, and there is no telling how much extra work these gods will make you do (Option 1). But in the same light, Apollo and Artemis are too the children of Zeus, and there is no telling how they will react to this slight (Option 2). Think to a time you hastily chose or committed to a path that felt \&quot;simple\&quot; yet had unforeseen consequences — how did you hope this would turn out, and what made you skip past the warning signs there was more involved?&quot;,
                 &quot;Going forward, what is one specific thing you can do to keep your hopefulness grounded — to hold onto faith that things can work out, while still seeing clearly what you're doing?&quot;);
 
-<span class="nc" id="L133">        InsertReflectionPrompt(28, 1, &quot;DEFICIT&quot;,</span>
+<span class="nc" id="L130">        InsertReflectionPrompt(28, 1, &quot;DEFICIT&quot;,</span>
                 &quot;Bracing for the Worst&quot;,
                 &quot;Think to the challenge, where you chose to brace for conflict instead of trusting it might go well — like squaring up to Artemis to win the hind. What past experience taught you to expect the worst here, and what were you protecting yourself from?&quot;,
                 &quot;Going forward, when is that caution genuinely serving you, and when is it costing you good outcomes you never gave a chance?&quot;);
-<span class="nc" id="L137">    }</span>
+<span class="nc" id="L134">    }</span>
 
-    public void ResetAndSeedCatalog() throws SQLException {
-<span class="nc" id="L140">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L141">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L142">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS ReflectionPrompts&quot;);</span>
+    public static void ResetAndSeedCatalog() throws SQLException {
+<span class="nc" id="L137">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L138">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L139">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS ReflectionPrompts&quot;);</span>
         }
-<span class="nc" id="L144">        EnsureTables();</span>
-<span class="nc" id="L145">        SeedCatalog();</span>
-<span class="nc" id="L146">    }</span>
+<span class="nc" id="L141">        EnsureTables();</span>
+<span class="nc" id="L142">        SeedCatalog();</span>
+<span class="nc" id="L143">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

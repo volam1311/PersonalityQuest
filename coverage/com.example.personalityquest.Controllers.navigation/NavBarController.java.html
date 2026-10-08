@@ -65,47 +65,43 @@ import java.util.ResourceBundle;
 <span class="nc" id="L65">    private final ChangeListener&lt;Number&gt; sceneWidthListener =</span>
 <span class="nc" id="L66">            (observable, oldWidth, newWidth) -&gt; ApplyResponsiveLayout(newWidth.doubleValue());</span>
 
-    private EmailService EmailService;
-    private QuizService QuizService;
     /** Initialises the navigation bar controls
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L76">        EmailService = new EmailService();</span>
-<span class="nc" id="L77">        QuizService = new QuizService();</span>
-<span class="nc" id="L78">        SetProfileLabel();</span>
-<span class="nc" id="L79">        SetSidebarExpanded(sidebarExpanded);</span>
+<span class="nc" id="L74">        SetProfileLabel();</span>
+<span class="nc" id="L75">        SetSidebarExpanded(sidebarExpanded);</span>
 
-<span class="nc" id="L81">        sidebar.sceneProperty().addListener((observable, oldScene, newScene) -&gt; {</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">            if (oldScene != null) {</span>
-<span class="nc" id="L83">                oldScene.widthProperty().removeListener(sceneWidthListener);</span>
+<span class="nc" id="L77">        sidebar.sceneProperty().addListener((observable, oldScene, newScene) -&gt; {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (oldScene != null) {</span>
+<span class="nc" id="L79">                oldScene.widthProperty().removeListener(sceneWidthListener);</span>
             }
-<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (newScene != null) {</span>
-<span class="nc" id="L86">                newScene.widthProperty().addListener(sceneWidthListener);</span>
-<span class="nc" id="L87">                ApplyResponsiveLayout(newScene.getWidth());</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (newScene != null) {</span>
+<span class="nc" id="L82">                newScene.widthProperty().addListener(sceneWidthListener);</span>
+<span class="nc" id="L83">                ApplyResponsiveLayout(newScene.getWidth());</span>
             }
-<span class="nc" id="L89">        });</span>
+<span class="nc" id="L85">        });</span>
 
-<span class="nc" id="L91">        Platform.runLater(() -&gt; {</span>
-<span class="nc" id="L92">            Scene scene = sidebar.getScene();</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (scene != null) {</span>
-<span class="nc" id="L94">                ApplyResponsiveLayout(scene.getWidth());</span>
+<span class="nc" id="L87">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L88">            Scene scene = sidebar.getScene();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            if (scene != null) {</span>
+<span class="nc" id="L90">                ApplyResponsiveLayout(scene.getWidth());</span>
             }
-<span class="nc" id="L96">        });</span>
+<span class="nc" id="L92">        });</span>
 
-<span class="nc" id="L98">        ApplyQuizProgressLock();</span>
-<span class="nc" id="L99">    }</span>
+<span class="nc" id="L94">        ApplyQuizProgressLock();</span>
+<span class="nc" id="L95">    }</span>
 
     /** Marks the supplied destination as selected
      * @param destination the destination to select
      */
     public void setCurrentDestination(NavDestination destination) {
-<span class="nc" id="L105">        currentDestination = destination;</span>
-<span class="nc" id="L106">        ApplySelectedStyles();</span>
-<span class="nc" id="L107">        ApplyQuizProgressLock();</span>
-<span class="nc" id="L108">    }</span>
+<span class="nc" id="L101">        currentDestination = destination;</span>
+<span class="nc" id="L102">        ApplySelectedStyles();</span>
+<span class="nc" id="L103">        ApplyQuizProgressLock();</span>
+<span class="nc" id="L104">    }</span>
 
     /**
      * While the user is mid-attempt on the archetype quiz (just clicked &quot;Redo Quiz&quot;, or is
@@ -114,11 +110,11 @@ import java.util.ResourceBundle;
      * and picking it abandons the in-progress attempt (see OnNavigationClick).
      */
     private void ApplyQuizProgressLock() {
-<span class="nc" id="L117">        boolean quizInProgress = QuizService.HasActiveAttempt();</span>
-<span class="nc" id="L118">        homeButton.setDisable(quizInProgress);</span>
-<span class="nc" id="L119">        tasksButton.setDisable(quizInProgress);</span>
-<span class="nc" id="L120">        questViewerButton.setDisable(quizInProgress);</span>
-<span class="nc" id="L121">    }</span>
+<span class="nc" id="L113">        boolean quizInProgress = QuizService.HasActiveAttempt();</span>
+<span class="nc" id="L114">        homeButton.setDisable(quizInProgress);</span>
+<span class="nc" id="L115">        tasksButton.setDisable(quizInProgress);</span>
+<span class="nc" id="L116">        questViewerButton.setDisable(quizInProgress);</span>
+<span class="nc" id="L117">    }</span>
 
     private static final String NAV_FLASH_STYLE = &quot;nav-flash&quot;;
 
@@ -127,192 +123,192 @@ import java.util.ResourceBundle;
      * attention to it (e.g. after adding a challenge or submitting a reflection).
      */
     public void FlashTasksButtonOnce() {
-<span class="nc" id="L130">        FlashButtonOnce(tasksButton);</span>
-<span class="nc" id="L131">    }</span>
+<span class="nc" id="L126">        FlashButtonOnce(tasksButton);</span>
+<span class="nc" id="L127">    }</span>
 
     private void FlashButtonOnce(Button button) {
-<span class="nc" id="L134">        Timeline timeline = new Timeline(</span>
-<span class="nc" id="L135">                new KeyFrame(Duration.ZERO, event -&gt; button.getStyleClass().add(NAV_FLASH_STYLE)),</span>
-<span class="nc" id="L136">                new KeyFrame(Duration.seconds(0.25), event -&gt; button.getStyleClass().remove(NAV_FLASH_STYLE)),</span>
-<span class="nc" id="L137">                new KeyFrame(Duration.seconds(0.5), event -&gt; button.getStyleClass().add(NAV_FLASH_STYLE)),</span>
-<span class="nc" id="L138">                new KeyFrame(Duration.seconds(0.75), event -&gt; button.getStyleClass().remove(NAV_FLASH_STYLE)));</span>
-<span class="nc" id="L139">        timeline.play();</span>
-<span class="nc" id="L140">    }</span>
+<span class="nc" id="L130">        Timeline timeline = new Timeline(</span>
+<span class="nc" id="L131">                new KeyFrame(Duration.ZERO, event -&gt; button.getStyleClass().add(NAV_FLASH_STYLE)),</span>
+<span class="nc" id="L132">                new KeyFrame(Duration.seconds(0.25), event -&gt; button.getStyleClass().remove(NAV_FLASH_STYLE)),</span>
+<span class="nc" id="L133">                new KeyFrame(Duration.seconds(0.5), event -&gt; button.getStyleClass().add(NAV_FLASH_STYLE)),</span>
+<span class="nc" id="L134">                new KeyFrame(Duration.seconds(0.75), event -&gt; button.getStyleClass().remove(NAV_FLASH_STYLE)));</span>
+<span class="nc" id="L135">        timeline.play();</span>
+<span class="nc" id="L136">    }</span>
 
     private void SetProfileLabel() {
-<span class="nc" id="L143">        String profileText = &quot;Profile&quot;;</span>
+<span class="nc" id="L139">        String profileText = &quot;Profile&quot;;</span>
         try {
-<span class="nc" id="L145">            EmailDetails emailDetails = EmailService.GetDetailsForEmail(</span>
-<span class="nc" id="L146">                    ApplicationManager.CurrentAccount.getCurrentEmail());</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">            if (emailDetails != null) {</span>
-<span class="nc" id="L148">                profileText = emailDetails.getUserName();</span>
+<span class="nc" id="L141">            EmailDetails emailDetails = EmailService.GetDetailsForEmail(</span>
+<span class="nc" id="L142">                    ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (emailDetails != null) {</span>
+<span class="nc" id="L144">                profileText = emailDetails.getUserName();</span>
             }
-<span class="nc" id="L150">        } catch (Exception exception) {</span>
-<span class="nc" id="L151">            profileText = &quot;Profile&quot;;</span>
-<span class="nc" id="L152">        }</span>
-<span class="nc" id="L153">        profileNameLabel.setText(profileText);</span>
-<span class="nc" id="L154">    }</span>
+<span class="nc" id="L146">        } catch (Exception exception) {</span>
+<span class="nc" id="L147">            profileText = &quot;Profile&quot;;</span>
+<span class="nc" id="L148">        }</span>
+<span class="nc" id="L149">        profileNameLabel.setText(profileText);</span>
+<span class="nc" id="L150">    }</span>
 
     private void ApplyResponsiveLayout(double width) {
-<span class="nc bnc" id="L157" title="All 2 branches missed.">        if (width &lt;= 0) {</span>
-<span class="nc" id="L158">            return;</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if (width &lt;= 0) {</span>
+<span class="nc" id="L154">            return;</span>
         }
 
-<span class="nc bnc" id="L161" title="All 2 branches missed.">        if (width &gt;= SIDEBAR_BREAKPOINT) {</span>
-<span class="nc" id="L162">            sidebarOverride = false;</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        if (width &gt;= SIDEBAR_BREAKPOINT) {</span>
+<span class="nc" id="L158">            sidebarOverride = false;</span>
         }
 
-<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (!sidebarOverride) {</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">            sidebarExpanded = width &gt;= SIDEBAR_BREAKPOINT;</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        if (!sidebarOverride) {</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">            sidebarExpanded = width &gt;= SIDEBAR_BREAKPOINT;</span>
         }
 
-<span class="nc" id="L169">        SetSidebarExpanded(sidebarExpanded);</span>
-<span class="nc" id="L170">    }</span>
+<span class="nc" id="L165">        SetSidebarExpanded(sidebarExpanded);</span>
+<span class="nc" id="L166">    }</span>
 
     private void SetSidebarExpanded(boolean expanded) {
-<span class="nc bnc" id="L173" title="All 2 branches missed.">        double width = expanded ? EXPANDED_SIDEBAR_WIDTH : COLLAPSED_SIDEBAR_WIDTH;</span>
-<span class="nc" id="L174">        sidebar.setMinWidth(width);</span>
-<span class="nc" id="L175">        sidebar.setPrefWidth(width);</span>
-<span class="nc" id="L176">        sidebar.setMaxWidth(width);</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        double width = expanded ? EXPANDED_SIDEBAR_WIDTH : COLLAPSED_SIDEBAR_WIDTH;</span>
+<span class="nc" id="L170">        sidebar.setMinWidth(width);</span>
+<span class="nc" id="L171">        sidebar.setPrefWidth(width);</span>
+<span class="nc" id="L172">        sidebar.setMaxWidth(width);</span>
 
-<span class="nc" id="L178">        sidebar.getStyleClass().remove(&quot;sidebar-collapsed&quot;);</span>
-<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (!expanded) {</span>
-<span class="nc" id="L180">            sidebar.getStyleClass().add(&quot;sidebar-collapsed&quot;);</span>
+<span class="nc" id="L174">        sidebar.getStyleClass().remove(&quot;sidebar-collapsed&quot;);</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">        if (!expanded) {</span>
+<span class="nc" id="L176">            sidebar.getStyleClass().add(&quot;sidebar-collapsed&quot;);</span>
         }
 
-<span class="nc" id="L183">        brandLabel.setManaged(expanded);</span>
-<span class="nc" id="L184">        brandLabel.setVisible(expanded);</span>
+<span class="nc" id="L179">        brandLabel.setManaged(expanded);</span>
+<span class="nc" id="L180">        brandLabel.setVisible(expanded);</span>
 
-<span class="nc" id="L186">        SetLabelVisible(homeNavLabel, expanded);</span>
+<span class="nc" id="L182">        SetLabelVisible(homeNavLabel, expanded);</span>
         //SetLabelVisible(questsNavLabel, expanded);
-<span class="nc" id="L188">        SetLabelVisible(questViewerNavLabel, expanded);</span>
-<span class="nc" id="L189">        SetLabelVisible(tasksNavLabel, expanded);</span>
-<span class="nc" id="L190">        SetLabelVisible(archetypeNavLabel, expanded);</span>
-<span class="nc" id="L191">        SetLabelVisible(profileNameLabel, expanded);</span>
-<span class="nc" id="L192">        SetLabelVisible(logoutNavLabel, expanded);</span>
+<span class="nc" id="L184">        SetLabelVisible(questViewerNavLabel, expanded);</span>
+<span class="nc" id="L185">        SetLabelVisible(tasksNavLabel, expanded);</span>
+<span class="nc" id="L186">        SetLabelVisible(archetypeNavLabel, expanded);</span>
+<span class="nc" id="L187">        SetLabelVisible(profileNameLabel, expanded);</span>
+<span class="nc" id="L188">        SetLabelVisible(logoutNavLabel, expanded);</span>
 
-<span class="nc" id="L194">        SetButtonDimensions(homeButton, expanded, NAV_BUTTON_HEIGHT);</span>
+<span class="nc" id="L190">        SetButtonDimensions(homeButton, expanded, NAV_BUTTON_HEIGHT);</span>
         //SetButtonDimensions(questsButton, expanded, NAV_BUTTON_HEIGHT);
-<span class="nc" id="L196">        SetButtonDimensions(questViewerButton, expanded, NAV_BUTTON_HEIGHT);</span>
-<span class="nc" id="L197">        SetButtonDimensions(tasksButton, expanded, NAV_BUTTON_HEIGHT);</span>
-<span class="nc" id="L198">        SetButtonDimensions(archetypeButton, expanded, NAV_BUTTON_HEIGHT);</span>
-<span class="nc" id="L199">        SetButtonDimensions(profileButton, expanded, PROFILE_BUTTON_HEIGHT);</span>
-<span class="nc" id="L200">        SetButtonDimensions(logoutButton, expanded, PROFILE_BUTTON_HEIGHT);</span>
-<span class="nc" id="L201">        SetButtonDimensions(menuButton, false, COMPACT_BUTTON_SIZE);</span>
-<span class="nc" id="L202">        SetButtonDimensions(settingsButton, false, COMPACT_BUTTON_SIZE);</span>
-<span class="nc" id="L203">    }</span>
+<span class="nc" id="L192">        SetButtonDimensions(questViewerButton, expanded, NAV_BUTTON_HEIGHT);</span>
+<span class="nc" id="L193">        SetButtonDimensions(tasksButton, expanded, NAV_BUTTON_HEIGHT);</span>
+<span class="nc" id="L194">        SetButtonDimensions(archetypeButton, expanded, NAV_BUTTON_HEIGHT);</span>
+<span class="nc" id="L195">        SetButtonDimensions(profileButton, expanded, PROFILE_BUTTON_HEIGHT);</span>
+<span class="nc" id="L196">        SetButtonDimensions(logoutButton, expanded, PROFILE_BUTTON_HEIGHT);</span>
+<span class="nc" id="L197">        SetButtonDimensions(menuButton, false, COMPACT_BUTTON_SIZE);</span>
+<span class="nc" id="L198">        SetButtonDimensions(settingsButton, false, COMPACT_BUTTON_SIZE);</span>
+<span class="nc" id="L199">    }</span>
 
     private void SetButtonDimensions(Button button, boolean expanded, double expandedHeight) {
-<span class="nc bnc" id="L206" title="All 2 branches missed.">        boolean square = !expanded;</span>
-<span class="nc bnc" id="L207" title="All 2 branches missed.">        double width = square ? COMPACT_BUTTON_SIZE : EXPANDED_BUTTON_PREF_WIDTH;</span>
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        double height = square ? COMPACT_BUTTON_SIZE : expandedHeight;</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        boolean square = !expanded;</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">        double width = square ? COMPACT_BUTTON_SIZE : EXPANDED_BUTTON_PREF_WIDTH;</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        double height = square ? COMPACT_BUTTON_SIZE : expandedHeight;</span>
 
-<span class="nc bnc" id="L210" title="All 2 branches missed.">        button.setMinWidth(square ? COMPACT_BUTTON_SIZE : 0);</span>
-<span class="nc" id="L211">        button.setPrefWidth(width);</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">        button.setMaxWidth(square ? COMPACT_BUTTON_SIZE : Double.MAX_VALUE);</span>
-<span class="nc" id="L213">        button.setMinHeight(height);</span>
-<span class="nc" id="L214">        button.setPrefHeight(height);</span>
-<span class="nc" id="L215">        button.setMaxHeight(height);</span>
-<span class="nc bnc" id="L216" title="All 2 branches missed.">        button.setPadding(square ? Insets.EMPTY : new Insets(0, 12, 0, 12));</span>
-<span class="nc bnc" id="L217" title="All 2 branches missed.">        button.setAlignment(square ? Pos.CENTER : Pos.CENTER_LEFT);</span>
-<span class="nc" id="L218">    }</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        button.setMinWidth(square ? COMPACT_BUTTON_SIZE : 0);</span>
+<span class="nc" id="L207">        button.setPrefWidth(width);</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        button.setMaxWidth(square ? COMPACT_BUTTON_SIZE : Double.MAX_VALUE);</span>
+<span class="nc" id="L209">        button.setMinHeight(height);</span>
+<span class="nc" id="L210">        button.setPrefHeight(height);</span>
+<span class="nc" id="L211">        button.setMaxHeight(height);</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        button.setPadding(square ? Insets.EMPTY : new Insets(0, 12, 0, 12));</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        button.setAlignment(square ? Pos.CENTER : Pos.CENTER_LEFT);</span>
+<span class="nc" id="L214">    }</span>
 
     private void SetLabelVisible(Label label, boolean visible) {
-<span class="nc" id="L221">        label.setManaged(visible);</span>
-<span class="nc" id="L222">        label.setVisible(visible);</span>
-<span class="nc" id="L223">    }</span>
+<span class="nc" id="L217">        label.setManaged(visible);</span>
+<span class="nc" id="L218">        label.setVisible(visible);</span>
+<span class="nc" id="L219">    }</span>
 
     private void ApplySelectedStyles() {
-<span class="nc" id="L226">        homeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L222">        homeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
         //questsButton.getStyleClass().remove(SELECTED_NAV_BUTTON);
-<span class="nc" id="L228">        questViewerButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
-<span class="nc" id="L229">        tasksButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
-<span class="nc" id="L230">        archetypeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
-<span class="nc" id="L231">        profileButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
-<span class="nc" id="L232">        settingsButton.getStyleClass().remove(SELECTED_SETTINGS_BUTTON);</span>
+<span class="nc" id="L224">        questViewerButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L225">        tasksButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L226">        archetypeButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L227">        profileButton.getStyleClass().remove(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L228">        settingsButton.getStyleClass().remove(SELECTED_SETTINGS_BUTTON);</span>
 
-<span class="nc bnc" id="L234" title="All 2 branches missed.">        if (currentDestination == null) {</span>
-<span class="nc" id="L235">            return;</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">        if (currentDestination == null) {</span>
+<span class="nc" id="L231">            return;</span>
         }
 
-<span class="nc bnc" id="L238" title="All 7 branches missed.">        switch (currentDestination) {</span>
-<span class="nc" id="L239">            case HOME -&gt; homeButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
+<span class="nc bnc" id="L234" title="All 7 branches missed.">        switch (currentDestination) {</span>
+<span class="nc" id="L235">            case HOME -&gt; homeButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
             //case QUESTS -&gt; questsButton.getStyleClass().add(SELECTED_NAV_BUTTON);
-<span class="nc" id="L241">            case QUEST_VIEWER -&gt;  questViewerButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
-<span class="nc" id="L242">            case TASKS -&gt; tasksButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
-<span class="nc" id="L243">            case ARCHETYPE -&gt; archetypeButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
-<span class="nc" id="L244">            case PROFILE -&gt; profileButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
-<span class="nc" id="L245">            case SETTINGS -&gt; settingsButton.getStyleClass().add(SELECTED_SETTINGS_BUTTON);</span>
+<span class="nc" id="L237">            case QUEST_VIEWER -&gt;  questViewerButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L238">            case TASKS -&gt; tasksButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L239">            case ARCHETYPE -&gt; archetypeButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L240">            case PROFILE -&gt; profileButton.getStyleClass().add(SELECTED_NAV_BUTTON);</span>
+<span class="nc" id="L241">            case SETTINGS -&gt; settingsButton.getStyleClass().add(SELECTED_SETTINGS_BUTTON);</span>
         }
-<span class="nc" id="L247">    }</span>
+<span class="nc" id="L243">    }</span>
 
     @FXML
     private void OnMenuToggle() {
-<span class="nc" id="L251">        sidebarOverride = true;</span>
-<span class="nc bnc" id="L252" title="All 2 branches missed.">        sidebarExpanded = !sidebarExpanded;</span>
-<span class="nc" id="L253">        SetSidebarExpanded(sidebarExpanded);</span>
-<span class="nc" id="L254">    }</span>
+<span class="nc" id="L247">        sidebarOverride = true;</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        sidebarExpanded = !sidebarExpanded;</span>
+<span class="nc" id="L249">        SetSidebarExpanded(sidebarExpanded);</span>
+<span class="nc" id="L250">    }</span>
 
     @FXML
     private void OnNavigationClick(ActionEvent event) throws IOException {
-<span class="nc" id="L258">        Button button = (Button) event.getSource();</span>
-<span class="nc" id="L259">        NavDestination destination = DestinationFor(button);</span>
+<span class="nc" id="L254">        Button button = (Button) event.getSource();</span>
+<span class="nc" id="L255">        NavDestination destination = DestinationFor(button);</span>
 
-<span class="nc bnc" id="L261" title="All 4 branches missed.">        if (destination == null || destination == currentDestination) {</span>
-<span class="nc" id="L262">            return;</span>
+<span class="nc bnc" id="L257" title="All 4 branches missed.">        if (destination == null || destination == currentDestination) {</span>
+<span class="nc" id="L258">            return;</span>
         }
 
-<span class="nc" id="L265">        Stage stage = (Stage) sidebar.getScene().getWindow();</span>
-<span class="nc bnc" id="L266" title="All 8 branches missed.">        switch (destination) {</span>
-<span class="nc" id="L267">            case HOME -&gt; NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
-<span class="nc" id="L268">            case QUESTS -&gt; NavigationService.LoadScreen(ScreenEnum.QUESTS);</span>
-<span class="nc" id="L269">            case QUEST_VIEWER -&gt; NavigationService.LoadScreen(ScreenEnum.QUEST_VIEWER);</span>
-<span class="nc" id="L270">            case TASKS -&gt; NavigationService.LoadScreen(ScreenEnum.TASKS);</span>
-<span class="nc" id="L271">            case SETTINGS -&gt; NavigationService.LoadScreen(ScreenEnum.SETTINGS);</span>
-<span class="nc" id="L272">            case PROFILE -&gt; NavigationService.LoadScreen(ScreenEnum.PROFILE);</span>
+<span class="nc" id="L261">        Stage stage = (Stage) sidebar.getScene().getWindow();</span>
+<span class="nc bnc" id="L262" title="All 8 branches missed.">        switch (destination) {</span>
+<span class="nc" id="L263">            case HOME -&gt; NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
+<span class="nc" id="L264">            case QUESTS -&gt; NavigationService.LoadScreen(ScreenEnum.QUESTS);</span>
+<span class="nc" id="L265">            case QUEST_VIEWER -&gt; NavigationService.LoadScreen(ScreenEnum.QUEST_VIEWER);</span>
+<span class="nc" id="L266">            case TASKS -&gt; NavigationService.LoadScreen(ScreenEnum.TASKS);</span>
+<span class="nc" id="L267">            case SETTINGS -&gt; NavigationService.LoadScreen(ScreenEnum.SETTINGS);</span>
+<span class="nc" id="L268">            case PROFILE -&gt; NavigationService.LoadScreen(ScreenEnum.PROFILE);</span>
             case ARCHETYPE -&gt; {
-<span class="nc bnc" id="L274" title="All 2 branches missed.">                if (QuizService.HasActiveAttempt()) {</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">                if (QuizService.HasActiveAttempt()) {</span>
                     // Abandon the in-progress attempt - nothing has been saved yet, so this
                     // reverts the user straight back to whatever result they had before.
-<span class="nc" id="L277">                    QuizService.Reset();</span>
+<span class="nc" id="L273">                    QuizService.Reset();</span>
                 }
-<span class="nc" id="L279">                NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);</span>
+<span class="nc" id="L275">                NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);</span>
             }
         }
-<span class="nc" id="L282">    }</span>
+<span class="nc" id="L278">    }</span>
 
     @FXML
     private void OnLogout() throws IOException {
-<span class="nc" id="L286">        LoginCacheService loginCacheService = new LoginCacheService();</span>
-<span class="nc" id="L287">        loginCacheService.ClearCache();</span>
-<span class="nc" id="L288">        ApplicationManager.CurrentAccount.setCurrentEmail(&quot;&quot;);</span>
+<span class="nc" id="L282">        LoginCacheService loginCacheService = new LoginCacheService();</span>
+<span class="nc" id="L283">        loginCacheService.ClearCache();</span>
+<span class="nc" id="L284">        ApplicationManager.CurrentAccount.setCurrentEmail(&quot;&quot;);</span>
 
-<span class="nc" id="L290">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);</span>
-<span class="nc" id="L291">    }</span>
+<span class="nc" id="L286">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);</span>
+<span class="nc" id="L287">    }</span>
 
     private NavDestination DestinationFor(Button button) {
-<span class="nc bnc" id="L294" title="All 2 branches missed.">        if (button == homeButton) {</span>
-<span class="nc" id="L295">            return NavDestination.HOME;</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">        if (button == homeButton) {</span>
+<span class="nc" id="L291">            return NavDestination.HOME;</span>
         }
 //        if (button == questsButton) {
 //            return NavDestination.QUESTS;
 //        }
-<span class="nc bnc" id="L300" title="All 2 branches missed.">        if (button == questViewerButton) {</span>
-<span class="nc" id="L301">            return NavDestination.QUEST_VIEWER;</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">        if (button == questViewerButton) {</span>
+<span class="nc" id="L297">            return NavDestination.QUEST_VIEWER;</span>
         }
-<span class="nc bnc" id="L303" title="All 2 branches missed.">        if (button == tasksButton) {</span>
-<span class="nc" id="L304">            return NavDestination.TASKS;</span>
+<span class="nc bnc" id="L299" title="All 2 branches missed.">        if (button == tasksButton) {</span>
+<span class="nc" id="L300">            return NavDestination.TASKS;</span>
         }
-<span class="nc bnc" id="L306" title="All 2 branches missed.">        if (button == archetypeButton) {</span>
-<span class="nc" id="L307">            return NavDestination.ARCHETYPE;</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">        if (button == archetypeButton) {</span>
+<span class="nc" id="L303">            return NavDestination.ARCHETYPE;</span>
         }
-<span class="nc bnc" id="L309" title="All 2 branches missed.">        if (button == settingsButton) {</span>
-<span class="nc" id="L310">            return NavDestination.SETTINGS;</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">        if (button == settingsButton) {</span>
+<span class="nc" id="L306">            return NavDestination.SETTINGS;</span>
         }
-<span class="nc bnc" id="L312" title="All 2 branches missed.">        if (button == profileButton) {</span>
-<span class="nc" id="L313">            return NavDestination.PROFILE;</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">        if (button == profileButton) {</span>
+<span class="nc" id="L309">            return NavDestination.PROFILE;</span>
         }
-<span class="nc" id="L315">        return null;</span>
+<span class="nc" id="L311">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

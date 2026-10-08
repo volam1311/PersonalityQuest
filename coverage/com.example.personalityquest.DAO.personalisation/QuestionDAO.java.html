@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuestionDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.personalisation</a> &gt; <span class="el_source">QuestionDAO.java</span></div><h1>QuestionDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.personalisation;
 
-import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quiz.Option;
 import com.example.personalityquest.Model.quiz.Question;
 import com.example.personalityquest.SQLite;
@@ -18,7 +17,7 @@ import java.sql.Statement;
 
 
 /** Stores and retrieves quiz question records */
-public class QuestionDAO extends ParentDAO {
+public class QuestionDAO {
     private static final String CREATE_QUESTIONS = &quot;&quot;&quot;
             CREATE TABLE IF NOT EXISTS Questions (
             questionID INTEGER PRIMARY KEY,
@@ -27,21 +26,13 @@ public class QuestionDAO extends ParentDAO {
             questionPrompt TEXT NOT NULL
             )&quot;&quot;&quot;;
 
-    private final OptionDAO OptionDAO;
-    public QuestionDAO() {
-<span class="nc" id="L32">        super();</span>
-<span class="nc" id="L33">        OptionDAO = new OptionDAO();</span>
-<span class="nc" id="L34">    }</span>
-
-    public QuestionDAO(Connection connection){
-<span class="fc" id="L37">        super(connection);</span>
-<span class="fc" id="L38">        OptionDAO = new OptionDAO(connection);</span>
-<span class="fc" id="L39">    }</span>
+    private QuestionDAO() {
+    }
 
     /** Inserts the default question catalog
      * @throws SQLException if the catalog cannot be inserted
      */
-    public void SeedCatalog() throws SQLException {
+    public static void SeedCatalog() throws SQLException {
 
         // The Four Realms are Ego, Soul, Self and Mark --&gt; Each Realm contains 3 Archetypes
         // There are four questions for each Realm, for a total of 16 Questions
@@ -54,45 +45,47 @@ public class QuestionDAO extends ParentDAO {
         // &lt;Short&gt; = questionID(1,2, 5,6, 9,10, 13,14)
         // &lt;Medium&gt; = questionID(1,2,3, 5,6,7, 9,10,11, 13,14,15)
 
-<span class="fc" id="L57">        InsertQuestion(1, &quot;Ego&quot;, &quot;Direct&quot;, &quot;How do you want to move through the world?&quot;);</span>
-<span class="fc" id="L58">        InsertQuestion(2, &quot;Ego&quot;, &quot;Scenario&quot;, &quot;Your group is facing a setback and morale is low. How do you respond?&quot;);</span>
-<span class="fc" id="L59">        InsertQuestion(3, &quot;Ego&quot;, &quot;Direct&quot;, &quot;What matters most to you when things get hard?&quot;);</span>
-<span class="fc" id="L60">        InsertQuestion(4, &quot;Ego&quot;, &quot;Scenario&quot;, &quot;Something has gone wrong and no one wants to deal with it. What do you do?&quot;);</span>
+<span class="fc" id="L48">        InsertQuestion(1, &quot;Ego&quot;, &quot;Direct&quot;, &quot;How do you want to move through the world?&quot;);</span>
+<span class="fc" id="L49">        InsertQuestion(2, &quot;Ego&quot;, &quot;Scenario&quot;, &quot;Your group is facing a setback and morale is low. How do you respond?&quot;);</span>
+<span class="fc" id="L50">        InsertQuestion(3, &quot;Ego&quot;, &quot;Direct&quot;, &quot;What matters most to you when things get hard?&quot;);</span>
+<span class="fc" id="L51">        InsertQuestion(4, &quot;Ego&quot;, &quot;Scenario&quot;, &quot;Something has gone wrong and no one wants to deal with it. What do you do?&quot;);</span>
 
-<span class="fc" id="L62">        InsertQuestion(5, &quot;Soul&quot;, &quot;Direct&quot;, &quot;How do you want to make a difference?&quot;);</span>
-<span class="fc" id="L63">        InsertQuestion(6, &quot;Soul&quot;, &quot;Scenario&quot;, &quot;A friend comes to you overwhelmed by a problem they can't see their way out of. How do you respond?&quot;);</span>
-<span class="fc" id="L64">        InsertQuestion(7, &quot;Soul&quot;, &quot;Direct&quot;, &quot;What matters most to you in how you help others?&quot;);</span>
-<span class="fc" id="L65">        InsertQuestion(8, &quot;Soul&quot;, &quot;Scenario&quot;, &quot;You're handed a situation nobody fully understands and everyone's anxious about. What's your instinct?&quot;);</span>
+<span class="fc" id="L53">        InsertQuestion(5, &quot;Soul&quot;, &quot;Direct&quot;, &quot;How do you want to make a difference?&quot;);</span>
+<span class="fc" id="L54">        InsertQuestion(6, &quot;Soul&quot;, &quot;Scenario&quot;, &quot;A friend comes to you overwhelmed by a problem they can't see their way out of. How do you respond?&quot;);</span>
+<span class="fc" id="L55">        InsertQuestion(7, &quot;Soul&quot;, &quot;Direct&quot;, &quot;What matters most to you in how you help others?&quot;);</span>
+<span class="fc" id="L56">        InsertQuestion(8, &quot;Soul&quot;, &quot;Scenario&quot;, &quot;You're handed a situation nobody fully understands and everyone's anxious about. What's your instinct?&quot;);</span>
 
-<span class="fc" id="L67">        InsertQuestion(9, &quot;Self&quot;, &quot;Direct&quot;, &quot;What draws you toward life?&quot;);</span>
-<span class="fc" id="L68">        InsertQuestion(10, &quot;Self&quot;, &quot;Scenario&quot;, &quot;A long, gruelling stretch of work has left everyone drained. How do you lift things?&quot;);</span>
-<span class="fc" id="L69">        InsertQuestion(11, &quot;Self&quot;, &quot;Direct&quot;, &quot;What matters most to you in how you spend your days?&quot;);</span>
-<span class="fc" id="L70">        InsertQuestion(12, &quot;Self&quot;, &quot;Scenario&quot;, &quot;You've got a rare free day and no obligations. What's your pull?&quot;);</span>
+<span class="fc" id="L58">        InsertQuestion(9, &quot;Self&quot;, &quot;Direct&quot;, &quot;What draws you toward life?&quot;);</span>
+<span class="fc" id="L59">        InsertQuestion(10, &quot;Self&quot;, &quot;Scenario&quot;, &quot;A long, gruelling stretch of work has left everyone drained. How do you lift things?&quot;);</span>
+<span class="fc" id="L60">        InsertQuestion(11, &quot;Self&quot;, &quot;Direct&quot;, &quot;What matters most to you in how you spend your days?&quot;);</span>
+<span class="fc" id="L61">        InsertQuestion(12, &quot;Self&quot;, &quot;Scenario&quot;, &quot;You've got a rare free day and no obligations. What's your pull?&quot;);</span>
 
-<span class="fc" id="L72">        InsertQuestion(13, &quot;Mark&quot;, &quot;Direct&quot;, &quot;How do you want to leave your mark on the world? (direct)&quot;);</span>
-<span class="fc" id="L73">        InsertQuestion(14, &quot;Mark&quot;, &quot;Scenario&quot;, &quot;Your team has inherited a project that's a complete mess — no clear direction, and the old way of doing things plainly isn't working. What's your instinct?&quot;);</span>
-<span class="fc" id="L74">        InsertQuestion(15, &quot;Mark&quot;, &quot;Direct&quot;, &quot;What matters most to you in the work you do?&quot;);</span>
-<span class="fc" id="L75">        InsertQuestion(16, &quot;Mark&quot;, &quot;Scenario&quot;, &quot;You discover a long-standing rule at work is holding good people back, but plenty of others just quietly follow it. What do you do? (scenario)&quot;);</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L63">        InsertQuestion(13, &quot;Mark&quot;, &quot;Direct&quot;, &quot;How do you want to leave your mark on the world? (direct)&quot;);</span>
+<span class="fc" id="L64">        InsertQuestion(14, &quot;Mark&quot;, &quot;Scenario&quot;, &quot;Your team has inherited a project that's a complete mess — no clear direction, and the old way of doing things plainly isn't working. What's your instinct?&quot;);</span>
+<span class="fc" id="L65">        InsertQuestion(15, &quot;Mark&quot;, &quot;Direct&quot;, &quot;What matters most to you in the work you do?&quot;);</span>
+<span class="fc" id="L66">        InsertQuestion(16, &quot;Mark&quot;, &quot;Scenario&quot;, &quot;You discover a long-standing rule at work is holding good people back, but plenty of others just quietly follow it. What do you do? (scenario)&quot;);</span>
+<span class="fc" id="L67">    }</span>
 
     /** Creates question tables if they do not already exist
      * @throws SQLException if the tables cannot be created
      */
-    public void EnsureTables() throws SQLException {
-<span class="fc" id="L82">        try (Statement statement = connection.createStatement()) {</span>
-<span class="fc" id="L83">            statement.executeUpdate(CREATE_QUESTIONS);</span>
+    public static void EnsureTables() throws SQLException {
+<span class="fc" id="L73">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L74">        try (Statement statement = connection.createStatement()) {</span>
+<span class="fc" id="L75">            statement.executeUpdate(CREATE_QUESTIONS);</span>
         }
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L77">    }</span>
 
     /** Checks whether question catalog records exist
      * @return true when the catalog contains records
      * @throws SQLException if the catalog cannot be checked
      */
-    public boolean HasCatalog() throws SQLException {
-<span class="fc" id="L92">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static boolean HasCatalog() throws SQLException {
+<span class="fc" id="L84">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L85">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;SELECT COUNT(*) FROM Questions&quot;)) {
-<span class="fc" id="L94">            ResultSet resultSet = statement.executeQuery();</span>
-<span class="pc bpc" id="L95" title="2 of 4 branches missed.">            return resultSet.next() &amp;&amp; resultSet.getInt(1) &gt; 0;</span>
+<span class="fc" id="L87">            ResultSet resultSet = statement.executeQuery();</span>
+<span class="pc bpc" id="L88" title="2 of 4 branches missed.">            return resultSet.next() &amp;&amp; resultSet.getInt(1) &gt; 0;</span>
         }
     }
 
@@ -105,53 +98,55 @@ public class QuestionDAO extends ParentDAO {
      * @param questionPrompt the text shown to the user
      * @throws SQLException if the question cannot be inserted
      */
-    public void InsertQuestion(
+    public static void InsertQuestion(
             int questionID,
             String realmType,
             String questionType,
             String questionPrompt) throws SQLException {
-<span class="fc" id="L113">        EnsureTables();</span>
+<span class="fc" id="L106">        EnsureTables();</span>
+<span class="fc" id="L107">        Connection connection = SQLite.getConnection();</span>
 
-<span class="fc" id="L115">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="fc" id="L109">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot; 
                     INSERT OR IGNORE INTO Questions
                     (questionID, realmType, questionType, questionPrompt)
                     VALUES (?, ?, ?, ?) 
                     &quot;&quot;&quot;)) {
-<span class="fc" id="L121">            statement.setInt(1, questionID);</span>
-<span class="fc" id="L122">            statement.setString(2, realmType);</span>
-<span class="fc" id="L123">            statement.setString(3, questionType);</span>
-<span class="fc" id="L124">            statement.setString(4, questionPrompt);</span>
+<span class="fc" id="L115">            statement.setInt(1, questionID);</span>
+<span class="fc" id="L116">            statement.setString(2, realmType);</span>
+<span class="fc" id="L117">            statement.setString(3, questionType);</span>
+<span class="fc" id="L118">            statement.setString(4, questionPrompt);</span>
 
-<span class="fc" id="L126">            statement.executeUpdate();</span>
+<span class="fc" id="L120">            statement.executeUpdate();</span>
         }
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L122">    }</span>
 
     /** Returns question records ordered by ID
      * @return the questions in the catalog
      * @throws SQLException if the questions cannot be read
      */
-    public List&lt;Question&gt; GetQuestions() throws SQLException {
-<span class="fc" id="L135">        EnsureTables();</span>
-<span class="fc" id="L136">        try(PreparedStatement statement = connection.prepareStatement(</span>
+    public static List&lt;Question&gt; GetQuestions() throws SQLException {
+<span class="fc" id="L129">        EnsureTables();</span>
+<span class="fc" id="L130">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L131">        try(PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * From Questions ORDER BY questionID
                     &quot;&quot;&quot;)){
-<span class="fc" id="L140">            ResultSet rs = statement.executeQuery();</span>
-<span class="fc" id="L141">            List&lt;Question&gt; questions = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L142" title="All 2 branches covered.">            while (rs.next()) {</span>
-<span class="fc" id="L143">                int questionID = rs.getInt(&quot;questionID&quot;);</span>
+<span class="fc" id="L135">            ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L136">            List&lt;Question&gt; questions = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L138">                int questionID = rs.getInt(&quot;questionID&quot;);</span>
                 //List&lt;Option&gt; options = OptionDAO.GetOptionsById(questionID);
-<span class="fc" id="L145">                Option options = OptionDAO.GetOptionById(questionID);</span>
-<span class="fc" id="L146">                questions.add(new Question(</span>
-<span class="fc" id="L147">                        rs.getInt(&quot;questionID&quot;),</span>
-<span class="fc" id="L148">                        rs.getString(&quot;realmType&quot;),</span>
-<span class="fc" id="L149">                        rs.getString(&quot;questionType&quot;),</span>
-<span class="fc" id="L150">                        rs.getString(&quot;questionPrompt&quot;),</span>
+<span class="fc" id="L140">                Option options = OptionDAO.GetOptionById(questionID);</span>
+<span class="fc" id="L141">                questions.add(new Question(</span>
+<span class="fc" id="L142">                        rs.getInt(&quot;questionID&quot;),</span>
+<span class="fc" id="L143">                        rs.getString(&quot;realmType&quot;),</span>
+<span class="fc" id="L144">                        rs.getString(&quot;questionType&quot;),</span>
+<span class="fc" id="L145">                        rs.getString(&quot;questionPrompt&quot;),</span>
                         options
                 ));
-<span class="fc" id="L153">            }</span>
-<span class="fc" id="L154">            return questions;</span>
+<span class="fc" id="L148">            }</span>
+<span class="fc" id="L149">            return questions;</span>
         }
     }
 

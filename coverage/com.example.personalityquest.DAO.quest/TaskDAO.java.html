@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.quest</a> &gt; <span class="el_source">TaskDAO.java</span></div><h1>TaskDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.quest;
 
-import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.Task;
+import com.example.personalityquest.SQLite;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /** Stores and retrieves task catalog records */
-public class TaskDAO extends ParentDAO {
+<span class="nc" id="L11">public class TaskDAO {</span>
     private static final String FIND_TASK_INFO = &quot;&quot;&quot;
             SELECT * FROM Tasks
             WHERE taskId = ?;
@@ -36,14 +36,6 @@ public class TaskDAO extends ParentDAO {
             ORDER BY taskId
             &quot;&quot;&quot;;
 
-    public TaskDAO(){
-<span class="fc" id="L40">        super();</span>
-<span class="fc" id="L41">    }</span>
-
-    public TaskDAO(Connection connection) {
-<span class="fc" id="L44">        super(connection);</span>
-<span class="fc" id="L45">    }</span>
-
     /**
      * Gets a Task from the database that matches the given id
      * @param taskId The taskId you of the Task you want to retrieve
@@ -52,27 +44,28 @@ public class TaskDAO extends ParentDAO {
      * @throws IllegalArgumentException If the given taskId is equal to 0
      * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
      */
-    public Task GetTaskForId(int taskId) throws Exception {
-<span class="fc" id="L56">        PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);</span>
-<span class="fc" id="L57">        Task task = null;</span>
+    public static Task GetTaskForId(int taskId) throws Exception {
+<span class="fc" id="L48">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L49">        PreparedStatement statement = connection.prepareStatement(FIND_TASK_INFO);</span>
+<span class="fc" id="L50">        Task task = null;</span>
 
-<span class="fc" id="L59">        statement.setInt(1, taskId);</span>
-<span class="fc" id="L60">        ResultSet rs = statement.executeQuery();</span>
-<span class="fc bfc" id="L61" title="All 2 branches covered.">        while (rs.next()) {</span>
-<span class="fc" id="L62">            System.out.println(&quot;Makes new task&quot;);</span>
-<span class="fc" id="L63">            task = new Task(</span>
-<span class="fc" id="L64">                    rs.getInt(&quot;taskId&quot;),</span>
-<span class="fc" id="L65">                    rs.getString(&quot;name&quot;),</span>
-<span class="fc" id="L66">                    rs.getString(&quot;description&quot;),</span>
-<span class="fc" id="L67">                    rs.getString(&quot;overview&quot;),</span>
-<span class="fc" id="L68">                    rs.getInt(&quot;labourId&quot;)</span>
+<span class="fc" id="L52">        statement.setInt(1, taskId);</span>
+<span class="fc" id="L53">        ResultSet rs = statement.executeQuery();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        while (rs.next()) {</span>
+<span class="fc" id="L55">            System.out.println(&quot;Makes new task&quot;);</span>
+<span class="fc" id="L56">            task = new Task(</span>
+<span class="fc" id="L57">                    rs.getInt(&quot;taskId&quot;),</span>
+<span class="fc" id="L58">                    rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L59">                    rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L60">                    rs.getString(&quot;overview&quot;),</span>
+<span class="fc" id="L61">                    rs.getInt(&quot;labourId&quot;)</span>
             );
         }
 
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (task == null){</span>
-<span class="fc" id="L73">            throw new Exception(&quot;No task matching the givenId&quot;);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (task == null){</span>
+<span class="fc" id="L66">            throw new Exception(&quot;No task matching the givenId&quot;);</span>
         }
-<span class="fc" id="L75">        return task;</span>
+<span class="fc" id="L68">        return task;</span>
     }
 
     /**
@@ -81,18 +74,19 @@ public class TaskDAO extends ParentDAO {
      * @return A list of weekly task ids
      * @throws SQLException Database Access Failure
      */
-    public List&lt;Integer&gt; GetWeeklyTaskIdsForLabourId(int labourId) throws SQLException {
-<span class="fc" id="L85">        PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK_IDS_FOR_LABOURID);</span>
-<span class="fc" id="L86">        List&lt;Integer&gt; taskIds = new ArrayList&lt;Integer&gt;();</span>
+    public static List&lt;Integer&gt; GetWeeklyTaskIdsForLabourId(int labourId) throws SQLException {
+<span class="fc" id="L78">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L79">        PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK_IDS_FOR_LABOURID);</span>
+<span class="fc" id="L80">        List&lt;Integer&gt; taskIds = new ArrayList&lt;Integer&gt;();</span>
 
-<span class="fc" id="L88">        statement.setInt(1, labourId);</span>
-<span class="fc" id="L89">        ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L82">        statement.setInt(1, labourId);</span>
+<span class="fc" id="L83">        ResultSet rs = statement.executeQuery();</span>
 
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        while (rs.next()) {</span>
-<span class="fc" id="L92">            taskIds.add(rs.getInt(&quot;taskId&quot;));</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        while (rs.next()) {</span>
+<span class="fc" id="L86">            taskIds.add(rs.getInt(&quot;taskId&quot;));</span>
         }
 
-<span class="fc" id="L95">        return taskIds;</span>
+<span class="fc" id="L89">        return taskIds;</span>
     }
 
     /**
@@ -102,77 +96,83 @@ public class TaskDAO extends ParentDAO {
      * @return A list of Task objects, empty if none exist
      * @throws Exception If a row cannot be mapped to a Task, or Database Access Failure
      */
-    public List&lt;Task&gt; GetTasksForLabourId(int labourId) throws Exception {
-<span class="fc" id="L106">        try (PreparedStatement statement = connection.prepareStatement(GET_QUEST_TASKS_FOR_LABOURID)) {</span>
-<span class="fc" id="L107">            statement.setInt(1, labourId);</span>
-<span class="fc" id="L108">            ResultSet rs = statement.executeQuery();</span>
-<span class="fc" id="L109">            List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">            while (rs.next()) {</span>
-<span class="fc" id="L111">                tasks.add(new Task(</span>
-<span class="fc" id="L112">                        rs.getInt(&quot;taskId&quot;),</span>
-<span class="fc" id="L113">                        rs.getString(&quot;name&quot;),</span>
-<span class="fc" id="L114">                        rs.getString(&quot;description&quot;),</span>
-<span class="fc" id="L115">                        rs.getString(&quot;overview&quot;),</span>
-<span class="fc" id="L116">                        rs.getInt(&quot;labourId&quot;)</span>
+    public static List&lt;Task&gt; GetTasksForLabourId(int labourId) throws Exception {
+<span class="fc" id="L100">        Connection connection = SQLite.getConnection();</span>
+<span class="fc" id="L101">        try (PreparedStatement statement = connection.prepareStatement(GET_QUEST_TASKS_FOR_LABOURID)) {</span>
+<span class="fc" id="L102">            statement.setInt(1, labourId);</span>
+<span class="fc" id="L103">            ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L104">            List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L106">                tasks.add(new Task(</span>
+<span class="fc" id="L107">                        rs.getInt(&quot;taskId&quot;),</span>
+<span class="fc" id="L108">                        rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L109">                        rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L110">                        rs.getString(&quot;overview&quot;),</span>
+<span class="fc" id="L111">                        rs.getInt(&quot;labourId&quot;)</span>
                 ));
             }
-<span class="fc" id="L119">            return tasks;</span>
+<span class="fc" id="L114">            return tasks;</span>
         }
     }
 
-    public void EnsureTables() throws SQLException {
-<span class="nc" id="L124">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L125">            statement.executeUpdate(&quot;ALTER TABLE Tasks ADD Column reactionType TEXT&quot;);</span>
-<span class="nc" id="L126">        } catch (SQLException alreadyExists) {</span>
+    public static void EnsureTables() throws SQLException {
+<span class="nc" id="L119">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L120">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L121">            statement.executeUpdate(&quot;ALTER TABLE Tasks ADD Column reactionType TEXT&quot;);</span>
+<span class="nc" id="L122">        } catch (SQLException alreadyExists) {</span>
             // Column already exists, ignore
-<span class="nc" id="L128">        }</span>
-<span class="nc" id="L129">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L130">            statement.executeUpdate(&quot;ALTER TABLE Tasks ADD COLUMN overview TEXT NOT NULL DEFAULT ''&quot;);</span>
-<span class="nc" id="L131">        } catch (SQLException alreadyExists) {</span>
+<span class="nc" id="L124">        }</span>
+<span class="nc" id="L125">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L126">            statement.executeUpdate(&quot;ALTER TABLE Tasks ADD COLUMN overview TEXT NOT NULL DEFAULT ''&quot;);</span>
+<span class="nc" id="L127">        } catch (SQLException alreadyExists) {</span>
             // Column already exists, ignore
-<span class="nc" id="L133">        }</span>
-<span class="nc" id="L134">    }</span>
+<span class="nc" id="L129">        }</span>
+<span class="nc" id="L130">    }</span>
 
-    public List&lt;Task&gt; GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception{
-<span class="nc" id="L137">        try (PreparedStatement statement = connection.prepareStatement(GET_CHALLENGE_FOR_LABOUR_AND_REACTION)) {</span>
-<span class="nc" id="L138">            statement.setInt(1, labourId);</span>
-<span class="nc" id="L139">            statement.setString(2, reactionType);</span>
-<span class="nc" id="L140">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc" id="L141">            List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L142" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L143">                tasks.add(new Task(</span>
-<span class="nc" id="L144">                        rs.getInt(&quot;taskId&quot;),</span>
-<span class="nc" id="L145">                        rs.getString(&quot;name&quot;),</span>
-<span class="nc" id="L146">                        rs.getString(&quot;description&quot;),</span>
-<span class="nc" id="L147">                        rs.getString(&quot;overview&quot;),</span>
-<span class="nc" id="L148">                        rs.getInt(&quot;labourId&quot;)</span>
+    public static List&lt;Task&gt; GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception{
+<span class="nc" id="L133">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L134">        try (PreparedStatement statement = connection.prepareStatement(GET_CHALLENGE_FOR_LABOUR_AND_REACTION)) {</span>
+<span class="nc" id="L135">            statement.setInt(1, labourId);</span>
+<span class="nc" id="L136">            statement.setString(2, reactionType);</span>
+<span class="nc" id="L137">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L138">            List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L140">                tasks.add(new Task(</span>
+<span class="nc" id="L141">                        rs.getInt(&quot;taskId&quot;),</span>
+<span class="nc" id="L142">                        rs.getString(&quot;name&quot;),</span>
+<span class="nc" id="L143">                        rs.getString(&quot;description&quot;),</span>
+<span class="nc" id="L144">                        rs.getString(&quot;overview&quot;),</span>
+<span class="nc" id="L145">                        rs.getInt(&quot;labourId&quot;)</span>
                 ));
             }
-<span class="nc" id="L151">            return tasks;</span>
+<span class="nc" id="L148">            return tasks;</span>
         }
     }
 
-    public void SetChallenge(int taskId, int labourId, String name, String description, String overview, String reactionType) throws SQLException{
-<span class="nc" id="L156">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static void SetChallenge(int taskId, int labourId, String name, String description, String overview, String reactionType) throws SQLException{
+<span class="nc" id="L153">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L154">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;UPDATE Tasks SET name = ?, description = ?, overview = ?, labourId = ?, reactionType = ? WHERE taskId = ?&quot;)){
-<span class="nc" id="L158">            statement.setString(1, name);</span>
-<span class="nc" id="L159">            statement.setString(2, description);</span>
-<span class="nc" id="L160">            statement.setString(3, overview);</span>
-<span class="nc" id="L161">            statement.setInt(4, labourId);</span>
-<span class="nc" id="L162">            statement.setString(5, reactionType);</span>
-<span class="nc" id="L163">            statement.setInt(6, taskId);</span>
-<span class="nc" id="L164">            statement.executeUpdate();</span>
+<span class="nc" id="L156">            statement.setString(1, name);</span>
+<span class="nc" id="L157">            statement.setString(2, description);</span>
+<span class="nc" id="L158">            statement.setString(3, overview);</span>
+<span class="nc" id="L159">            statement.setInt(4, labourId);</span>
+<span class="nc" id="L160">            statement.setString(5, reactionType);</span>
+<span class="nc" id="L161">            statement.setInt(6, taskId);</span>
+<span class="nc" id="L162">            statement.executeUpdate();</span>
         }
-<span class="nc" id="L166">    }</span>
+<span class="nc" id="L164">    }</span>
 
-    public void DeleteTask(int taskId) throws SQLException{
-<span class="nc" id="L169">        try (PreparedStatement statement = connection.prepareStatement(&quot;DELETE FROM Tasks WHERE taskId = ?&quot;)){</span>
-<span class="nc" id="L170">            statement.setInt(1, taskId);</span>
-<span class="nc" id="L171">            statement.executeUpdate();</span>
+    public static void DeleteTask(int taskId) throws SQLException{
+<span class="nc" id="L167">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L168">        try (PreparedStatement statement = connection.prepareStatement(&quot;DELETE FROM Tasks WHERE taskId = ?&quot;)){</span>
+<span class="nc" id="L169">            statement.setInt(1, taskId);</span>
+<span class="nc" id="L170">            statement.executeUpdate();</span>
         }
-<span class="nc" id="L173">    }</span>
+<span class="nc" id="L172">    }</span>
 
-    public boolean IsLabourAlreadyMigrated(int labourId) throws SQLException {
+    public static boolean IsLabourAlreadyMigrated(int labourId) throws SQLException {
+<span class="nc" id="L175">        Connection connection = SQLite.getConnection();</span>
 <span class="nc" id="L176">        try (PreparedStatement statement = connection.prepareStatement(&quot;SELECT COUNT(*) FROM Tasks WHERE labourId = ? AND reactionType IS NOT NULL&quot;)){</span>
 <span class="nc" id="L177">            statement.setInt(1, labourId);</span>
 <span class="nc" id="L178">            ResultSet rs = statement.executeQuery();</span>
@@ -180,35 +180,36 @@ public class TaskDAO extends ParentDAO {
         }
     }
 
-    public List&lt;Integer&gt; GetTaskIdsForLabourId(int labourId) throws SQLException {
-<span class="nc" id="L184">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public static List&lt;Integer&gt; GetTaskIdsForLabourId(int labourId) throws SQLException {
+<span class="nc" id="L184">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L185">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;SELECT taskId FROM Tasks WHERE labourId = ? AND IFNULL(taskType, 'QUEST') = 'QUEST' ORDER BY taskId&quot;)) {
-<span class="nc" id="L186">            statement.setInt(1, labourId);</span>
-<span class="nc" id="L187">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc" id="L188">            List&lt;Integer&gt; taskIds = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L190">                taskIds.add(rs.getInt(&quot;taskId&quot;));</span>
+<span class="nc" id="L187">            statement.setInt(1, labourId);</span>
+<span class="nc" id="L188">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L189">            List&lt;Integer&gt; taskIds = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L191">                taskIds.add(rs.getInt(&quot;taskId&quot;));</span>
             }
-<span class="nc" id="L192">            return taskIds;</span>
+<span class="nc" id="L193">            return taskIds;</span>
         }
     }
 
-    public void MigrateLabourChallenges(int labourId,
+    public static void MigrateLabourChallenges(int labourId,
                                                String excessName, String excessDescription, String excessOverview,
                                                String deficitName, String deficitDescription, String deficitOverview) throws SQLException {
-<span class="nc" id="L199">        List&lt;Integer&gt; taskIds = GetTaskIdsForLabourId(labourId);</span>
-<span class="nc bnc" id="L200" title="All 2 branches missed.">        if (taskIds.size() &lt; 2) {</span>
-<span class="nc" id="L201">            return;</span>
+<span class="nc" id="L200">        List&lt;Integer&gt; taskIds = GetTaskIdsForLabourId(labourId);</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">        if (taskIds.size() &lt; 2) {</span>
+<span class="nc" id="L202">            return;</span>
         }
-<span class="nc" id="L203">        SetChallenge(taskIds.get(0), labourId, excessName, excessDescription, excessOverview, &quot;EXCESS&quot;);</span>
-<span class="nc" id="L204">        SetChallenge(taskIds.get(1), labourId, deficitName, deficitDescription, deficitOverview, &quot;DEFICIT&quot;);</span>
-<span class="nc bnc" id="L205" title="All 2 branches missed.">        for (int index = 2; index &lt; taskIds.size(); index++) {</span>
-<span class="nc" id="L206">            DeleteTask(taskIds.get(index));</span>
+<span class="nc" id="L204">        SetChallenge(taskIds.get(0), labourId, excessName, excessDescription, excessOverview, &quot;EXCESS&quot;);</span>
+<span class="nc" id="L205">        SetChallenge(taskIds.get(1), labourId, deficitName, deficitDescription, deficitOverview, &quot;DEFICIT&quot;);</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        for (int index = 2; index &lt; taskIds.size(); index++) {</span>
+<span class="nc" id="L207">            DeleteTask(taskIds.get(index));</span>
         }
-<span class="nc" id="L208">    }</span>
+<span class="nc" id="L209">    }</span>
 
-    public void PopulateChallenges() throws SQLException {
-<span class="nc" id="L211">        MigrateLabourChallenges(2,</span>
+    public static void PopulateChallenges() throws SQLException {
+<span class="nc" id="L212">        MigrateLabourChallenges(2,</span>
                 &quot;Stand Level&quot;,
                 &quot;This week, in a group where you'd normally expect to lead or be listened to first, deliberately take the equal seat instead — ask for someone else's account before you give yours, and let the outcome rest on the shared facts rather than your standing.&quot;,
                 &quot;Record in your Journal the moment you took the equal seat instead of leading.&quot;,
@@ -216,7 +217,7 @@ public class TaskDAO extends ParentDAO {
                 &quot;This week, find one moment where you'd normally go quiet to keep the peace — a group leaning the wrong way, a decision you privately disagree with — and say your piece anyway, plainly and without apology.&quot;,
                 &quot;Record in your Journal the moment you spoke up instead of staying quiet.&quot;);
 
-<span class="nc" id="L219">        MigrateLabourChallenges(3,</span>
+<span class="nc" id="L220">        MigrateLabourChallenges(3,</span>
                 &quot;Pick your ground&quot;,
                 &quot;This week, take on a challenge you'd normally rush straight into, but pause first and choose how you'll face it — the timing, the ground, the approach that gives you the best chance. Act with the same resolve, just aimed with judgment rather than thrown blindly.&quot;,
                 &quot;Record in your Journal the challenge you will pause and face.&quot;,
@@ -224,14 +225,14 @@ public class TaskDAO extends ParentDAO {
                 &quot;This week, find one thing you've been facing from a safe distance — a conversation you're circling, a task you keep setting up for but not starting — and actually close with it. Take the direct step you've been waiting to feel ready for.&quot;,
                 &quot;Record in your Journal the step you took to close the distance.&quot;);
 
-<span class="nc" id="L227">        MigrateLabourChallenges(1,</span>
+<span class="nc" id="L228">        MigrateLabourChallenges(1,</span>
                 &quot;Temper your faith&quot;,
                 &quot;Before you commit to a favour, plan or a promise, verbalise to yourself what could go wrong. Make the commitment only after you're ready and with open eyes. Do this before one major decision that may have consequences if done so blindly.&quot;,
                 &quot;Record in your Journal the commitment you made with open eyes.&quot;,
                 &quot;Lower the armour&quot;,
                 &quot;This week, find one situation where you'd normally assume the worst of someone — a message that seems harsh, a person you expect to be difficult, a request you think will be refused — and approach it openly anyway. Have the conversation or make the ask, without the armour up, and see what happens.&quot;,
                 &quot;Record in your Journal the moment you lowered the armour and approached it openly.&quot;);
-<span class="nc" id="L234">    }</span>
+<span class="nc" id="L235">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

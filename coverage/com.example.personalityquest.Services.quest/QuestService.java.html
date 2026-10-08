@@ -9,38 +9,26 @@ import com.example.personalityquest.Model.quest.UserQuest;
 import java.sql.SQLException;
 import java.util.Random;
 
+import static com.example.personalityquest.DAO.quest.UserQuestDAO.GetUserQuestForEmailAndLabourId;
 
 /**
  * This class managers everything to do with quests and has utility functions to retrieve
  * quests matching archetypeId's or a labourId or get the count of how many quests
  * match an archetypeId
  */
-public class QuestService {
-
-    private final QuestDAO QuestDAO;
-
-    public QuestService(){
-<span class="fc" id="L23">        super();</span>
-<span class="fc" id="L24">        QuestDAO = new QuestDAO();</span>
-<span class="fc" id="L25">    }</span>
-
-    public QuestService(QuestDAO questDAO)
-    {
-<span class="fc" id="L29">        super();</span>
-<span class="fc" id="L30">        QuestDAO = questDAO;</span>
-<span class="fc" id="L31">    }</span>
+<span class="nc" id="L19">public class QuestService {</span>
     /**
      * Gets an Array of Quests for the given archetypeId
      * @param archetypeId The archetypeId you want to get quests for
      * @return Array of quests matching archetypeId
      * @throws SQLException &quot;Database Access Failure&quot;
      */
-    public Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (archetypeId == 0){</span>
-<span class="fc" id="L40">            throw new IllegalArgumentException(&quot;Bad archetypeId of 0&quot;);</span>
+    public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (archetypeId == 0){</span>
+<span class="fc" id="L28">            throw new IllegalArgumentException(&quot;Bad archetypeId of 0&quot;);</span>
         }
 
-<span class="fc" id="L43">        return QuestDAO.GetQuestsForArchetypeId(archetypeId);</span>
+<span class="fc" id="L31">        return QuestDAO.GetQuestsForArchetypeId(archetypeId);</span>
     }
 
     /**
@@ -49,12 +37,12 @@ public class QuestService {
      * @return The Quest is successful or null if labourId doesn't match a quest in the database
      * @throws SQLException Database Access Failure
      */
-    public Quest GetQuestForLabourId(int labourId) throws SQLException {
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (labourId == 0){</span>
-<span class="fc" id="L54">            throw new IllegalArgumentException(&quot;Bad labourId of 0&quot;);</span>
+    public static Quest GetQuestForLabourId(int labourId) throws SQLException {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (labourId == 0){</span>
+<span class="fc" id="L42">            throw new IllegalArgumentException(&quot;Bad labourId of 0&quot;);</span>
         }
 
-<span class="fc" id="L57">        return QuestDAO.GetQuestForLabourId(labourId);</span>
+<span class="fc" id="L45">        return QuestDAO.GetQuestForLabourId(labourId);</span>
     }
 
     /**
@@ -63,16 +51,16 @@ public class QuestService {
      * @return The archetype name, or &quot;Unknown archetype&quot; if none matches
      * @throws SQLException Database Access Failure
      */
-    public String GetArchetypeName(int archetypeId) throws SQLException {
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (archetypeId == 0) {</span>
-<span class="nc" id="L68">            throw new IllegalArgumentException(&quot;Bad archetypeId of 0&quot;);</span>
+    public static String GetArchetypeName(int archetypeId) throws SQLException {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (archetypeId == 0) {</span>
+<span class="nc" id="L56">            throw new IllegalArgumentException(&quot;Bad archetypeId of 0&quot;);</span>
         }
 
-<span class="nc" id="L71">        String name = QuestDAO.GetArchetypeName(archetypeId);</span>
-<span class="nc bnc" id="L72" title="All 4 branches missed.">        if (name == null || name.isBlank()) {</span>
-<span class="nc" id="L73">            return &quot;Unknown archetype&quot;;</span>
+<span class="nc" id="L59">        String name = QuestDAO.GetArchetypeName(archetypeId);</span>
+<span class="nc bnc" id="L60" title="All 4 branches missed.">        if (name == null || name.isBlank()) {</span>
+<span class="nc" id="L61">            return &quot;Unknown archetype&quot;;</span>
         }
-<span class="nc" id="L75">        return name;</span>
+<span class="nc" id="L63">        return name;</span>
     }
 
     /**
@@ -81,12 +69,12 @@ public class QuestService {
      * @return The archetypeId, or null if none matches
      * @throws SQLException Database Access Failure
      */
-    public Integer GetArchetypeIdForName(String name) throws SQLException {
-<span class="pc bpc" id="L85" title="2 of 4 branches missed.">        if (name == null || name.isBlank()) {</span>
-<span class="nc" id="L86">            throw new IllegalArgumentException(&quot;Archetype name is empty&quot;);</span>
+    public static Integer GetArchetypeIdForName(String name) throws SQLException {
+<span class="pc bpc" id="L73" title="2 of 4 branches missed.">        if (name == null || name.isBlank()) {</span>
+<span class="nc" id="L74">            throw new IllegalArgumentException(&quot;Archetype name is empty&quot;);</span>
         }
 
-<span class="fc" id="L89">        return QuestDAO.GetArchetypeIdForName(name);</span>
+<span class="fc" id="L77">        return QuestDAO.GetArchetypeIdForName(name);</span>
     }
 
     /**
@@ -95,16 +83,16 @@ public class QuestService {
      * @return The description, or an empty string if none is stored
      * @throws SQLException Database Access Failure
      */
-    public String GetArchetypeDescription(int archetypeId) throws SQLException {
-<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (archetypeId == 0) {</span>
-<span class="nc" id="L100">            throw new IllegalArgumentException(&quot;Bad archetypeId of 0&quot;);</span>
+    public static String GetArchetypeDescription(int archetypeId) throws SQLException {
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (archetypeId == 0) {</span>
+<span class="nc" id="L88">            throw new IllegalArgumentException(&quot;Bad archetypeId of 0&quot;);</span>
         }
 
-<span class="nc" id="L103">        String description = QuestDAO.GetArchetypeDescription(archetypeId);</span>
-<span class="nc bnc" id="L104" title="All 4 branches missed.">        if (description == null || description.isBlank()) {</span>
-<span class="nc" id="L105">            return &quot;&quot;;</span>
+<span class="nc" id="L91">        String description = QuestDAO.GetArchetypeDescription(archetypeId);</span>
+<span class="nc bnc" id="L92" title="All 4 branches missed.">        if (description == null || description.isBlank()) {</span>
+<span class="nc" id="L93">            return &quot;&quot;;</span>
         }
-<span class="nc" id="L107">        return description;</span>
+<span class="nc" id="L95">        return description;</span>
     }
 
     /**
@@ -113,19 +101,38 @@ public class QuestService {
      * @return The Random Quests information
      * @throws SQLException &quot;Database Access Failure&quot;
      */
-    public Quest GetRandomQuestForArchetypeId(int archetypeId) throws SQLException {
-<span class="fc" id="L117">        Quest[] quests = GetQuestsForArchetypeId(archetypeId);</span>
+    public static Quest GetRandomQuestForArchetypeId(int archetypeId) throws SQLException {
+<span class="fc" id="L105">        Quest[] quests = GetQuestsForArchetypeId(archetypeId);</span>
 
-<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (quests == null){</span>
-<span class="fc" id="L120">            return null;</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (quests == null){</span>
+<span class="fc" id="L108">            return null;</span>
         }
-<span class="fc" id="L122">        Random random = new Random();</span>
+<span class="fc" id="L110">        Random random = new Random();</span>
 
-<span class="fc" id="L124">        int randomInt = random.nextInt(0, quests.length);</span>
+<span class="fc" id="L112">        int randomInt = random.nextInt(0, quests.length);</span>
 
-<span class="fc" id="L126">        return quests[randomInt];</span>
+<span class="fc" id="L114">        return quests[randomInt];</span>
     }
 
+    public static UserQuest UpdateQuestReflectionToDraft(UserQuest quest, String reflection, String email) throws SQLException {
+<span class="nc bnc" id="L118" title="All 6 branches missed.">        if (quest == null || ApplicationManager.isEmpty(reflection) || ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L119">            throw new IllegalArgumentException(&quot;Null quest, refleciton or email&quot;);</span>
+        }
+
+<span class="nc" id="L122">        UserQuestDAO.UpdateGivenQuestReflectionToDraft(quest, reflection, email);</span>
+
+<span class="nc" id="L124">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+    }
+
+    public static UserQuest UpdateQuestReflectionToBeFinished(UserQuest quest, String reflection, String email) throws SQLException {
+<span class="nc bnc" id="L128" title="All 6 branches missed.">        if (quest == null || ApplicationManager.isEmpty(reflection) || ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L129">            throw new IllegalArgumentException(&quot;Null quest, refleciton or email&quot;);</span>
+        }
+
+<span class="nc" id="L132">        UserQuestDAO.UpdateGivenQuestReflectionToBeFinished(quest, reflection, email);</span>
+
+<span class="nc" id="L134">        return GetUserQuestForEmailAndLabourId(email, quest.getLabourId());</span>
+    }
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
