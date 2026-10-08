@@ -12,6 +12,17 @@ import java.util.List;
 public class TaskService {
     private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
 
+    private TaskDAO TaskDAO;
+
+    public TaskService(){
+        super();
+        this.TaskDAO = new TaskDAO();
+    }
+
+    public TaskService(TaskDAO taskDAO){
+        super();
+        this.TaskDAO = taskDAO;
+    }
     /**
      * Gets a Task from the database that matches the given id
      * @param taskId The taskId you of the Task you want to retrieve
@@ -20,7 +31,7 @@ public class TaskService {
      * @throws IllegalArgumentException If the given taskId is equal to 0
      * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
      */
-    public static Task GetTaskForId(int taskId) throws Exception {
+    public Task GetTaskForId(int taskId) throws Exception {
         if (IsTaskIdNull(taskId)){
             throw new IllegalArgumentException("TaskId is null");
         }
@@ -35,7 +46,7 @@ public class TaskService {
      * @return A list of Task objects, empty if none exist
      * @throws Exception If the labourId is invalid or a Database Access Failure occurs
      */
-    public static List<Task> GetTasksForLabourId(int labourId) throws Exception {
+    public List<Task> GetTasksForLabourId(int labourId) throws Exception {
         if (IsLabourIdNull(labourId)) {
             throw new IllegalArgumentException("Labour Id is null");
         }
@@ -46,7 +57,7 @@ public class TaskService {
     /**
      * Joins task names for compact UI labels.
      */
-    public static String JoinTaskNames(List<Task> tasks) {
+    public String JoinTaskNames(List<Task> tasks) {
         if (tasks == null || tasks.isEmpty()) {
             return "";
         }
@@ -64,7 +75,7 @@ public class TaskService {
     /**
      * Joins task names and descriptions for labour detail copy.
      */
-    public static String JoinTaskDetails(List<Task> tasks) {
+    public String JoinTaskDetails(List<Task> tasks) {
         if (tasks == null || tasks.isEmpty()) {
             return "";
         }
@@ -90,7 +101,7 @@ public class TaskService {
      * @return A populated Array of weekly taskId's that have a matching labourId to the one given
      * @throws Exception If the labourId is null OR a Database Access Failure
      */
-    public static int[] GetRandomAmountOfTaskIdsForLabourId(int labourId) throws Exception {
+    public int[] GetRandomAmountOfTaskIdsForLabourId(int labourId) throws Exception {
         if (IsLabourIdNull(labourId)){
             throw new IllegalArgumentException("Labour Id is null");
         }
@@ -121,7 +132,7 @@ public class TaskService {
      * @param weekNumber The 1-based week of the labour
      * @return Weekly task ids for that week, empty if none exist
      */
-    public static int[] GetTaskIdsForLabourWeek(int labourId, int weekNumber) throws Exception {
+    public int[] GetTaskIdsForLabourWeek(int labourId, int weekNumber) throws Exception {
         if (IsLabourIdNull(labourId)) {
             throw new IllegalArgumentException("Labour Id is null");
         }
@@ -145,7 +156,7 @@ public class TaskService {
         return returnedTaskIds;
     }
 
-    public static List<Task> GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception {
+    public List<Task> GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception {
         if (IsLabourIdNull(labourId)) {
             throw new IllegalArgumentException("Labour Id is null");
         }

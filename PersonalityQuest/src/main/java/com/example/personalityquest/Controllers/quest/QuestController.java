@@ -51,12 +51,19 @@ public class QuestController implements Initializable {
     @FXML
     private ListView<QuestListItem> questHistory;
 
+
+    private UserQuestService UserQuestService;
+    private TaskService TaskService;
+    private QuestService QuestService;
     /** Initialises quest controls and loads available quests
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        TaskService = new TaskService();
+        UserQuestService = new UserQuestService();
+        QuestService = new QuestService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUESTS);
         ConfigureTaskList();
         ConfigureHistoryList();

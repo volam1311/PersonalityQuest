@@ -24,6 +24,7 @@ public class MainApplicationTest {
     void startupPreservesExistingUserQuestProgress() throws Exception {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
         SQLite.setConnection(connection);
+        UserQuestDAO UserQuestDAO = new UserQuestDAO(connection);
 
         UserQuestDAO.EnsureTables();
 

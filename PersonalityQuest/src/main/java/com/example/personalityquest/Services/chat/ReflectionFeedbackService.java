@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services.chat;
 
+import com.example.personalityquest.Services.ParentService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.chat.ReflectionFeedbackDAO;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 /**
  * Builds a coaching prompt from a weekly-task reflection and asks OpenAI for feedback.
  */
-public final class ReflectionFeedbackService {
+public final class ReflectionFeedbackService extends ParentService {
     static final String SYSTEM_PROMPT = """
             You are a supportive coach inside PersonalityQuest, a growth app based on Jungian brand archetypes.
             The user just wrote a reflection after attempting a weekly practice.
@@ -24,22 +25,40 @@ public final class ReflectionFeedbackService {
             Keep a warm, grounded tone. Do not mention being an AI unless asked.
             """;
 
-    private static ChatCompletionClient client = new OpenAiClient();
+    private ChatCompletionClient client;
+    private ReflectionFeedbackDAO ReflectionFeedbackDAO;
 
-    private ReflectionFeedbackService() {
+    public ReflectionFeedbackService() {
+        super();
+        client = new OpenAiClient();
+        ReflectionFeedbackDAO = new ReflectionFeedbackDAO();
+    }
+
+    public ReflectionFeedbackService(ChatCompletionClient client){
+        super();
+        this.client = client;
+    }
+
+    public ReflectionFeedbackService(ReflectionFeedbackDAO reflectionFeedbackDAO) {
+        this.ReflectionFeedbackDAO = reflectionFeedbackDAO;
+    }
+
+    public ReflectionFeedbackService(ReflectionFeedbackDAO reflectionFeedbackDAO, ChatCompletionClient client) {
+        this.ReflectionFeedbackDAO = reflectionFeedbackDAO;
+        this.client = client;
     }
 
     /**
      * Replaces the chat client. Used by tests to avoid calling the live OpenAI API.
      */
-    public static void SetClient(ChatCompletionClient chatClient) {
+    public void SetClient(ChatCompletionClient chatClient) {
         client = chatClient == null ? new OpenAiClient() : chatClient;
     }
 
     /**
      * Restores the default OpenAI client.
      */
-    public static void Reset() {
+    public void Reset() {
         client = new OpenAiClient();
     }
 
@@ -50,7 +69,7 @@ public final class ReflectionFeedbackService {
      * @throws IllegalArgumentException If the reflection is empty
      * @throws Exception If the chat client cannot complete the request
      */
-    public static String FeedbackFor(ReflectionContext context) throws Exception {
+    public String FeedbackFor(ReflectionContext context) throws Exception {
         if (context == null || ApplicationManager.isEmpty(context.reflection())) {
             throw new IllegalArgumentException("Write a reflection before requesting AI feedback.");
         }
@@ -61,7 +80,7 @@ public final class ReflectionFeedbackService {
     /**
      * Builds a prompt containing the task, quest, archetype, and user reflection.
      */
-    public static String UserPrompt(ReflectionContext context) {
+    public String UserPrompt(ReflectionContext context) {
         ReflectionContext safe = context == null
                 ? new ReflectionContext("", "", "", "", "", "", "", "")
                 : context;
@@ -92,13 +111,14 @@ public final class ReflectionFeedbackService {
     /**
      * Enriches a task with quest and archetype details for the feedback prompt.
      */
-    public static ReflectionContext ContextFor(Task task, String questName, String reflection) {
+    public ReflectionContext ContextFor(Task task, String questName, String reflection) {
         String resolvedQuestName = questName;
         String archetypeName = "";
         String overview = "";
         String strengths = "";
         String weaknesses = "";
 
+        QuestService QuestService = new QuestService();
         if (task != null) {
             try {
                 Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());
@@ -137,7 +157,7 @@ public final class ReflectionFeedbackService {
     /**
      * Saves AI feedback for a weekly task so it can be shown again later.
      */
-    public static void Save(WeeklyTask weeklyTask, String feedback) throws SQLException {
+    public void Save(WeeklyTask weeklyTask, String feedback) throws SQLException {
         if (weeklyTask == null || ApplicationManager.isEmpty(feedback)) {
             return;
         }
@@ -151,7 +171,7 @@ public final class ReflectionFeedbackService {
     /**
      * Loads stored AI feedback for a weekly task, or an empty string when none exists.
      */
-    public static String Find(WeeklyTask weeklyTask) throws SQLException {
+    public String Find(WeeklyTask weeklyTask) throws SQLException {
         if (weeklyTask == null) {
             return "";
         }
@@ -161,7 +181,7 @@ public final class ReflectionFeedbackService {
                 weeklyTask.getWeekStarted());
     }
 
-    static Archetype MatchArchetype(String name) {
+    Archetype MatchArchetype(String name) {
         if (ApplicationManager.isEmpty(name)) {
             return null;
         }
@@ -180,20 +200,20 @@ public final class ReflectionFeedbackService {
         return null;
     }
 
-    private static String Fallback(String value, String fallback) {
+    private String Fallback(String value, String fallback) {
         return ApplicationManager.isEmpty(value) ? fallback : value;
     }
 
-    private static final String QUEST_FEEDBACK_KEY ="QUEST";
+    private final String QUEST_FEEDBACK_KEY ="QUEST";
 
-    public static void SaveForQuest(String email, int labourId, String feedback) throws SQLException {
+    public void SaveForQuest(String email, int labourId, String feedback) throws SQLException {
         if (ApplicationManager.isEmpty(email) || ApplicationManager.isEmpty(feedback)) {
             return;
         }
         ReflectionFeedbackDAO.Save(email, labourId, QUEST_FEEDBACK_KEY, feedback.trim());
     }
 
-    public static String FindForQuest(String email, int labourId) throws SQLException {
+    public String FindForQuest(String email, int labourId) throws SQLException {
         if (ApplicationManager.isEmpty(email)) {
             return "";
         }

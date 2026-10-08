@@ -8,6 +8,8 @@ import com.example.personalityquest.DAO.quest.*;
 import com.example.personalityquest.Model.auth.LoginCache;
 import com.example.personalityquest.Services.auth.*;
 import com.example.personalityquest.Services.navigation.NavigationService;
+import com.example.personalityquest.Services.quest.QuestService;
+import com.example.personalityquest.Services.quiz.QuizService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -34,18 +36,24 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException{
         AppFonts.load();
 
+        QuestDAO questDAO = new QuestDAO();
+        TaskDAO taskDAO = new TaskDAO();
+        QuestOptionDAO questOptionDAO = new QuestOptionDAO();
+        ReflectionPromptDAO reflectionPromptDAO = new ReflectionPromptDAO();
+        ArchetypeDAO ArchetypeDAO = new ArchetypeDAO();
+        JournalEntryDAO JournalEntryDAO = new JournalEntryDAO();
         // Runs once, before any other DB call has a chance to leave an open
         // statement on the shared connection. Doing this here (rather than on
         // every visit to the Archetype screen) avoids SQLITE_LOCKED errors caused
         // by other DAOs not closing their statements/result sets.
         try {
             ArchetypeDAO.ResetAndSeedCatalog();
-            QuestDAO.ResetAndSeedCatalog();
-            QuestOptionDAO.ResetAndSeedCatalog();
-            ReflectionPromptDAO.ResetAndSeedCatalog();
+            questDAO.ResetAndSeedCatalog();
+            questOptionDAO.ResetAndSeedCatalog();
+            reflectionPromptDAO.ResetAndSeedCatalog();
             initialiseUserQuestData();
-            TaskDAO.EnsureTables();
-            TaskDAO.PopulateChallenges();
+            taskDAO.EnsureTables();
+            taskDAO.PopulateChallenges();
             JournalEntryDAO.EnsureTables();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -58,6 +66,7 @@ public class MainApplication extends Application {
 
             LoginCache loginCache = loginCacheService.GetLoginCache();
 
+            System.out.println(loginCacheService.toString());
             // do we have login details
             if (loginCache.GetEmail().isEmpty()){
                 NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
@@ -78,7 +87,8 @@ public class MainApplication extends Application {
     }
 
     static void initialiseUserQuestData() throws Exception{
-        UserQuestDAO.EnsureTables();
+        UserQuestDAO userQuestDAO = new UserQuestDAO();
+        userQuestDAO.EnsureTables();
     }
 
     void AttemptLogin(LoginCache loginCache) throws Exception {
@@ -87,7 +97,8 @@ public class MainApplication extends Application {
             throw new Exception("Login Cache Expired");
         }
 
-        if (!EmailService.DoesAccountWithEmailExist(loginCache.GetEmail())){
+        EmailService emailService = new EmailService();
+        if (!emailService.DoesAccountWithEmailExist(loginCache.GetEmail())){
             throw new Exception("Account does not exist with this email");
         }
 

@@ -33,12 +33,16 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     private String oldEmail;
 
 
+    private EmailService EmailService;
+    private AccountService AccountService;
     /** Initialises the personal-details form
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        AccountService = new AccountService();
+        EmailService = new EmailService();
         oldEmail = ApplicationManager.CurrentAccount.getCurrentEmail();
 
         // attempt to populate the entry fields with the users current account details

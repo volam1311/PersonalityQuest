@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.personalisation;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quiz.Option;
 import com.example.personalityquest.SQLite;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Stores and retrieves quiz answer-option records */
-public class OptionDAO {
+public class OptionDAO extends ParentDAO {
     public static final String CREATE_OPTIONS =
             """
             CREATE TABLE IF NOT EXISTS Options (
@@ -21,15 +22,20 @@ public class OptionDAO {
             option3 TEXT NOT NULL)
             """;
 
-    private OptionDAO() {}
+    public OptionDAO() {
+        super();
+    }
+
+    public OptionDAO(Connection connection){
+        super(connection);
+    }
 
 
     /** Creates option tables if they do not already exist
      * @throws SQLException if the tables cannot be created
      */
-    public static void EnsureTables() throws SQLException {
-        Connection conn = SQLite.getConnection();
-        try (Statement stmt = conn.createStatement()) {
+    public void EnsureTables() throws SQLException {
+        try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(CREATE_OPTIONS);
         }
     }
@@ -38,8 +44,7 @@ public class OptionDAO {
      * @return true when the catalog contains records
      * @throws SQLException if the catalog cannot be checked
      */
-    public static boolean HasCatalog() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public boolean HasCatalog() throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT COUNT(*) FROM Options"
         )) {
@@ -60,7 +65,7 @@ public class OptionDAO {
      * @param option3 the text of the third answer
      * @throws SQLException if the option set cannot be inserted
      */
-    public static void InsertOptions(
+    public void InsertOptions(
             int optionsID,
             int option1Archetype,
             int option2Archetype,
@@ -70,8 +75,7 @@ public class OptionDAO {
             String option3) throws SQLException {
         EnsureTables();
 
-        Connection conn = SQLite.getConnection();
-        try (PreparedStatement statement = conn.prepareStatement(
+        try (PreparedStatement statement = connection.prepareStatement(
                 """
                    INSERT OR IGNORE INTO Options 
                    (optionsID, option1Archetype, option2Archetype, option3Archetype, option1, option2, option3)
@@ -94,10 +98,9 @@ public class OptionDAO {
      * @return the options in the catalog
      * @throws SQLException if the options cannot be read
      */
-    public static List<Option> GetOptions() throws SQLException {
+    public List<Option> GetOptions() throws SQLException {
         EnsureTables();
-        Connection conn = SQLite.getConnection();
-        try (PreparedStatement statement = conn.prepareStatement(
+        try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * FROM Options ORDER BY optionsID
                     """)){
@@ -123,10 +126,9 @@ public class OptionDAO {
      * @return the matching option, or null if no option is found
      * @throws SQLException if the option cannot be read
      */
-    public static Option GetOptionById(int optionsID) throws SQLException {
+    public Option GetOptionById(int optionsID) throws SQLException {
         EnsureTables();
-        Connection conn = SQLite.getConnection();
-        try (PreparedStatement statement = conn.prepareStatement(
+        try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * FROM Options WHERE optionsID = ?
                     """
@@ -153,7 +155,7 @@ public class OptionDAO {
     /** Inserts the default option catalog
      * @throws SQLException if the catalog cannot be inserted
      */
-    public static void SeedCatalog() throws SQLException {
+    public void SeedCatalog() throws SQLException {
 
         InsertOptions(1, 1, 2, 3,
                 "Trust that things will work out and see the good in people",

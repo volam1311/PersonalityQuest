@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Ref;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,9 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ReflectionFeedbackDAOTest {
     private Connection connection;
 
+    private ReflectionFeedbackDAO ReflectionFeedbackDAO;
+    private ReflectionFeedbackService ReflectionFeedbackService;
     @BeforeEach
     void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        ReflectionFeedbackDAO = new ReflectionFeedbackDAO(connection);
+        ReflectionFeedbackService = new ReflectionFeedbackService(ReflectionFeedbackDAO);
         SQLite.setConnection(connection);
     }
 

@@ -1,9 +1,9 @@
 package com.example.personalityquest.DAO.quest;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quest.WeeklyTask;
-import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 /** Stores and updates each account's weekly task records */
-public class WeeklyTaskDAO {
+public class WeeklyTaskDAO extends ParentDAO {
     private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
 
     private final static int FALLBACK_WEEKLY_LABOUR_ID = 1;
@@ -50,7 +50,13 @@ public class WeeklyTaskDAO {
             """;
 
 
+    public WeeklyTaskDAO(){
+        super();
+    }
 
+    public WeeklyTaskDAO(Connection connection) {
+        super(connection);
+    }
     /**
      * Gets a Weekly Task for a given taskId, email and weekStart
      * @param email The email of the acccount you want to get the WeeklyTask from
@@ -61,9 +67,8 @@ public class WeeklyTaskDAO {
      * @throws SQLException From a Database Access Failure
      * @throws Exception If a "Bad" Weekly Task is made
      */
-    public static WeeklyTask GetWeeklyTaskMatchingId(String email, int taskId, LocalDate weekStart) throws Exception {
+    public WeeklyTask GetWeeklyTaskMatchingId(String email, int taskId, LocalDate weekStart) throws Exception {
         // executes the query to find the given taskId, email and weekStart date
-        Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(GET_WEEKLY_TASK);
         // assign parameters
         statement.setInt(1, taskId);
@@ -91,9 +96,9 @@ public class WeeklyTaskDAO {
      * @throws IllegalArgumentException If Week start or Email is null or empty
      * @throws SQLException Database Access Failure
      */
-    public static int[] GetTaskIdsAssignedForWeek(String email, LocalDate weekStart) throws Exception {
+    public int[] GetTaskIdsAssignedForWeek(String email, LocalDate weekStart) throws Exception {
         // executes the query to find all tasks that were assigned this week
-        Connection connection = SQLite.getConnection();
+
         PreparedStatement statement = connection.prepareStatement(TASK_FOR_EMAIL);
         // assign parameters
         statement.setString(1, email);
@@ -117,9 +122,11 @@ public class WeeklyTaskDAO {
      * @param weekStart The weekStart you want to insertTasks for
      * @throws Exception For Database Update Failures and if week start or email is null or empty
      */
-    public static void InsertTasks(String email, LocalDate weekStart) throws Exception {
+    public void InsertTasks(String email, LocalDate weekStart) throws Exception {
         try{
-            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail
+            UserQuestService userQuestService = new UserQuestService();
+            TaskService TaskService = new TaskService();
+            UserQuest currentActiveQuest = userQuestService.GetCurrentActiveUserQuestForEmail
                     (ApplicationManager.CurrentAccount.getCurrentEmail());
 
             System.out.println("Current Quest labourId is" + currentActiveQuest.getLabourId());
@@ -152,7 +159,7 @@ public class WeeklyTaskDAO {
         }
     }
 
-    private static void InsertWeeklyTaskRows(String email, int[] taskIds, LocalDate weekStart) throws SQLException {
+    private void InsertWeeklyTaskRows(String email, int[] taskIds, LocalDate weekStart) throws SQLException {
         StringBuilder insertSql = new StringBuilder(
                 "INSERT INTO WeeklyTasks (accountEmail, taskId, status, weekStart) VALUES ");
         for (int i = 0; i < taskIds.length; i++) {
@@ -162,7 +169,7 @@ public class WeeklyTaskDAO {
             insertSql.append("(?, ?, ?, ?)");
         }
 
-        Connection connection = SQLite.getConnection();
+
         PreparedStatement statement = connection.prepareStatement(insertSql.toString());
         for (int i = 0; i < taskIds.length; i++) {
             int start = i * 4;
@@ -174,7 +181,7 @@ public class WeeklyTaskDAO {
         statement.executeUpdate();
     }
 
-    private static int[] uniquePositiveIds(int[] taskIds) {
+    private int[] uniquePositiveIds(int[] taskIds) {
         Set<Integer> uniqueIds = new LinkedHashSet<>();
         if (taskIds != null) {
             for (int taskId : taskIds) {
@@ -186,7 +193,7 @@ public class WeeklyTaskDAO {
         return toIntArray(uniqueIds);
     }
 
-    private static int[] toIntArray(Iterable<Integer> values) {
+    private int[] toIntArray(Iterable<Integer> values) {
         List<Integer> list = new ArrayList<>();
         for (Integer value : values) {
             list.add(value);
@@ -201,8 +208,7 @@ public class WeeklyTaskDAO {
     /**
      * How many distinct weeks this account already has weekly tasks for.
      */
-    public static int CountAssignedWeeks(String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public int CountAssignedWeeks(String email) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT COUNT(DISTINCT weekStart) FROM WeeklyTasks
@@ -225,8 +231,7 @@ public class WeeklyTaskDAO {
      * @param email The email of the account matching the WeeklyTask
      * @throws Exception If a Database Access Failure Or if the weekly task , reflection or email is null or empty
      */
-    public static void UpdateGivenTaskToDraft(WeeklyTask task, String reflection, String email) throws Exception {
-        Connection connection = SQLite.getConnection();
+    public void UpdateGivenTaskToDraft(WeeklyTask task, String reflection, String email) throws Exception {
         PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_DRAFT);
         statement.setString(1, reflection);
         statement.setString(2, email);
@@ -242,8 +247,7 @@ public class WeeklyTaskDAO {
      * @param email The email of the account matching the WeeklyTask
      * @throws Exception If a Database Access Failure Or if the weekly task
      */
-    public static void UpdateGivenTaskToBeFinished(WeeklyTask task, String reflection, String email) throws Exception {
-        Connection connection = SQLite.getConnection();
+    public void UpdateGivenTaskToBeFinished(WeeklyTask task, String reflection, String email) throws Exception {
         PreparedStatement statement = connection.prepareStatement(SQL_FINISH_TASK);
         statement.setString(1, reflection);
         statement.setString(2, email);

@@ -54,8 +54,10 @@ public class AccountCreationController {
     @FXML
     private Label Message;
 
+    private QuizService QuizService;
     @FXML
     private void initialize() {
+        QuizService = new QuizService();
         Rectangle clip = new Rectangle();
         clip.setArcWidth(56);
         clip.setArcHeight(56);
@@ -189,7 +191,8 @@ public class AccountCreationController {
             return;
         }
 
-        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText())) {
+        EmailService emailService = new EmailService();
+        if (emailService.DoesAccountWithEmailExist(emailEntry.getText())) {
             markFieldError(emailEntry);
             Message.setText("An account with this email already exists");
             return;

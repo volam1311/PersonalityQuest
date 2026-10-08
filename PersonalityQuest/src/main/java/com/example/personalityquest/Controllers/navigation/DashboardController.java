@@ -89,12 +89,28 @@ public class DashboardController implements Initializable {
     private double[] radarValues = new double[RADAR_AXIS_COUNT];
     private boolean isRefreshingQuestline = false;
 
+    private WeeklyTaskService WeeklyTaskService;
+    private UserQuestService UserQuestService;
+    private TaskService TaskService;
+    private QuestService QuestService;
+    private JournalEntryService JournalEntryService;
+    private StreakService StreakService;
+    private EmailService EmailService;
+    private QuizService QuizService;
     /** Initialises dashboard controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        TaskService = new TaskService();
+        UserQuestService = new UserQuestService();
+        WeeklyTaskService = new WeeklyTaskService();
+        QuestService = new QuestService();
+        JournalEntryService = new JournalEntryService();
+        StreakService = new StreakService();
+        EmailService = new EmailService();
+        QuizService = new QuizService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
         ConfigureHistoryList();
         ConfigureWeeklyTaskList();

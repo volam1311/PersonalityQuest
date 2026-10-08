@@ -2,6 +2,7 @@ package com.example.personalityquest.Services.profile;
 
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.profile.AchievementDAO;
+import com.example.personalityquest.DAO.profile.StreakDAO;
 import com.example.personalityquest.Model.profile.Achievement;
 import com.example.personalityquest.Model.profile.UserProfile;
 
@@ -23,26 +24,41 @@ public class AchievementService {
     public static final String CRITERIA_COMPLETED_QUESTS = "COMPLETED_QUESTS";
     public static final String CRITERIA_QUEST_PROGRESS = "QUEST_PROGRESS";
 
-    private AchievementService() {
+    private final AchievementDAO AchievementDAO;
+    private final StreakService StreakService;
+
+    public AchievementService() {
+        super();
+        this.AchievementDAO = new AchievementDAO();
+        this.StreakService = new StreakService();
+    }
+
+    public AchievementService(AchievementDAO AchievementDAO) {
+        super();
+        this.AchievementDAO = AchievementDAO;
+
+        StreakDAO streakDAO = new StreakDAO(AchievementDAO.getConnection());
+        this.StreakService = new StreakService(streakDAO);
     }
 
     /**
      * Loads streak, quest, and weekly-task totals for an account.
      * Current streak uses {@link StreakService} so missed weeks match the rest of the app.
      */
-    public static UserProfile GetProgress(String email) throws SQLException {
+    public UserProfile GetProgress(String email) throws SQLException {
         if (ApplicationManager.isEmpty(email)) {
             return UserProfile.empty();
         }
 
         UserProfile progress = AchievementDAO.GetProgress(email);
+
         return progress.withCurrentStreak(StreakService.GetCurrentStreak(email));
     }
 
     /**
      * Returns catalog achievements from the database, unlocking any the account now qualifies for.
      */
-    public static List<Achievement> GetAchievementsForEmail(String email) throws SQLException {
+    public List<Achievement> GetAchievementsForEmail(String email) throws SQLException {
         EnsureCatalog();
         List<Achievement> catalog = AchievementDAO.GetCatalog();
         if (ApplicationManager.isEmpty(email)) {
@@ -65,7 +81,7 @@ public class AchievementService {
         return achievements;
     }
 
-    static boolean MeetsCriteria(Achievement achievement, UserProfile progress) {
+    boolean MeetsCriteria(Achievement achievement, UserProfile progress) {
         if (progress == null) {
             return false;
         }
@@ -87,7 +103,7 @@ public class AchievementService {
         };
     }
 
-    private static void EnsureCatalog() throws SQLException {
+    private void EnsureCatalog() throws SQLException {
         AchievementDAO.EnsureTables();
 
         Insert(1, "Signed in", "Create an account and open your profile", CRITERIA_ACCOUNT, 1, 1);
@@ -107,7 +123,7 @@ public class AchievementService {
         Insert(15, "Legend", "Reach a 21-week best streak", CRITERIA_BEST_STREAK, 21, 4);
     }
 
-    private static void Insert(
+    private void Insert(
             int achievementId,
             String name,
             String description,

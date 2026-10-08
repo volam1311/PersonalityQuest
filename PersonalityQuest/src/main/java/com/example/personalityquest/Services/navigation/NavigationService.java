@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 /** Loads application screens and manages the primary stage */
 public class NavigationService {
+
     public final static String fxmlPrefix = "/com/example/personalityquest/";
 
     public static Stage stage;
