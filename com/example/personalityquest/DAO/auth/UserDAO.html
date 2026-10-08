@@ -61,6 +61,7 @@ initTheme();
 <div class="toc-header">Contents&nbsp;<input type="text" class="filter-input" disabled placeholder="Filter contents (type .)" aria-label="Filter table of contents" autocomplete="off" spellcheck="false"><input type="reset" class="reset-filter" disabled tabindex="-1" value="Reset">&nbsp;<button class="toc-sort-toggle" id="toc-lexical-order-toggle"><img src="../../../../../resource-files/sort-a-z.svg" alt="Sort member details in lexicographical order"></button></div>
 <ol class="toc-list" tabindex="-1">
 <li><a href="#" tabindex="0">Description</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
@@ -85,7 +86,9 @@ initTheme();
 <h1 title="Class UserDAO" class="title">Class UserDAO</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class in java.lang" class="external-link">java.lang.Object</a>
+<div class="inheritance"><a href="../ParentDAO.html" title="class in com.example.personalityquest.DAO">com.example.personalityquest.DAO.ParentDAO</a>
 <div class="inheritance">com.example.personalityquest.DAO.auth.UserDAO</div>
+</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
@@ -95,13 +98,31 @@ initTheme();
 <hr>
 <div class="horizontal-scroll">
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">UserDAO</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class in java.lang" class="external-link">Object</a>
+<span class="extends-implements">extends <a href="../ParentDAO.html" title="class in com.example.personalityquest.DAO">ParentDAO</a>
 implements <a href="IUserDAO.html" title="interface in com.example.personalityquest.DAO.auth">IUserDAO</a></span></div>
 <div class="block">SQLite persistence for <a href="../../Model/auth/User.html" title="class in com.example.personalityquest.Model.auth"><code>User</code></a> against the existing Accounts table.</div>
 </div>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="inherited-list">
+<h3 id="fields-inherited-from-class-com.example.personalityquest.DAO.ParentDAO">Fields inherited from class&nbsp;<a href="../ParentDAO.html#field-summary" title="class in com.example.personalityquest.DAO">ParentDAO</a></h3>
+<code><a href="../ParentDAO.html#connection">connection</a></code>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a></code></div>
+<div class="col-second even-row-color"><code><a href="../ParentDAO.html#connection" class="member-name-link">connection</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -153,6 +174,18 @@ implements <a href="IUserDAO.html" title="interface in com.example.personalityqu
 <div class="block">Updates a stored user record</div>
 </div>
 </div>
+</div>
+</div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-com.example.personalityquest.DAO.ParentDAO">Methods inherited from class&nbsp;<a href="../ParentDAO.html#method-summary" title="class in com.example.personalityquest.DAO">ParentDAO</a></h3>
+<code><a href="../ParentDAO.html#getConnection()" title="getConnection()">getConnection</a></code>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a></code></div>
+<div class="col-second even-row-color"><code><a href="../ParentDAO.html#getConnection()" class="member-name-link">getConnection</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </div>
 <div class="inherited-list">

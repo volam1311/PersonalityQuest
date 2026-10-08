@@ -20,6 +20,7 @@ com.example.personalityquest.Model.chat
 com.example.personalityquest.Model.profile
 com.example.personalityquest.Model.quest
 com.example.personalityquest.Model.quiz
+com.example.personalityquest.Services
 com.example.personalityquest.Services.auth
 com.example.personalityquest.Services.chat
 com.example.personalityquest.Services.navigation
