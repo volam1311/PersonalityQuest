@@ -9,9 +9,20 @@ import java.util.Collections;
 import java.util.List;
 
 /** Provides task lookup, formatting, and selection operations */
-<span class="nc" id="L12">public class TaskService {</span>
+public class TaskService {
 <span class="fc" id="L13">    private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();</span>
 
+    private TaskDAO TaskDAO;
+
+    public TaskService(){
+<span class="fc" id="L18">        super();</span>
+<span class="fc" id="L19">        this.TaskDAO = new TaskDAO();</span>
+<span class="fc" id="L20">    }</span>
+
+    public TaskService(TaskDAO taskDAO){
+<span class="fc" id="L23">        super();</span>
+<span class="fc" id="L24">        this.TaskDAO = taskDAO;</span>
+<span class="fc" id="L25">    }</span>
     /**
      * Gets a Task from the database that matches the given id
      * @param taskId The taskId you of the Task you want to retrieve
@@ -20,12 +31,12 @@ import java.util.List;
      * @throws IllegalArgumentException If the given taskId is equal to 0
      * @throws Exception If there is a Database Access Failure OR user doesn't have separate tasks
      */
-    public static Task GetTaskForId(int taskId) throws Exception {
-<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (IsTaskIdNull(taskId)){</span>
-<span class="fc" id="L25">            throw new IllegalArgumentException(&quot;TaskId is null&quot;);</span>
+    public Task GetTaskForId(int taskId) throws Exception {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (IsTaskIdNull(taskId)){</span>
+<span class="fc" id="L36">            throw new IllegalArgumentException(&quot;TaskId is null&quot;);</span>
         }
 
-<span class="fc" id="L28">        return TaskDAO.GetTaskForId(taskId);</span>
+<span class="fc" id="L39">        return TaskDAO.GetTaskForId(taskId);</span>
     }
 
     /**
@@ -35,51 +46,51 @@ import java.util.List;
      * @return A list of Task objects, empty if none exist
      * @throws Exception If the labourId is invalid or a Database Access Failure occurs
      */
-    public static List&lt;Task&gt; GetTasksForLabourId(int labourId) throws Exception {
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (IsLabourIdNull(labourId)) {</span>
-<span class="fc" id="L40">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+    public List&lt;Task&gt; GetTasksForLabourId(int labourId) throws Exception {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (IsLabourIdNull(labourId)) {</span>
+<span class="fc" id="L51">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
         }
 
-<span class="fc" id="L43">        return TaskDAO.GetTasksForLabourId(labourId);</span>
+<span class="fc" id="L54">        return TaskDAO.GetTasksForLabourId(labourId);</span>
     }
 
     /**
      * Joins task names for compact UI labels.
      */
-    public static String JoinTaskNames(List&lt;Task&gt; tasks) {
-<span class="nc bnc" id="L50" title="All 4 branches missed.">        if (tasks == null || tasks.isEmpty()) {</span>
-<span class="nc" id="L51">            return &quot;&quot;;</span>
+    public String JoinTaskNames(List&lt;Task&gt; tasks) {
+<span class="nc bnc" id="L61" title="All 4 branches missed.">        if (tasks == null || tasks.isEmpty()) {</span>
+<span class="nc" id="L62">            return &quot;&quot;;</span>
         }
 
-<span class="nc" id="L54">        StringBuilder names = new StringBuilder();</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">        for (Task task : tasks) {</span>
-<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (!names.isEmpty()) {</span>
-<span class="nc" id="L57">                names.append(&quot; · &quot;);</span>
+<span class="nc" id="L65">        StringBuilder names = new StringBuilder();</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (Task task : tasks) {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">            if (!names.isEmpty()) {</span>
+<span class="nc" id="L68">                names.append(&quot; · &quot;);</span>
             }
-<span class="nc" id="L59">            names.append(task.getName());</span>
-<span class="nc" id="L60">        }</span>
-<span class="nc" id="L61">        return names.toString();</span>
+<span class="nc" id="L70">            names.append(task.getName());</span>
+<span class="nc" id="L71">        }</span>
+<span class="nc" id="L72">        return names.toString();</span>
     }
 
     /**
      * Joins task names and descriptions for labour detail copy.
      */
-    public static String JoinTaskDetails(List&lt;Task&gt; tasks) {
-<span class="nc bnc" id="L68" title="All 4 branches missed.">        if (tasks == null || tasks.isEmpty()) {</span>
-<span class="nc" id="L69">            return &quot;&quot;;</span>
+    public String JoinTaskDetails(List&lt;Task&gt; tasks) {
+<span class="nc bnc" id="L79" title="All 4 branches missed.">        if (tasks == null || tasks.isEmpty()) {</span>
+<span class="nc" id="L80">            return &quot;&quot;;</span>
         }
 
-<span class="nc" id="L72">        StringBuilder details = new StringBuilder();</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">        for (Task task : tasks) {</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (!details.isEmpty()) {</span>
-<span class="nc" id="L75">                details.append(&quot;\n\n&quot;);</span>
+<span class="nc" id="L83">        StringBuilder details = new StringBuilder();</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        for (Task task : tasks) {</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (!details.isEmpty()) {</span>
+<span class="nc" id="L86">                details.append(&quot;\n\n&quot;);</span>
             }
-<span class="nc" id="L77">            details.append(task.getName());</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (!ApplicationManager.isEmpty(task.getDescription())) {</span>
-<span class="nc" id="L79">                details.append(&quot;\n&quot;).append(task.getDescription());</span>
+<span class="nc" id="L88">            details.append(task.getName());</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            if (!ApplicationManager.isEmpty(task.getDescription())) {</span>
+<span class="nc" id="L90">                details.append(&quot;\n&quot;).append(task.getDescription());</span>
             }
-<span class="nc" id="L81">        }</span>
-<span class="nc" id="L82">        return details.toString();</span>
+<span class="nc" id="L92">        }</span>
+<span class="nc" id="L93">        return details.toString();</span>
     }
 
 
@@ -90,28 +101,28 @@ import java.util.List;
      * @return A populated Array of weekly taskId's that have a matching labourId to the one given
      * @throws Exception If the labourId is null OR a Database Access Failure
      */
-    public static int[] GetRandomAmountOfTaskIdsForLabourId(int labourId) throws Exception {
-<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (IsLabourIdNull(labourId)){</span>
-<span class="fc" id="L95">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+    public int[] GetRandomAmountOfTaskIdsForLabourId(int labourId) throws Exception {
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (IsLabourIdNull(labourId)){</span>
+<span class="fc" id="L106">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
         }
 
-<span class="fc" id="L98">        List&lt;Integer&gt; taskIds = TaskDAO.GetWeeklyTaskIdsForLabourId(labourId);</span>
+<span class="fc" id="L109">        List&lt;Integer&gt; taskIds = TaskDAO.GetWeeklyTaskIdsForLabourId(labourId);</span>
 
 
-<span class="fc" id="L101">        Collections.shuffle(taskIds);</span>
+<span class="fc" id="L112">        Collections.shuffle(taskIds);</span>
 
 
-<span class="fc" id="L104">        int[] returnedTaskIds = new int[AMOUNT_OF_TASKS];</span>
+<span class="fc" id="L115">        int[] returnedTaskIds = new int[AMOUNT_OF_TASKS];</span>
 
-<span class="fc bfc" id="L106" title="All 2 branches covered.">        for (int i = 0; i &lt; AMOUNT_OF_TASKS; i++){</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">            if (i == taskIds.size()) {</span>
-<span class="fc" id="L108">                System.out.println(&quot;Early returned&quot;);</span>
-<span class="fc" id="L109">                return Arrays.copyOf(returnedTaskIds, i);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        for (int i = 0; i &lt; AMOUNT_OF_TASKS; i++){</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (i == taskIds.size()) {</span>
+<span class="fc" id="L119">                System.out.println(&quot;Early returned&quot;);</span>
+<span class="fc" id="L120">                return Arrays.copyOf(returnedTaskIds, i);</span>
             }
-<span class="fc" id="L111">            returnedTaskIds[i] = taskIds.get(i);</span>
+<span class="fc" id="L122">            returnedTaskIds[i] = taskIds.get(i);</span>
         }
 
-<span class="fc" id="L114">        return returnedTaskIds;</span>
+<span class="fc" id="L125">        return returnedTaskIds;</span>
     }
 
     /**
@@ -121,39 +132,39 @@ import java.util.List;
      * @param weekNumber The 1-based week of the labour
      * @return Weekly task ids for that week, empty if none exist
      */
-    public static int[] GetTaskIdsForLabourWeek(int labourId, int weekNumber) throws Exception {
-<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (IsLabourIdNull(labourId)) {</span>
-<span class="nc" id="L126">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+    public int[] GetTaskIdsForLabourWeek(int labourId, int weekNumber) throws Exception {
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (IsLabourIdNull(labourId)) {</span>
+<span class="nc" id="L137">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
         }
-<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        if (weekNumber &lt;= 0) {</span>
-<span class="nc" id="L129">            throw new IllegalArgumentException(&quot;Week number is invalid&quot;);</span>
-        }
-
-<span class="fc" id="L132">        List&lt;Integer&gt; taskIds = TaskDAO.GetWeeklyTaskIdsForLabourId(labourId);</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (taskIds.isEmpty()) {</span>
-<span class="nc" id="L134">            return new int[0];</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        if (weekNumber &lt;= 0) {</span>
+<span class="nc" id="L140">            throw new IllegalArgumentException(&quot;Week number is invalid&quot;);</span>
         }
 
-<span class="fc" id="L137">        int weeks = Math.max(1, (int) Math.ceil(taskIds.size() / (double) AMOUNT_OF_TASKS));</span>
-<span class="fc" id="L138">        int week = ((weekNumber - 1) % weeks) + 1;</span>
-<span class="fc" id="L139">        int start = (week - 1) * AMOUNT_OF_TASKS;</span>
-<span class="fc" id="L140">        int count = Math.min(AMOUNT_OF_TASKS, taskIds.size());</span>
-<span class="fc" id="L141">        int[] returnedTaskIds = new int[count];</span>
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        for (int index = 0; index &lt; count; index++) {</span>
-<span class="fc" id="L143">            returnedTaskIds[index] = taskIds.get((start + index) % taskIds.size());</span>
+<span class="fc" id="L143">        List&lt;Integer&gt; taskIds = TaskDAO.GetWeeklyTaskIdsForLabourId(labourId);</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (taskIds.isEmpty()) {</span>
+<span class="nc" id="L145">            return new int[0];</span>
         }
-<span class="fc" id="L145">        return returnedTaskIds;</span>
+
+<span class="fc" id="L148">        int weeks = Math.max(1, (int) Math.ceil(taskIds.size() / (double) AMOUNT_OF_TASKS));</span>
+<span class="fc" id="L149">        int week = ((weekNumber - 1) % weeks) + 1;</span>
+<span class="fc" id="L150">        int start = (week - 1) * AMOUNT_OF_TASKS;</span>
+<span class="fc" id="L151">        int count = Math.min(AMOUNT_OF_TASKS, taskIds.size());</span>
+<span class="fc" id="L152">        int[] returnedTaskIds = new int[count];</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        for (int index = 0; index &lt; count; index++) {</span>
+<span class="fc" id="L154">            returnedTaskIds[index] = taskIds.get((start + index) % taskIds.size());</span>
+        }
+<span class="fc" id="L156">        return returnedTaskIds;</span>
     }
 
-    public static List&lt;Task&gt; GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception {
-<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (IsLabourIdNull(labourId)) {</span>
-<span class="nc" id="L150">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
+    public List&lt;Task&gt; GetTasksForLabourIdAndReactionType(int labourId, String reactionType) throws Exception {
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        if (IsLabourIdNull(labourId)) {</span>
+<span class="nc" id="L161">            throw new IllegalArgumentException(&quot;Labour Id is null&quot;);</span>
         }
-<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reactionType)){</span>
-<span class="nc" id="L153">            throw new IllegalArgumentException(&quot;Reaction type is null&quot;);</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reactionType)){</span>
+<span class="nc" id="L164">            throw new IllegalArgumentException(&quot;Reaction type is null&quot;);</span>
         }
 
-<span class="nc" id="L156">        return TaskDAO.GetTasksForLabourIdAndReactionType(labourId, reactionType);</span>
+<span class="nc" id="L167">        return TaskDAO.GetTasksForLabourIdAndReactionType(labourId, reactionType);</span>
     }
 
     /// NULL CHECKING
@@ -163,7 +174,7 @@ import java.util.List;
      * @return Whether the labourId is equal to 0
      */
     private static boolean IsLabourIdNull(int labourId){
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        return labourId == 0;</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        return labourId == 0;</span>
     }
     /**
      * Checks if the given taskId is equal to 0
@@ -171,7 +182,7 @@ import java.util.List;
      * @return Whether the taskId is equal to 0
      */
     private static boolean IsTaskIdNull(int taskId){
-<span class="fc bfc" id="L174" title="All 2 branches covered.">        return taskId == 0;</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        return taskId == 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

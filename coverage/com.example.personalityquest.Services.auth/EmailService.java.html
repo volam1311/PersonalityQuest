@@ -3,6 +3,7 @@
 import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Services.ParentService;
 
 import java.sql.SQLException;
 
@@ -10,20 +11,31 @@ import java.sql.SQLException;
  * This class managers everything to do with emails and has utility functions to check
  * if account exist for them or retrieve the EmailDetails matching the email
  */
-<span class="nc" id="L13">public class EmailService {</span>
+public class EmailService extends ParentService {
+
+    private AccountDAO AccountDAO;
+    public EmailService(){
+<span class="nc" id="L18">        super();</span>
+<span class="nc" id="L19">        this.AccountDAO = new AccountDAO();</span>
+<span class="nc" id="L20">    }</span>
+
+    public EmailService(AccountDAO accountDAO){
+<span class="fc" id="L23">        super();</span>
+<span class="fc" id="L24">        this.AccountDAO = accountDAO;</span>
+<span class="fc" id="L25">    }</span>
     /**
      * Checks to see whether an account exists in the database with the given email
      * @param email &quot;The email for the presumed account you want to check&quot;
      * @return &quot;Whether the account exists in the database&quot;
      * @throws SQLException &quot;Database Access&quot;
      */
-    public static boolean DoesAccountWithEmailExist(String email) throws SQLException {
+    public boolean DoesAccountWithEmailExist(String email) throws SQLException {
         // check nulls
-<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="fc" id="L23">            System.out.println(&quot;Email is null therefor it does not exist&quot;);</span>
-<span class="fc" id="L24">            return false;}</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="fc" id="L35">            System.out.println(&quot;Email is null therefor it does not exist&quot;);</span>
+<span class="fc" id="L36">            return false;}</span>
 
-<span class="fc" id="L26">        return AccountDAO.DoesAccountWithEmailExist(email);</span>
+<span class="fc" id="L38">        return AccountDAO.DoesAccountWithEmailExist(email);</span>
     }
 
     /**
@@ -32,13 +44,13 @@ import java.sql.SQLException;
      * @return &quot;Email, UserName FirstName, LastName&quot;
      * @throws Exception &quot;Database Access Failure&quot;
      */
-    public static EmailDetails GetDetailsForEmail(String email) throws Exception {
+    public EmailDetails GetDetailsForEmail(String email) throws Exception {
         // check nulls
-<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="fc" id="L38">            System.out.println(&quot;Email is null therefore details can not be gotten&quot;);</span>
-<span class="fc" id="L39">            return null;}</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="fc" id="L50">            System.out.println(&quot;Email is null therefore details can not be gotten&quot;);</span>
+<span class="fc" id="L51">            return null;}</span>
 
-<span class="fc" id="L41">        return AccountDAO.GetDetailsForEmail(email);</span>
+<span class="fc" id="L53">        return AccountDAO.GetDetailsForEmail(email);</span>
     }
 
 }
