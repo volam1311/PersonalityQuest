@@ -61,18 +61,11 @@ initTheme();
 <div class="toc-header">Contents&nbsp;<input type="text" class="filter-input" disabled placeholder="Filter contents (type .)" aria-label="Filter table of contents" autocomplete="off" spellcheck="false"><input type="reset" class="reset-filter" disabled tabindex="-1" value="Reset">&nbsp;<button class="toc-sort-toggle" id="toc-lexical-order-toggle"><img src="../../../../../resource-files/sort-a-z.svg" alt="Sort member details in lexicographical order"></button></div>
 <ol class="toc-list" tabindex="-1">
 <li><a href="#" tabindex="0">Description</a></li>
-<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
-<li><a href="#method-summary" tabindex="0">Method Summary</a>
-<ol class="toc-list">
-<li><a href="#methods-inherited-from-class-com.example.personalityquest.DAO.ParentDAO" tabindex="0">Methods inherited from class&nbsp;ParentDAO</a></li>
-<li><a href="#methods-inherited-from-class-java.lang.Object" tabindex="0">Methods inherited from class&nbsp;Object</a></li>
-</ol>
-</li>
+<li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E()" tabindex="0">UserQuestDAO()</a></li>
-<li><a href="#%3Cinit%3E(java.sql.Connection)" tabindex="0">UserQuestDAO(Connection)</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
@@ -101,38 +94,18 @@ initTheme();
 <h1 title="Class UserQuestDAO" class="title">Class UserQuestDAO</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../ParentDAO.html" title="class in com.example.personalityquest.DAO">com.example.personalityquest.DAO.ParentDAO</a>
 <div class="inheritance">com.example.personalityquest.DAO.quest.UserQuestDAO</div>
-</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="horizontal-scroll">
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">UserQuestDAO</span>
-<span class="extends-implements">extends <a href="../ParentDAO.html" title="class in com.example.personalityquest.DAO">ParentDAO</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Stores and retrieves each account's storyline quest progress</div>
 </div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- =========== FIELD SUMMARY =========== -->
-<li>
-<section class="field-summary" id="field-summary">
-<h2>Field Summary</h2>
-<div class="inherited-list">
-<h3 id="fields-inherited-from-class-com.example.personalityquest.DAO.ParentDAO">Fields inherited from class&nbsp;<a href="../ParentDAO.html#field-summary" title="class in com.example.personalityquest.DAO">ParentDAO</a></h3>
-<code><a href="../ParentDAO.html#connection">connection</a></code>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a></code></div>
-<div class="col-second even-row-color"><code><a href="../ParentDAO.html#connection" class="member-name-link">connection</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</div>
-</section>
-</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -143,8 +116,6 @@ initTheme();
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">UserQuestDAO</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.sql.Connection)" class="member-name-link">UserQuestDAO</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a>&nbsp;connection)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -153,100 +124,88 @@ initTheme();
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ClearAll()" class="member-name-link">ClearAll</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ClearAll()" class="member-name-link">ClearAll</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Deletes storyline quest progress for every account</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#DeactivateUserQuest(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)" class="member-name-link">DeactivateUserQuest</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#DeactivateUserQuest(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)" class="member-name-link">DeactivateUserQuest</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#DoesUserHaveActiveQuest(java.lang.String)" class="member-name-link">DoesUserHaveActiveQuest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#DoesUserHaveActiveQuest(java.lang.String)" class="member-name-link">DoesUserHaveActiveQuest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Checks to see if a given account email has a currently active quest</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#EnsureTables()" class="member-name-link">EnsureTables</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#EnsureTables()" class="member-name-link">EnsureTables</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates the user quest progress table if it does not already exist</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetCurrentActiveUserQuestForEmail(java.lang.String)" class="member-name-link">GetCurrentActiveUserQuestForEmail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetCurrentActiveUserQuestForEmail(java.lang.String)" class="member-name-link">GetCurrentActiveUserQuestForEmail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Retrives the current active quest for the user matching the account</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetUserQuestForEmailAndLabourId(java.lang.String,int)" class="member-name-link">GetUserQuestForEmailAndLabourId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetUserQuestForEmailAndLabourId(java.lang.String,int)" class="member-name-link">GetUserQuestForEmailAndLabourId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
  int&nbsp;labourId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets an accounts specific UserQuest for the labourId</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetUserQuestsForEmail(java.lang.String)" class="member-name-link">GetUserQuestsForEmail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetUserQuestsForEmail(java.lang.String)" class="member-name-link">GetUserQuestsForEmail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets every UserQuest assigned to the given account.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#InsertNewQuestForEmail(com.example.personalityquest.Model.quest.Quest,java.lang.String)" class="member-name-link">InsertNewQuestForEmail</a><wbr>(<a href="../../Model/quest/Quest.html" title="class in com.example.personalityquest.Model.quest">Quest</a>&nbsp;quest,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#InsertNewQuestForEmail(com.example.personalityquest.Model.quest.Quest,java.lang.String)" class="member-name-link">InsertNewQuestForEmail</a><wbr>(<a href="../../Model/quest/Quest.html" title="class in com.example.personalityquest.Model.quest">Quest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Inserts a new User Quest into the database then returns it</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#SetUserQuesStatusAsActive(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)" class="member-name-link">SetUserQuesStatusAsActive</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;userQuest,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#SetUserQuesStatusAsActive(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)" class="member-name-link">SetUserQuesStatusAsActive</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;userQuest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets the given UserQuest to active in the database</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#SetUserQuestStatusAsComplete(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)" class="member-name-link">SetUserQuestStatusAsComplete</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#SetUserQuestStatusAsComplete(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)" class="member-name-link">SetUserQuestStatusAsComplete</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets the given UserQuest to status "Complete" in the database</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#SetUserQuestToPercentageComplete(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,float)" class="member-name-link">SetUserQuestToPercentageComplete</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#SetUserQuestToPercentageComplete(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,float)" class="member-name-link">SetUserQuestToPercentageComplete</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
  float&nbsp;percentage)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets the given User quest to a percentage complete from 0 and 1 for the given email</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UpdateGivenQuestReflectionToBeFinished(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)" class="member-name-link">UpdateGivenQuestReflectionToBeFinished</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#UpdateGivenQuestReflectionToBeFinished(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)" class="member-name-link">UpdateGivenQuestReflectionToBeFinished</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;reflection,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UpdateGivenQuestReflectionToDraft(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)" class="member-name-link">UpdateGivenQuestReflectionToDraft</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#UpdateGivenQuestReflectionToDraft(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)" class="member-name-link">UpdateGivenQuestReflectionToDraft</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;reflection,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UpdateUserQuestReactionType(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)" class="member-name-link">UpdateUserQuestReactionType</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#UpdateUserQuestReactionType(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)" class="member-name-link">UpdateUserQuestReactionType</a><wbr>(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;reactionType)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
-</div>
-</div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.example.personalityquest.DAO.ParentDAO">Methods inherited from class&nbsp;<a href="../ParentDAO.html#method-summary" title="class in com.example.personalityquest.DAO">ParentDAO</a></h3>
-<code><a href="../ParentDAO.html#getConnection()" title="getConnection()">getConnection</a></code>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a></code></div>
-<div class="col-second even-row-color"><code><a href="../ParentDAO.html#getConnection()" class="member-name-link">getConnection</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </div>
 <div class="inherited-list">
@@ -271,14 +230,6 @@ initTheme();
 </div>
 </section>
 </li>
-<li>
-<section class="detail" id="&lt;init&gt;(java.sql.Connection)">
-<h3>UserQuestDAO</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">UserQuestDAO</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a>&nbsp;connection)</span></div>
-</div>
-</section>
-</li>
 </ul>
 </section>
 </li>
@@ -291,8 +242,8 @@ initTheme();
 <section class="detail" id="EnsureTables()">
 <h3>EnsureTables</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">EnsureTables</span>()
-                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">EnsureTables</span>()
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Creates the user quest progress table if it does not already exist</div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -305,8 +256,8 @@ initTheme();
 <section class="detail" id="ClearAll()">
 <h3>ClearAll</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">ClearAll</span>()
-              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">ClearAll</span>()
+                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Deletes storyline quest progress for every account</div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -319,8 +270,8 @@ initTheme();
 <section class="detail" id="GetCurrentActiveUserQuestForEmail(java.lang.String)">
 <h3>GetCurrentActiveUserQuestForEmail</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></span>&nbsp;<span class="element-name">GetCurrentActiveUserQuestForEmail</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class in java.lang" class="external-link">IllegalArgumentException</a>,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></span>&nbsp;<span class="element-name">GetCurrentActiveUserQuestForEmail</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
+                                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class in java.lang" class="external-link">IllegalArgumentException</a>,
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Retrives the current active quest for the user matching the account</div>
 <dl class="notes">
@@ -339,8 +290,8 @@ initTheme();
 <section class="detail" id="GetUserQuestsForEmail(java.lang.String)">
 <h3>GetUserQuestsForEmail</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&gt;</span>&nbsp;<span class="element-name">GetUserQuestsForEmail</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&gt;</span>&nbsp;<span class="element-name">GetUserQuestsForEmail</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
+                                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Gets every UserQuest assigned to the given account.
 Active quests are returned first, then not started, then complete.</div>
 <dl class="notes">
@@ -358,9 +309,9 @@ Active quests are returned first, then not started, then complete.</div>
 <section class="detail" id="SetUserQuesStatusAsActive(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)">
 <h3>SetUserQuesStatusAsActive</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">SetUserQuesStatusAsActive</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;userQuest,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">SetUserQuesStatusAsActive</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;userQuest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class in java.lang" class="external-link">IllegalArgumentException</a>,
+                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class in java.lang" class="external-link">IllegalArgumentException</a>,
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Sets the given UserQuest to active in the database</div>
 <dl class="notes">
@@ -379,9 +330,9 @@ have an active quest</dd>
 <section class="detail" id="InsertNewQuestForEmail(com.example.personalityquest.Model.quest.Quest,java.lang.String)">
 <h3>InsertNewQuestForEmail</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">InsertNewQuestForEmail</span><wbr><span class="parameters">(<a href="../../Model/quest/Quest.html" title="class in com.example.personalityquest.Model.quest">Quest</a>&nbsp;quest,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">InsertNewQuestForEmail</span><wbr><span class="parameters">(<a href="../../Model/quest/Quest.html" title="class in com.example.personalityquest.Model.quest">Quest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Inserts a new User Quest into the database then returns it</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -397,9 +348,9 @@ have an active quest</dd>
 <section class="detail" id="SetUserQuestStatusAsComplete(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)">
 <h3>SetUserQuestStatusAsComplete</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">SetUserQuestStatusAsComplete</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">SetUserQuestStatusAsComplete</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Sets the given UserQuest to status "Complete" in the database</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -416,10 +367,10 @@ have an active quest</dd>
 <section class="detail" id="SetUserQuestToPercentageComplete(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,float)">
 <h3>SetUserQuestToPercentageComplete</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">SetUserQuestToPercentageComplete</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">SetUserQuestToPercentageComplete</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
  float&nbsp;percentage)</span>
-                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Sets the given User quest to a percentage complete from 0 and 1 for the given email</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -438,8 +389,8 @@ have an active quest</dd>
 <section class="detail" id="DoesUserHaveActiveQuest(java.lang.String)">
 <h3>DoesUserHaveActiveQuest</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">DoesUserHaveActiveQuest</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class in java.lang" class="external-link">IllegalArgumentException</a>,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">DoesUserHaveActiveQuest</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
+                                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class in java.lang" class="external-link">IllegalArgumentException</a>,
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Checks to see if a given account email has a currently active quest</div>
 <dl class="notes">
@@ -458,9 +409,9 @@ have an active quest</dd>
 <section class="detail" id="GetUserQuestForEmailAndLabourId(java.lang.String,int)">
 <h3>GetUserQuestForEmailAndLabourId</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></span>&nbsp;<span class="element-name">GetUserQuestForEmailAndLabourId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></span>&nbsp;<span class="element-name">GetUserQuestForEmailAndLabourId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
  int&nbsp;labourId)</span>
-                                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                                                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Gets an accounts specific UserQuest for the labourId</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -478,10 +429,10 @@ have an active quest</dd>
 <section class="detail" id="UpdateGivenQuestReflectionToDraft(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)">
 <h3>UpdateGivenQuestReflectionToDraft</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UpdateGivenQuestReflectionToDraft</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UpdateGivenQuestReflectionToDraft</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;reflection,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></code></dd>
@@ -493,10 +444,10 @@ have an active quest</dd>
 <section class="detail" id="UpdateGivenQuestReflectionToBeFinished(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)">
 <h3>UpdateGivenQuestReflectionToBeFinished</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UpdateGivenQuestReflectionToBeFinished</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UpdateGivenQuestReflectionToBeFinished</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;reflection,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></code></dd>
@@ -508,9 +459,9 @@ have an active quest</dd>
 <section class="detail" id="DeactivateUserQuest(com.example.personalityquest.Model.quest.UserQuest,java.lang.String)">
 <h3>DeactivateUserQuest</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">DeactivateUserQuest</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">DeactivateUserQuest</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></code></dd>
@@ -522,10 +473,10 @@ have an active quest</dd>
 <section class="detail" id="UpdateUserQuestReactionType(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)">
 <h3>UpdateUserQuestReactionType</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UpdateUserQuestReactionType</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UpdateUserQuestReactionType</span><wbr><span class="parameters">(<a href="../../Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a>&nbsp;quest,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;reactionType)</span>
-                                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></code></dd>

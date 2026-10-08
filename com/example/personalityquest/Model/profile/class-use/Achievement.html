@@ -82,7 +82,7 @@ initTheme();
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../Achievement.html" title="class in com.example.personalityquest.Model.profile">Achievement</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../Achievement.html" title="class in com.example.personalityquest.Model.profile">Achievement</a>&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">AchievementDAO.</span><code><a href="../../../DAO/profile/AchievementDAO.html#GetCatalog()" class="member-name-link">GetCatalog</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -112,10 +112,17 @@ initTheme();
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../Achievement.html" title="class in com.example.personalityquest.Model.profile">Achievement</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../Achievement.html" title="class in com.example.personalityquest.Model.profile">Achievement</a>&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">AchievementService.</span><code><a href="../../../Services/profile/AchievementService.html#GetAchievementsForEmail(java.lang.String)" class="member-name-link">GetAchievementsForEmail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns catalog achievements from the database, unlocking any the account now qualifies for.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../Achievement.html" title="class in com.example.personalityquest.Model.profile">Achievement</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AchievementService.</span><code><a href="../../../Services/profile/AchievementService.html#GetRecentlyUnlockedAchievements(java.lang.String,int)" class="member-name-link">GetRecentlyUnlockedAchievements</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+ int&nbsp;limit)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the account's most recently unlocked achievements (most recent first),
+capped at <code>limit</code>.</div>
 </div>
 </div>
 </section>

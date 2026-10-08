@@ -74,7 +74,6 @@ initTheme();
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E()" tabindex="0">FriendsDAO()</a></li>
-<li><a href="#%3Cinit%3E(java.sql.Connection)" tabindex="0">FriendsDAO(Connection)</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
@@ -92,15 +91,13 @@ initTheme();
 <h1 title="Class FriendsDAO" class="title">Class FriendsDAO</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../ParentDAO.html" title="class in com.example.personalityquest.DAO">com.example.personalityquest.DAO.ParentDAO</a>
 <div class="inheritance">com.example.personalityquest.DAO.profile.FriendsDAO</div>
-</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="horizontal-scroll">
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">FriendsDAO</span>
-<span class="extends-implements">extends <a href="../ParentDAO.html" title="class in com.example.personalityquest.DAO">ParentDAO</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Stores and retrieves account friendship relationships</div>
 </div>
 </section>
@@ -125,18 +122,6 @@ initTheme();
 <div class="col-second even-row-color"><code><a href="#REMOVE_FRIEND" class="member-name-link">REMOVE_FRIEND</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
-<div class="inherited-list">
-<h3 id="fields-inherited-from-class-com.example.personalityquest.DAO.ParentDAO">Fields inherited from class&nbsp;<a href="../ParentDAO.html#field-summary" title="class in com.example.personalityquest.DAO">ParentDAO</a></h3>
-<code><a href="../ParentDAO.html#connection">connection</a></code>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a></code></div>
-<div class="col-second even-row-color"><code><a href="../ParentDAO.html#connection" class="member-name-link">connection</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -149,8 +134,6 @@ initTheme();
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">FriendsDAO</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.sql.Connection)" class="member-name-link">FriendsDAO</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a>&nbsp;connection)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -159,42 +142,30 @@ initTheme();
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#AddFriend(java.lang.String,java.lang.String)" class="member-name-link">AddFriend</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;yourEmail,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#AddFriend(java.lang.String,java.lang.String)" class="member-name-link">AddFriend</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;yourEmail,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;friendsEmail)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Adds a friendship between two accounts</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/auth/EmailDetails.html" title="class in com.example.personalityquest.Model.auth">EmailDetails</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetFriendsForEmail(java.lang.String)" class="member-name-link">GetFriendsForEmail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/auth/EmailDetails.html" title="class in com.example.personalityquest.Model.auth">EmailDetails</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetFriendsForEmail(java.lang.String)" class="member-name-link">GetFriendsForEmail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns account details for the friends of the supplied account</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#RemoveFriend(java.lang.String,java.lang.String)" class="member-name-link">RemoveFriend</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;yourEmail,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#RemoveFriend(java.lang.String,java.lang.String)" class="member-name-link">RemoveFriend</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;yourEmail,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;friendsEmail)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Removes a friendship between two accounts</div>
 </div>
 </div>
-</div>
-</div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.example.personalityquest.DAO.ParentDAO">Methods inherited from class&nbsp;<a href="../ParentDAO.html#method-summary" title="class in com.example.personalityquest.DAO">ParentDAO</a></h3>
-<code><a href="../ParentDAO.html#getConnection()" title="getConnection()">getConnection</a></code>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a></code></div>
-<div class="col-second even-row-color"><code><a href="../ParentDAO.html#getConnection()" class="member-name-link">getConnection</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </div>
 <div class="inherited-list">
@@ -275,14 +246,6 @@ initTheme();
 </div>
 </section>
 </li>
-<li>
-<section class="detail" id="&lt;init&gt;(java.sql.Connection)">
-<h3>FriendsDAO</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">FriendsDAO</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/Connection.html" title="interface in java.sql" class="external-link">Connection</a>&nbsp;connection)</span></div>
-</div>
-</section>
-</li>
 </ul>
 </section>
 </li>
@@ -295,8 +258,8 @@ initTheme();
 <section class="detail" id="GetFriendsForEmail(java.lang.String)">
 <h3>GetFriendsForEmail</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="../../Model/auth/EmailDetails.html" title="class in com.example.personalityquest.Model.auth">EmailDetails</a>&gt;</span>&nbsp;<span class="element-name">GetFriendsForEmail</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
-                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class in java.lang" class="external-link">Exception</a></span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="../../Model/auth/EmailDetails.html" title="class in com.example.personalityquest.Model.auth">EmailDetails</a>&gt;</span>&nbsp;<span class="element-name">GetFriendsForEmail</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span>
+                                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Returns account details for the friends of the supplied account</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -313,9 +276,9 @@ initTheme();
 <section class="detail" id="AddFriend(java.lang.String,java.lang.String)">
 <h3>AddFriend</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">AddFriend</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;yourEmail,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">AddFriend</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;yourEmail,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;friendsEmail)</span>
-               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Adds a friendship between two accounts</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -331,9 +294,9 @@ initTheme();
 <section class="detail" id="RemoveFriend(java.lang.String,java.lang.String)">
 <h3>RemoveFriend</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">RemoveFriend</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;yourEmail,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">RemoveFriend</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;yourEmail,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;friendsEmail)</span>
-                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Removes a friendship between two accounts</div>
 <dl class="notes">
 <dt>Parameters:</dt>

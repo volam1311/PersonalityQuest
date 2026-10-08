@@ -61,19 +61,7 @@ initTheme();
 <div class="toc-header">Contents&nbsp;<input type="text" class="filter-input" disabled placeholder="Filter contents (type .)" aria-label="Filter table of contents" autocomplete="off" spellcheck="false"><input type="reset" class="reset-filter" disabled tabindex="-1" value="Reset">&nbsp;<button class="toc-sort-toggle" id="toc-lexical-order-toggle"><img src="../../../../../resource-files/sort-a-z.svg" alt="Sort member details in lexicographical order"></button></div>
 <ol class="toc-list" tabindex="-1">
 <li><a href="#" tabindex="0">Description</a></li>
-<li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
-<li><a href="#method-summary" tabindex="0">Method Summary</a>
-<ol class="toc-list">
-<li><a href="#methods-inherited-from-class-com.example.personalityquest.Services.ParentService" tabindex="0">Methods inherited from class&nbsp;ParentService</a></li>
-<li><a href="#methods-inherited-from-class-java.lang.Object" tabindex="0">Methods inherited from class&nbsp;Object</a></li>
-</ol>
-</li>
-<li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
-<ol class="toc-list">
-<li><a href="#%3Cinit%3E()" tabindex="0">QuizService()</a></li>
-<li><a href="#%3Cinit%3E(com.example.personalityquest.DAO.personalisation.QuestionDAO,com.example.personalityquest.DAO.personalisation.OptionDAO,com.example.personalityquest.DAO.quest.QuizResultDAO)" tabindex="0">QuizService(QuestionDAO, OptionDAO, QuizResultDAO)</a></li>
-</ol>
-</li>
+<li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
 <li><a href="#Reset()" tabindex="0">Reset()</a></li>
@@ -107,135 +95,116 @@ initTheme();
 <h1 title="Class QuizService" class="title">Class QuizService</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../ParentService.html" title="class in com.example.personalityquest.Services">com.example.personalityquest.Services.ParentService</a>
 <div class="inheritance">com.example.personalityquest.Services.quiz.QuizService</div>
-</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="horizontal-scroll">
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">QuizService</span>
-<span class="extends-implements">extends <a href="../ParentService.html" title="class in com.example.personalityquest.Services">ParentService</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Runs the archetype quiz: dummy questions, answers, scoring, and quest assignment.</div>
 </div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<li>
-<section class="constructor-summary" id="constructor-summary">
-<h2>Constructor Summary</h2>
-<div class="caption"><span>Constructors</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Constructor</div>
-<div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">QuizService</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.example.personalityquest.DAO.personalisation.QuestionDAO,com.example.personalityquest.DAO.personalisation.OptionDAO,com.example.personalityquest.DAO.quest.QuizResultDAO)" class="member-name-link">QuizService</a><wbr>(<a href="../../DAO/personalisation/QuestionDAO.html" title="class in com.example.personalityquest.DAO.personalisation">QuestionDAO</a>&nbsp;questionDAO,
- <a href="../../DAO/personalisation/OptionDAO.html" title="class in com.example.personalityquest.DAO.personalisation">OptionDAO</a>&nbsp;optionDAO,
- <a href="../../DAO/quest/QuizResultDAO.html" title="class in com.example.personalityquest.DAO.quest">QuizResultDAO</a>&nbsp;quizResultDAO)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#AnswerCurrentQuestion(int)" class="member-name-link">AnswerCurrentQuestion</a><wbr>(int&nbsp;archetypeId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#AnswerCurrentQuestion(int)" class="member-name-link">AnswerCurrentQuestion</a><wbr>(int&nbsp;archetypeId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Stores the selected option for the current question.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ArchetypeScores(com.example.personalityquest.Model.quiz.QuizResult)" class="member-name-link">ArchetypeScores</a><wbr>(<a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a>&nbsp;quizResult)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static double[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ArchetypeScores(com.example.personalityquest.Model.quiz.QuizResult)" class="member-name-link">ArchetypeScores</a><wbr>(<a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a>&nbsp;quizResult)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Each archetype's score, in <a href="../../Model/quiz/Archetype.html#values()"><code>Archetype.values()</code></a> order, normalised so the
 highest-scoring archetype reaches 1.0.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#AssignQuestForCurrentResult(java.lang.String)" class="member-name-link">AssignQuestForCurrentResult</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#AssignQuestForCurrentResult(java.lang.String)" class="member-name-link">AssignQuestForCurrentResult</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Assigns a matching quest to the signed-in account when one is available.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#CanGoBack()" class="member-name-link">CanGoBack</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#CanGoBack()" class="member-name-link">CanGoBack</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Whether the user can move back from the current question.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#CompleteQuiz()" class="member-name-link">CompleteQuiz</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#CompleteQuiz()" class="member-name-link">CompleteQuiz</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Scores every answer and stores the result.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#EnsureCatalog()" class="member-name-link">EnsureCatalog</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#EnsureCatalog()" class="member-name-link">EnsureCatalog</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Ensures the quiz catalog is available in the database</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetAnswerForCurrentQuestion()" class="member-name-link">GetAnswerForCurrentQuestion</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetAnswerForCurrentQuestion()" class="member-name-link">GetAnswerForCurrentQuestion</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Archetype id chosen for the current question, or null if not yet answered</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quiz/Question.html" title="class in com.example.personalityquest.Model.quiz">Question</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetCurrentQuestion()" class="member-name-link">GetCurrentQuestion</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../Model/quiz/Question.html" title="class in com.example.personalityquest.Model.quiz">Question</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetCurrentQuestion()" class="member-name-link">GetCurrentQuestion</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">The question currently on screen.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetCurrentQuestionIndex()" class="member-name-link">GetCurrentQuestionIndex</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetCurrentQuestionIndex()" class="member-name-link">GetCurrentQuestionIndex</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Zero-based index of the current question.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetQuestionCount()" class="member-name-link">GetQuestionCount</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetQuestionCount()" class="member-name-link">GetQuestionCount</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">How many questions are in the current attempt.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/quiz/Question.html" title="class in com.example.personalityquest.Model.quiz">Question</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetQuestions()" class="member-name-link">GetQuestions</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/quiz/Question.html" title="class in com.example.personalityquest.Model.quiz">Question</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetQuestions()" class="member-name-link">GetQuestions</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">The dummy question bank used by the current attempt.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetResult()" class="member-name-link">GetResult</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GetResult()" class="member-name-link">GetResult</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">The most recent scored result, or null if the quiz has not been finished.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GoToNextQuestion()" class="member-name-link">GoToNextQuestion</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GoToNextQuestion()" class="member-name-link">GoToNextQuestion</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Moves to the next question after the current one has been answered.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GoToPreviousQuestion()" class="member-name-link">GoToPreviousQuestion</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#GoToPreviousQuestion()" class="member-name-link">GoToPreviousQuestion</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Moves to the previous question so the user can change an answer.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#HasActiveAttempt()" class="member-name-link">HasActiveAttempt</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#HasActiveAttempt()" class="member-name-link">HasActiveAttempt</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Whether an attempt is underway and has not been scored yet.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#IsLastQuestion()" class="member-name-link">IsLastQuestion</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#IsLastQuestion()" class="member-name-link">IsLastQuestion</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Whether the current question is the last one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#LoadStoredResult(java.lang.String)" class="member-name-link">LoadStoredResult</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/quiz/Archetype.html" title="enum class in com.example.personalityquest.Model.quiz">Archetype</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#RankedArchetypes(com.example.personalityquest.Model.quiz.QuizResult)" class="member-name-link">RankedArchetypes</a><wbr>(<a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a>&nbsp;quizResult)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#LoadStoredResult(java.lang.String)" class="member-name-link">LoadStoredResult</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/quiz/Archetype.html" title="enum class in com.example.personalityquest.Model.quiz">Archetype</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#RankedArchetypes(com.example.personalityquest.Model.quiz.QuizResult)" class="member-name-link">RankedArchetypes</a><wbr>(<a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a>&nbsp;quizResult)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Archetypes from a quiz result, winner first, then remaining scores high to low.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
@@ -243,66 +212,28 @@ highest-scoring archetype reaches 1.0.</div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Clears any in-progress attempt or stored result.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#Score(java.util.List)" class="member-name-link">Score</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a>&gt;&nbsp;selectedArchetypeIds)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#Score(java.util.List)" class="member-name-link">Score</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a>&gt;&nbsp;selectedArchetypeIds)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Counts answers per archetype.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#StartQuiz()" class="member-name-link">StartQuiz</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#StartQuiz()" class="member-name-link">StartQuiz</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Starts a new attempt with the dummy five-question bank.</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.example.personalityquest.Services.ParentService">Methods inherited from class&nbsp;<a href="../ParentService.html#method-summary" title="class in com.example.personalityquest.Services">ParentService</a></h3>
-<code><a href="../ParentService.html#toString()" title="toString()">toString</a></code>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="../ParentService.html#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</div>
-<div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#method-summary" title="class in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="clone()" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="equals(Object)" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="finalize()" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="getClass()" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="hashCode()" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="notify()" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="notifyAll()" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="wait()" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="wait(long)" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="wait(long, int)" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="clone()" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="equals(Object)" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="finalize()" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="getClass()" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="hashCode()" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="notify()" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="notifyAll()" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="toString()" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="wait()" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="wait(long)" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="wait(long, int)" class="external-link">wait</a></code></div>
 </section>
 </li>
 </ul>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<li>
-<section class="constructor-details" id="constructor-detail">
-<h2>Constructor Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="&lt;init&gt;()">
-<h3>QuizService</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">QuizService</span>()</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(com.example.personalityquest.DAO.personalisation.QuestionDAO,com.example.personalityquest.DAO.personalisation.OptionDAO,com.example.personalityquest.DAO.quest.QuizResultDAO)">
-<h3>QuizService</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">QuizService</span><wbr><span class="parameters">(<a href="../../DAO/personalisation/QuestionDAO.html" title="class in com.example.personalityquest.DAO.personalisation">QuestionDAO</a>&nbsp;questionDAO,
- <a href="../../DAO/personalisation/OptionDAO.html" title="class in com.example.personalityquest.DAO.personalisation">OptionDAO</a>&nbsp;optionDAO,
- <a href="../../DAO/quest/QuizResultDAO.html" title="class in com.example.personalityquest.DAO.quest">QuizResultDAO</a>&nbsp;quizResultDAO)</span></div>
-</div>
-</section>
-</li>
-</ul>
-</section>
-</li>
 <!-- ============ METHOD DETAIL ========== -->
 <li>
 <section class="method-details" id="method-detail">
@@ -321,7 +252,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="StartQuiz()">
 <h3>StartQuiz</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">StartQuiz</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">StartQuiz</span>()</div>
 <div class="block">Starts a new attempt with the dummy five-question bank.</div>
 </div>
 </section>
@@ -330,8 +261,8 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="EnsureCatalog()">
 <h3>EnsureCatalog</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">EnsureCatalog</span>()
-                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">EnsureCatalog</span>()
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
 <div class="block">Ensures the quiz catalog is available in the database</div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -344,7 +275,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="HasActiveAttempt()">
 <h3>HasActiveAttempt</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">HasActiveAttempt</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">HasActiveAttempt</span>()</div>
 <div class="block">Whether an attempt is underway and has not been scored yet.</div>
 </div>
 </section>
@@ -353,7 +284,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="GetResult()">
 <h3>GetResult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">GetResult</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">GetResult</span>()</div>
 <div class="block">The most recent scored result, or null if the quiz has not been finished.</div>
 </div>
 </section>
@@ -362,7 +293,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="GetQuestions()">
 <h3>GetQuestions</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="../../Model/quiz/Question.html" title="class in com.example.personalityquest.Model.quiz">Question</a>&gt;</span>&nbsp;<span class="element-name">GetQuestions</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="../../Model/quiz/Question.html" title="class in com.example.personalityquest.Model.quiz">Question</a>&gt;</span>&nbsp;<span class="element-name">GetQuestions</span>()</div>
 <div class="block">The dummy question bank used by the current attempt.</div>
 </div>
 </section>
@@ -371,7 +302,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="GetCurrentQuestion()">
 <h3>GetCurrentQuestion</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/Question.html" title="class in com.example.personalityquest.Model.quiz">Question</a></span>&nbsp;<span class="element-name">GetCurrentQuestion</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/Question.html" title="class in com.example.personalityquest.Model.quiz">Question</a></span>&nbsp;<span class="element-name">GetCurrentQuestion</span>()</div>
 <div class="block">The question currently on screen.</div>
 </div>
 </section>
@@ -380,7 +311,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="GetCurrentQuestionIndex()">
 <h3>GetCurrentQuestionIndex</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">GetCurrentQuestionIndex</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">GetCurrentQuestionIndex</span>()</div>
 <div class="block">Zero-based index of the current question.</div>
 </div>
 </section>
@@ -389,7 +320,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="GetQuestionCount()">
 <h3>GetQuestionCount</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">GetQuestionCount</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">GetQuestionCount</span>()</div>
 <div class="block">How many questions are in the current attempt.</div>
 </div>
 </section>
@@ -398,7 +329,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="IsLastQuestion()">
 <h3>IsLastQuestion</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">IsLastQuestion</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">IsLastQuestion</span>()</div>
 <div class="block">Whether the current question is the last one.</div>
 </div>
 </section>
@@ -407,7 +338,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="CanGoBack()">
 <h3>CanGoBack</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">CanGoBack</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">CanGoBack</span>()</div>
 <div class="block">Whether the user can move back from the current question.</div>
 </div>
 </section>
@@ -416,7 +347,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="GetAnswerForCurrentQuestion()">
 <h3>GetAnswerForCurrentQuestion</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name">GetAnswerForCurrentQuestion</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name">GetAnswerForCurrentQuestion</span>()</div>
 <div class="block">Archetype id chosen for the current question, or null if not yet answered</div>
 </div>
 </section>
@@ -425,7 +356,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="AnswerCurrentQuestion(int)">
 <h3>AnswerCurrentQuestion</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">AnswerCurrentQuestion</span><wbr><span class="parameters">(int&nbsp;archetypeId)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">AnswerCurrentQuestion</span><wbr><span class="parameters">(int&nbsp;archetypeId)</span></div>
 <div class="block">Stores the selected option for the current question.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -438,7 +369,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="GoToPreviousQuestion()">
 <h3>GoToPreviousQuestion</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">GoToPreviousQuestion</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">GoToPreviousQuestion</span>()</div>
 <div class="block">Moves to the previous question so the user can change an answer.</div>
 </div>
 </section>
@@ -447,7 +378,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="GoToNextQuestion()">
 <h3>GoToNextQuestion</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">GoToNextQuestion</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">GoToNextQuestion</span>()</div>
 <div class="block">Moves to the next question after the current one has been answered.</div>
 </div>
 </section>
@@ -456,7 +387,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="CompleteQuiz()">
 <h3>CompleteQuiz</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">CompleteQuiz</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">CompleteQuiz</span>()</div>
 <div class="block">Scores every answer and stores the result.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -469,7 +400,7 @@ highest-scoring archetype reaches 1.0.</div>
 <section class="detail" id="AssignQuestForCurrentResult(java.lang.String)">
 <h3>AssignQuestForCurrentResult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">AssignQuestForCurrentResult</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">AssignQuestForCurrentResult</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span></div>
 <div class="block">Assigns a matching quest to the signed-in account when one is available.
 Missing database rows are ignored so the result page can still be shown.</div>
 <dl class="notes">
@@ -485,7 +416,7 @@ Missing database rows are ignored so the result page can still be shown.</div>
 <section class="detail" id="Score(java.util.List)">
 <h3>Score</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">Score</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a>&gt;&nbsp;selectedArchetypeIds)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">Score</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a>&gt;&nbsp;selectedArchetypeIds)</span></div>
 <div class="block">Counts answers per archetype. Ties go to the later answer among the tied winners.</div>
 </div>
 </section>
@@ -494,7 +425,7 @@ Missing database rows are ignored so the result page can still be shown.</div>
 <section class="detail" id="RankedArchetypes(com.example.personalityquest.Model.quiz.QuizResult)">
 <h3>RankedArchetypes</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="../../Model/quiz/Archetype.html" title="enum class in com.example.personalityquest.Model.quiz">Archetype</a>&gt;</span>&nbsp;<span class="element-name">RankedArchetypes</span><wbr><span class="parameters">(<a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a>&nbsp;quizResult)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a>&lt;<a href="../../Model/quiz/Archetype.html" title="enum class in com.example.personalityquest.Model.quiz">Archetype</a>&gt;</span>&nbsp;<span class="element-name">RankedArchetypes</span><wbr><span class="parameters">(<a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a>&nbsp;quizResult)</span></div>
 <div class="block">Archetypes from a quiz result, winner first, then remaining scores high to low.</div>
 </div>
 </section>
@@ -503,7 +434,7 @@ Missing database rows are ignored so the result page can still be shown.</div>
 <section class="detail" id="ArchetypeScores(com.example.personalityquest.Model.quiz.QuizResult)">
 <h3>ArchetypeScores</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double[]</span>&nbsp;<span class="element-name">ArchetypeScores</span><wbr><span class="parameters">(<a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a>&nbsp;quizResult)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double[]</span>&nbsp;<span class="element-name">ArchetypeScores</span><wbr><span class="parameters">(<a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a>&nbsp;quizResult)</span></div>
 <div class="block">Each archetype's score, in <a href="../../Model/quiz/Archetype.html#values()"><code>Archetype.values()</code></a> order, normalised so the
 highest-scoring archetype reaches 1.0. Used to plot the 12-axis archetype radar
 chart. Returns all zeros when there is no quiz result yet.</div>
@@ -514,7 +445,7 @@ chart. Returns all zeros when there is no quiz result yet.</div>
 <section class="detail" id="LoadStoredResult(java.lang.String)">
 <h3>LoadStoredResult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">LoadStoredResult</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../Model/quiz/QuizResult.html" title="class in com.example.personalityquest.Model.quiz">QuizResult</a></span>&nbsp;<span class="element-name">LoadStoredResult</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email)</span></div>
 </div>
 </section>
 </li>
