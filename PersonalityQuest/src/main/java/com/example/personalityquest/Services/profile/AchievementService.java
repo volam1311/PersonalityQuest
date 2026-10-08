@@ -28,11 +28,13 @@ public class AchievementService {
     private final StreakService StreakService;
 
     public AchievementService() {
+        super();
         this.AchievementDAO = new AchievementDAO();
         this.StreakService = new StreakService();
     }
 
     public AchievementService(AchievementDAO AchievementDAO) {
+        super();
         this.AchievementDAO = AchievementDAO;
 
         StreakDAO streakDAO = new StreakDAO(AchievementDAO.getConnection());

@@ -2,20 +2,23 @@ package com.example.personalityquest.Services.auth;
 
 import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
+import com.example.personalityquest.Services.ParentService;
 
 import java.sql.SQLException;
 import java.util.Objects;
 
 /** Coordinates account profile updates */
-public class AccountService {
+public class AccountService extends ParentService {
 
     private AccountDAO AccountDAO;
 
     public AccountService(){
+        super();
         this.AccountDAO = new AccountDAO();
     }
 
     public AccountService(AccountDAO accountDAO){
+        super();
         this.AccountDAO = accountDAO;
     }
     /**

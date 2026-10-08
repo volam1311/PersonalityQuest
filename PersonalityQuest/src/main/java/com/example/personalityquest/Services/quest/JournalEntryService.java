@@ -12,10 +12,12 @@ public class JournalEntryService {
     private JournalEntryDAO JournalEntryDAO;
 
     public JournalEntryService(){
+        super();
         JournalEntryDAO = new JournalEntryDAO();
     }
 
     public JournalEntryService(JournalEntryDAO journalEntryDAO){
+        super();
         this.JournalEntryDAO = journalEntryDAO;
     }
 

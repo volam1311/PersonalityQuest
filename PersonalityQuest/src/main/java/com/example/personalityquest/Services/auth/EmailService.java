@@ -3,6 +3,7 @@ package com.example.personalityquest.Services.auth;
 import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.Services.ParentService;
 
 import java.sql.SQLException;
 
@@ -10,14 +11,16 @@ import java.sql.SQLException;
  * This class managers everything to do with emails and has utility functions to check
  * if account exist for them or retrieve the EmailDetails matching the email
  */
-public class EmailService {
+public class EmailService extends ParentService {
 
     private AccountDAO AccountDAO;
     public EmailService(){
+        super();
         this.AccountDAO = new AccountDAO();
     }
 
     public EmailService(AccountDAO accountDAO){
+        super();
         this.AccountDAO = accountDAO;
     }
     /**

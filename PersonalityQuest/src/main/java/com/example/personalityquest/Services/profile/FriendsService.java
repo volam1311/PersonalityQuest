@@ -15,15 +15,17 @@ import java.util.List;
 public class FriendsService {
 
     private FriendsDAO FriendsDAO;
-
     private EmailService EmailService;
+
     public FriendsService(){
+        super();
         this.FriendsDAO = new FriendsDAO();
         EmailService = new EmailService();
 
     }
 
     public FriendsService(FriendsDAO friendsDAO){
+        super();
         this.FriendsDAO = friendsDAO;
 
         AccountDAO accountDAO = new AccountDAO(FriendsDAO.getConnection());

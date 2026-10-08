@@ -22,12 +22,14 @@ public class WeeklyTaskService {
     private EmailService EmailService;
 
     public WeeklyTaskService(){
+        super();
         WeeklyTaskDAO = new WeeklyTaskDAO();
         EmailService = new EmailService();
 
     }
 
     public WeeklyTaskService(WeeklyTaskDAO WeeklyTaskDAO){
+        super();
         this.WeeklyTaskDAO = WeeklyTaskDAO;
 
         AccountDAO accountDAO = new AccountDAO(WeeklyTaskDAO.getConnection());

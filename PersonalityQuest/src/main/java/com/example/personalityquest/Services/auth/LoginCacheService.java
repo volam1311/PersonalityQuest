@@ -2,24 +2,28 @@ package com.example.personalityquest.Services.auth;
 
 import com.example.personalityquest.Model.auth.LoginCache;
 import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.ParentService;
 import com.example.personalityquest.Services.navigation.NavigationService;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.prefs.Preferences;
 
-public class LoginCacheService {
+public class LoginCacheService extends ParentService {
 
 
     public Preferences preferences;
 
     public LoginCacheService(){
+        super();
         preferences = Preferences.userRoot();
     }
 
     public LoginCacheService(Preferences preferences){
+        super();
         this.preferences = preferences;
     }
+
     private final static int days = 7;
 
 

@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services.chat;
 
+import com.example.personalityquest.Services.ParentService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.chat.ReflectionFeedbackDAO;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 /**
  * Builds a coaching prompt from a weekly-task reflection and asks OpenAI for feedback.
  */
-public final class ReflectionFeedbackService {
+public final class ReflectionFeedbackService extends ParentService {
     static final String SYSTEM_PROMPT = """
             You are a supportive coach inside PersonalityQuest, a growth app based on Jungian brand archetypes.
             The user just wrote a reflection after attempting a weekly practice.
@@ -28,11 +29,13 @@ public final class ReflectionFeedbackService {
     private ReflectionFeedbackDAO ReflectionFeedbackDAO;
 
     public ReflectionFeedbackService() {
+        super();
         client = new OpenAiClient();
         ReflectionFeedbackDAO = new ReflectionFeedbackDAO();
     }
 
     public ReflectionFeedbackService(ChatCompletionClient client){
+        super();
         this.client = client;
     }
 

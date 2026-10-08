@@ -15,10 +15,12 @@ public class TaskService {
     private TaskDAO TaskDAO;
 
     public TaskService(){
+        super();
         this.TaskDAO = new TaskDAO();
     }
 
     public TaskService(TaskDAO taskDAO){
+        super();
         this.TaskDAO = taskDAO;
     }
     /**

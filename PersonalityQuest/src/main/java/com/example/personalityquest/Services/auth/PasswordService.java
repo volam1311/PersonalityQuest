@@ -2,6 +2,7 @@ package com.example.personalityquest.Services.auth;
 
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.auth.AccountDAO;
+import com.example.personalityquest.Services.ParentService;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -10,17 +11,19 @@ import java.util.Objects;
  * This class managers everything to do with password and has utility functions to check
  * weather a password matches an email in the database or to update the password in the database
  */
-public class PasswordService {
+public class PasswordService extends ParentService {
 
     private AccountDAO AccountDAO;
 
     private EmailService EmailService;
     public PasswordService(){
+        super();
         this.AccountDAO = new AccountDAO();
         EmailService = new EmailService();
     }
 
     public PasswordService(AccountDAO accountDAO){
+        super();
         this.AccountDAO = accountDAO;
 
         EmailService = new EmailService(accountDAO);

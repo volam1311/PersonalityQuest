@@ -20,10 +20,13 @@ public class QuestService {
     private final QuestDAO QuestDAO;
 
     public QuestService(){
+        super();
         QuestDAO = new QuestDAO();
     }
 
-    public QuestService(QuestDAO questDAO){
+    public QuestService(QuestDAO questDAO)
+    {
+        super();
         QuestDAO = questDAO;
     }
     /**

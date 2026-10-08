@@ -20,9 +20,11 @@ public class StreakService {
     private final StreakDAO StreakDAO;
 
     public StreakService(){
+        super();
         StreakDAO = new StreakDAO();
     }
     public StreakService(StreakDAO streakDAO) {
+        super();
         this.StreakDAO = streakDAO;
     }
 

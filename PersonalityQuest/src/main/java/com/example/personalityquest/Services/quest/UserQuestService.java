@@ -18,9 +18,11 @@ public class UserQuestService {
     private final UserQuestDAO UserQuestDAO;
 
     public UserQuestService(){
+        super();
         UserQuestDAO = new UserQuestDAO();
     }
     public UserQuestService(UserQuestDAO userQuestDAO){
+        super();
         this.UserQuestDAO = userQuestDAO;
     }
     /**
