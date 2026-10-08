@@ -92,6 +92,7 @@ public class ProfileController implements Initializable {
     private QuestService QuestService;
     private AchievementService AchievementService;
     private EmailService EmailService;
+    private UserProfileService UserProfileService;
     /** Initialises profile controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
@@ -102,6 +103,7 @@ public class ProfileController implements Initializable {
         UserQuestService = new UserQuestService();
         QuestService = new QuestService();
         EmailService = new EmailService();
+        UserProfileService = new UserProfileService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);
         ConfigureAchievementsGrid(DEFAULT_ACHIEVEMENT_COLUMNS);
         LoadProfile();

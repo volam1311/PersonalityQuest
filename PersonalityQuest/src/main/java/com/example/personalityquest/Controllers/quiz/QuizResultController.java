@@ -23,6 +23,7 @@ public class QuizResultController implements Initializable {
     private Label archetypeNameLabel, archetypeDescriptionLabel, strengthsLabel, weaknessesLabel, questLabel;
 
     private QuestService QuestService;
+    private UserProfileService UserProfileService;
     /** Initialises the quiz-results screen
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
@@ -30,6 +31,7 @@ public class QuizResultController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         QuestService = new QuestService();
+        UserProfileService = new UserProfileService();
         QuizResult result = QuizService.GetResult();
         if (result == null) {
             archetypeNameLabel.setText(UserProfileService.UNASSIGNED_ARCHETYPE);

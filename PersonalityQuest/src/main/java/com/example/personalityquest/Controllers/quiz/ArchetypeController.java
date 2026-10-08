@@ -68,6 +68,7 @@ public class ArchetypeController implements Initializable {
     private QuestService QuestService;
     private UserQuestService UserQuestService;
     private TaskService TaskService;
+    private UserProfileService UserProfileService;
     /** Initialises archetype controls and loads the selected archetype
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
@@ -77,6 +78,7 @@ public class ArchetypeController implements Initializable {
         TaskService = new TaskService();
         UserQuestService = new UserQuestService();
         QuestService = new QuestService();
+        UserProfileService = new UserProfileService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);
         quadrantRealms = Map.of(
                 egoQuadrantButton, "Ego",
