@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AchievementDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.profile</a> &gt; <span class="el_source">AchievementDAO.java</span></div><h1>AchievementDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.profile;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.profile.Achievement;
 import com.example.personalityquest.Model.profile.UserProfile;
 import com.example.personalityquest.SQLite;
@@ -21,7 +22,7 @@ import java.util.Set;
 /**
  * SQLite persistence for achievement definitions, unlocks, and profile progress totals.
  */
-public class AchievementDAO {
+public class AchievementDAO extends ParentDAO {
     private static final String CREATE_ACHIEVEMENTS = &quot;&quot;&quot;
             CREATE TABLE IF NOT EXISTS Achievements (
                 achievementId INTEGER PRIMARY KEY,
@@ -44,70 +45,73 @@ public class AchievementDAO {
             )
             &quot;&quot;&quot;;
 
-    private AchievementDAO() {
-    }
 
+
+    public AchievementDAO(){
+<span class="nc" id="L51">        super();</span>
+<span class="nc" id="L52">    }</span>
+
+    public AchievementDAO(Connection connection) {
+<span class="nc" id="L55">        super(connection);</span>
+<span class="nc" id="L56">    }</span>
     /**
      * Creates the achievement tables when they do not already exist.
      * @throws SQLException Database Access Failure
      */
-    public static void EnsureTables() throws SQLException {
-<span class="nc" id="L55">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L56">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L57">            statement.execute(CREATE_ACHIEVEMENTS);</span>
-<span class="nc" id="L58">            EnsureLevelColumn(connection);</span>
-<span class="nc" id="L59">            statement.execute(CREATE_USER_ACHIEVEMENTS);</span>
+    public void EnsureTables() throws SQLException {
+<span class="nc" id="L62">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L63">            statement.execute(CREATE_ACHIEVEMENTS);</span>
+<span class="nc" id="L64">            EnsureLevelColumn(connection);</span>
+<span class="nc" id="L65">            statement.execute(CREATE_USER_ACHIEVEMENTS);</span>
         }
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L67">    }</span>
 
-    private static void EnsureLevelColumn(Connection connection) throws SQLException {
-<span class="nc" id="L64">        boolean hasLevelColumn = false;</span>
+    private void EnsureLevelColumn(Connection connection) throws SQLException {
+<span class="nc" id="L70">        boolean hasLevelColumn = false;</span>
 
-<span class="nc" id="L66">        try (Statement statement = connection.createStatement();</span>
-<span class="nc" id="L67">             ResultSet resultSet = statement.executeQuery(&quot;PRAGMA table_info(Achievements)&quot;)) {</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">            while (resultSet.next()) {</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">                if (&quot;level&quot;.equalsIgnoreCase(resultSet.getString(&quot;name&quot;))) {</span>
-<span class="nc" id="L70">                    hasLevelColumn = true;</span>
-<span class="nc" id="L71">                    break;</span>
+<span class="nc" id="L72">        try (Statement statement = connection.createStatement();</span>
+<span class="nc" id="L73">             ResultSet resultSet = statement.executeQuery(&quot;PRAGMA table_info(Achievements)&quot;)) {</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            while (resultSet.next()) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                if (&quot;level&quot;.equalsIgnoreCase(resultSet.getString(&quot;name&quot;))) {</span>
+<span class="nc" id="L76">                    hasLevelColumn = true;</span>
+<span class="nc" id="L77">                    break;</span>
                 }
             }
         }
 
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (!hasLevelColumn) {</span>
-<span class="nc" id="L77">            try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L78">                statement.executeUpdate(</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (!hasLevelColumn) {</span>
+<span class="nc" id="L83">            try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L84">                statement.executeUpdate(</span>
                         &quot;ALTER TABLE Achievements ADD COLUMN level INTEGER NOT NULL DEFAULT 1&quot;
                 );
             }
         }
-<span class="nc" id="L83">    }</span>
+<span class="nc" id="L89">    }</span>
 
     /**
      * @return Whether the Achievements table currently has any rows
      * @throws SQLException Database Access Failure
      */
-    public static boolean HasCatalog() throws SQLException {
-<span class="nc" id="L90">        EnsureTables();</span>
-<span class="nc" id="L91">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L92">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public boolean HasCatalog() throws SQLException {
+<span class="nc" id="L96">        EnsureTables();</span>
+<span class="nc" id="L97">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;SELECT COUNT(*) FROM Achievements&quot;)) {
-<span class="nc" id="L94">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc bnc" id="L95" title="All 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt; 0;</span>
+<span class="nc" id="L99">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L100" title="All 4 branches missed.">            return rs.next() &amp;&amp; rs.getInt(1) &gt; 0;</span>
         }
     }
 
     /**
      * Inserts or updates an achievement definition.
      */
-    public static void InsertAchievement(
+    public void InsertAchievement(
             int achievementId,
             String name,
             String description,
             String criteriaType,
             double threshold, int level) throws SQLException {
-<span class="nc" id="L108">        EnsureTables();</span>
-<span class="nc" id="L109">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L110">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="nc" id="L113">        EnsureTables();</span>
+<span class="nc" id="L114">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     INSERT INTO Achievements
                         (achievementId, name, description, criteriaType, threshold, level)
@@ -119,43 +123,42 @@ public class AchievementDAO {
                         threshold = excluded.threshold,
                         level = excluded.level
                     &quot;&quot;&quot;)) {
-<span class="nc" id="L122">            statement.setInt(1, achievementId);</span>
-<span class="nc" id="L123">            statement.setString(2, name);</span>
-<span class="nc" id="L124">            statement.setString(3, description);</span>
-<span class="nc" id="L125">            statement.setString(4, criteriaType);</span>
-<span class="nc" id="L126">            statement.setDouble(5, threshold);</span>
-<span class="nc" id="L127">            statement.setInt(6, level);</span>
-<span class="nc" id="L128">            statement.executeUpdate();</span>
+<span class="nc" id="L126">            statement.setInt(1, achievementId);</span>
+<span class="nc" id="L127">            statement.setString(2, name);</span>
+<span class="nc" id="L128">            statement.setString(3, description);</span>
+<span class="nc" id="L129">            statement.setString(4, criteriaType);</span>
+<span class="nc" id="L130">            statement.setDouble(5, threshold);</span>
+<span class="nc" id="L131">            statement.setInt(6, level);</span>
+<span class="nc" id="L132">            statement.executeUpdate();</span>
         }
-<span class="nc" id="L130">    }</span>
+<span class="nc" id="L134">    }</span>
 
     /**
      * @return Every achievement definition, ordered by id
      * @throws SQLException Database Access Failure
      */
-    public static List&lt;Achievement&gt; GetCatalog() throws SQLException {
-<span class="nc" id="L137">        EnsureTables();</span>
-<span class="nc" id="L138">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L139">        try (PreparedStatement statement = connection.prepareStatement(</span>
+    public List&lt;Achievement&gt; GetCatalog() throws SQLException {
+<span class="nc" id="L141">        EnsureTables();</span>
+<span class="nc" id="L142">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT achievementId, name, description, criteriaType, threshold, level
                     FROM Achievements
                     ORDER BY achievementId
                     &quot;&quot;&quot;)) {
-<span class="nc" id="L145">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc" id="L146">            List&lt;Achievement&gt; achievements = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L148">                achievements.add(new Achievement(</span>
-<span class="nc" id="L149">                        rs.getInt(&quot;achievementId&quot;),</span>
-<span class="nc" id="L150">                        rs.getString(&quot;name&quot;),</span>
-<span class="nc" id="L151">                        rs.getString(&quot;description&quot;),</span>
-<span class="nc" id="L152">                        rs.getString(&quot;criteriaType&quot;),</span>
-<span class="nc" id="L153">                        rs.getDouble(&quot;threshold&quot;),</span>
-<span class="nc" id="L154">                        rs.getInt(&quot;level&quot;),</span>
+<span class="nc" id="L148">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc" id="L149">            List&lt;Achievement&gt; achievements = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L151">                achievements.add(new Achievement(</span>
+<span class="nc" id="L152">                        rs.getInt(&quot;achievementId&quot;),</span>
+<span class="nc" id="L153">                        rs.getString(&quot;name&quot;),</span>
+<span class="nc" id="L154">                        rs.getString(&quot;description&quot;),</span>
+<span class="nc" id="L155">                        rs.getString(&quot;criteriaType&quot;),</span>
+<span class="nc" id="L156">                        rs.getDouble(&quot;threshold&quot;),</span>
+<span class="nc" id="L157">                        rs.getInt(&quot;level&quot;),</span>
                         false
                 ));
             }
-<span class="nc" id="L158">            return achievements;</span>
+<span class="nc" id="L161">            return achievements;</span>
         }
     }
 
@@ -164,50 +167,48 @@ public class AchievementDAO {
      * @return Achievement ids this account has already unlocked
      * @throws SQLException Database Access Failure
      */
-    public static Set&lt;Integer&gt; GetUnlockedIds(String email) throws SQLException {
-<span class="nc" id="L168">        EnsureTables();</span>
-<span class="nc" id="L169">        Set&lt;Integer&gt; unlocked = new HashSet&lt;&gt;();</span>
-<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L171">            return unlocked;</span>
+    public Set&lt;Integer&gt; GetUnlockedIds(String email) throws SQLException {
+<span class="nc" id="L171">        EnsureTables();</span>
+<span class="nc" id="L172">        Set&lt;Integer&gt; unlocked = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L174">            return unlocked;</span>
         }
 
-<span class="nc" id="L174">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L175">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="nc" id="L177">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT achievementId FROM UserAchievements
                     WHERE accountEmail = ?
                     &quot;&quot;&quot;)) {
-<span class="nc" id="L180">            statement.setString(1, email);</span>
-<span class="nc" id="L181">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc bnc" id="L182" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L183">                unlocked.add(rs.getInt(&quot;achievementId&quot;));</span>
+<span class="nc" id="L182">            statement.setString(1, email);</span>
+<span class="nc" id="L183">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L185">                unlocked.add(rs.getInt(&quot;achievementId&quot;));</span>
             }
         }
-<span class="nc" id="L186">        return unlocked;</span>
+<span class="nc" id="L188">        return unlocked;</span>
     }
 
     /**
      * Stores an unlock for the given account. Repeated calls are ignored.
      */
-    public static void Unlock(String email, int achievementId) throws SQLException {
-<span class="nc bnc" id="L193" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L194">            return;</span>
+    public void Unlock(String email, int achievementId) throws SQLException {
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L196">            return;</span>
         }
 
-<span class="nc" id="L197">        EnsureTables();</span>
-<span class="nc" id="L198">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L199">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="nc" id="L199">        EnsureTables();</span>
+<span class="nc" id="L200">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     INSERT OR IGNORE INTO UserAchievements
                         (accountEmail, achievementId, unlockedAt)
                     VALUES (?, ?, ?)
                     &quot;&quot;&quot;)) {
-<span class="nc" id="L205">            statement.setString(1, email);</span>
-<span class="nc" id="L206">            statement.setInt(2, achievementId);</span>
-<span class="nc" id="L207">            statement.setString(3, LocalDate.now().toString());</span>
-<span class="nc" id="L208">            statement.executeUpdate();</span>
+<span class="nc" id="L206">            statement.setString(1, email);</span>
+<span class="nc" id="L207">            statement.setInt(2, achievementId);</span>
+<span class="nc" id="L208">            statement.setString(3, LocalDate.now().toString());</span>
+<span class="nc" id="L209">            statement.executeUpdate();</span>
         }
-<span class="nc" id="L210">    }</span>
+<span class="nc" id="L211">    }</span>
 
     /**
      * @param email The account to look up
@@ -215,29 +216,29 @@ public class AchievementDAO {
      * @return Achievement ids this account has unlocked, most recently unlocked first
      * @throws SQLException Database Access Failure
      */
-    public static List&lt;Integer&gt; GetRecentlyUnlockedIds(String email, int limit) throws SQLException {
-<span class="nc" id="L219">        EnsureTables();</span>
-<span class="nc" id="L220">        List&lt;Integer&gt; recentIds = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L221" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L222">            return recentIds;</span>
+    public List&lt;Integer&gt; GetRecentlyUnlockedIds(String email, int limit) throws SQLException {
+<span class="nc" id="L220">        EnsureTables();</span>
+<span class="nc" id="L221">        List&lt;Integer&gt; recentIds = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L223">            return recentIds;</span>
         }
 
-<span class="nc" id="L225">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L226">        try (PreparedStatement statement = connection.prepareStatement(</span>
+<span class="nc" id="L226">        Connection connection = SQLite.getConnection();</span>
+<span class="nc" id="L227">        try (PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT achievementId FROM UserAchievements
                     WHERE accountEmail = ?
                     ORDER BY unlockedAt DESC, achievementId DESC
                     LIMIT ?
                     &quot;&quot;&quot;)) {
-<span class="nc" id="L233">            statement.setString(1, email);</span>
-<span class="nc" id="L234">            statement.setInt(2, limit);</span>
-<span class="nc" id="L235">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc bnc" id="L236" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L237">                recentIds.add(rs.getInt(&quot;achievementId&quot;));</span>
+<span class="nc" id="L234">            statement.setString(1, email);</span>
+<span class="nc" id="L235">            statement.setInt(2, limit);</span>
+<span class="nc" id="L236">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L238">                recentIds.add(rs.getInt(&quot;achievementId&quot;));</span>
             }
         }
-<span class="nc" id="L240">        return recentIds;</span>
+<span class="nc" id="L241">        return recentIds;</span>
     }
 
     /**
@@ -246,62 +247,61 @@ public class AchievementDAO {
      * @return Progress totals, or {@link UserProfile#empty()} when the email is blank
      * @throws SQLException Database Access Failure
      */
-    public static UserProfile GetProgress(String email) throws SQLException {
-<span class="nc bnc" id="L250" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L251">            return UserProfile.empty();</span>
+    public UserProfile GetProgress(String email) throws SQLException {
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L252">            return UserProfile.empty();</span>
         }
 
-<span class="nc" id="L254">        String weekStart = LocalDate.now()</span>
-<span class="nc" id="L255">                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))</span>
-<span class="nc" id="L256">                .toString();</span>
+<span class="nc" id="L255">        String weekStart = LocalDate.now()</span>
+<span class="nc" id="L256">                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))</span>
+<span class="nc" id="L257">                .toString();</span>
 
-<span class="nc" id="L258">        return new UserProfile(</span>
-<span class="nc" id="L259">                CountInt(&quot;&quot;&quot;</span>
+<span class="nc" id="L259">        return new UserProfile(</span>
+<span class="nc" id="L260">                CountInt(&quot;&quot;&quot;</span>
                         SELECT currentStreak FROM UserProgress
                         WHERE accountEmail = ?
                         &quot;&quot;&quot;, email, 0),
-<span class="nc" id="L263">                CountInt(&quot;&quot;&quot;</span>
+<span class="nc" id="L264">                CountInt(&quot;&quot;&quot;</span>
                         SELECT bestStreak FROM UserProgress
                         WHERE accountEmail = ?
                         &quot;&quot;&quot;, email, 0),
-<span class="nc" id="L267">                CountInt(&quot;&quot;&quot;</span>
+<span class="nc" id="L268">                CountInt(&quot;&quot;&quot;</span>
                         SELECT COUNT(*) FROM UserQuests
                         WHERE accountEmail = ?
                         &quot;&quot;&quot;, email, 0),
-<span class="nc" id="L271">                CountInt(&quot;&quot;&quot;</span>
+<span class="nc" id="L272">                CountInt(&quot;&quot;&quot;</span>
                         SELECT COUNT(*) FROM UserQuests
                         WHERE accountEmail = ?
                         AND (status = 'Complete' OR status = 'Completed')
                         &quot;&quot;&quot;, email, 0),
-<span class="nc" id="L276">                CountDouble(&quot;&quot;&quot;</span>
+<span class="nc" id="L277">                CountDouble(&quot;&quot;&quot;</span>
                         SELECT percentageComplete FROM UserQuests
                         WHERE accountEmail = ? AND status = 'Active'
                         &quot;&quot;&quot;, email),
-<span class="nc" id="L280">                CountInt(&quot;&quot;&quot;</span>
+<span class="nc" id="L281">                CountInt(&quot;&quot;&quot;</span>
                         SELECT COUNT(*) FROM WeeklyTasks
                         WHERE accountEmail = ? AND status = 'Finished'
                         &quot;&quot;&quot;, email, 0),
-<span class="nc" id="L284">                CountInt(&quot;&quot;&quot;</span>
+<span class="nc" id="L285">                CountInt(&quot;&quot;&quot;</span>
                         SELECT COUNT(*) FROM WeeklyTasks
                         WHERE accountEmail = ?
                         &quot;&quot;&quot;, email, 0),
-<span class="nc" id="L288">                CountIntWithWeek(&quot;&quot;&quot;</span>
+<span class="nc" id="L289">                CountIntWithWeek(&quot;&quot;&quot;</span>
                         SELECT COUNT(*) FROM WeeklyTasks
                         WHERE accountEmail = ? AND weekStart = ? AND status = 'Finished'
                         &quot;&quot;&quot;, email, weekStart),
-<span class="nc" id="L292">                CountIntWithWeek(&quot;&quot;&quot;</span>
+<span class="nc" id="L293">                CountIntWithWeek(&quot;&quot;&quot;</span>
                         SELECT COUNT(*) FROM WeeklyTasks
                         WHERE accountEmail = ? AND weekStart = ?
                         &quot;&quot;&quot;, email, weekStart),
-<span class="nc bnc" id="L296" title="All 2 branches missed.">                CountInt(&quot;&quot;&quot;</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">                CountInt(&quot;&quot;&quot;</span>
                         SELECT COUNT(*) FROM Accounts
                         WHERE email = ?
                         &quot;&quot;&quot;, email, 0) == 1
         );
     }
 
-    private static int CountInt(String sql, String email, int defaultValue) throws SQLException {
-<span class="nc" id="L304">        Connection connection = SQLite.getConnection();</span>
+    private int CountInt(String sql, String email, int defaultValue) throws SQLException {
 <span class="nc" id="L305">        try (PreparedStatement statement = connection.prepareStatement(sql)) {</span>
 <span class="nc" id="L306">            statement.setString(1, email);</span>
 <span class="nc" id="L307">            ResultSet rs = statement.executeQuery();</span>
@@ -312,29 +312,27 @@ public class AchievementDAO {
 <span class="nc bnc" id="L312" title="All 2 branches missed.">        }</span>
     }
 
-    private static double CountDouble(String sql, String email) throws SQLException {
-<span class="nc" id="L316">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L317">        try (PreparedStatement statement = connection.prepareStatement(sql)) {</span>
-<span class="nc" id="L318">            statement.setString(1, email);</span>
-<span class="nc" id="L319">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc bnc" id="L320" title="All 2 branches missed.">            if (rs.next()) {</span>
-<span class="nc" id="L321">                return rs.getDouble(1);</span>
+    private double CountDouble(String sql, String email) throws SQLException {
+<span class="nc" id="L316">        try (PreparedStatement statement = connection.prepareStatement(sql)) {</span>
+<span class="nc" id="L317">            statement.setString(1, email);</span>
+<span class="nc" id="L318">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L320">                return rs.getDouble(1);</span>
             }
-<span class="nc" id="L323">            return 0;</span>
-<span class="nc bnc" id="L324" title="All 2 branches missed.">        }</span>
+<span class="nc" id="L322">            return 0;</span>
+<span class="nc bnc" id="L323" title="All 2 branches missed.">        }</span>
     }
 
-    private static int CountIntWithWeek(String sql, String email, String weekStart) throws SQLException {
-<span class="nc" id="L328">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L329">        try (PreparedStatement statement = connection.prepareStatement(sql)) {</span>
-<span class="nc" id="L330">            statement.setString(1, email);</span>
-<span class="nc" id="L331">            statement.setString(2, weekStart);</span>
-<span class="nc" id="L332">            ResultSet rs = statement.executeQuery();</span>
-<span class="nc bnc" id="L333" title="All 2 branches missed.">            if (rs.next()) {</span>
-<span class="nc" id="L334">                return rs.getInt(1);</span>
+    private int CountIntWithWeek(String sql, String email, String weekStart) throws SQLException {
+<span class="nc" id="L327">        try (PreparedStatement statement = connection.prepareStatement(sql)) {</span>
+<span class="nc" id="L328">            statement.setString(1, email);</span>
+<span class="nc" id="L329">            statement.setString(2, weekStart);</span>
+<span class="nc" id="L330">            ResultSet rs = statement.executeQuery();</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L332">                return rs.getInt(1);</span>
             }
-<span class="nc" id="L336">            return 0;</span>
-<span class="nc bnc" id="L337" title="All 2 branches missed.">        }</span>
+<span class="nc" id="L334">            return 0;</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

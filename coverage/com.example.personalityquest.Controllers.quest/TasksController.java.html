@@ -81,222 +81,238 @@ import java.util.concurrent.CompletableFuture;
 
     private boolean updatingJournalSelection;
 
+    private WeeklyTaskService WeeklyTaskService;
+    private UserQuestService UserQuestService;
+    private TaskService TaskService;
+    private QuestService QuestService;
+    private JournalEntryService JournalEntryService;
+    private StreakService StreakService;
+    private ReflectionFeedbackService ReflectionFeedbackService;
+    private ReflectionPromptDAO ReflectionPromptDAO;
     /** Initialises quest challenge/reflection controls and loads the active quest's data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L90">        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);</span>
-<span class="nc" id="L91">        ConfigureQuestChallengesList();</span>
-<span class="nc" id="L92">        ConfigureQuestReflectionsList();</span>
-<span class="nc" id="L93">        ConfigureWordCount();</span>
-<span class="nc" id="L94">        PopulateActiveQuestHeader();</span>
-<span class="nc" id="L95">        LoadQuestChallenges();</span>
-<span class="nc" id="L96">        LoadQuestReflections();</span>
-<span class="nc" id="L97">        ShowEmptyDetail();</span>
-<span class="nc" id="L98">    }</span>
+<span class="nc" id="L98">        QuestService = new QuestService();</span>
+<span class="nc" id="L99">        UserQuestService = new UserQuestService();</span>
+<span class="nc" id="L100">        WeeklyTaskService = new WeeklyTaskService();</span>
+<span class="nc" id="L101">        TaskService = new TaskService();</span>
+<span class="nc" id="L102">        JournalEntryService = new JournalEntryService();</span>
+<span class="nc" id="L103">        StreakService = new StreakService();</span>
+<span class="nc" id="L104">        ReflectionFeedbackService = new ReflectionFeedbackService();</span>
+<span class="nc" id="L105">        ReflectionPromptDAO = new ReflectionPromptDAO();</span>
+<span class="nc" id="L106">        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);</span>
+<span class="nc" id="L107">        ConfigureQuestChallengesList();</span>
+<span class="nc" id="L108">        ConfigureQuestReflectionsList();</span>
+<span class="nc" id="L109">        ConfigureWordCount();</span>
+<span class="nc" id="L110">        PopulateActiveQuestHeader();</span>
+<span class="nc" id="L111">        LoadQuestChallenges();</span>
+<span class="nc" id="L112">        LoadQuestReflections();</span>
+<span class="nc" id="L113">        ShowEmptyDetail();</span>
+<span class="nc" id="L114">    }</span>
 
     /** Keeps the word count label in sync with the reflection editor. */
     private void ConfigureWordCount() {
-<span class="nc" id="L102">        reflectionArea.textProperty().addListener((obs, oldText, newText) -&gt; UpdateWordCount(newText));</span>
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L118">        reflectionArea.textProperty().addListener((obs, oldText, newText) -&gt; UpdateWordCount(newText));</span>
+<span class="nc" id="L119">    }</span>
 
     private void UpdateWordCount(String text) {
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        String trimmed = text == null ? &quot;&quot; : text.trim();</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">        int count = trimmed.isEmpty() ? 0 : trimmed.split(&quot;\\s+&quot;).length;</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">        wordCountLabel.setText(count + (count == 1 ? &quot; word&quot; : &quot; words&quot;));</span>
-<span class="nc" id="L109">    }</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        String trimmed = text == null ? &quot;&quot; : text.trim();</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        int count = trimmed.isEmpty() ? 0 : trimmed.split(&quot;\\s+&quot;).length;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        wordCountLabel.setText(count + (count == 1 ? &quot; word&quot; : &quot; words&quot;));</span>
+<span class="nc" id="L125">    }</span>
 
     private void ShowJournalChallenge(ChallengeListItem item){
-<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (item.weeklyTask() != null) {</span>
-<span class="nc" id="L113">            ShowWeeklyChallenge(item);</span>
-<span class="nc" id="L114">            return;</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (item.weeklyTask() != null) {</span>
+<span class="nc" id="L129">            ShowWeeklyChallenge(item);</span>
+<span class="nc" id="L130">            return;</span>
         }
 
-<span class="nc" id="L117">        selectedWeeklyChallenge = null;</span>
-<span class="nc" id="L118">        selectedReflectionItem = null;</span>
-<span class="nc" id="L119">        selectedJournalChallenge = item;</span>
+<span class="nc" id="L133">        selectedWeeklyChallenge = null;</span>
+<span class="nc" id="L134">        selectedReflectionItem = null;</span>
+<span class="nc" id="L135">        selectedJournalChallenge = item;</span>
 
-<span class="nc" id="L121">        ShowTaskContent();</span>
+<span class="nc" id="L137">        ShowTaskContent();</span>
 
-<span class="nc" id="L123">        JournalEntry entry = item.entry();</span>
-<span class="nc" id="L124">        Task task = item.task();</span>
+<span class="nc" id="L139">        JournalEntry entry = item.entry();</span>
+<span class="nc" id="L140">        Task task = item.task();</span>
 
-<span class="nc" id="L126">        taskEyebrowLabel.setText(&quot;CHALLENGE&quot;);</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">        taskTitleLabel.setText(task == null ? entry.getTitle() : task.getName());</span>
-<span class="nc bnc" id="L128" title="All 4 branches missed.">        descriptionLabel.setText(task == null || ApplicationManager.isEmpty(task.getDescription())</span>
-<span class="nc" id="L129">                ? &quot;Write what you plan to do for this challenge.&quot;</span>
-<span class="nc" id="L130">                : task.getDescription());</span>
-<span class="nc" id="L131">        SetReflectionAreaCompact(true);</span>
-<span class="nc" id="L132">        reflectionArea.setPromptText(&quot;Begin with what happened…&quot;);</span>
-<span class="nc bnc" id="L133" title="All 2 branches missed.">        reflectionArea.setText(entry.getBody() == null ? &quot;&quot; : entry.getBody());</span>
-<span class="nc" id="L134">        reflectionArea.setDisable(true);</span>
-<span class="nc" id="L135">        SetEditButtonVisible(true);</span>
-<span class="nc" id="L136">        submitButton.setDisable(true);</span>
-<span class="nc" id="L137">        submitButton.setText(&quot;Submit&quot;);</span>
-<span class="nc" id="L138">        feedbackButton.setDisable(true);</span>
-<span class="nc" id="L139">        feedbackLabel.setText(&quot;Click Edit, to change what you wrote for this challenge&quot;);</span>
-<span class="nc" id="L140">        savedStatusLabel.setText(&quot;Saved&quot;);</span>
-<span class="nc" id="L141">        HideAiFeedback();</span>
-<span class="nc" id="L142">    }</span>
+<span class="nc" id="L142">        taskEyebrowLabel.setText(&quot;CHALLENGE&quot;);</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        taskTitleLabel.setText(task == null ? entry.getTitle() : task.getName());</span>
+<span class="nc bnc" id="L144" title="All 4 branches missed.">        descriptionLabel.setText(task == null || ApplicationManager.isEmpty(task.getDescription())</span>
+<span class="nc" id="L145">                ? &quot;Write what you plan to do for this challenge.&quot;</span>
+<span class="nc" id="L146">                : task.getDescription());</span>
+<span class="nc" id="L147">        SetReflectionAreaCompact(true);</span>
+<span class="nc" id="L148">        reflectionArea.setPromptText(&quot;Begin with what happened…&quot;);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        reflectionArea.setText(entry.getBody() == null ? &quot;&quot; : entry.getBody());</span>
+<span class="nc" id="L150">        reflectionArea.setDisable(true);</span>
+<span class="nc" id="L151">        SetEditButtonVisible(true);</span>
+<span class="nc" id="L152">        submitButton.setDisable(true);</span>
+<span class="nc" id="L153">        submitButton.setText(&quot;Submit&quot;);</span>
+<span class="nc" id="L154">        feedbackButton.setDisable(true);</span>
+<span class="nc" id="L155">        feedbackLabel.setText(&quot;Click Edit, to change what you wrote for this challenge&quot;);</span>
+<span class="nc" id="L156">        savedStatusLabel.setText(&quot;Saved&quot;);</span>
+<span class="nc" id="L157">        HideAiFeedback();</span>
+<span class="nc" id="L158">    }</span>
 
     private void ShowWeeklyChallenge(ChallengeListItem item){
-<span class="nc" id="L145">        selectedReflectionItem = null;</span>
-<span class="nc" id="L146">        selectedJournalChallenge = null;</span>
-<span class="nc" id="L147">        selectedWeeklyChallenge = item;</span>
+<span class="nc" id="L161">        selectedReflectionItem = null;</span>
+<span class="nc" id="L162">        selectedJournalChallenge = null;</span>
+<span class="nc" id="L163">        selectedWeeklyChallenge = item;</span>
 
-<span class="nc" id="L149">        ShowTaskContent();</span>
+<span class="nc" id="L165">        ShowTaskContent();</span>
 
-<span class="nc" id="L151">        WeeklyTask weeklyTask = item.weeklyTask();</span>
-<span class="nc" id="L152">        Task task = item.task();</span>
-<span class="nc" id="L153">        boolean finished = IsFinished(weeklyTask.getStatus());</span>
+<span class="nc" id="L167">        WeeklyTask weeklyTask = item.weeklyTask();</span>
+<span class="nc" id="L168">        Task task = item.task();</span>
+<span class="nc" id="L169">        boolean finished = IsFinished(weeklyTask.getStatus());</span>
 
-<span class="nc" id="L155">        taskEyebrowLabel.setText(&quot;WEEKLY CHALLENGE&quot;);</span>
-<span class="nc bnc" id="L156" title="All 2 branches missed.">        taskTitleLabel.setText(task == null ? &quot;Weekly challenge&quot; : task.getName());</span>
-<span class="nc bnc" id="L157" title="All 4 branches missed.">        descriptionLabel.setText(task == null || ApplicationManager.isEmpty(task.getDescription())</span>
-<span class="nc" id="L158">                ? &quot;Complete this week's challenge, then write an honest reflection.&quot;</span>
-<span class="nc" id="L159">                : task.getDescription());</span>
-<span class="nc" id="L160">        SetReflectionAreaCompact(true);</span>
-<span class="nc" id="L161">        reflectionArea.setPromptText(&quot;Begin with what happened…&quot;);</span>
-<span class="nc bnc" id="L162" title="All 2 branches missed.">        reflectionArea.setText(weeklyTask.getReflection() == null ? &quot;&quot; : weeklyTask.getReflection());</span>
-<span class="nc" id="L163">        reflectionArea.setDisable(finished);</span>
-<span class="nc" id="L164">        SetEditButtonVisible(finished);</span>
-<span class="nc" id="L165">        submitButton.setDisable(finished);</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">        savedStatusLabel.setText(finished ? &quot;Saved&quot; : &quot;&quot;);</span>
-<span class="nc bnc" id="L167" title="All 4 branches missed.">        boolean keepGenerating = generatingFeedback</span>
+<span class="nc" id="L171">        taskEyebrowLabel.setText(&quot;WEEKLY CHALLENGE&quot;);</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        taskTitleLabel.setText(task == null ? &quot;Weekly challenge&quot; : task.getName());</span>
+<span class="nc bnc" id="L173" title="All 4 branches missed.">        descriptionLabel.setText(task == null || ApplicationManager.isEmpty(task.getDescription())</span>
+<span class="nc" id="L174">                ? &quot;Complete this week's challenge, then write an honest reflection.&quot;</span>
+<span class="nc" id="L175">                : task.getDescription());</span>
+<span class="nc" id="L176">        SetReflectionAreaCompact(true);</span>
+<span class="nc" id="L177">        reflectionArea.setPromptText(&quot;Begin with what happened…&quot;);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        reflectionArea.setText(weeklyTask.getReflection() == null ? &quot;&quot; : weeklyTask.getReflection());</span>
+<span class="nc" id="L179">        reflectionArea.setDisable(finished);</span>
+<span class="nc" id="L180">        SetEditButtonVisible(finished);</span>
+<span class="nc" id="L181">        submitButton.setDisable(finished);</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">        savedStatusLabel.setText(finished ? &quot;Saved&quot; : &quot;&quot;);</span>
+<span class="nc bnc" id="L183" title="All 4 branches missed.">        boolean keepGenerating = generatingFeedback</span>
                 &amp;&amp; selectedWeeklyChallenge != null
-<span class="nc bnc" id="L169" title="All 2 branches missed.">                &amp;&amp; SameTask(selectedWeeklyChallenge.weeklyTask(), weeklyTask);</span>
-<span class="nc" id="L170">        feedbackButton.setDisable(keepGenerating);</span>
-<span class="nc bnc" id="L171" title="All 2 branches missed.">        if (keepGenerating) {</span>
-<span class="nc" id="L172">            feedbackLabel.setText(&quot;Generating AI feedback...&quot;);</span>
-<span class="nc" id="L173">            ShowAiFeedback(&quot;Writing feedback from your reflection...&quot;);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                &amp;&amp; SameTask(selectedWeeklyChallenge.weeklyTask(), weeklyTask);</span>
+<span class="nc" id="L186">        feedbackButton.setDisable(keepGenerating);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if (keepGenerating) {</span>
+<span class="nc" id="L188">            feedbackLabel.setText(&quot;Generating AI feedback...&quot;);</span>
+<span class="nc" id="L189">            ShowAiFeedback(&quot;Writing feedback from your reflection...&quot;);</span>
         } else {
-<span class="nc bnc" id="L175" title="All 2 branches missed.">            feedbackLabel.setText(finished ? &quot;Click Edit, to change the reflection you have written for this&quot; : &quot;&quot;);</span>
-<span class="nc" id="L176">            ShowStoredFeedback(weeklyTask);</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            feedbackLabel.setText(finished ? &quot;Click Edit, to change the reflection you have written for this&quot; : &quot;&quot;);</span>
+<span class="nc" id="L192">            ShowStoredFeedback(weeklyTask);</span>
         }
-<span class="nc" id="L178">    }</span>
+<span class="nc" id="L194">    }</span>
 
     private void ShowEmptyDetail() {
-<span class="nc" id="L181">        selectedWeeklyChallenge = null;</span>
-<span class="nc" id="L182">        selectedReflectionItem = null;</span>
-<span class="nc" id="L183">        selectedJournalChallenge = null;</span>
+<span class="nc" id="L197">        selectedWeeklyChallenge = null;</span>
+<span class="nc" id="L198">        selectedReflectionItem = null;</span>
+<span class="nc" id="L199">        selectedJournalChallenge = null;</span>
 
-<span class="nc" id="L185">        ShowEmptyState();</span>
+<span class="nc" id="L201">        ShowEmptyState();</span>
 
-<span class="nc" id="L187">        reflectionArea.clear();</span>
-<span class="nc" id="L188">        reflectionArea.setDisable(true);</span>
-<span class="nc" id="L189">        SetEditButtonVisible(false);</span>
-<span class="nc" id="L190">        submitButton.setDisable(true);</span>
-<span class="nc" id="L191">        submitButton.setText(&quot;Submit&quot;);</span>
-<span class="nc" id="L192">        feedbackButton.setDisable(true);</span>
-<span class="nc" id="L193">        feedbackLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L194">        savedStatusLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L195">        HideAiFeedback();</span>
-<span class="nc" id="L196">    }</span>
+<span class="nc" id="L203">        reflectionArea.clear();</span>
+<span class="nc" id="L204">        reflectionArea.setDisable(true);</span>
+<span class="nc" id="L205">        SetEditButtonVisible(false);</span>
+<span class="nc" id="L206">        submitButton.setDisable(true);</span>
+<span class="nc" id="L207">        submitButton.setText(&quot;Submit&quot;);</span>
+<span class="nc" id="L208">        feedbackButton.setDisable(true);</span>
+<span class="nc" id="L209">        feedbackLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L210">        savedStatusLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L211">        HideAiFeedback();</span>
+<span class="nc" id="L212">    }</span>
 
     /** Shows the centred &quot;nothing selected&quot; message and hides the editor/buttons. */
     private void ShowEmptyState() {
-<span class="nc" id="L200">        emptyStateBox.setVisible(true);</span>
-<span class="nc" id="L201">        emptyStateBox.setManaged(true);</span>
-<span class="nc" id="L202">        taskContentBox.setVisible(false);</span>
-<span class="nc" id="L203">        taskContentBox.setManaged(false);</span>
-<span class="nc" id="L204">    }</span>
+<span class="nc" id="L216">        emptyStateBox.setVisible(true);</span>
+<span class="nc" id="L217">        emptyStateBox.setManaged(true);</span>
+<span class="nc" id="L218">        taskContentBox.setVisible(false);</span>
+<span class="nc" id="L219">        taskContentBox.setManaged(false);</span>
+<span class="nc" id="L220">    }</span>
 
     /** Shows the task header, editor, and action buttons. */
     private void ShowTaskContent() {
-<span class="nc" id="L208">        emptyStateBox.setVisible(false);</span>
-<span class="nc" id="L209">        emptyStateBox.setManaged(false);</span>
-<span class="nc" id="L210">        taskContentBox.setVisible(true);</span>
-<span class="nc" id="L211">        taskContentBox.setManaged(true);</span>
-<span class="nc" id="L212">    }</span>
+<span class="nc" id="L224">        emptyStateBox.setVisible(false);</span>
+<span class="nc" id="L225">        emptyStateBox.setManaged(false);</span>
+<span class="nc" id="L226">        taskContentBox.setVisible(true);</span>
+<span class="nc" id="L227">        taskContentBox.setManaged(true);</span>
+<span class="nc" id="L228">    }</span>
 
     /** The Edit action only makes sense once something has been submitted. */
     private void SetEditButtonVisible(boolean visible) {
-<span class="nc" id="L216">        editButton.setVisible(visible);</span>
-<span class="nc" id="L217">        editButton.setManaged(visible);</span>
-<span class="nc bnc" id="L218" title="All 2 branches missed.">        editButton.setDisable(!visible);</span>
-<span class="nc" id="L219">    }</span>
+<span class="nc" id="L232">        editButton.setVisible(visible);</span>
+<span class="nc" id="L233">        editButton.setManaged(visible);</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">        editButton.setDisable(!visible);</span>
+<span class="nc" id="L235">    }</span>
 
     @FXML
     private void OnBack() throws IOException {
-<span class="nc" id="L223">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
-<span class="nc" id="L224">    }</span>
+<span class="nc" id="L239">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
+<span class="nc" id="L240">    }</span>
 
     @FXML
     private void OnEditReflection() {
-<span class="nc" id="L228">        reflectionArea.setDisable(false);</span>
-<span class="nc" id="L229">        submitButton.setDisable(false);</span>
-<span class="nc" id="L230">        SetEditButtonVisible(false);</span>
-<span class="nc" id="L231">        feedbackLabel.setText(&quot;Re-enter you reflection&quot;);</span>
-<span class="nc" id="L232">        savedStatusLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L233">    }</span>
+<span class="nc" id="L244">        reflectionArea.setDisable(false);</span>
+<span class="nc" id="L245">        submitButton.setDisable(false);</span>
+<span class="nc" id="L246">        SetEditButtonVisible(false);</span>
+<span class="nc" id="L247">        feedbackLabel.setText(&quot;Re-enter you reflection&quot;);</span>
+<span class="nc" id="L248">        savedStatusLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L249">    }</span>
 
     @FXML
     private void OnSubmit() {
-<span class="nc" id="L237">        String reflection = CurrentReflection();</span>
-<span class="nc bnc" id="L238" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)) {</span>
-<span class="nc" id="L239">            feedbackLabel.setText(&quot;Write a reflection before submitting.&quot;);</span>
-<span class="nc" id="L240">            return;</span>
+<span class="nc" id="L253">        String reflection = CurrentReflection();</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)) {</span>
+<span class="nc" id="L255">            feedbackLabel.setText(&quot;Write a reflection before submitting.&quot;);</span>
+<span class="nc" id="L256">            return;</span>
         }
 
-<span class="nc" id="L243">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc" id="L259">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
 
-<span class="nc bnc" id="L245" title="All 2 branches missed.">        if (selectedWeeklyChallenge != null) {</span>
-<span class="nc" id="L246">            ChallengeListItem submitted = selectedWeeklyChallenge;</span>
-<span class="nc" id="L247">            WeeklyTask weeklyTask = submitted.weeklyTask();</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        if (selectedWeeklyChallenge != null) {</span>
+<span class="nc" id="L262">            ChallengeListItem submitted = selectedWeeklyChallenge;</span>
+<span class="nc" id="L263">            WeeklyTask weeklyTask = submitted.weeklyTask();</span>
             try {
-<span class="nc" id="L249">                boolean alreadyFinished = IsFinished(weeklyTask.getStatus());</span>
-<span class="nc" id="L250">                WeeklyTaskService.UpdateGivenTaskToBeFinished(weeklyTask, reflection, email);</span>
-<span class="nc" id="L251">                RequestWeeklyAiFeedback(submitted, reflection, &quot;Task submitted. Generating AI feedback...&quot;);</span>
-<span class="nc" id="L252">                LoadQuestChallenges();</span>
-<span class="nc" id="L253">                ReselectWeeklyChallenge(weeklyTask);</span>
+<span class="nc" id="L265">                boolean alreadyFinished = IsFinished(weeklyTask.getStatus());</span>
+<span class="nc" id="L266">                WeeklyTaskService.UpdateGivenTaskToBeFinished(weeklyTask, reflection, email);</span>
+<span class="nc" id="L267">                RequestWeeklyAiFeedback(submitted, reflection, &quot;Task submitted. Generating AI feedback...&quot;);</span>
+<span class="nc" id="L268">                LoadQuestChallenges();</span>
+<span class="nc" id="L269">                ReselectWeeklyChallenge(weeklyTask);</span>
 
-<span class="nc bnc" id="L255" title="All 2 branches missed.">                if (!alreadyFinished){</span>
-<span class="nc" id="L256">                    MaybeRecordWeekCompletion(email);</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                if (!alreadyFinished){</span>
+<span class="nc" id="L272">                    MaybeRecordWeekCompletion(email);</span>
                 }
-<span class="nc bnc" id="L258" title="All 2 branches missed.">                if (alreadyFinished)</span>
-<span class="nc" id="L259">                    feedbackLabel.setText(&quot;Re-Submitted Reflection for this Weekly Task!&quot;);</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">                if (alreadyFinished)</span>
+<span class="nc" id="L275">                    feedbackLabel.setText(&quot;Re-Submitted Reflection for this Weekly Task!&quot;);</span>
                 else
-<span class="nc" id="L261">                    feedbackLabel.setText(&quot;Submitted!&quot;);</span>
-<span class="nc" id="L262">                savedStatusLabel.setText(&quot;Saved&quot;);</span>
-<span class="nc" id="L263">            } catch (Exception exception) {</span>
-<span class="nc" id="L264">                feedbackLabel.setText(&quot;Could not submit this task right now.&quot;);</span>
-<span class="nc" id="L265">            }</span>
-<span class="nc" id="L266">            return;</span>
-        }
-
-<span class="nc bnc" id="L269" title="All 2 branches missed.">        if (selectedJournalChallenge != null) {</span>
-<span class="nc" id="L270">            ChallengeListItem submitted = selectedJournalChallenge;</span>
-<span class="nc" id="L271">            JournalEntry entry = submitted.entry();</span>
-            try {
-<span class="nc bnc" id="L273" title="All 2 branches missed.">                String title = submitted.task() == null ? entry.getTitle() : submitted.task().getName();</span>
-<span class="nc" id="L274">                JournalEntryService.AddChallengeEntry(email, entry.getLabourId(), title, reflection);</span>
-<span class="nc" id="L275">                LoadQuestChallenges();</span>
-<span class="nc" id="L276">                ReselectJournalChallenge(entry.getLabourId());</span>
-<span class="nc" id="L277">                feedbackLabel.setText(&quot;Saved!&quot;);</span>
+<span class="nc" id="L277">                    feedbackLabel.setText(&quot;Submitted!&quot;);</span>
 <span class="nc" id="L278">                savedStatusLabel.setText(&quot;Saved&quot;);</span>
 <span class="nc" id="L279">            } catch (Exception exception) {</span>
-<span class="nc" id="L280">                feedbackLabel.setText(&quot;Could not save this challenge right now.&quot;);</span>
+<span class="nc" id="L280">                feedbackLabel.setText(&quot;Could not submit this task right now.&quot;);</span>
 <span class="nc" id="L281">            }</span>
 <span class="nc" id="L282">            return;</span>
         }
 
-<span class="nc bnc" id="L285" title="All 2 branches missed.">        if (selectedReflectionItem != null) {</span>
-<span class="nc" id="L286">            ReflectionListItem submitted = selectedReflectionItem;</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">        if (selectedJournalChallenge != null) {</span>
+<span class="nc" id="L286">            ChallengeListItem submitted = selectedJournalChallenge;</span>
+<span class="nc" id="L287">            JournalEntry entry = submitted.entry();</span>
             try {
-<span class="nc" id="L288">                UserQuest updated = UserQuestService.UpdateQuestReflectionToBeFinished(</span>
-<span class="nc" id="L289">                        submitted.userQuest(), reflection, email);</span>
-<span class="nc" id="L290">                RequestQuestAiFeedback(submitted, reflection, &quot;Reflection submitted. Generating AI feedback...&quot;);</span>
-<span class="nc" id="L291">                LoadQuestReflections();</span>
-<span class="nc" id="L292">                ReselectReflection(updated);</span>
-<span class="nc" id="L293">                feedbackLabel.setText(&quot;Re-Submitted your Reflection!&quot;);</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">                String title = submitted.task() == null ? entry.getTitle() : submitted.task().getName();</span>
+<span class="nc" id="L290">                JournalEntryService.AddChallengeEntry(email, entry.getLabourId(), title, reflection);</span>
+<span class="nc" id="L291">                LoadQuestChallenges();</span>
+<span class="nc" id="L292">                ReselectJournalChallenge(entry.getLabourId());</span>
+<span class="nc" id="L293">                feedbackLabel.setText(&quot;Saved!&quot;);</span>
 <span class="nc" id="L294">                savedStatusLabel.setText(&quot;Saved&quot;);</span>
 <span class="nc" id="L295">            } catch (Exception exception) {</span>
-<span class="nc" id="L296">                feedbackLabel.setText(&quot;Could not submit this reflection right now.&quot;);</span>
+<span class="nc" id="L296">                feedbackLabel.setText(&quot;Could not save this challenge right now.&quot;);</span>
 <span class="nc" id="L297">            }</span>
+<span class="nc" id="L298">            return;</span>
         }
-<span class="nc" id="L299">    }</span>
+
+<span class="nc bnc" id="L301" title="All 2 branches missed.">        if (selectedReflectionItem != null) {</span>
+<span class="nc" id="L302">            ReflectionListItem submitted = selectedReflectionItem;</span>
+            try {
+<span class="nc" id="L304">                UserQuest updated = UserQuestService.UpdateQuestReflectionToBeFinished(</span>
+<span class="nc" id="L305">                        submitted.userQuest(), reflection, email);</span>
+<span class="nc" id="L306">                RequestQuestAiFeedback(submitted, reflection, &quot;Reflection submitted. Generating AI feedback...&quot;);</span>
+<span class="nc" id="L307">                LoadQuestReflections();</span>
+<span class="nc" id="L308">                ReselectReflection(updated);</span>
+<span class="nc" id="L309">                feedbackLabel.setText(&quot;Re-Submitted your Reflection!&quot;);</span>
+<span class="nc" id="L310">                savedStatusLabel.setText(&quot;Saved&quot;);</span>
+<span class="nc" id="L311">            } catch (Exception exception) {</span>
+<span class="nc" id="L312">                feedbackLabel.setText(&quot;Could not submit this reflection right now.&quot;);</span>
+<span class="nc" id="L313">            }</span>
+        }
+<span class="nc" id="L315">    }</span>
 
     /**
      * Once every weekly challenge assigned this week is finished, counts it as the
@@ -304,619 +320,619 @@ import java.util.concurrent.CompletableFuture;
      */
     private void MaybeRecordWeekCompletion(String email) {
         try {
-<span class="nc" id="L307">            int total = 0;</span>
-<span class="nc" id="L308">            int finished = 0;</span>
-<span class="nc bnc" id="L309" title="All 2 branches missed.">            for (ChallengeListItem item : questChallengesList.getItems()) {</span>
-<span class="nc bnc" id="L310" title="All 2 branches missed.">                if (item.weeklyTask() == null) {</span>
-<span class="nc" id="L311">                    continue;</span>
+<span class="nc" id="L323">            int total = 0;</span>
+<span class="nc" id="L324">            int finished = 0;</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">            for (ChallengeListItem item : questChallengesList.getItems()) {</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">                if (item.weeklyTask() == null) {</span>
+<span class="nc" id="L327">                    continue;</span>
                 }
-<span class="nc" id="L313">                total++;</span>
-<span class="nc bnc" id="L314" title="All 2 branches missed.">                if (IsFinished(item.weeklyTask().getStatus())) {</span>
-<span class="nc" id="L315">                    finished++;</span>
+<span class="nc" id="L329">                total++;</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">                if (IsFinished(item.weeklyTask().getStatus())) {</span>
+<span class="nc" id="L331">                    finished++;</span>
                 }
-<span class="nc" id="L317">            }</span>
+<span class="nc" id="L333">            }</span>
 
-<span class="nc bnc" id="L319" title="All 4 branches missed.">            if (total == 0 || finished != total) {</span>
-<span class="nc" id="L320">                return;</span>
+<span class="nc bnc" id="L335" title="All 4 branches missed.">            if (total == 0 || finished != total) {</span>
+<span class="nc" id="L336">                return;</span>
             }
 
-<span class="nc" id="L323">            StreakService.RecordCompletion(email, LocalDate.now());</span>
-<span class="nc" id="L324">            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L339">            StreakService.RecordCompletion(email, LocalDate.now());</span>
+<span class="nc" id="L340">            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 
-<span class="nc" id="L326">            UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(</span>
-<span class="nc" id="L327">                    currentActiveQuest, email, currentActiveQuest.getPercentageComplete() + 0.1f);</span>
+<span class="nc" id="L342">            UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(</span>
+<span class="nc" id="L343">                    currentActiveQuest, email, currentActiveQuest.getPercentageComplete() + 0.1f);</span>
 
-<span class="nc bnc" id="L329" title="All 2 branches missed.">            if (updatedQuest.getPercentageComplete() &gt;= 1.0f) {</span>
-<span class="nc" id="L330">                UserQuestService.SetUserQuestStatusAsComplete(updatedQuest, email);</span>
-<span class="nc" id="L331">                StreakService.IncreaseTotalQuestsCompleted(email);</span>
+<span class="nc bnc" id="L345" title="All 2 branches missed.">            if (updatedQuest.getPercentageComplete() &gt;= 1.0f) {</span>
+<span class="nc" id="L346">                UserQuestService.SetUserQuestStatusAsComplete(updatedQuest, email);</span>
+<span class="nc" id="L347">                StreakService.IncreaseTotalQuestsCompleted(email);</span>
             }
-<span class="nc" id="L333">        } catch (Exception exception) {</span>
-<span class="nc" id="L334">            System.out.println(exception.getMessage());</span>
-<span class="nc" id="L335">        }</span>
-<span class="nc" id="L336">    }</span>
+<span class="nc" id="L349">        } catch (Exception exception) {</span>
+<span class="nc" id="L350">            System.out.println(exception.getMessage());</span>
+<span class="nc" id="L351">        }</span>
+<span class="nc" id="L352">    }</span>
 
     @FXML
     private void OnGetFeedback() {
-<span class="nc" id="L340">        String reflection = CurrentReflection();</span>
-<span class="nc bnc" id="L341" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)) {</span>
-<span class="nc" id="L342">            feedbackLabel.setText(&quot;Write a reflection before requesting AI feedback.&quot;);</span>
-<span class="nc" id="L343">            return;</span>
+<span class="nc" id="L356">        String reflection = CurrentReflection();</span>
+<span class="nc bnc" id="L357" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(reflection)) {</span>
+<span class="nc" id="L358">            feedbackLabel.setText(&quot;Write a reflection before requesting AI feedback.&quot;);</span>
+<span class="nc" id="L359">            return;</span>
         }
 
-<span class="nc bnc" id="L346" title="All 2 branches missed.">        if (selectedWeeklyChallenge != null) {</span>
-<span class="nc" id="L347">            RequestWeeklyAiFeedback(selectedWeeklyChallenge, reflection, &quot;Generating AI feedback...&quot;);</span>
-<span class="nc" id="L348">            return;</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">        if (selectedWeeklyChallenge != null) {</span>
+<span class="nc" id="L363">            RequestWeeklyAiFeedback(selectedWeeklyChallenge, reflection, &quot;Generating AI feedback...&quot;);</span>
+<span class="nc" id="L364">            return;</span>
         }
 
-<span class="nc bnc" id="L351" title="All 2 branches missed.">        if (selectedReflectionItem != null) {</span>
-<span class="nc" id="L352">            RequestQuestAiFeedback(selectedReflectionItem, reflection, &quot;Generating AI feedback...&quot;);</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">        if (selectedReflectionItem != null) {</span>
+<span class="nc" id="L368">            RequestQuestAiFeedback(selectedReflectionItem, reflection, &quot;Generating AI feedback...&quot;);</span>
         }
-<span class="nc" id="L354">    }</span>
+<span class="nc" id="L370">    }</span>
 
     private void ReselectWeeklyChallenge(WeeklyTask weeklyTask) {
-<span class="nc bnc" id="L357" title="All 2 branches missed.">        for (ChallengeListItem item : questChallengesList.getItems()) {</span>
-<span class="nc bnc" id="L358" title="All 4 branches missed.">            if (item.weeklyTask() != null &amp;&amp; SameTask(item.weeklyTask(), weeklyTask)) {</span>
-<span class="nc" id="L359">                questChallengesList.getSelectionModel().select(item);</span>
-<span class="nc" id="L360">                return;</span>
+<span class="nc bnc" id="L373" title="All 2 branches missed.">        for (ChallengeListItem item : questChallengesList.getItems()) {</span>
+<span class="nc bnc" id="L374" title="All 4 branches missed.">            if (item.weeklyTask() != null &amp;&amp; SameTask(item.weeklyTask(), weeklyTask)) {</span>
+<span class="nc" id="L375">                questChallengesList.getSelectionModel().select(item);</span>
+<span class="nc" id="L376">                return;</span>
             }
-<span class="nc" id="L362">        }</span>
-<span class="nc" id="L363">    }</span>
+<span class="nc" id="L378">        }</span>
+<span class="nc" id="L379">    }</span>
 
     private void ReselectJournalChallenge(int labourId) {
-<span class="nc bnc" id="L366" title="All 2 branches missed.">        for (ChallengeListItem item : questChallengesList.getItems()) {</span>
-<span class="nc bnc" id="L367" title="All 6 branches missed.">            if (item.weeklyTask() == null &amp;&amp; item.entry() != null &amp;&amp; item.entry().getLabourId() == labourId) {</span>
-<span class="nc" id="L368">                questChallengesList.getSelectionModel().select(item);</span>
-<span class="nc" id="L369">                return;</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">        for (ChallengeListItem item : questChallengesList.getItems()) {</span>
+<span class="nc bnc" id="L383" title="All 6 branches missed.">            if (item.weeklyTask() == null &amp;&amp; item.entry() != null &amp;&amp; item.entry().getLabourId() == labourId) {</span>
+<span class="nc" id="L384">                questChallengesList.getSelectionModel().select(item);</span>
+<span class="nc" id="L385">                return;</span>
             }
-<span class="nc" id="L371">        }</span>
-<span class="nc" id="L372">    }</span>
+<span class="nc" id="L387">        }</span>
+<span class="nc" id="L388">    }</span>
 
     private void ReselectReflection(UserQuest userQuest) {
-<span class="nc bnc" id="L375" title="All 2 branches missed.">        for (ReflectionListItem item : questReflectionsList.getItems()) {</span>
-<span class="nc bnc" id="L376" title="All 2 branches missed.">            if (item.userQuest().getLabourId() == userQuest.getLabourId()) {</span>
-<span class="nc" id="L377">                questReflectionsList.getSelectionModel().select(item);</span>
-<span class="nc" id="L378">                return;</span>
+<span class="nc bnc" id="L391" title="All 2 branches missed.">        for (ReflectionListItem item : questReflectionsList.getItems()) {</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">            if (item.userQuest().getLabourId() == userQuest.getLabourId()) {</span>
+<span class="nc" id="L393">                questReflectionsList.getSelectionModel().select(item);</span>
+<span class="nc" id="L394">                return;</span>
             }
-<span class="nc" id="L380">        }</span>
-<span class="nc" id="L381">    }</span>
+<span class="nc" id="L396">        }</span>
+<span class="nc" id="L397">    }</span>
 
     private void RequestWeeklyAiFeedback(ChallengeListItem item, String reflection, String statusMessage) {
-<span class="nc" id="L384">        WeeklyTask weeklyTask = item.weeklyTask();</span>
-<span class="nc" id="L385">        Task task = item.task();</span>
-<span class="nc" id="L386">        String questName = QuestNameForTask(task);</span>
+<span class="nc" id="L400">        WeeklyTask weeklyTask = item.weeklyTask();</span>
+<span class="nc" id="L401">        Task task = item.task();</span>
+<span class="nc" id="L402">        String questName = QuestNameForTask(task);</span>
 
-<span class="nc" id="L388">        int requestId = ++feedbackRequestId;</span>
-<span class="nc" id="L389">        generatingFeedback = true;</span>
-<span class="nc" id="L390">        feedbackButton.setDisable(true);</span>
-<span class="nc" id="L391">        feedbackLabel.setText(statusMessage);</span>
-<span class="nc" id="L392">        ShowAiFeedback(&quot;Writing feedback from your reflection...&quot;);</span>
+<span class="nc" id="L404">        int requestId = ++feedbackRequestId;</span>
+<span class="nc" id="L405">        generatingFeedback = true;</span>
+<span class="nc" id="L406">        feedbackButton.setDisable(true);</span>
+<span class="nc" id="L407">        feedbackLabel.setText(statusMessage);</span>
+<span class="nc" id="L408">        ShowAiFeedback(&quot;Writing feedback from your reflection...&quot;);</span>
 
-<span class="nc" id="L394">        CompletableFuture.supplyAsync(() -&gt; {</span>
+<span class="nc" id="L410">        CompletableFuture.supplyAsync(() -&gt; {</span>
             try {
-<span class="nc" id="L396">                return ReflectionFeedbackService.FeedbackFor(</span>
-<span class="nc" id="L397">                        ReflectionFeedbackService.ContextFor(task, questName, reflection));</span>
-<span class="nc" id="L398">            } catch (Exception exception) {</span>
-<span class="nc" id="L399">                throw new RuntimeException(exception);</span>
+<span class="nc" id="L412">                return ReflectionFeedbackService.FeedbackFor(</span>
+<span class="nc" id="L413">                        ReflectionFeedbackService.ContextFor(task, questName, reflection));</span>
+<span class="nc" id="L414">            } catch (Exception exception) {</span>
+<span class="nc" id="L415">                throw new RuntimeException(exception);</span>
             }
-<span class="nc" id="L401">        }).whenComplete((text, error) -&gt; Platform.runLater(() -&gt; {</span>
-<span class="nc bnc" id="L402" title="All 2 branches missed.">            if (requestId != feedbackRequestId) {</span>
-<span class="nc" id="L403">                return;</span>
-            }
-
-<span class="nc" id="L406">            generatingFeedback = false;</span>
-<span class="nc bnc" id="L407" title="All 4 branches missed.">            if (selectedWeeklyChallenge == null || !SameTask(selectedWeeklyChallenge.weeklyTask(), weeklyTask)) {</span>
-<span class="nc bnc" id="L408" title="All 2 branches missed.">                feedbackButton.setDisable(selectedWeeklyChallenge == null);</span>
-<span class="nc" id="L409">                return;</span>
+<span class="nc" id="L417">        }).whenComplete((text, error) -&gt; Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">            if (requestId != feedbackRequestId) {</span>
+<span class="nc" id="L419">                return;</span>
             }
 
-<span class="nc bnc" id="L412" title="All 2 branches missed.">            if (error != null) {</span>
-<span class="nc" id="L413">                feedbackLabel.setText(FriendlyFeedbackError(error));</span>
-<span class="nc" id="L414">                feedbackButton.setDisable(false);</span>
-<span class="nc" id="L415">                return;</span>
+<span class="nc" id="L422">            generatingFeedback = false;</span>
+<span class="nc bnc" id="L423" title="All 4 branches missed.">            if (selectedWeeklyChallenge == null || !SameTask(selectedWeeklyChallenge.weeklyTask(), weeklyTask)) {</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">                feedbackButton.setDisable(selectedWeeklyChallenge == null);</span>
+<span class="nc" id="L425">                return;</span>
+            }
+
+<span class="nc bnc" id="L428" title="All 2 branches missed.">            if (error != null) {</span>
+<span class="nc" id="L429">                feedbackLabel.setText(FriendlyFeedbackError(error));</span>
+<span class="nc" id="L430">                feedbackButton.setDisable(false);</span>
+<span class="nc" id="L431">                return;</span>
             }
 
             try {
-<span class="nc" id="L419">                ReflectionFeedbackService.Save(weeklyTask, text);</span>
-<span class="nc" id="L420">            } catch (Exception ignored) {</span>
+<span class="nc" id="L435">                ReflectionFeedbackService.Save(weeklyTask, text);</span>
+<span class="nc" id="L436">            } catch (Exception ignored) {</span>
                 // Showing the reply still helps even if it cannot be stored.
-<span class="nc" id="L422">            }</span>
-<span class="nc" id="L423">            ShowAiFeedback(text);</span>
-<span class="nc" id="L424">            feedbackLabel.setText(&quot;AI feedback is ready.&quot;);</span>
-<span class="nc" id="L425">            feedbackButton.setDisable(false);</span>
-<span class="nc" id="L426">        }));</span>
-<span class="nc" id="L427">    }</span>
+<span class="nc" id="L438">            }</span>
+<span class="nc" id="L439">            ShowAiFeedback(text);</span>
+<span class="nc" id="L440">            feedbackLabel.setText(&quot;AI feedback is ready.&quot;);</span>
+<span class="nc" id="L441">            feedbackButton.setDisable(false);</span>
+<span class="nc" id="L442">        }));</span>
+<span class="nc" id="L443">    }</span>
 
     private void RequestQuestAiFeedback(ReflectionListItem item, String reflection, String statusMessage) {
-<span class="nc" id="L430">        UserQuest userQuest = item.userQuest();</span>
-<span class="nc bnc" id="L431" title="All 2 branches missed.">        String questName = item.quest() == null ? &quot;your current quest&quot; : item.quest().getName();</span>
+<span class="nc" id="L446">        UserQuest userQuest = item.userQuest();</span>
+<span class="nc bnc" id="L447" title="All 2 branches missed.">        String questName = item.quest() == null ? &quot;your current quest&quot; : item.quest().getName();</span>
 
-<span class="nc" id="L433">        int requestId = ++feedbackRequestId;</span>
-<span class="nc" id="L434">        generatingFeedback = true;</span>
-<span class="nc" id="L435">        feedbackButton.setDisable(true);</span>
-<span class="nc" id="L436">        feedbackLabel.setText(statusMessage);</span>
-<span class="nc" id="L437">        ShowAiFeedback(&quot;Writing feedback from your reflection...&quot;);</span>
+<span class="nc" id="L449">        int requestId = ++feedbackRequestId;</span>
+<span class="nc" id="L450">        generatingFeedback = true;</span>
+<span class="nc" id="L451">        feedbackButton.setDisable(true);</span>
+<span class="nc" id="L452">        feedbackLabel.setText(statusMessage);</span>
+<span class="nc" id="L453">        ShowAiFeedback(&quot;Writing feedback from your reflection...&quot;);</span>
 
-<span class="nc" id="L439">        CompletableFuture.supplyAsync(() -&gt; {</span>
+<span class="nc" id="L455">        CompletableFuture.supplyAsync(() -&gt; {</span>
             try {
-<span class="nc" id="L441">                return ReflectionFeedbackService.FeedbackFor(</span>
-<span class="nc" id="L442">                        ReflectionFeedbackService.ContextFor(null, questName, reflection));</span>
-<span class="nc" id="L443">            } catch (Exception exception) {</span>
-<span class="nc" id="L444">                throw new RuntimeException(exception);</span>
+<span class="nc" id="L457">                return ReflectionFeedbackService.FeedbackFor(</span>
+<span class="nc" id="L458">                        ReflectionFeedbackService.ContextFor(null, questName, reflection));</span>
+<span class="nc" id="L459">            } catch (Exception exception) {</span>
+<span class="nc" id="L460">                throw new RuntimeException(exception);</span>
             }
-<span class="nc" id="L446">        }).whenComplete((text, error) -&gt; Platform.runLater(() -&gt; {</span>
-<span class="nc bnc" id="L447" title="All 2 branches missed.">            if (requestId != feedbackRequestId) {</span>
-<span class="nc" id="L448">                return;</span>
-            }
-
-<span class="nc" id="L451">            generatingFeedback = false;</span>
-<span class="nc bnc" id="L452" title="All 2 branches missed.">            if (selectedReflectionItem == null</span>
-<span class="nc bnc" id="L453" title="All 2 branches missed.">                    || selectedReflectionItem.userQuest().getLabourId() != userQuest.getLabourId()) {</span>
-<span class="nc bnc" id="L454" title="All 2 branches missed.">                feedbackButton.setDisable(selectedReflectionItem == null);</span>
-<span class="nc" id="L455">                return;</span>
+<span class="nc" id="L462">        }).whenComplete((text, error) -&gt; Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L463" title="All 2 branches missed.">            if (requestId != feedbackRequestId) {</span>
+<span class="nc" id="L464">                return;</span>
             }
 
-<span class="nc bnc" id="L458" title="All 2 branches missed.">            if (error != null) {</span>
-<span class="nc" id="L459">                feedbackLabel.setText(FriendlyFeedbackError(error));</span>
-<span class="nc" id="L460">                feedbackButton.setDisable(false);</span>
-<span class="nc" id="L461">                return;</span>
+<span class="nc" id="L467">            generatingFeedback = false;</span>
+<span class="nc bnc" id="L468" title="All 2 branches missed.">            if (selectedReflectionItem == null</span>
+<span class="nc bnc" id="L469" title="All 2 branches missed.">                    || selectedReflectionItem.userQuest().getLabourId() != userQuest.getLabourId()) {</span>
+<span class="nc bnc" id="L470" title="All 2 branches missed.">                feedbackButton.setDisable(selectedReflectionItem == null);</span>
+<span class="nc" id="L471">                return;</span>
+            }
+
+<span class="nc bnc" id="L474" title="All 2 branches missed.">            if (error != null) {</span>
+<span class="nc" id="L475">                feedbackLabel.setText(FriendlyFeedbackError(error));</span>
+<span class="nc" id="L476">                feedbackButton.setDisable(false);</span>
+<span class="nc" id="L477">                return;</span>
             }
 
             try {
-<span class="nc" id="L465">                ReflectionFeedbackService.SaveForQuest(userQuest.getAccountEmail(), userQuest.getLabourId(), text);</span>
-<span class="nc" id="L466">            } catch (Exception ignored) {</span>
+<span class="nc" id="L481">                ReflectionFeedbackService.SaveForQuest(userQuest.getAccountEmail(), userQuest.getLabourId(), text);</span>
+<span class="nc" id="L482">            } catch (Exception ignored) {</span>
                 // Showing the reply still helps even if it cannot be stored.
-<span class="nc" id="L468">            }</span>
-<span class="nc" id="L469">            ShowAiFeedback(text);</span>
-<span class="nc" id="L470">            feedbackLabel.setText(&quot;AI feedback is ready.&quot;);</span>
-<span class="nc" id="L471">            feedbackButton.setDisable(false);</span>
-<span class="nc" id="L472">        }));</span>
-<span class="nc" id="L473">    }</span>
+<span class="nc" id="L484">            }</span>
+<span class="nc" id="L485">            ShowAiFeedback(text);</span>
+<span class="nc" id="L486">            feedbackLabel.setText(&quot;AI feedback is ready.&quot;);</span>
+<span class="nc" id="L487">            feedbackButton.setDisable(false);</span>
+<span class="nc" id="L488">        }));</span>
+<span class="nc" id="L489">    }</span>
 
     private String QuestNameForTask(Task task) {
-<span class="nc bnc" id="L476" title="All 2 branches missed.">        if (task == null) {</span>
-<span class="nc" id="L477">            return &quot;your current quest&quot;;</span>
+<span class="nc bnc" id="L492" title="All 2 branches missed.">        if (task == null) {</span>
+<span class="nc" id="L493">            return &quot;your current quest&quot;;</span>
         }
         try {
-<span class="nc" id="L480">            Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());</span>
-<span class="nc bnc" id="L481" title="All 4 branches missed.">            if (quest != null &amp;&amp; !ApplicationManager.isEmpty(quest.getName())) {</span>
-<span class="nc" id="L482">                return quest.getName();</span>
+<span class="nc" id="L496">            Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());</span>
+<span class="nc bnc" id="L497" title="All 4 branches missed.">            if (quest != null &amp;&amp; !ApplicationManager.isEmpty(quest.getName())) {</span>
+<span class="nc" id="L498">                return quest.getName();</span>
             }
-<span class="nc" id="L484">        } catch (Exception ignored) {</span>
+<span class="nc" id="L500">        } catch (Exception ignored) {</span>
             // fall through to the default name below
-<span class="nc" id="L486">        }</span>
-<span class="nc" id="L487">        return &quot;your current quest&quot;;</span>
+<span class="nc" id="L502">        }</span>
+<span class="nc" id="L503">        return &quot;your current quest&quot;;</span>
     }
 
     private void ShowStoredFeedback(WeeklyTask weeklyTask) {
         try {
-<span class="nc" id="L492">            String stored = ReflectionFeedbackService.Find(weeklyTask);</span>
-<span class="nc bnc" id="L493" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
-<span class="nc" id="L494">                HideAiFeedback();</span>
-<span class="nc" id="L495">                return;</span>
+<span class="nc" id="L508">            String stored = ReflectionFeedbackService.Find(weeklyTask);</span>
+<span class="nc bnc" id="L509" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
+<span class="nc" id="L510">                HideAiFeedback();</span>
+<span class="nc" id="L511">                return;</span>
             }
-<span class="nc" id="L497">            ShowAiFeedback(stored);</span>
-<span class="nc" id="L498">        } catch (Exception exception) {</span>
-<span class="nc" id="L499">            HideAiFeedback();</span>
-<span class="nc" id="L500">        }</span>
-<span class="nc" id="L501">    }</span>
+<span class="nc" id="L513">            ShowAiFeedback(stored);</span>
+<span class="nc" id="L514">        } catch (Exception exception) {</span>
+<span class="nc" id="L515">            HideAiFeedback();</span>
+<span class="nc" id="L516">        }</span>
+<span class="nc" id="L517">    }</span>
 
     private void ShowAiFeedback(String text) {
-<span class="nc" id="L504">        aiFeedbackLabel.setText(text);</span>
-<span class="nc" id="L505">        aiFeedbackCard.setVisible(true);</span>
-<span class="nc" id="L506">        aiFeedbackCard.setManaged(true);</span>
-<span class="nc" id="L507">    }</span>
+<span class="nc" id="L520">        aiFeedbackLabel.setText(text);</span>
+<span class="nc" id="L521">        aiFeedbackCard.setVisible(true);</span>
+<span class="nc" id="L522">        aiFeedbackCard.setManaged(true);</span>
+<span class="nc" id="L523">    }</span>
 
     private void HideAiFeedback() {
-<span class="nc" id="L510">        aiFeedbackLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L511">        aiFeedbackCard.setVisible(false);</span>
-<span class="nc" id="L512">        aiFeedbackCard.setManaged(false);</span>
-<span class="nc" id="L513">    }</span>
+<span class="nc" id="L526">        aiFeedbackLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L527">        aiFeedbackCard.setVisible(false);</span>
+<span class="nc" id="L528">        aiFeedbackCard.setManaged(false);</span>
+<span class="nc" id="L529">    }</span>
 
     private void CancelPendingFeedback() {
-<span class="nc" id="L516">        feedbackRequestId++;</span>
-<span class="nc" id="L517">        generatingFeedback = false;</span>
-<span class="nc" id="L518">    }</span>
+<span class="nc" id="L532">        feedbackRequestId++;</span>
+<span class="nc" id="L533">        generatingFeedback = false;</span>
+<span class="nc" id="L534">    }</span>
 
     private static String FriendlyFeedbackError(Throwable error) {
-<span class="nc" id="L521">        Throwable cause = error;</span>
-<span class="nc bnc" id="L522" title="All 4 branches missed.">        while (cause.getCause() != null &amp;&amp; cause.getCause() != cause) {</span>
-<span class="nc" id="L523">            cause = cause.getCause();</span>
+<span class="nc" id="L537">        Throwable cause = error;</span>
+<span class="nc bnc" id="L538" title="All 4 branches missed.">        while (cause.getCause() != null &amp;&amp; cause.getCause() != cause) {</span>
+<span class="nc" id="L539">            cause = cause.getCause();</span>
         }
-<span class="nc" id="L525">        String message = cause.getMessage();</span>
-<span class="nc bnc" id="L526" title="All 2 branches missed.">        if (!ApplicationManager.isEmpty(message)) {</span>
-<span class="nc" id="L527">            return message;</span>
+<span class="nc" id="L541">        String message = cause.getMessage();</span>
+<span class="nc bnc" id="L542" title="All 2 branches missed.">        if (!ApplicationManager.isEmpty(message)) {</span>
+<span class="nc" id="L543">            return message;</span>
         }
-<span class="nc" id="L529">        return &quot;Could not get AI feedback right now.&quot;;</span>
+<span class="nc" id="L545">        return &quot;Could not get AI feedback right now.&quot;;</span>
     }
 
     /** Shrinks the shared text area to a compact 2-line box for challenge entries,
      * or restores its normal expanding height for reflections. */
     private void SetReflectionAreaCompact(boolean compact) {
-<span class="nc bnc" id="L535" title="All 2 branches missed.">        reflectionArea.setPrefRowCount(compact ? 2 : 10);</span>
-<span class="nc bnc" id="L536" title="All 2 branches missed.">        reflectionArea.setPrefHeight(compact ? Region.USE_COMPUTED_SIZE : 0);</span>
-<span class="nc bnc" id="L537" title="All 2 branches missed.">        VBox.setVgrow(reflectionArea, compact ? Priority.NEVER : Priority.ALWAYS);</span>
-<span class="nc" id="L538">    }</span>
+<span class="nc bnc" id="L551" title="All 2 branches missed.">        reflectionArea.setPrefRowCount(compact ? 2 : 10);</span>
+<span class="nc bnc" id="L552" title="All 2 branches missed.">        reflectionArea.setPrefHeight(compact ? Region.USE_COMPUTED_SIZE : 0);</span>
+<span class="nc bnc" id="L553" title="All 2 branches missed.">        VBox.setVgrow(reflectionArea, compact ? Priority.NEVER : Priority.ALWAYS);</span>
+<span class="nc" id="L554">    }</span>
 
     private String CurrentReflection() {
-<span class="nc" id="L541">        String reflection = reflectionArea.getText();</span>
-<span class="nc bnc" id="L542" title="All 2 branches missed.">        return reflection == null ? &quot;&quot; : reflection.trim();</span>
+<span class="nc" id="L557">        String reflection = reflectionArea.getText();</span>
+<span class="nc bnc" id="L558" title="All 2 branches missed.">        return reflection == null ? &quot;&quot; : reflection.trim();</span>
     }
 
     private static boolean SameTask(WeeklyTask first, WeeklyTask second) {
-<span class="nc bnc" id="L546" title="All 2 branches missed.">        return first.getTaskId() == second.getTaskId()</span>
-<span class="nc bnc" id="L547" title="All 2 branches missed.">                &amp;&amp; Objects.equals(first.getWeekStarted(), second.getWeekStarted())</span>
-<span class="nc bnc" id="L548" title="All 2 branches missed.">                &amp;&amp; Objects.equals(first.getEmail(), second.getEmail());</span>
+<span class="nc bnc" id="L562" title="All 2 branches missed.">        return first.getTaskId() == second.getTaskId()</span>
+<span class="nc bnc" id="L563" title="All 2 branches missed.">                &amp;&amp; Objects.equals(first.getWeekStarted(), second.getWeekStarted())</span>
+<span class="nc bnc" id="L564" title="All 2 branches missed.">                &amp;&amp; Objects.equals(first.getEmail(), second.getEmail());</span>
     }
 
     private static boolean IsFinished(String status) {
-<span class="nc" id="L552">        return &quot;Finished&quot;.equalsIgnoreCase(status);</span>
+<span class="nc" id="L568">        return &quot;Finished&quot;.equalsIgnoreCase(status);</span>
     }
 
     /** Strips a leading &quot;Labour of the &quot; from a quest name, e.g. &quot;Labour of the Nemean Lion&quot; -&amp;gt; &quot;The Nemean Lion&quot;. */
     private static String LabourSubject(String questName) {
-<span class="nc bnc" id="L557" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(questName)) {</span>
-<span class="nc" id="L558">            return questName;</span>
+<span class="nc bnc" id="L573" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(questName)) {</span>
+<span class="nc" id="L574">            return questName;</span>
         }
-<span class="nc" id="L560">        String prefix = &quot;labour of the &quot;;</span>
-<span class="nc bnc" id="L561" title="All 2 branches missed.">        if (questName.toLowerCase().startsWith(prefix)) {</span>
-<span class="nc" id="L562">            return &quot;The &quot; + questName.substring(prefix.length());</span>
+<span class="nc" id="L576">        String prefix = &quot;labour of the &quot;;</span>
+<span class="nc bnc" id="L577" title="All 2 branches missed.">        if (questName.toLowerCase().startsWith(prefix)) {</span>
+<span class="nc" id="L578">            return &quot;The &quot; + questName.substring(prefix.length());</span>
         }
-<span class="nc" id="L564">        return questName;</span>
+<span class="nc" id="L580">        return questName;</span>
     }
 
     private void PopulateActiveQuestHeader(){
-<span class="nc" id="L568">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc" id="L584">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
         try {
-<span class="nc" id="L570">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
-<span class="nc bnc" id="L571" title="All 2 branches missed.">            if (userQuest == null) {</span>
-<span class="nc" id="L572">                questTitleLabel.setText(&quot;No active quest&quot;);</span>
-<span class="nc" id="L573">                questProgress.setProgress(0);</span>
-<span class="nc" id="L574">                questProgressLabel.setText(&quot;0% Complete&quot;);</span>
-<span class="nc" id="L575">                return;</span>
+<span class="nc" id="L586">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc bnc" id="L587" title="All 2 branches missed.">            if (userQuest == null) {</span>
+<span class="nc" id="L588">                questTitleLabel.setText(&quot;No active quest&quot;);</span>
+<span class="nc" id="L589">                questProgress.setProgress(0);</span>
+<span class="nc" id="L590">                questProgressLabel.setText(&quot;0% Complete&quot;);</span>
+<span class="nc" id="L591">                return;</span>
             }
-<span class="nc" id="L577">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
-<span class="nc" id="L578">            questTitleLabel.setText(LabourSubject(quest.getName()));</span>
-<span class="nc" id="L579">            questProgress.setProgress(userQuest.getPercentageComplete());</span>
-<span class="nc" id="L580">            questProgressLabel.setText(String.format(&quot;%.0f%% Complete&quot;, userQuest.getPercentageComplete() *100));</span>
-<span class="nc" id="L581">        } catch (Exception exception) {</span>
-<span class="nc" id="L582">            questTitleLabel.setText(&quot;No active quest&quot;);</span>
-<span class="nc" id="L583">            questProgress.setProgress(0);</span>
-<span class="nc" id="L584">            questProgressLabel.setText(&quot;0% Complete&quot;);</span>
-<span class="nc" id="L585">        }</span>
-<span class="nc" id="L586">    }</span>
+<span class="nc" id="L593">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L594">            questTitleLabel.setText(LabourSubject(quest.getName()));</span>
+<span class="nc" id="L595">            questProgress.setProgress(userQuest.getPercentageComplete());</span>
+<span class="nc" id="L596">            questProgressLabel.setText(String.format(&quot;%.0f%% Complete&quot;, userQuest.getPercentageComplete() *100));</span>
+<span class="nc" id="L597">        } catch (Exception exception) {</span>
+<span class="nc" id="L598">            questTitleLabel.setText(&quot;No active quest&quot;);</span>
+<span class="nc" id="L599">            questProgress.setProgress(0);</span>
+<span class="nc" id="L600">            questProgressLabel.setText(&quot;0% Complete&quot;);</span>
+<span class="nc" id="L601">        }</span>
+<span class="nc" id="L602">    }</span>
 
     /** Builds the gold tick/circle status indicator (display only, not clickable). */
     private static StackPane BuildStatusIcon() {
-<span class="nc" id="L590">        Circle circle = new Circle(8);</span>
-<span class="nc" id="L591">        circle.getStyleClass().add(&quot;status-icon-circle&quot;);</span>
+<span class="nc" id="L606">        Circle circle = new Circle(8);</span>
+<span class="nc" id="L607">        circle.getStyleClass().add(&quot;status-icon-circle&quot;);</span>
 
-<span class="nc" id="L593">        SVGPath tick = new SVGPath();</span>
-<span class="nc" id="L594">        tick.setContent(CHECKMARK_PATH);</span>
-<span class="nc" id="L595">        tick.getStyleClass().add(&quot;status-icon-tick&quot;);</span>
+<span class="nc" id="L609">        SVGPath tick = new SVGPath();</span>
+<span class="nc" id="L610">        tick.setContent(CHECKMARK_PATH);</span>
+<span class="nc" id="L611">        tick.getStyleClass().add(&quot;status-icon-tick&quot;);</span>
 
-<span class="nc" id="L597">        StackPane icon = new StackPane(circle, tick);</span>
-<span class="nc" id="L598">        icon.getStyleClass().add(&quot;journal-row-icon-box&quot;);</span>
-<span class="nc" id="L599">        return icon;</span>
+<span class="nc" id="L613">        StackPane icon = new StackPane(circle, tick);</span>
+<span class="nc" id="L614">        icon.getStyleClass().add(&quot;journal-row-icon-box&quot;);</span>
+<span class="nc" id="L615">        return icon;</span>
     }
 
     private static void SetStatusIconFinished(StackPane icon, boolean finished) {
-<span class="nc" id="L603">        Circle circle = (Circle) icon.getChildren().get(0);</span>
-<span class="nc" id="L604">        SVGPath tick = (SVGPath) icon.getChildren().get(1);</span>
-<span class="nc bnc" id="L605" title="All 2 branches missed.">        if (finished) {</span>
-<span class="nc bnc" id="L606" title="All 2 branches missed.">            if (!circle.getStyleClass().contains(&quot;status-complete&quot;)) {</span>
-<span class="nc" id="L607">                circle.getStyleClass().add(&quot;status-complete&quot;);</span>
+<span class="nc" id="L619">        Circle circle = (Circle) icon.getChildren().get(0);</span>
+<span class="nc" id="L620">        SVGPath tick = (SVGPath) icon.getChildren().get(1);</span>
+<span class="nc bnc" id="L621" title="All 2 branches missed.">        if (finished) {</span>
+<span class="nc bnc" id="L622" title="All 2 branches missed.">            if (!circle.getStyleClass().contains(&quot;status-complete&quot;)) {</span>
+<span class="nc" id="L623">                circle.getStyleClass().add(&quot;status-complete&quot;);</span>
             }
         } else {
-<span class="nc" id="L610">            circle.getStyleClass().remove(&quot;status-complete&quot;);</span>
+<span class="nc" id="L626">            circle.getStyleClass().remove(&quot;status-complete&quot;);</span>
         }
-<span class="nc" id="L612">        tick.setVisible(finished);</span>
-<span class="nc" id="L613">        tick.setManaged(finished);</span>
-<span class="nc" id="L614">    }</span>
+<span class="nc" id="L628">        tick.setVisible(finished);</span>
+<span class="nc" id="L629">        tick.setManaged(finished);</span>
+<span class="nc" id="L630">    }</span>
 
     /** Clips a label's rendered text to two lines so long descriptions don't blow out row height. */
     private static void ClampToTwoLines(Label label) {
-<span class="nc" id="L618">        label.setMinHeight(0);</span>
-<span class="nc" id="L619">        label.setPrefHeight(36);</span>
-<span class="nc" id="L620">        label.setMaxHeight(36);</span>
-<span class="nc" id="L621">        Rectangle clip = new Rectangle();</span>
-<span class="nc" id="L622">        clip.widthProperty().bind(label.widthProperty());</span>
-<span class="nc" id="L623">        clip.setHeight(36);</span>
-<span class="nc" id="L624">        label.setClip(clip);</span>
-<span class="nc" id="L625">    }</span>
+<span class="nc" id="L634">        label.setMinHeight(0);</span>
+<span class="nc" id="L635">        label.setPrefHeight(36);</span>
+<span class="nc" id="L636">        label.setMaxHeight(36);</span>
+<span class="nc" id="L637">        Rectangle clip = new Rectangle();</span>
+<span class="nc" id="L638">        clip.widthProperty().bind(label.widthProperty());</span>
+<span class="nc" id="L639">        clip.setHeight(36);</span>
+<span class="nc" id="L640">        label.setClip(clip);</span>
+<span class="nc" id="L641">    }</span>
 
     private void ConfigureQuestChallengesList() {
-<span class="nc" id="L628">        questChallengesList.setPlaceholder(new Label(&quot;Add a challenge to your journal from the Quest Viewer&quot;));</span>
-<span class="nc" id="L629">        questChallengesList.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
-<span class="nc" id="L630">            private final StackPane statusIcon = BuildStatusIcon();</span>
-<span class="nc" id="L631">            private final Label eyebrowLabel = new Label();</span>
-<span class="nc" id="L632">            private final Label nameLabel = new Label();</span>
-<span class="nc" id="L633">            private final Label overviewLabel = new Label();</span>
-<span class="nc" id="L634">            private final VBox textBox = new VBox(2, eyebrowLabel, nameLabel, overviewLabel);</span>
-<span class="nc" id="L635">            private final HBox row = new HBox(10, statusIcon, textBox);</span>
+<span class="nc" id="L644">        questChallengesList.setPlaceholder(new Label(&quot;Add a challenge to your journal from the Quest Viewer&quot;));</span>
+<span class="nc" id="L645">        questChallengesList.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
+<span class="nc" id="L646">            private final StackPane statusIcon = BuildStatusIcon();</span>
+<span class="nc" id="L647">            private final Label eyebrowLabel = new Label();</span>
+<span class="nc" id="L648">            private final Label nameLabel = new Label();</span>
+<span class="nc" id="L649">            private final Label overviewLabel = new Label();</span>
+<span class="nc" id="L650">            private final VBox textBox = new VBox(2, eyebrowLabel, nameLabel, overviewLabel);</span>
+<span class="nc" id="L651">            private final HBox row = new HBox(10, statusIcon, textBox);</span>
 
             {
-<span class="nc" id="L638">                row.getStyleClass().add(&quot;journal-row&quot;);</span>
-<span class="nc" id="L639">                eyebrowLabel.getStyleClass().add(&quot;journal-row-eyebrow&quot;);</span>
-<span class="nc" id="L640">                nameLabel.getStyleClass().add(&quot;journal-row-title&quot;);</span>
-<span class="nc" id="L641">                overviewLabel.getStyleClass().add(&quot;journal-row-description&quot;);</span>
-<span class="nc" id="L642">                nameLabel.setWrapText(true);</span>
-<span class="nc" id="L643">                overviewLabel.setWrapText(true);</span>
-<span class="nc" id="L644">                HBox.setHgrow(textBox, Priority.ALWAYS);</span>
-<span class="nc" id="L645">                ClampToTwoLines(overviewLabel);</span>
-<span class="nc" id="L646">                row.maxWidthProperty().bind(questChallengesList.widthProperty().subtract(24));</span>
+<span class="nc" id="L654">                row.getStyleClass().add(&quot;journal-row&quot;);</span>
+<span class="nc" id="L655">                eyebrowLabel.getStyleClass().add(&quot;journal-row-eyebrow&quot;);</span>
+<span class="nc" id="L656">                nameLabel.getStyleClass().add(&quot;journal-row-title&quot;);</span>
+<span class="nc" id="L657">                overviewLabel.getStyleClass().add(&quot;journal-row-description&quot;);</span>
+<span class="nc" id="L658">                nameLabel.setWrapText(true);</span>
+<span class="nc" id="L659">                overviewLabel.setWrapText(true);</span>
+<span class="nc" id="L660">                HBox.setHgrow(textBox, Priority.ALWAYS);</span>
+<span class="nc" id="L661">                ClampToTwoLines(overviewLabel);</span>
+<span class="nc" id="L662">                row.maxWidthProperty().bind(questChallengesList.widthProperty().subtract(24));</span>
             }
 
             @Override
             protected void updateItem(ChallengeListItem item, boolean empty) {
-<span class="nc" id="L651">                super.updateItem(item, empty);</span>
-<span class="nc bnc" id="L652" title="All 4 branches missed.">                if (empty || item == null) {</span>
-<span class="nc" id="L653">                    setText(null);</span>
-<span class="nc" id="L654">                    setGraphic(null);</span>
-<span class="nc" id="L655">                    return;</span>
+<span class="nc" id="L667">                super.updateItem(item, empty);</span>
+<span class="nc bnc" id="L668" title="All 4 branches missed.">                if (empty || item == null) {</span>
+<span class="nc" id="L669">                    setText(null);</span>
+<span class="nc" id="L670">                    setGraphic(null);</span>
+<span class="nc" id="L671">                    return;</span>
                 }
 
                 boolean finished;
-<span class="nc bnc" id="L659" title="All 2 branches missed.">                if (item.weeklyTask() != null) {</span>
-<span class="nc" id="L660">                    eyebrowLabel.setText(&quot;WEEKLY&quot;);</span>
-<span class="nc bnc" id="L661" title="All 2 branches missed.">                    nameLabel.setText(item.task() == null ? &quot;Weekly challenge&quot; : item.task().getName());</span>
-<span class="nc bnc" id="L662" title="All 2 branches missed.">                    overviewLabel.setText(item.task() == null ? &quot;&quot; : item.task().getOverview());</span>
-<span class="nc" id="L663">                    finished = IsFinished(item.weeklyTask().getStatus());</span>
+<span class="nc bnc" id="L675" title="All 2 branches missed.">                if (item.weeklyTask() != null) {</span>
+<span class="nc" id="L676">                    eyebrowLabel.setText(&quot;WEEKLY&quot;);</span>
+<span class="nc bnc" id="L677" title="All 2 branches missed.">                    nameLabel.setText(item.task() == null ? &quot;Weekly challenge&quot; : item.task().getName());</span>
+<span class="nc bnc" id="L678" title="All 2 branches missed.">                    overviewLabel.setText(item.task() == null ? &quot;&quot; : item.task().getOverview());</span>
+<span class="nc" id="L679">                    finished = IsFinished(item.weeklyTask().getStatus());</span>
                 } else {
-<span class="nc bnc" id="L665" title="All 2 branches missed.">                    String subject = item.quest() == null ? &quot;QUEST&quot; : LabourSubject(item.quest().getName()).toUpperCase();</span>
-<span class="nc" id="L666">                    eyebrowLabel.setText(subject);</span>
-<span class="nc bnc" id="L667" title="All 2 branches missed.">                    nameLabel.setText(item.task() == null ? item.entry().getTitle() : item.task().getName());</span>
-<span class="nc bnc" id="L668" title="All 2 branches missed.">                    overviewLabel.setText(item.task() == null ? &quot;&quot; : item.task().getOverview());</span>
-<span class="nc" id="L669">                    finished = true;</span>
+<span class="nc bnc" id="L681" title="All 2 branches missed.">                    String subject = item.quest() == null ? &quot;QUEST&quot; : LabourSubject(item.quest().getName()).toUpperCase();</span>
+<span class="nc" id="L682">                    eyebrowLabel.setText(subject);</span>
+<span class="nc bnc" id="L683" title="All 2 branches missed.">                    nameLabel.setText(item.task() == null ? item.entry().getTitle() : item.task().getName());</span>
+<span class="nc bnc" id="L684" title="All 2 branches missed.">                    overviewLabel.setText(item.task() == null ? &quot;&quot; : item.task().getOverview());</span>
+<span class="nc" id="L685">                    finished = true;</span>
                 }
-<span class="nc" id="L671">                SetStatusIconFinished(statusIcon, finished);</span>
-<span class="nc" id="L672">                setText(null);</span>
-<span class="nc" id="L673">                setGraphic(row);</span>
-<span class="nc" id="L674">            }</span>
+<span class="nc" id="L687">                SetStatusIconFinished(statusIcon, finished);</span>
+<span class="nc" id="L688">                setText(null);</span>
+<span class="nc" id="L689">                setGraphic(row);</span>
+<span class="nc" id="L690">            }</span>
         });
 
-<span class="nc" id="L677">        questChallengesList.getSelectionModel().selectedItemProperty().addListener(</span>
+<span class="nc" id="L693">        questChallengesList.getSelectionModel().selectedItemProperty().addListener(</span>
                 (obs, oldItem, newItem) -&gt; {
-<span class="nc bnc" id="L679" title="All 4 branches missed.">                    if (updatingJournalSelection || newItem == null) return;</span>
-<span class="nc" id="L680">                    CancelPendingFeedback();</span>
-<span class="nc" id="L681">                    updatingJournalSelection = true;</span>
-<span class="nc" id="L682">                    questReflectionsList.getSelectionModel().clearSelection();</span>
-<span class="nc" id="L683">                    updatingJournalSelection = false;</span>
-<span class="nc" id="L684">                    ShowJournalChallenge(newItem);</span>
-<span class="nc" id="L685">                });</span>
-<span class="nc" id="L686">    }</span>
+<span class="nc bnc" id="L695" title="All 4 branches missed.">                    if (updatingJournalSelection || newItem == null) return;</span>
+<span class="nc" id="L696">                    CancelPendingFeedback();</span>
+<span class="nc" id="L697">                    updatingJournalSelection = true;</span>
+<span class="nc" id="L698">                    questReflectionsList.getSelectionModel().clearSelection();</span>
+<span class="nc" id="L699">                    updatingJournalSelection = false;</span>
+<span class="nc" id="L700">                    ShowJournalChallenge(newItem);</span>
+<span class="nc" id="L701">                });</span>
+<span class="nc" id="L702">    }</span>
 
     private void LoadQuestChallenges(){
-<span class="nc" id="L689">        questChallengesList.getItems().clear();</span>
-<span class="nc" id="L690">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
-<span class="nc bnc" id="L691" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L692">            UpdateChallengesCount();</span>
-<span class="nc" id="L693">            return;</span>
+<span class="nc" id="L705">        questChallengesList.getItems().clear();</span>
+<span class="nc" id="L706">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc bnc" id="L707" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L708">            UpdateChallengesCount();</span>
+<span class="nc" id="L709">            return;</span>
         }
 
         try {
-<span class="nc bnc" id="L697" title="All 2 branches missed.">            for (JournalEntry entry : JournalEntryService.GetChallengesForEmail(email)) {</span>
-<span class="nc" id="L698">                Quest quest = QuestService.GetQuestForLabourId(entry.getLabourId());</span>
-<span class="nc" id="L699">                Task task = FindChallengeTask(email, entry.getLabourId());</span>
-<span class="nc" id="L700">                questChallengesList.getItems().add(new ChallengeListItem(entry, quest, task, null));</span>
-<span class="nc" id="L701">            }</span>
-<span class="nc" id="L702">        } catch (Exception exception) {</span>
-<span class="nc" id="L703">            System.err.println(&quot;Could not load quest challenges&quot; + exception.getMessage());</span>
-<span class="nc" id="L704">        }</span>
+<span class="nc bnc" id="L713" title="All 2 branches missed.">            for (JournalEntry entry : JournalEntryService.GetChallengesForEmail(email)) {</span>
+<span class="nc" id="L714">                Quest quest = QuestService.GetQuestForLabourId(entry.getLabourId());</span>
+<span class="nc" id="L715">                Task task = FindChallengeTask(email, entry.getLabourId());</span>
+<span class="nc" id="L716">                questChallengesList.getItems().add(new ChallengeListItem(entry, quest, task, null));</span>
+<span class="nc" id="L717">            }</span>
+<span class="nc" id="L718">        } catch (Exception exception) {</span>
+<span class="nc" id="L719">            System.err.println(&quot;Could not load quest challenges&quot; + exception.getMessage());</span>
+<span class="nc" id="L720">        }</span>
 
         try {
-<span class="nc" id="L707">            WeeklyTask[] weekly = WeeklyTaskService.GetTasksForEmailForThisWeek(email);</span>
-<span class="nc bnc" id="L708" title="All 2 branches missed.">            if (weekly == null) {</span>
-<span class="nc" id="L709">                weekly = WeeklyTaskService.GenerateTasksForThisWeek(email);</span>
+<span class="nc" id="L723">            WeeklyTask[] weekly = WeeklyTaskService.GetTasksForEmailForThisWeek(email);</span>
+<span class="nc bnc" id="L724" title="All 2 branches missed.">            if (weekly == null) {</span>
+<span class="nc" id="L725">                weekly = WeeklyTaskService.GenerateTasksForThisWeek(email);</span>
             }
-<span class="nc bnc" id="L711" title="All 2 branches missed.">            if (weekly != null) {</span>
-<span class="nc bnc" id="L712" title="All 2 branches missed.">                for (WeeklyTask weeklyTask : weekly) {</span>
-<span class="nc" id="L713">                    Task task = TaskService.GetTaskForId(weeklyTask.getTaskId());</span>
-<span class="nc" id="L714">                    questChallengesList.getItems().add(new ChallengeListItem(null, null, task, weeklyTask));</span>
+<span class="nc bnc" id="L727" title="All 2 branches missed.">            if (weekly != null) {</span>
+<span class="nc bnc" id="L728" title="All 2 branches missed.">                for (WeeklyTask weeklyTask : weekly) {</span>
+<span class="nc" id="L729">                    Task task = TaskService.GetTaskForId(weeklyTask.getTaskId());</span>
+<span class="nc" id="L730">                    questChallengesList.getItems().add(new ChallengeListItem(null, null, task, weeklyTask));</span>
                 }
             }
-<span class="nc" id="L717">        } catch (Exception exception) {</span>
-<span class="nc" id="L718">            System.err.println(&quot;Could not load weekly challenges&quot; + exception.getMessage());</span>
-<span class="nc" id="L719">        }</span>
+<span class="nc" id="L733">        } catch (Exception exception) {</span>
+<span class="nc" id="L734">            System.err.println(&quot;Could not load weekly challenges&quot; + exception.getMessage());</span>
+<span class="nc" id="L735">        }</span>
 
-<span class="nc" id="L721">        UpdateChallengesCount();</span>
-<span class="nc" id="L722">    }</span>
+<span class="nc" id="L737">        UpdateChallengesCount();</span>
+<span class="nc" id="L738">    }</span>
 
     /** Updates the &quot;x / y&quot; count next to the Challenges heading. */
     private void UpdateChallengesCount() {
-<span class="nc" id="L726">        int total = questChallengesList.getItems().size();</span>
-<span class="nc" id="L727">        int finished = 0;</span>
-<span class="nc bnc" id="L728" title="All 2 branches missed.">        for (ChallengeListItem item : questChallengesList.getItems()) {</span>
-<span class="nc bnc" id="L729" title="All 4 branches missed.">            boolean itemFinished = item.weeklyTask() == null || IsFinished(item.weeklyTask().getStatus());</span>
-<span class="nc bnc" id="L730" title="All 2 branches missed.">            if (itemFinished) {</span>
-<span class="nc" id="L731">                finished++;</span>
+<span class="nc" id="L742">        int total = questChallengesList.getItems().size();</span>
+<span class="nc" id="L743">        int finished = 0;</span>
+<span class="nc bnc" id="L744" title="All 2 branches missed.">        for (ChallengeListItem item : questChallengesList.getItems()) {</span>
+<span class="nc bnc" id="L745" title="All 4 branches missed.">            boolean itemFinished = item.weeklyTask() == null || IsFinished(item.weeklyTask().getStatus());</span>
+<span class="nc bnc" id="L746" title="All 2 branches missed.">            if (itemFinished) {</span>
+<span class="nc" id="L747">                finished++;</span>
             }
-<span class="nc" id="L733">        }</span>
-<span class="nc" id="L734">        questChallengesCountLabel.setText(finished + &quot; / &quot; + total);</span>
-<span class="nc" id="L735">    }</span>
+<span class="nc" id="L749">        }</span>
+<span class="nc" id="L750">        questChallengesCountLabel.setText(finished + &quot; / &quot; + total);</span>
+<span class="nc" id="L751">    }</span>
 
     private Task FindChallengeTask(String email, int labourId) {
         try {
-<span class="nc" id="L739">            UserQuest userQuest = UserQuestService.GetUserQuestForEmailAndLabourId(email, labourId);</span>
-<span class="nc bnc" id="L740" title="All 4 branches missed.">            if (userQuest == null || ApplicationManager.isEmpty(userQuest.getReactionType())) return null;</span>
-<span class="nc" id="L741">            List&lt;Task&gt; tasks = TaskService.GetTasksForLabourIdAndReactionType(labourId, userQuest.getReactionType());</span>
-<span class="nc bnc" id="L742" title="All 2 branches missed.">            return tasks.isEmpty() ? null : tasks.get(0);</span>
-<span class="nc" id="L743">        } catch (Exception ignored) {</span>
-<span class="nc" id="L744">            return null;</span>
+<span class="nc" id="L755">            UserQuest userQuest = UserQuestService.GetUserQuestForEmailAndLabourId(email, labourId);</span>
+<span class="nc bnc" id="L756" title="All 4 branches missed.">            if (userQuest == null || ApplicationManager.isEmpty(userQuest.getReactionType())) return null;</span>
+<span class="nc" id="L757">            List&lt;Task&gt; tasks = TaskService.GetTasksForLabourIdAndReactionType(labourId, userQuest.getReactionType());</span>
+<span class="nc bnc" id="L758" title="All 2 branches missed.">            return tasks.isEmpty() ? null : tasks.get(0);</span>
+<span class="nc" id="L759">        } catch (Exception ignored) {</span>
+<span class="nc" id="L760">            return null;</span>
         }
     }
 
     private void LoadQuestReflections(){
-<span class="nc" id="L749">        questReflectionsList.getItems().clear();</span>
-<span class="nc" id="L750">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
-<span class="nc bnc" id="L751" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L752">            UpdateReflectionsCount();</span>
-<span class="nc" id="L753">            return;</span>
+<span class="nc" id="L765">        questReflectionsList.getItems().clear();</span>
+<span class="nc" id="L766">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
+<span class="nc bnc" id="L767" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L768">            UpdateReflectionsCount();</span>
+<span class="nc" id="L769">            return;</span>
         }
 
         try {
-<span class="nc bnc" id="L757" title="All 2 branches missed.">            for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {</span>
-<span class="nc bnc" id="L758" title="All 2 branches missed.">                if (ApplicationManager.isEmpty(userQuest.getReactionType())) continue; // quest not started yet</span>
-<span class="nc" id="L759">                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
-<span class="nc" id="L760">                ReflectionPrompt prompt = FindReflectionPrompt(userQuest);</span>
-<span class="nc" id="L761">                questReflectionsList.getItems().add(new ReflectionListItem(userQuest, quest, prompt));</span>
-<span class="nc" id="L762">            }</span>
+<span class="nc bnc" id="L773" title="All 2 branches missed.">            for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {</span>
+<span class="nc bnc" id="L774" title="All 2 branches missed.">                if (ApplicationManager.isEmpty(userQuest.getReactionType())) continue; // quest not started yet</span>
+<span class="nc" id="L775">                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L776">                ReflectionPrompt prompt = FindReflectionPrompt(userQuest);</span>
+<span class="nc" id="L777">                questReflectionsList.getItems().add(new ReflectionListItem(userQuest, quest, prompt));</span>
+<span class="nc" id="L778">            }</span>
             // TODO: append standalone journal entry
-<span class="nc" id="L764">        } catch (Exception exception) {</span>
-<span class="nc" id="L765">            System.err.println(&quot;Could not load quest reflections&quot; + exception.getMessage());</span>
-<span class="nc" id="L766">        }</span>
+<span class="nc" id="L780">        } catch (Exception exception) {</span>
+<span class="nc" id="L781">            System.err.println(&quot;Could not load quest reflections&quot; + exception.getMessage());</span>
+<span class="nc" id="L782">        }</span>
 
-<span class="nc" id="L768">        UpdateReflectionsCount();</span>
-<span class="nc" id="L769">    }</span>
+<span class="nc" id="L784">        UpdateReflectionsCount();</span>
+<span class="nc" id="L785">    }</span>
 
     /** Updates the &quot;x / y&quot; count next to the Reflections heading. */
     private void UpdateReflectionsCount() {
-<span class="nc" id="L773">        int total = questReflectionsList.getItems().size();</span>
-<span class="nc" id="L774">        int finished = 0;</span>
-<span class="nc bnc" id="L775" title="All 2 branches missed.">        for (ReflectionListItem item : questReflectionsList.getItems()) {</span>
-<span class="nc bnc" id="L776" title="All 2 branches missed.">            if (IsFinished(item.userQuest().getReflectionStatus())) {</span>
-<span class="nc" id="L777">                finished++;</span>
+<span class="nc" id="L789">        int total = questReflectionsList.getItems().size();</span>
+<span class="nc" id="L790">        int finished = 0;</span>
+<span class="nc bnc" id="L791" title="All 2 branches missed.">        for (ReflectionListItem item : questReflectionsList.getItems()) {</span>
+<span class="nc bnc" id="L792" title="All 2 branches missed.">            if (IsFinished(item.userQuest().getReflectionStatus())) {</span>
+<span class="nc" id="L793">                finished++;</span>
             }
-<span class="nc" id="L779">        }</span>
-<span class="nc" id="L780">        questReflectionsCountLabel.setText(finished + &quot; / &quot; + total);</span>
-<span class="nc" id="L781">    }</span>
+<span class="nc" id="L795">        }</span>
+<span class="nc" id="L796">        questReflectionsCountLabel.setText(finished + &quot; / &quot; + total);</span>
+<span class="nc" id="L797">    }</span>
 
     private ReflectionPrompt FindReflectionPrompt(UserQuest userQuest) {
         try {
-<span class="nc" id="L785">            List&lt;ReflectionPrompt&gt; prompts = ReflectionPromptDAO.GetReflectionPromptsForLabourId(userQuest.getLabourId());</span>
-<span class="nc bnc" id="L786" title="All 2 branches missed.">            for (ReflectionPrompt prompt : prompts) {</span>
-<span class="nc bnc" id="L787" title="All 2 branches missed.">                if (userQuest.getReactionType().equalsIgnoreCase(prompt.reactionType())) {</span>
-<span class="nc" id="L788">                    return prompt;</span>
+<span class="nc" id="L801">            List&lt;ReflectionPrompt&gt; prompts = ReflectionPromptDAO.GetReflectionPromptsForLabourId(userQuest.getLabourId());</span>
+<span class="nc bnc" id="L802" title="All 2 branches missed.">            for (ReflectionPrompt prompt : prompts) {</span>
+<span class="nc bnc" id="L803" title="All 2 branches missed.">                if (userQuest.getReactionType().equalsIgnoreCase(prompt.reactionType())) {</span>
+<span class="nc" id="L804">                    return prompt;</span>
                 }
-<span class="nc" id="L790">            }</span>
-<span class="nc" id="L791">        } catch (Exception ignored) {</span>
-<span class="nc" id="L792">        }</span>
-<span class="nc" id="L793">        return null;</span>
+<span class="nc" id="L806">            }</span>
+<span class="nc" id="L807">        } catch (Exception ignored) {</span>
+<span class="nc" id="L808">        }</span>
+<span class="nc" id="L809">        return null;</span>
     }
 
     @FXML
     private void OnWriteNewReflection(){
-<span class="nc" id="L798">        questReflectionsList.getSelectionModel().clearSelection();</span>
-<span class="nc" id="L799">        questChallengesList.getSelectionModel().clearSelection();</span>
-<span class="nc" id="L800">        selectedWeeklyChallenge = null;</span>
-<span class="nc" id="L801">        selectedJournalChallenge = null;</span>
-<span class="nc" id="L802">        selectedReflectionItem = null;</span>
+<span class="nc" id="L814">        questReflectionsList.getSelectionModel().clearSelection();</span>
+<span class="nc" id="L815">        questChallengesList.getSelectionModel().clearSelection();</span>
+<span class="nc" id="L816">        selectedWeeklyChallenge = null;</span>
+<span class="nc" id="L817">        selectedJournalChallenge = null;</span>
+<span class="nc" id="L818">        selectedReflectionItem = null;</span>
 
-<span class="nc" id="L804">        ShowTaskContent();</span>
-<span class="nc" id="L805">        taskEyebrowLabel.setText(&quot;NEW REFLECTION&quot;);</span>
-<span class="nc" id="L806">        taskTitleLabel.setText(&quot;Write a new reflection&quot;);</span>
-<span class="nc" id="L807">        descriptionLabel.setText(&quot;Not tied to a specific quest. Write freely about anything on your mind.&quot;);</span>
-<span class="nc" id="L808">        SetReflectionAreaCompact(false);</span>
-<span class="nc" id="L809">        reflectionArea.setPromptText(&quot;Begin with what happened…&quot;);</span>
-<span class="nc" id="L810">        reflectionArea.clear();</span>
-<span class="nc" id="L811">        reflectionArea.setDisable(false);</span>
-<span class="nc" id="L812">        SetEditButtonVisible(false);</span>
-<span class="nc" id="L813">        submitButton.setDisable(false);</span>
-<span class="nc" id="L814">        feedbackButton.setDisable(false);</span>
-<span class="nc" id="L815">        feedbackLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L816">        savedStatusLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L817">        HideAiFeedback();</span>
+<span class="nc" id="L820">        ShowTaskContent();</span>
+<span class="nc" id="L821">        taskEyebrowLabel.setText(&quot;NEW REFLECTION&quot;);</span>
+<span class="nc" id="L822">        taskTitleLabel.setText(&quot;Write a new reflection&quot;);</span>
+<span class="nc" id="L823">        descriptionLabel.setText(&quot;Not tied to a specific quest. Write freely about anything on your mind.&quot;);</span>
+<span class="nc" id="L824">        SetReflectionAreaCompact(false);</span>
+<span class="nc" id="L825">        reflectionArea.setPromptText(&quot;Begin with what happened…&quot;);</span>
+<span class="nc" id="L826">        reflectionArea.clear();</span>
+<span class="nc" id="L827">        reflectionArea.setDisable(false);</span>
+<span class="nc" id="L828">        SetEditButtonVisible(false);</span>
+<span class="nc" id="L829">        submitButton.setDisable(false);</span>
+<span class="nc" id="L830">        feedbackButton.setDisable(false);</span>
+<span class="nc" id="L831">        feedbackLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L832">        savedStatusLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L833">        HideAiFeedback();</span>
         // Add full save to journal entries
-<span class="nc" id="L819">    }</span>
+<span class="nc" id="L835">    }</span>
 
     private void ConfigureQuestReflectionsList(){
-<span class="nc" id="L822">        questReflectionsList.setPlaceholder(new Label(&quot;No reflections yet&quot;));</span>
-<span class="nc" id="L823">        questReflectionsList.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
-<span class="nc" id="L824">            private final StackPane statusIcon = BuildStatusIcon();</span>
-<span class="nc" id="L825">            private final Label eyebrowLabel = new Label();</span>
-<span class="nc" id="L826">            private final Label nameLabel = new Label();</span>
-<span class="nc" id="L827">            private final Label overviewLabel = new Label();</span>
-<span class="nc" id="L828">            private final VBox textBox = new VBox(2, eyebrowLabel, nameLabel, overviewLabel);</span>
-<span class="nc" id="L829">            private final HBox row = new HBox(10, statusIcon, textBox);</span>
+<span class="nc" id="L838">        questReflectionsList.setPlaceholder(new Label(&quot;No reflections yet&quot;));</span>
+<span class="nc" id="L839">        questReflectionsList.setCellFactory(list -&gt; new ListCell&lt;&gt;() {</span>
+<span class="nc" id="L840">            private final StackPane statusIcon = BuildStatusIcon();</span>
+<span class="nc" id="L841">            private final Label eyebrowLabel = new Label();</span>
+<span class="nc" id="L842">            private final Label nameLabel = new Label();</span>
+<span class="nc" id="L843">            private final Label overviewLabel = new Label();</span>
+<span class="nc" id="L844">            private final VBox textBox = new VBox(2, eyebrowLabel, nameLabel, overviewLabel);</span>
+<span class="nc" id="L845">            private final HBox row = new HBox(10, statusIcon, textBox);</span>
 
             {
-<span class="nc" id="L832">                row.getStyleClass().add(&quot;journal-row&quot;);</span>
-<span class="nc" id="L833">                eyebrowLabel.getStyleClass().add(&quot;journal-row-eyebrow&quot;);</span>
-<span class="nc" id="L834">                nameLabel.getStyleClass().add(&quot;journal-row-title&quot;);</span>
-<span class="nc" id="L835">                overviewLabel.getStyleClass().add(&quot;journal-row-description&quot;);</span>
-<span class="nc" id="L836">                nameLabel.setWrapText(true);</span>
-<span class="nc" id="L837">                overviewLabel.setWrapText(true);</span>
-<span class="nc" id="L838">                HBox.setHgrow(textBox, Priority.ALWAYS);</span>
-<span class="nc" id="L839">                ClampToTwoLines(overviewLabel);</span>
-<span class="nc" id="L840">                row.maxWidthProperty().bind(questReflectionsList.widthProperty().subtract(24));</span>
+<span class="nc" id="L848">                row.getStyleClass().add(&quot;journal-row&quot;);</span>
+<span class="nc" id="L849">                eyebrowLabel.getStyleClass().add(&quot;journal-row-eyebrow&quot;);</span>
+<span class="nc" id="L850">                nameLabel.getStyleClass().add(&quot;journal-row-title&quot;);</span>
+<span class="nc" id="L851">                overviewLabel.getStyleClass().add(&quot;journal-row-description&quot;);</span>
+<span class="nc" id="L852">                nameLabel.setWrapText(true);</span>
+<span class="nc" id="L853">                overviewLabel.setWrapText(true);</span>
+<span class="nc" id="L854">                HBox.setHgrow(textBox, Priority.ALWAYS);</span>
+<span class="nc" id="L855">                ClampToTwoLines(overviewLabel);</span>
+<span class="nc" id="L856">                row.maxWidthProperty().bind(questReflectionsList.widthProperty().subtract(24));</span>
             }
 
             @Override
             protected void updateItem(ReflectionListItem item, boolean empty) {
-<span class="nc" id="L845">                super.updateItem(item, empty);</span>
-<span class="nc bnc" id="L846" title="All 4 branches missed.">                if (empty || item == null){</span>
-<span class="nc" id="L847">                    setText(null);</span>
-<span class="nc" id="L848">                    setGraphic(null);</span>
-<span class="nc" id="L849">                    return;</span>
+<span class="nc" id="L861">                super.updateItem(item, empty);</span>
+<span class="nc bnc" id="L862" title="All 4 branches missed.">                if (empty || item == null){</span>
+<span class="nc" id="L863">                    setText(null);</span>
+<span class="nc" id="L864">                    setGraphic(null);</span>
+<span class="nc" id="L865">                    return;</span>
                 }
-<span class="nc bnc" id="L851" title="All 2 branches missed.">                String subject = item.quest() == null ? &quot;REFLECTION&quot; : LabourSubject(item.quest().getName()).toUpperCase();</span>
-<span class="nc" id="L852">                eyebrowLabel.setText(subject);</span>
-<span class="nc bnc" id="L853" title="All 2 branches missed.">                nameLabel.setText(item.prompt() == null ? &quot;Reflection&quot; : item.prompt().name());</span>
-<span class="nc bnc" id="L854" title="All 2 branches missed.">                overviewLabel.setText(item.prompt() == null ? &quot;&quot; : item.prompt().overview());</span>
-<span class="nc" id="L855">                SetStatusIconFinished(statusIcon, IsFinished(item.userQuest().getReflectionStatus()));</span>
-<span class="nc" id="L856">                setText(null);</span>
-<span class="nc" id="L857">                setGraphic(row);</span>
-<span class="nc" id="L858">            }</span>
+<span class="nc bnc" id="L867" title="All 2 branches missed.">                String subject = item.quest() == null ? &quot;REFLECTION&quot; : LabourSubject(item.quest().getName()).toUpperCase();</span>
+<span class="nc" id="L868">                eyebrowLabel.setText(subject);</span>
+<span class="nc bnc" id="L869" title="All 2 branches missed.">                nameLabel.setText(item.prompt() == null ? &quot;Reflection&quot; : item.prompt().name());</span>
+<span class="nc bnc" id="L870" title="All 2 branches missed.">                overviewLabel.setText(item.prompt() == null ? &quot;&quot; : item.prompt().overview());</span>
+<span class="nc" id="L871">                SetStatusIconFinished(statusIcon, IsFinished(item.userQuest().getReflectionStatus()));</span>
+<span class="nc" id="L872">                setText(null);</span>
+<span class="nc" id="L873">                setGraphic(row);</span>
+<span class="nc" id="L874">            }</span>
         });
 
-<span class="nc" id="L861">        questReflectionsList.getSelectionModel().selectedItemProperty().addListener(</span>
+<span class="nc" id="L877">        questReflectionsList.getSelectionModel().selectedItemProperty().addListener(</span>
                 (obs, oldItem, newItem) -&gt; {
-<span class="nc bnc" id="L863" title="All 4 branches missed.">                    if (updatingJournalSelection || newItem == null) return;</span>
-<span class="nc" id="L864">                    CancelPendingFeedback();</span>
-<span class="nc" id="L865">                    updatingJournalSelection = true;</span>
-<span class="nc" id="L866">                    questChallengesList.getSelectionModel().clearSelection();</span>
-<span class="nc" id="L867">                    updatingJournalSelection = false;</span>
-<span class="nc" id="L868">                    ShowReflection(newItem);</span>
-<span class="nc" id="L869">                });</span>
-<span class="nc" id="L870">    }</span>
+<span class="nc bnc" id="L879" title="All 4 branches missed.">                    if (updatingJournalSelection || newItem == null) return;</span>
+<span class="nc" id="L880">                    CancelPendingFeedback();</span>
+<span class="nc" id="L881">                    updatingJournalSelection = true;</span>
+<span class="nc" id="L882">                    questChallengesList.getSelectionModel().clearSelection();</span>
+<span class="nc" id="L883">                    updatingJournalSelection = false;</span>
+<span class="nc" id="L884">                    ShowReflection(newItem);</span>
+<span class="nc" id="L885">                });</span>
+<span class="nc" id="L886">    }</span>
 
     private void ShowReflection(ReflectionListItem item){
-<span class="nc" id="L873">        selectedWeeklyChallenge = null;</span>
-<span class="nc" id="L874">        selectedJournalChallenge = null;</span>
-<span class="nc" id="L875">        selectedReflectionItem = item;</span>
+<span class="nc" id="L889">        selectedWeeklyChallenge = null;</span>
+<span class="nc" id="L890">        selectedJournalChallenge = null;</span>
+<span class="nc" id="L891">        selectedReflectionItem = item;</span>
 
-<span class="nc" id="L877">        ShowTaskContent();</span>
+<span class="nc" id="L893">        ShowTaskContent();</span>
 
-<span class="nc" id="L879">        boolean finished = IsFinished(item.userQuest().getReflectionStatus());</span>
+<span class="nc" id="L895">        boolean finished = IsFinished(item.userQuest().getReflectionStatus());</span>
 
-<span class="nc" id="L881">        taskEyebrowLabel.setText(&quot;REFLECTION&quot;);</span>
-<span class="nc bnc" id="L882" title="All 2 branches missed.">        taskTitleLabel.setText(item.prompt() == null ? &quot;Reflection&quot; : item.prompt().name());</span>
-<span class="nc bnc" id="L883" title="All 2 branches missed.">        descriptionLabel.setText(item.prompt() == null ? &quot;Reflection prompt not available yet.&quot; : item.prompt().prompt());</span>
-<span class="nc" id="L884">        SetReflectionAreaCompact(false);</span>
-<span class="nc bnc" id="L885" title="All 4 branches missed.">        reflectionArea.setPromptText(item.prompt() == null || ApplicationManager.isEmpty(item.prompt().overview())</span>
-<span class="nc" id="L886">                ? &quot;Begin with what happened…&quot;</span>
-<span class="nc" id="L887">                : item.prompt().overview());</span>
-<span class="nc" id="L888">        String answer = item.userQuest().getReflection();</span>
-<span class="nc bnc" id="L889" title="All 2 branches missed.">        reflectionArea.setText(ApplicationManager.isEmpty(answer) ? &quot;&quot; : answer);</span>
-<span class="nc" id="L890">        reflectionArea.setDisable(finished);</span>
-<span class="nc" id="L891">        SetEditButtonVisible(finished);</span>
-<span class="nc" id="L892">        submitButton.setDisable(finished);</span>
-<span class="nc bnc" id="L893" title="All 2 branches missed.">        savedStatusLabel.setText(finished ? &quot;Saved&quot; : &quot;&quot;);</span>
+<span class="nc" id="L897">        taskEyebrowLabel.setText(&quot;REFLECTION&quot;);</span>
+<span class="nc bnc" id="L898" title="All 2 branches missed.">        taskTitleLabel.setText(item.prompt() == null ? &quot;Reflection&quot; : item.prompt().name());</span>
+<span class="nc bnc" id="L899" title="All 2 branches missed.">        descriptionLabel.setText(item.prompt() == null ? &quot;Reflection prompt not available yet.&quot; : item.prompt().prompt());</span>
+<span class="nc" id="L900">        SetReflectionAreaCompact(false);</span>
+<span class="nc bnc" id="L901" title="All 4 branches missed.">        reflectionArea.setPromptText(item.prompt() == null || ApplicationManager.isEmpty(item.prompt().overview())</span>
+<span class="nc" id="L902">                ? &quot;Begin with what happened…&quot;</span>
+<span class="nc" id="L903">                : item.prompt().overview());</span>
+<span class="nc" id="L904">        String answer = item.userQuest().getReflection();</span>
+<span class="nc bnc" id="L905" title="All 2 branches missed.">        reflectionArea.setText(ApplicationManager.isEmpty(answer) ? &quot;&quot; : answer);</span>
+<span class="nc" id="L906">        reflectionArea.setDisable(finished);</span>
+<span class="nc" id="L907">        SetEditButtonVisible(finished);</span>
+<span class="nc" id="L908">        submitButton.setDisable(finished);</span>
+<span class="nc bnc" id="L909" title="All 2 branches missed.">        savedStatusLabel.setText(finished ? &quot;Saved&quot; : &quot;&quot;);</span>
 
-<span class="nc bnc" id="L895" title="All 4 branches missed.">        boolean keepGenerating = generatingFeedback</span>
+<span class="nc bnc" id="L911" title="All 4 branches missed.">        boolean keepGenerating = generatingFeedback</span>
                 &amp;&amp; selectedReflectionItem != null
-<span class="nc bnc" id="L897" title="All 2 branches missed.">                &amp;&amp; selectedReflectionItem.userQuest().getLabourId() == item.userQuest().getLabourId();</span>
-<span class="nc" id="L898">        feedbackButton.setDisable(keepGenerating);</span>
-<span class="nc bnc" id="L899" title="All 2 branches missed.">        if (keepGenerating) {</span>
-<span class="nc" id="L900">            feedbackLabel.setText(&quot;Generating AI feedback...&quot;);</span>
-<span class="nc" id="L901">            ShowAiFeedback(&quot;Writing feedback from your reflection...&quot;);</span>
+<span class="nc bnc" id="L913" title="All 2 branches missed.">                &amp;&amp; selectedReflectionItem.userQuest().getLabourId() == item.userQuest().getLabourId();</span>
+<span class="nc" id="L914">        feedbackButton.setDisable(keepGenerating);</span>
+<span class="nc bnc" id="L915" title="All 2 branches missed.">        if (keepGenerating) {</span>
+<span class="nc" id="L916">            feedbackLabel.setText(&quot;Generating AI feedback...&quot;);</span>
+<span class="nc" id="L917">            ShowAiFeedback(&quot;Writing feedback from your reflection...&quot;);</span>
         } else {
-<span class="nc bnc" id="L903" title="All 2 branches missed.">            feedbackLabel.setText(finished ? &quot;Click Edit, to change the reflection you have written&quot; : &quot;&quot;);</span>
-<span class="nc" id="L904">            ShowStoredQuestFeedback(item.userQuest());</span>
+<span class="nc bnc" id="L919" title="All 2 branches missed.">            feedbackLabel.setText(finished ? &quot;Click Edit, to change the reflection you have written&quot; : &quot;&quot;);</span>
+<span class="nc" id="L920">            ShowStoredQuestFeedback(item.userQuest());</span>
         }
-<span class="nc" id="L906">    }</span>
+<span class="nc" id="L922">    }</span>
 
     private void ShowStoredQuestFeedback(UserQuest userQuest) {
         try {
-<span class="nc" id="L910">            String stored = ReflectionFeedbackService.FindForQuest(userQuest.getAccountEmail(), userQuest.getLabourId());</span>
-<span class="nc bnc" id="L911" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
-<span class="nc" id="L912">                HideAiFeedback();</span>
-<span class="nc" id="L913">                return;</span>
+<span class="nc" id="L926">            String stored = ReflectionFeedbackService.FindForQuest(userQuest.getAccountEmail(), userQuest.getLabourId());</span>
+<span class="nc bnc" id="L927" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
+<span class="nc" id="L928">                HideAiFeedback();</span>
+<span class="nc" id="L929">                return;</span>
             }
-<span class="nc" id="L915">            ShowAiFeedback(stored);</span>
-<span class="nc" id="L916">        } catch (Exception exception) {</span>
-<span class="nc" id="L917">            HideAiFeedback();</span>
-<span class="nc" id="L918">        }</span>
-<span class="nc" id="L919">    }</span>
+<span class="nc" id="L931">            ShowAiFeedback(stored);</span>
+<span class="nc" id="L932">        } catch (Exception exception) {</span>
+<span class="nc" id="L933">            HideAiFeedback();</span>
+<span class="nc" id="L934">        }</span>
+<span class="nc" id="L935">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

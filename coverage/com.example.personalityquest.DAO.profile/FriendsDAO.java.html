@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FriendsDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.profile</a> &gt; <span class="el_source">FriendsDAO.java</span></div><h1>FriendsDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.profile;
 
+import com.example.personalityquest.DAO.ParentDAO;
+import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
-import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Services.auth.EmailService;
 
 import java.sql.Connection;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Stores and retrieves account friendship relationships */
-<span class="nc" id="L15">public class FriendsDAO {</span>
+public class FriendsDAO extends ParentDAO {
     public static final String GET_FRIENDS = &quot;&quot;&quot;
         SELECT friendsEmail
         FROM Friends
@@ -29,24 +30,37 @@ import java.util.List;
         WHERE accountEmail = ?
         AND friendsEmail = ?
     &quot;&quot;&quot;;
+
+    public FriendsDAO(){
+<span class="nc" id="L35">        super();</span>
+<span class="nc" id="L36">    }</span>
+
+    public FriendsDAO(Connection connection) {
+<span class="fc" id="L39">        super(connection);</span>
+<span class="fc" id="L40">    }</span>
+
     /** Returns account details for the friends of the supplied account
      * @param email the account email whose friends should be loaded
      * @return the friend's account details
      * @throws Exception if the friend records cannot be loaded
      */
-    public static List&lt;EmailDetails&gt; GetFriendsForEmail(String email) throws Exception {
-<span class="fc" id="L38">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L39">        PreparedStatement statement = connection.prepareStatement(GET_FRIENDS);</span>
-<span class="fc" id="L40">        statement.setString(1, email);</span>
+    public List&lt;EmailDetails&gt; GetFriendsForEmail(String email) throws Exception {
+<span class="fc" id="L48">        PreparedStatement statement = connection.prepareStatement(GET_FRIENDS);</span>
+<span class="fc" id="L49">        statement.setString(1, email);</span>
 
-<span class="fc" id="L42">        ResultSet rs = statement.executeQuery();</span>
-<span class="fc" id="L43">        List&lt;EmailDetails&gt; detailsForFriends = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L44" title="All 2 branches covered.">        while (rs.next()){</span>
-<span class="fc" id="L45">            EmailDetails details = EmailService.GetDetailsForEmail(rs.getString(1));</span>
-<span class="fc" id="L46">            detailsForFriends.add(details);</span>
-<span class="fc" id="L47">        }</span>
+<span class="fc" id="L51">        ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L52">        List&lt;EmailDetails&gt; detailsForFriends = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L49">        return detailsForFriends;</span>
+<span class="fc" id="L54">        AccountDAO accountDAO = new AccountDAO(connection);</span>
+<span class="fc" id="L55">        EmailService emailService = new EmailService(accountDAO);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        while (rs.next()){</span>
+
+
+<span class="fc" id="L59">            EmailDetails details = emailService.GetDetailsForEmail(rs.getString(1));</span>
+<span class="fc" id="L60">            detailsForFriends.add(details);</span>
+<span class="fc" id="L61">        }</span>
+
+<span class="fc" id="L63">        return detailsForFriends;</span>
     }
 
     /** Adds a friendship between two accounts
@@ -54,28 +68,26 @@ import java.util.List;
      * @param friendsEmail the email address of the account to add
      * @throws SQLException if the friendship cannot be stored
      */
-    public static void AddFriend(String yourEmail, String friendsEmail) throws SQLException {
-<span class="fc" id="L58">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L59">        PreparedStatement statement = connection.prepareStatement(INSERT_FRIEND);</span>
-<span class="fc" id="L60">        statement.setString(1, yourEmail);</span>
-<span class="fc" id="L61">        statement.setString(2, friendsEmail);</span>
+    public void AddFriend(String yourEmail, String friendsEmail) throws SQLException {
+<span class="fc" id="L72">        PreparedStatement statement = connection.prepareStatement(INSERT_FRIEND);</span>
+<span class="fc" id="L73">        statement.setString(1, yourEmail);</span>
+<span class="fc" id="L74">        statement.setString(2, friendsEmail);</span>
 
-<span class="fc" id="L63">        statement.executeUpdate();</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L76">        statement.executeUpdate();</span>
+<span class="fc" id="L77">    }</span>
 
     /** Removes a friendship between two accounts
      * @param yourEmail the email address of the account removing the friend
      * @param friendsEmail the email address of the friend to remove
      * @throws SQLException if the friendship cannot be removed
      */
-    public static void RemoveFriend(String yourEmail, String friendsEmail) throws SQLException {
-<span class="fc" id="L72">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L73">        PreparedStatement statement = connection.prepareStatement(REMOVE_FRIEND);</span>
-<span class="fc" id="L74">        statement.setString(1, yourEmail);</span>
-<span class="fc" id="L75">        statement.setString(2, friendsEmail);</span>
+    public void RemoveFriend(String yourEmail, String friendsEmail) throws SQLException {
+<span class="fc" id="L85">        PreparedStatement statement = connection.prepareStatement(REMOVE_FRIEND);</span>
+<span class="fc" id="L86">        statement.setString(1, yourEmail);</span>
+<span class="fc" id="L87">        statement.setString(2, friendsEmail);</span>
 
-<span class="fc" id="L77">        statement.executeUpdate();</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L89">        statement.executeUpdate();</span>
+<span class="fc" id="L90">    }</span>
 
 
 }

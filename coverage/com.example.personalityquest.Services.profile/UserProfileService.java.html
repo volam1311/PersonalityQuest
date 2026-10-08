@@ -3,141 +3,143 @@
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Model.profile.UserProfile;
+import com.example.personalityquest.Services.ParentService;
 
 import java.util.Locale;
 
 /**
  * Display helpers for the profile page: name formatting, archetype labels, and radar values.
  */
-public class UserProfileService {
+public class UserProfileService extends ParentService {
     public static final String UNASSIGNED_ARCHETYPE = &quot;Unassigned&quot;;
     public static final String UNKNOWN_TYPE = &quot;—&quot;;
     public static final String DEFAULT_DISPLAY_NAME = &quot;Adventurer&quot;;
 
-    private UserProfileService() {
-    }
+    public UserProfileService() {
+<span class="fc" id="L19">        super();</span>
+<span class="fc" id="L20">    }</span>
 
     /**
      * Builds a display name from first and last name, falling back to username.
      */
-    public static String DisplayName(EmailDetails details) {
-<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (details == null) {</span>
-<span class="fc" id="L25">            return DEFAULT_DISPLAY_NAME;</span>
+    public String DisplayName(EmailDetails details) {
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (details == null) {</span>
+<span class="fc" id="L27">            return DEFAULT_DISPLAY_NAME;</span>
         }
 
-<span class="fc" id="L28">        String first = SafeTrim(details.getFirstName());</span>
-<span class="fc" id="L29">        String last = SafeTrim(details.getLastName());</span>
-<span class="fc" id="L30">        String full = (first + &quot; &quot; + last).trim();</span>
-<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (!full.isEmpty()) {</span>
-<span class="fc" id="L32">            return full;</span>
+<span class="fc" id="L30">        String first = SafeTrim(details.getFirstName());</span>
+<span class="fc" id="L31">        String last = SafeTrim(details.getLastName());</span>
+<span class="fc" id="L32">        String full = (first + &quot; &quot; + last).trim();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (!full.isEmpty()) {</span>
+<span class="fc" id="L34">            return full;</span>
         }
 
-<span class="fc" id="L35">        String userName = SafeTrim(details.getUserName());</span>
-<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        if (!userName.isEmpty()) {</span>
-<span class="fc" id="L37">            return userName;</span>
+<span class="fc" id="L37">        String userName = SafeTrim(details.getUserName());</span>
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (!userName.isEmpty()) {</span>
+<span class="fc" id="L39">            return userName;</span>
         }
 
-<span class="nc" id="L40">        return DEFAULT_DISPLAY_NAME;</span>
+<span class="nc" id="L42">        return DEFAULT_DISPLAY_NAME;</span>
     }
 
     /**
      * Returns the account's username, falling back to {@link #DEFAULT_DISPLAY_NAME} when blank.
      */
     public static String Username(EmailDetails details) {
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (details == null) {</span>
-<span class="nc" id="L48">            return DEFAULT_DISPLAY_NAME;</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (details == null) {</span>
+<span class="nc" id="L50">            return DEFAULT_DISPLAY_NAME;</span>
         }
 
-<span class="nc" id="L51">        String userName = SafeTrim(details.getUserName());</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (!userName.isEmpty()) {</span>
-<span class="nc" id="L53">            return userName;</span>
+<span class="nc" id="L53">        String userName = SafeTrim(details.getUserName());</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (!userName.isEmpty()) {</span>
+<span class="nc" id="L55">            return userName;</span>
         }
 
-<span class="nc" id="L56">        return DEFAULT_DISPLAY_NAME;</span>
+<span class="nc" id="L58">        return DEFAULT_DISPLAY_NAME;</span>
     }
 
     /**
      * Formats an archetype for display, adding &quot;The&quot; when it is missing.
      */
-    public static String FormatArchetypeName(String name) {
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(name)) {</span>
-<span class="fc" id="L64">            return UNASSIGNED_ARCHETYPE;</span>
+    public String FormatArchetypeName(String name) {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(name)) {</span>
+<span class="fc" id="L66">            return UNASSIGNED_ARCHETYPE;</span>
         }
 
-<span class="fc" id="L67">        String titled = TitleCase(name.trim());</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (titled.toLowerCase(Locale.ROOT).startsWith(&quot;the &quot;)) {</span>
-<span class="fc" id="L69">            return titled;</span>
+<span class="fc" id="L69">        String titled = TitleCase(name.trim());</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (titled.toLowerCase(Locale.ROOT).startsWith(&quot;the &quot;)) {</span>
+<span class="fc" id="L71">            return titled;</span>
         }
-<span class="fc" id="L71">        return &quot;The &quot; + titled;</span>
+<span class="fc" id="L73">        return &quot;The &quot; + titled;</span>
     }
 
     /**
      * Returns a stored archetype description, or {@link #UNKNOWN_TYPE} when none exists.
      */
-    public static String PersonalityType(String archetypeDescription) {
-<span class="nc" id="L78">        String description = SafeTrim(archetypeDescription);</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (description.isEmpty()) {</span>
-<span class="nc" id="L80">            return UNKNOWN_TYPE;</span>
+    public String PersonalityType(String archetypeDescription) {
+<span class="nc" id="L80">        String description = SafeTrim(archetypeDescription);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (description.isEmpty()) {</span>
+<span class="nc" id="L82">            return UNKNOWN_TYPE;</span>
         }
-<span class="nc" id="L82">        return description;</span>
+<span class="nc" id="L84">        return description;</span>
     }
 
     /**
      * Builds five radar-chart values between 0 and 1 from database profile totals.
      */
-    public static double[] RadarValues(UserProfile profile) {
-<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (profile == null) {</span>
-<span class="nc" id="L90">            return new double[]{0, 0, 0, 0, 0};</span>
+    public double[] RadarValues(UserProfile profile) {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (profile == null) {</span>
+<span class="nc" id="L92">            return new double[]{0, 0, 0, 0, 0};</span>
         }
 
-<span class="nc" id="L93">        double weeklyRatio = Ratio(profile.finishedWeeklyTasksThisWeek(), profile.weeklyTasksThisWeek());</span>
-<span class="nc" id="L94">        double streakRatio = Ratio(profile.currentStreak(), Math.max(profile.bestStreak(), 1));</span>
-<span class="nc" id="L95">        double questRatio = Ratio(profile.completedQuests(), profile.assignedQuests());</span>
-<span class="nc" id="L96">        double finishedRatio = Ratio(profile.finishedWeeklyTasks(), profile.totalWeeklyTasks());</span>
+<span class="nc" id="L95">        double weeklyRatio = Ratio(profile.finishedWeeklyTasksThisWeek(), profile.weeklyTasksThisWeek());</span>
+<span class="nc" id="L96">        double streakRatio = Ratio(profile.currentStreak(), Math.max(profile.bestStreak(), 1));</span>
+<span class="nc" id="L97">        double questRatio = Ratio(profile.completedQuests(), profile.assignedQuests());</span>
+<span class="nc" id="L98">        double finishedRatio = Ratio(profile.finishedWeeklyTasks(), profile.totalWeeklyTasks());</span>
 
-<span class="nc" id="L98">        return new double[]{</span>
-<span class="nc" id="L99">                Clamp(profile.activeQuestProgress()),</span>
-<span class="nc" id="L100">                Clamp(weeklyRatio),</span>
-<span class="nc" id="L101">                Clamp(streakRatio),</span>
-<span class="nc" id="L102">                Clamp(questRatio),</span>
-<span class="nc" id="L103">                Clamp(finishedRatio)</span>
+<span class="nc" id="L100">        return new double[]{</span>
+<span class="nc" id="L101">                Clamp(profile.activeQuestProgress()),</span>
+<span class="nc" id="L102">                Clamp(weeklyRatio),</span>
+<span class="nc" id="L103">                Clamp(streakRatio),</span>
+<span class="nc" id="L104">                Clamp(questRatio),</span>
+<span class="nc" id="L105">                Clamp(finishedRatio)</span>
         };
     }
 
-    private static double Ratio(int numerator, int denominator) {
-<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (denominator &lt;= 0) {</span>
-<span class="nc" id="L109">            return 0;</span>
+    private double Ratio(int numerator, int denominator) {
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (denominator &lt;= 0) {</span>
+<span class="nc" id="L111">            return 0;</span>
         }
-<span class="nc" id="L111">        return (double) numerator / denominator;</span>
+<span class="nc" id="L113">        return (double) numerator / denominator;</span>
     }
 
     private static String SafeTrim(String value) {
-<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        return value == null ? &quot;&quot; : value.trim();</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        return value == null ? &quot;&quot; : value.trim();</span>
     }
 
-    private static String TitleCase(String value) {
-<span class="fc" id="L119">        String[] words = value.split(&quot;\\s+&quot;);</span>
-<span class="fc" id="L120">        StringBuilder titled = new StringBuilder();</span>
-<span class="fc bfc" id="L121" title="All 2 branches covered.">        for (String word : words) {</span>
-<span class="pc bpc" id="L122" title="1 of 2 branches missed.">            if (word.isEmpty()) {</span>
-<span class="nc" id="L123">                continue;</span>
+    private String TitleCase(String value) {
+<span class="fc" id="L121">        String[] words = value.split(&quot;\\s+&quot;);</span>
+<span class="fc" id="L122">        StringBuilder titled = new StringBuilder();</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (String word : words) {</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            if (word.isEmpty()) {</span>
+<span class="nc" id="L125">                continue;</span>
             }
-<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (titled.length() &gt; 0) {</span>
-<span class="fc" id="L126">                titled.append(' ');</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">            if (titled.length() &gt; 0) {</span>
+<span class="fc" id="L128">                titled.append(' ');</span>
             }
-<span class="fc" id="L128">            titled.append(Character.toUpperCase(word.charAt(0)));</span>
-<span class="pc bpc" id="L129" title="1 of 2 branches missed.">            if (word.length() &gt; 1) {</span>
-<span class="fc" id="L130">                titled.append(word.substring(1).toLowerCase(Locale.ROOT));</span>
+<span class="fc" id="L130">            titled.append(Character.toUpperCase(word.charAt(0)));</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">            if (word.length() &gt; 1) {</span>
+<span class="fc" id="L132">                titled.append(word.substring(1).toLowerCase(Locale.ROOT));</span>
             }
         }
-<span class="fc" id="L133">        return titled.toString();</span>
+<span class="fc" id="L135">        return titled.toString();</span>
     }
 
-    private static double Clamp(double value) {
-<span class="nc bnc" id="L137" title="All 4 branches missed.">        if (Double.isNaN(value) || value &lt; 0) {</span>
-<span class="nc" id="L138">            return 0;</span>
+    private double Clamp(double value) {
+<span class="nc bnc" id="L139" title="All 4 branches missed.">        if (Double.isNaN(value) || value &lt; 0) {</span>
+<span class="nc" id="L140">            return 0;</span>
         }
-<span class="nc" id="L140">        return Math.min(value, 1);</span>
+<span class="nc" id="L142">        return Math.min(value, 1);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -2,6 +2,7 @@
 
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.profile.AchievementDAO;
+import com.example.personalityquest.DAO.profile.StreakDAO;
 import com.example.personalityquest.Model.profile.Achievement;
 import com.example.personalityquest.Model.profile.UserProfile;
 
@@ -25,125 +26,140 @@ public class AchievementService {
     public static final String CRITERIA_COMPLETED_QUESTS = &quot;COMPLETED_QUESTS&quot;;
     public static final String CRITERIA_QUEST_PROGRESS = &quot;QUEST_PROGRESS&quot;;
 
-    private AchievementService() {
-    }
+    private final AchievementDAO AchievementDAO;
+    private final StreakService StreakService;
+
+    public AchievementService() {
+<span class="nc" id="L33">        super();</span>
+<span class="nc" id="L34">        this.AchievementDAO = new AchievementDAO();</span>
+<span class="nc" id="L35">        this.StreakService = new StreakService();</span>
+<span class="nc" id="L36">    }</span>
+
+    public AchievementService(AchievementDAO AchievementDAO) {
+<span class="nc" id="L39">        super();</span>
+<span class="nc" id="L40">        this.AchievementDAO = AchievementDAO;</span>
+
+<span class="nc" id="L42">        StreakDAO streakDAO = new StreakDAO(AchievementDAO.getConnection());</span>
+<span class="nc" id="L43">        this.StreakService = new StreakService(streakDAO);</span>
+<span class="nc" id="L44">    }</span>
 
     /**
      * Loads streak, quest, and weekly-task totals for an account.
      * Current streak uses {@link StreakService} so missed weeks match the rest of the app.
      */
-    public static UserProfile GetProgress(String email) throws SQLException {
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L37">            return UserProfile.empty();</span>
+    public UserProfile GetProgress(String email) throws SQLException {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L52">            return UserProfile.empty();</span>
         }
 
-<span class="nc" id="L40">        UserProfile progress = AchievementDAO.GetProgress(email);</span>
-<span class="nc" id="L41">        return progress.withCurrentStreak(StreakService.GetCurrentStreak(email));</span>
+<span class="nc" id="L55">        UserProfile progress = AchievementDAO.GetProgress(email);</span>
+
+<span class="nc" id="L57">        return progress.withCurrentStreak(StreakService.GetCurrentStreak(email));</span>
     }
 
     /**
      * Returns catalog achievements from the database, unlocking any the account now qualifies for.
      */
-    public static List&lt;Achievement&gt; GetAchievementsForEmail(String email) throws SQLException {
-<span class="nc" id="L48">        EnsureCatalog();</span>
-<span class="nc" id="L49">        List&lt;Achievement&gt; catalog = AchievementDAO.GetCatalog();</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L51">            return catalog;</span>
+    public List&lt;Achievement&gt; GetAchievementsForEmail(String email) throws SQLException {
+<span class="nc" id="L64">        EnsureCatalog();</span>
+<span class="nc" id="L65">        List&lt;Achievement&gt; catalog = AchievementDAO.GetCatalog();</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L67">            return catalog;</span>
         }
 
-<span class="nc" id="L54">        UserProfile progress = GetProgress(email);</span>
-<span class="nc" id="L55">        Set&lt;Integer&gt; unlockedIds = AchievementDAO.GetUnlockedIds(email);</span>
-<span class="nc" id="L56">        List&lt;Achievement&gt; achievements = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L70">        UserProfile progress = GetProgress(email);</span>
+<span class="nc" id="L71">        Set&lt;Integer&gt; unlockedIds = AchievementDAO.GetUnlockedIds(email);</span>
+<span class="nc" id="L72">        List&lt;Achievement&gt; achievements = new ArrayList&lt;&gt;();</span>
 
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        for (Achievement achievement : catalog) {</span>
-<span class="nc" id="L59">            boolean alreadyUnlocked = unlockedIds.contains(achievement.achievementId());</span>
-<span class="nc" id="L60">            boolean qualifies = MeetsCriteria(achievement, progress);</span>
-<span class="nc bnc" id="L61" title="All 4 branches missed.">            if (qualifies &amp;&amp; !alreadyUnlocked) {</span>
-<span class="nc" id="L62">                AchievementDAO.Unlock(email, achievement.achievementId());</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for (Achievement achievement : catalog) {</span>
+<span class="nc" id="L75">            boolean alreadyUnlocked = unlockedIds.contains(achievement.achievementId());</span>
+<span class="nc" id="L76">            boolean qualifies = MeetsCriteria(achievement, progress);</span>
+<span class="nc bnc" id="L77" title="All 4 branches missed.">            if (qualifies &amp;&amp; !alreadyUnlocked) {</span>
+<span class="nc" id="L78">                AchievementDAO.Unlock(email, achievement.achievementId());</span>
             }
-<span class="nc bnc" id="L64" title="All 4 branches missed.">            achievements.add(achievement.withUnlocked(alreadyUnlocked || qualifies));</span>
-<span class="nc" id="L65">        }</span>
+<span class="nc bnc" id="L80" title="All 4 branches missed.">            achievements.add(achievement.withUnlocked(alreadyUnlocked || qualifies));</span>
+<span class="nc" id="L81">        }</span>
 
-<span class="nc" id="L67">        return achievements;</span>
+<span class="nc" id="L83">        return achievements;</span>
     }
 
     /**
      * Returns the account's most recently unlocked achievements (most recent first),
      * capped at {@code limit}. Also unlocks any achievements the account now qualifies for.
      */
-    public static List&lt;Achievement&gt; GetRecentlyUnlockedAchievements(String email, int limit) throws SQLException {
-<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="nc" id="L76">            return List.of();</span>
+    public List&lt;Achievement&gt; GetRecentlyUnlockedAchievements(String email, int limit) throws SQLException {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="nc" id="L92">            return List.of();</span>
         }
 
-<span class="nc" id="L79">        List&lt;Achievement&gt; achievements = GetAchievementsForEmail(email);</span>
-<span class="nc" id="L80">        List&lt;Integer&gt; recentIds = AchievementDAO.GetRecentlyUnlockedIds(email, limit);</span>
+<span class="nc" id="L95">        List&lt;Achievement&gt; achievements = GetAchievementsForEmail(email);</span>
+<span class="nc" id="L96">        List&lt;Integer&gt; recentIds = AchievementDAO.GetRecentlyUnlockedIds(email, limit);</span>
 
-<span class="nc" id="L82">        Map&lt;Integer, Achievement&gt; achievementsById = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        for (Achievement achievement : achievements) {</span>
-<span class="nc" id="L84">            achievementsById.put(achievement.achievementId(), achievement);</span>
-<span class="nc" id="L85">        }</span>
+<span class="nc" id="L98">        Map&lt;Integer, Achievement&gt; achievementsById = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        for (Achievement achievement : achievements) {</span>
+<span class="nc" id="L100">            achievementsById.put(achievement.achievementId(), achievement);</span>
+<span class="nc" id="L101">        }</span>
 
-<span class="nc" id="L87">        List&lt;Achievement&gt; recent = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">        for (Integer achievementId : recentIds) {</span>
-<span class="nc" id="L89">            Achievement achievement = achievementsById.get(achievementId);</span>
-<span class="nc bnc" id="L90" title="All 2 branches missed.">            if (achievement != null) {</span>
-<span class="nc" id="L91">                recent.add(achievement);</span>
+<span class="nc" id="L103">        List&lt;Achievement&gt; recent = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for (Integer achievementId : recentIds) {</span>
+<span class="nc" id="L105">            Achievement achievement = achievementsById.get(achievementId);</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            if (achievement != null) {</span>
+<span class="nc" id="L107">                recent.add(achievement);</span>
             }
-<span class="nc" id="L93">        }</span>
-<span class="nc" id="L94">        return recent;</span>
+<span class="nc" id="L109">        }</span>
+<span class="nc" id="L110">        return recent;</span>
     }
 
-    static boolean MeetsCriteria(Achievement achievement, UserProfile progress) {
-<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (progress == null) {</span>
-<span class="nc" id="L99">            return false;</span>
+    boolean MeetsCriteria(Achievement achievement, UserProfile progress) {
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (progress == null) {</span>
+<span class="nc" id="L115">            return false;</span>
         }
 
-<span class="nc" id="L102">        double threshold = achievement.threshold();</span>
-<span class="nc bnc" id="L103" title="All 9 branches missed.">        return switch (achievement.criteriaType()) {</span>
-<span class="nc bnc" id="L104" title="All 4 branches missed.">            case CRITERIA_ACCOUNT -&gt; progress.accountExists() &amp;&amp; threshold &lt;= 1;</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">            case CRITERIA_CURRENT_STREAK -&gt; progress.currentStreak() &gt;= threshold;</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">            case CRITERIA_BEST_STREAK -&gt; progress.bestStreak() &gt;= threshold;</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">            case CRITERIA_FINISHED_TASKS -&gt; progress.finishedWeeklyTasks() &gt;= threshold;</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">            case CRITERIA_WEEK_COMPLETE -&gt; progress.weeklyTasksThisWeek() &gt; 0</span>
-<span class="nc bnc" id="L109" title="All 4 branches missed.">                    &amp;&amp; progress.finishedWeeklyTasksThisWeek() &gt;= progress.weeklyTasksThisWeek()</span>
+<span class="nc" id="L118">        double threshold = achievement.threshold();</span>
+<span class="nc bnc" id="L119" title="All 9 branches missed.">        return switch (achievement.criteriaType()) {</span>
+<span class="nc bnc" id="L120" title="All 4 branches missed.">            case CRITERIA_ACCOUNT -&gt; progress.accountExists() &amp;&amp; threshold &lt;= 1;</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            case CRITERIA_CURRENT_STREAK -&gt; progress.currentStreak() &gt;= threshold;</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">            case CRITERIA_BEST_STREAK -&gt; progress.bestStreak() &gt;= threshold;</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            case CRITERIA_FINISHED_TASKS -&gt; progress.finishedWeeklyTasks() &gt;= threshold;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            case CRITERIA_WEEK_COMPLETE -&gt; progress.weeklyTasksThisWeek() &gt; 0</span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">                    &amp;&amp; progress.finishedWeeklyTasksThisWeek() &gt;= progress.weeklyTasksThisWeek()</span>
                     &amp;&amp; threshold &lt;= 1;
-<span class="nc bnc" id="L111" title="All 2 branches missed.">            case CRITERIA_ASSIGNED_QUESTS -&gt; progress.assignedQuests() &gt;= threshold;</span>
-<span class="nc bnc" id="L112" title="All 2 branches missed.">            case CRITERIA_COMPLETED_QUESTS -&gt; progress.completedQuests() &gt;= threshold;</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">            case CRITERIA_QUEST_PROGRESS -&gt; progress.activeQuestProgress() &gt;= threshold</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">                    || progress.completedQuests() &gt;= 1;</span>
-<span class="nc" id="L115">            default -&gt; false;</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            case CRITERIA_ASSIGNED_QUESTS -&gt; progress.assignedQuests() &gt;= threshold;</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">            case CRITERIA_COMPLETED_QUESTS -&gt; progress.completedQuests() &gt;= threshold;</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            case CRITERIA_QUEST_PROGRESS -&gt; progress.activeQuestProgress() &gt;= threshold</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                    || progress.completedQuests() &gt;= 1;</span>
+<span class="nc" id="L131">            default -&gt; false;</span>
         };
     }
 
-    private static void EnsureCatalog() throws SQLException {
-<span class="nc" id="L120">        AchievementDAO.EnsureTables();</span>
+    private void EnsureCatalog() throws SQLException {
+<span class="nc" id="L136">        AchievementDAO.EnsureTables();</span>
 
-<span class="nc" id="L122">        Insert(1, &quot;Signed in&quot;, &quot;Create an account and open your profile&quot;, CRITERIA_ACCOUNT, 1, 1);</span>
-<span class="nc" id="L123">        Insert(2, &quot;First spark&quot;, &quot;Record a completion and start a streak&quot;, CRITERIA_CURRENT_STREAK, 1, 1);</span>
-<span class="nc" id="L124">        Insert(3, &quot;Three-week flame&quot;, &quot;Reach a 3-week streak&quot;, CRITERIA_BEST_STREAK, 3, 2);</span>
-<span class="nc" id="L125">        Insert(4, &quot;Week warrior&quot;, &quot;Reach a 7-week streak&quot;, CRITERIA_BEST_STREAK, 7, 3);</span>
-<span class="nc" id="L126">        Insert(5, &quot;Fortnight fire&quot;, &quot;Reach a 14-week streak&quot;, CRITERIA_BEST_STREAK, 14, 4);</span>
-<span class="nc" id="L127">        Insert(6, &quot;Personal best&quot;, &quot;Hold a best streak of 7 weeks&quot;, CRITERIA_BEST_STREAK, 7, 3);</span>
-<span class="nc" id="L128">        Insert(7, &quot;Task started&quot;, &quot;Finish a weekly task&quot;, CRITERIA_FINISHED_TASKS, 1, 1);</span>
-<span class="nc" id="L129">        Insert(8, &quot;Week complete&quot;, &quot;Finish every weekly task this week&quot;, CRITERIA_WEEK_COMPLETE, 1, 1);</span>
-<span class="nc" id="L130">        Insert(9, &quot;Quest accepted&quot;, &quot;Have a quest assigned&quot;, CRITERIA_ASSIGNED_QUESTS, 1, 1);</span>
-<span class="nc" id="L131">        Insert(10, &quot;On the path&quot;, &quot;Reach 20% on a quest&quot;, CRITERIA_QUEST_PROGRESS, 0.2, 1);</span>
-<span class="nc" id="L132">        Insert(11, &quot;Halfway hero&quot;, &quot;Reach 50% on a quest&quot;, CRITERIA_QUEST_PROGRESS, 0.5, 2);</span>
-<span class="nc" id="L133">        Insert(12, &quot;Labour complete&quot;, &quot;Finish a quest&quot;, CRITERIA_COMPLETED_QUESTS, 1, 3);</span>
-<span class="nc" id="L134">        Insert(13, &quot;Two labours&quot;, &quot;Take on two quests&quot;, CRITERIA_ASSIGNED_QUESTS, 2, 2);</span>
-<span class="nc" id="L135">        Insert(14, &quot;Triple threat&quot;, &quot;Complete three quests&quot;, CRITERIA_COMPLETED_QUESTS, 3, 3);</span>
-<span class="nc" id="L136">        Insert(15, &quot;Legend&quot;, &quot;Reach a 21-week best streak&quot;, CRITERIA_BEST_STREAK, 21, 4);</span>
-<span class="nc" id="L137">    }</span>
+<span class="nc" id="L138">        Insert(1, &quot;Signed in&quot;, &quot;Create an account and open your profile&quot;, CRITERIA_ACCOUNT, 1, 1);</span>
+<span class="nc" id="L139">        Insert(2, &quot;First spark&quot;, &quot;Record a completion and start a streak&quot;, CRITERIA_CURRENT_STREAK, 1, 1);</span>
+<span class="nc" id="L140">        Insert(3, &quot;Three-week flame&quot;, &quot;Reach a 3-week streak&quot;, CRITERIA_BEST_STREAK, 3, 2);</span>
+<span class="nc" id="L141">        Insert(4, &quot;Week warrior&quot;, &quot;Reach a 7-week streak&quot;, CRITERIA_BEST_STREAK, 7, 3);</span>
+<span class="nc" id="L142">        Insert(5, &quot;Fortnight fire&quot;, &quot;Reach a 14-week streak&quot;, CRITERIA_BEST_STREAK, 14, 4);</span>
+<span class="nc" id="L143">        Insert(6, &quot;Personal best&quot;, &quot;Hold a best streak of 7 weeks&quot;, CRITERIA_BEST_STREAK, 7, 3);</span>
+<span class="nc" id="L144">        Insert(7, &quot;Task started&quot;, &quot;Finish a weekly task&quot;, CRITERIA_FINISHED_TASKS, 1, 1);</span>
+<span class="nc" id="L145">        Insert(8, &quot;Week complete&quot;, &quot;Finish every weekly task this week&quot;, CRITERIA_WEEK_COMPLETE, 1, 1);</span>
+<span class="nc" id="L146">        Insert(9, &quot;Quest accepted&quot;, &quot;Have a quest assigned&quot;, CRITERIA_ASSIGNED_QUESTS, 1, 1);</span>
+<span class="nc" id="L147">        Insert(10, &quot;On the path&quot;, &quot;Reach 20% on a quest&quot;, CRITERIA_QUEST_PROGRESS, 0.2, 1);</span>
+<span class="nc" id="L148">        Insert(11, &quot;Halfway hero&quot;, &quot;Reach 50% on a quest&quot;, CRITERIA_QUEST_PROGRESS, 0.5, 2);</span>
+<span class="nc" id="L149">        Insert(12, &quot;Labour complete&quot;, &quot;Finish a quest&quot;, CRITERIA_COMPLETED_QUESTS, 1, 3);</span>
+<span class="nc" id="L150">        Insert(13, &quot;Two labours&quot;, &quot;Take on two quests&quot;, CRITERIA_ASSIGNED_QUESTS, 2, 2);</span>
+<span class="nc" id="L151">        Insert(14, &quot;Triple threat&quot;, &quot;Complete three quests&quot;, CRITERIA_COMPLETED_QUESTS, 3, 3);</span>
+<span class="nc" id="L152">        Insert(15, &quot;Legend&quot;, &quot;Reach a 21-week best streak&quot;, CRITERIA_BEST_STREAK, 21, 4);</span>
+<span class="nc" id="L153">    }</span>
 
-    private static void Insert(
+    private void Insert(
             int achievementId,
             String name,
             String description,
             String criteriaType,
             double threshold,
             int level) throws SQLException {
-<span class="nc" id="L146">        AchievementDAO.InsertAchievement(achievementId, name, description, criteriaType, threshold, level);</span>
-<span class="nc" id="L147">    }</span>
+<span class="nc" id="L162">        AchievementDAO.InsertAchievement(achievementId, name, description, criteriaType, threshold, level);</span>
+<span class="nc" id="L163">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

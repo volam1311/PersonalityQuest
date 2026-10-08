@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuestDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.DAO.quest</a> &gt; <span class="el_source">QuestDAO.java</span></div><h1>QuestDAO.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.SQLite;
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.Locale;
 
 /** Stores and retrieves quest catalog records */
-<span class="nc" id="L12">public class QuestDAO {</span>
+public class QuestDAO extends ParentDAO {
     /**
      * Gets an Array of Quests for the given archetypeId
      * @param archetypeId The archetypeId you want to get quests for
@@ -28,7 +29,7 @@ import java.util.Locale;
             )
             &quot;&quot;&quot;;
 
-<span class="fc" id="L31">    private static final String[] LABOUR_NAMES ={</span>
+<span class="fc" id="L32">    private static final String[] LABOUR_NAMES ={</span>
             &quot;Labour of the Ceryneian Hind&quot;,      // 1  Innocent
             &quot;Labour of the Augean Stables&quot;,      // 2  Everyman
             &quot;Labour of the Nemean Lion&quot;,         // 3  Hero
@@ -43,7 +44,7 @@ import java.util.Locale;
             &quot;Labour of Cerberus&quot;                 // 12 Outlaw
     };
 
-<span class="fc" id="L46">    private static final String[] LABOUR_NARRATIVES = {</span>
+<span class="fc" id="L47">    private static final String[] LABOUR_NARRATIVES = {</span>
             // 1  Innocent — Ceryneian Hind (Apollodorus 2.5.3)
             &quot;As a third labour he ordered him to bring the Cerynitian hind alive to Mycenae. Now the hind was at Oenoe; it had golden horns and was sacred to Artemis; so wishing neither to kill nor wound it, Hercules hunted it a whole year. But when, weary with the chase, the beast took refuge on the mountain called Artemisius, and thence passed to the river Ladon, Hercules shot it just as it was about to cross the stream, and catching it put it on his shoulders and hastened through Arcadia. But Artemis with Apollo met him, and would have wrested the hind from him, and rebuked him for attempting to kill her sacred animal. Howbeit, by pleading necessity and laying the blame on Eurystheus, he appeased the anger of the goddess and carried the beast alive to Mycenae.&quot;,
 
@@ -89,7 +90,7 @@ import java.util.Locale;
             &quot;A twelfth labour imposed on Hercules was to bring Cerberus from Hades. Now this Cerberus had three heads of dogs, the tail of a dragon, and on his back the heads of all sorts of snakes. And having come to Taenarum in Laconia, where is the mouth of the descent to Hades, he descended through it. But when the souls saw him, they fled, save Meleager and the Gorgon Medusa. And being come near to the gates of Hades he found Theseus and Pirithous. And Theseus, indeed, he took by the hand and raised up, but when he would have brought up Pirithous, the earth quaked and he let go. When Hercules asked Pluto for Cerberus, Pluto ordered him to take the animal provided he mastered him without the use of the weapons which he carried. Hercules found him at the gates of Acheron, and, cased in his cuirass and covered by the lion's skin, he flung his arms round the head of the brute, and though the dragon in its tail bit him, he never relaxed his grip and pressure till it yielded. So he carried it off and ascended through Troezen. And Hercules, after showing Cerberus to Eurystheus, carried him back to Hades.&quot;,
     };
 
-<span class="fc" id="L92">    private static final String[] LABOUR_DECISION_QUESTIONS = {</span>
+<span class="fc" id="L93">    private static final String[] LABOUR_DECISION_QUESTIONS = {</span>
             // 1  Innocent
             &quot;The hind is caught and bound across your shoulders. As you turn for home, Apollo appears at Artemis's side, angered that you have laid hands on her sacred beast. You will not abandon the labour — but how do you carry it through?&quot;,
             // 2  Everyman
@@ -107,7 +108,7 @@ import java.util.Locale;
             &quot;&quot;  // 12 Outlaw
     };
 
-<span class="fc" id="L110">    private static final String[] LABOUR_RESOLUTIONS = {</span>
+<span class="fc" id="L111">    private static final String[] LABOUR_RESOLUTIONS = {</span>
             // 1 Innocent
             &quot;Hercules did not push past the gods, and he did not brace for a fight. He simply spoke the truth. He explained that he meant the hind no harm, that the labour had been forced on him by Eurystheus, and that he would never have raised a hand against something sacred by his own choice. He laid the matter bare and trusted Artemis to see his heart.\n\nAnd she did. The goddess's anger softened, and she let him pass. Hercules carried the hind alive to Mycenae — not by force, not by rank, and not by fear, but by holding honestly to good faith and trusting it would be understood.\n\nThis is the Innocent's lesson. Faith isn't blind, and it isn't armour against the world. It's a grounded trust — in others, and in how things can turn out — held with open eyes. Hercules faced down two gods with nothing but the truth and the belief that it would be enough. The naive over-promise and the cynic braces for a fight; the one who keeps honest faith simply says what is true, and finds that it carries further than either.&quot;,
             // 2  Everyman
@@ -128,48 +129,54 @@ import java.util.Locale;
     };
 
 
-    private static void EnsureTables() throws SQLException {
-<span class="nc" id="L132">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L133">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L134">            statement.executeUpdate(CREATE_QUESTS);</span>
-        }
-<span class="nc" id="L136">    }</span>
+    public QuestDAO(){
+<span class="fc" id="L133">        super();</span>
+<span class="fc" id="L134">    }</span>
 
-    private static void InsertQuest(int labourId, int archetypeId, String name, String narrative,
-                                    String decisionQuestion, String resolution) throws SQLException {
-<span class="nc" id="L140">        EnsureTables();</span>
+    public QuestDAO(Connection connection){
+<span class="fc" id="L137">        super(connection);</span>
+<span class="fc" id="L138">    }</span>
+
+    private void EnsureTables() throws SQLException {
 <span class="nc" id="L141">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L142">        try (PreparedStatement statement = connection.prepareStatement(</span>
-                &quot;INSERT OR IGNORE INTO Quests (LabourId, archetypeId, name, narrative, decisionQuestion, resolution) VALUES (?, ?, ?, ?, ?, ?)&quot;)){
-<span class="nc" id="L144">            statement.setInt(1, labourId);</span>
-<span class="nc" id="L145">            statement.setInt(2, archetypeId);</span>
-<span class="nc" id="L146">            statement.setString(3, name);</span>
-<span class="nc" id="L147">            statement.setString(4, narrative);</span>
-<span class="nc" id="L148">            statement.setString(5, decisionQuestion);</span>
-<span class="nc" id="L149">            statement.setString(6, resolution);</span>
-<span class="nc" id="L150">            statement.executeUpdate();</span>
+<span class="nc" id="L142">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L143">            statement.executeUpdate(CREATE_QUESTS);</span>
         }
-<span class="nc" id="L152">    }</span>
+<span class="nc" id="L145">    }</span>
 
-    private static void SeedCatalog() throws SQLException {
-<span class="nc bnc" id="L155" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc" id="L156">            int archetypeId = archetype.getArchetypeId();</span>
-<span class="nc" id="L157">            InsertQuest(archetypeId, archetypeId, LABOUR_NAMES[archetypeId - 1], LABOUR_NARRATIVES[archetypeId - 1],</span>
-                    LABOUR_DECISION_QUESTIONS[archetypeId - 1], LABOUR_RESOLUTIONS[archetypeId - 1]);
+    private void InsertQuest(int labourId, int archetypeId, String name, String narrative,
+                                    String decisionQuestion, String resolution) throws SQLException {
+<span class="nc" id="L149">        EnsureTables();</span>
+<span class="nc" id="L150">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;INSERT OR IGNORE INTO Quests (LabourId, archetypeId, name, narrative, decisionQuestion, resolution) VALUES (?, ?, ?, ?, ?, ?)&quot;)){
+<span class="nc" id="L152">            statement.setInt(1, labourId);</span>
+<span class="nc" id="L153">            statement.setInt(2, archetypeId);</span>
+<span class="nc" id="L154">            statement.setString(3, name);</span>
+<span class="nc" id="L155">            statement.setString(4, narrative);</span>
+<span class="nc" id="L156">            statement.setString(5, decisionQuestion);</span>
+<span class="nc" id="L157">            statement.setString(6, resolution);</span>
+<span class="nc" id="L158">            statement.executeUpdate();</span>
         }
 <span class="nc" id="L160">    }</span>
+
+    private void SeedCatalog() throws SQLException {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc" id="L164">            int archetypeId = archetype.getArchetypeId();</span>
+<span class="nc" id="L165">            InsertQuest(archetypeId, archetypeId, LABOUR_NAMES[archetypeId - 1], LABOUR_NARRATIVES[archetypeId - 1],</span>
+                    LABOUR_DECISION_QUESTIONS[archetypeId - 1], LABOUR_RESOLUTIONS[archetypeId - 1]);
+        }
+<span class="nc" id="L168">    }</span>
 
     /** Recreates the quest catalog and inserts its default records
      * @throws SQLException if the catalog cannot be recreated
      */
-    public static void ResetAndSeedCatalog() throws SQLException {
-<span class="nc" id="L166">        Connection connection = SQLite.getConnection();</span>
-<span class="nc" id="L167">        try (Statement statement = connection.createStatement()) {</span>
-<span class="nc" id="L168">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS Quests&quot;);</span>
+    public void ResetAndSeedCatalog() throws SQLException {
+<span class="nc" id="L174">        try (Statement statement = connection.createStatement()) {</span>
+<span class="nc" id="L175">            statement.executeUpdate(&quot;DROP TABLE IF EXISTS Quests&quot;);</span>
         }
-<span class="nc" id="L170">        EnsureTables();</span>
-<span class="nc" id="L171">        SeedCatalog();</span>
-<span class="nc" id="L172">    }</span>
+<span class="nc" id="L177">        EnsureTables();</span>
+<span class="nc" id="L178">        SeedCatalog();</span>
+<span class="nc" id="L179">    }</span>
 
 
     /** Returns quests assigned to the supplied archetype
@@ -177,46 +184,45 @@ import java.util.Locale;
      * @return the quests assigned to the archetype
      * @throws SQLException if the quests cannot be loaded
      */
-    public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
+    public Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
 
-<span class="fc" id="L182">        int count = GetCountOfQuestsForArchetypeId(archetypeId);</span>
+<span class="fc" id="L189">        int count = GetCountOfQuestsForArchetypeId(archetypeId);</span>
         // no quests exist for this given ID
-<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (count == 0){</span>
-<span class="fc" id="L185">            return null;</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (count == 0){</span>
+<span class="fc" id="L192">            return null;</span>
         }
 
-<span class="fc" id="L188">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L189">        PreparedStatement getQuestsForArchetypeId = connection.prepareStatement(</span>
+<span class="fc" id="L195">        PreparedStatement getQuestsForArchetypeId = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * FROM Quests
                     WHERE archetypeId = ?
                     &quot;&quot;&quot;);
-<span class="fc" id="L194">        getQuestsForArchetypeId.setInt(1, archetypeId);</span>
+<span class="fc" id="L200">        getQuestsForArchetypeId.setInt(1, archetypeId);</span>
 
-<span class="fc" id="L196">        ResultSet rs = getQuestsForArchetypeId.executeQuery();</span>
-<span class="fc" id="L197">        Quest[] quests = new Quest[count];</span>
+<span class="fc" id="L202">        ResultSet rs = getQuestsForArchetypeId.executeQuery();</span>
+<span class="fc" id="L203">        Quest[] quests = new Quest[count];</span>
 
-<span class="fc" id="L199">        int index = 0;</span>
-<span class="fc bfc" id="L200" title="All 2 branches covered.">        while (rs.next()){</span>
-<span class="pc bpc" id="L201" title="1 of 2 branches missed.">            if (index == count) {</span>
-<span class="nc" id="L202">                System.out.println(&quot;Early break for quests as their where more quests then the count that was gotten&quot;);</span>
-<span class="nc" id="L203">                break;</span>
+<span class="fc" id="L205">        int index = 0;</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        while (rs.next()){</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            if (index == count) {</span>
+<span class="nc" id="L208">                System.out.println(&quot;Early break for quests as their where more quests then the count that was gotten&quot;);</span>
+<span class="nc" id="L209">                break;</span>
             }
 
-<span class="fc" id="L206">            quests[index] = new Quest(</span>
-<span class="fc" id="L207">                    rs.getInt(&quot;labourId&quot;),</span>
-<span class="fc" id="L208">                    rs.getInt(&quot;archetypeId&quot;),</span>
-<span class="fc" id="L209">                    rs.getString(&quot;name&quot;),</span>
-<span class="fc" id="L210">                    rs.getString(&quot;narrative&quot;),</span>
-<span class="fc" id="L211">                    rs.getString(&quot;decisionQuestion&quot;),</span>
-<span class="fc" id="L212">                    rs.getString(&quot;resolution&quot;)</span>
+<span class="fc" id="L212">            quests[index] = new Quest(</span>
+<span class="fc" id="L213">                    rs.getInt(&quot;labourId&quot;),</span>
+<span class="fc" id="L214">                    rs.getInt(&quot;archetypeId&quot;),</span>
+<span class="fc" id="L215">                    rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L216">                    rs.getString(&quot;narrative&quot;),</span>
+<span class="fc" id="L217">                    rs.getString(&quot;decisionQuestion&quot;),</span>
+<span class="fc" id="L218">                    rs.getString(&quot;resolution&quot;)</span>
             );
 
-<span class="fc" id="L215">            index++;</span>
+<span class="fc" id="L221">            index++;</span>
         }
 
 
-<span class="fc" id="L219">        return quests;</span>
+<span class="fc" id="L225">        return quests;</span>
     }
 
     /**
@@ -225,30 +231,29 @@ import java.util.Locale;
      * @return The Quest is successful or null if labourId doesn't match a quest in the database
      * @throws SQLException Database Access Failure
      */
-    public static Quest GetQuestForLabourId(int labourId) throws SQLException {
-<span class="fc" id="L229">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L230">        PreparedStatement getQuestForLabourID = connection.prepareStatement(</span>
+    public Quest GetQuestForLabourId(int labourId) throws SQLException {
+<span class="fc" id="L235">        PreparedStatement getQuestForLabourID = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT * FROM Quests
                     WHERE labourId = ?
                     &quot;&quot;&quot;);
-<span class="fc" id="L235">        getQuestForLabourID.setInt(1, labourId);</span>
+<span class="fc" id="L240">        getQuestForLabourID.setInt(1, labourId);</span>
 
-<span class="fc" id="L237">        ResultSet rs = getQuestForLabourID.executeQuery();</span>
+<span class="fc" id="L242">        ResultSet rs = getQuestForLabourID.executeQuery();</span>
 
-<span class="fc" id="L239">        Quest quest = null;</span>
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (rs.next()){</span>
-<span class="fc" id="L241">            quest = new Quest(</span>
-<span class="fc" id="L242">                    rs.getInt(&quot;labourId&quot;),</span>
-<span class="fc" id="L243">                    rs.getInt(&quot;archetypeId&quot;),</span>
-<span class="fc" id="L244">                    rs.getString(&quot;name&quot;),</span>
-<span class="fc" id="L245">                    rs.getString(&quot;narrative&quot;),</span>
-<span class="fc" id="L246">                    rs.getString(&quot;decisionQuestion&quot;),</span>
-<span class="fc" id="L247">                    rs.getString(&quot;resolution&quot;)</span>
+<span class="fc" id="L244">        Quest quest = null;</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (rs.next()){</span>
+<span class="fc" id="L246">            quest = new Quest(</span>
+<span class="fc" id="L247">                    rs.getInt(&quot;labourId&quot;),</span>
+<span class="fc" id="L248">                    rs.getInt(&quot;archetypeId&quot;),</span>
+<span class="fc" id="L249">                    rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L250">                    rs.getString(&quot;narrative&quot;),</span>
+<span class="fc" id="L251">                    rs.getString(&quot;decisionQuestion&quot;),</span>
+<span class="fc" id="L252">                    rs.getString(&quot;resolution&quot;)</span>
             );
         }
 
-<span class="fc" id="L251">        return quest;</span>
+<span class="fc" id="L256">        return quest;</span>
     }
 
     /**
@@ -257,13 +262,13 @@ import java.util.Locale;
      * @return The archetype name, or null if no row matches
      * @throws SQLException Database Access Failure
      */
-    public static String GetArchetypeName(int archetypeId) throws SQLException {
-<span class="nc bnc" id="L261" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc bnc" id="L262" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
-<span class="nc" id="L263">                return archetype.getName();</span>
+    public String GetArchetypeName(int archetypeId) throws SQLException {
+<span class="nc bnc" id="L266" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
+<span class="nc" id="L268">                return archetype.getName();</span>
             }
         }
-<span class="nc" id="L266">        return null;</span>
+<span class="nc" id="L271">        return null;</span>
 //        Connection connection = SQLite.getConnection();
 //        try (PreparedStatement statement = connection.prepareStatement(
 //                &quot;&quot;&quot;
@@ -285,20 +290,20 @@ import java.util.Locale;
      * @return The archetypeId, or null if none matches
      * @throws SQLException Database Access Failure
      */
-    public static Integer GetArchetypeIdForName(String name) throws SQLException {
+    public Integer GetArchetypeIdForName(String name) throws SQLException {
         //Connection connection = SQLite.getConnection();
-<span class="fc" id="L290">        String needle = name.trim().toLowerCase(Locale.ROOT);</span>
-<span class="pc bpc" id="L291" title="1 of 2 branches missed.">        if (needle.startsWith(&quot;the &quot;)) {</span>
-<span class="nc" id="L292">            needle = needle.substring(4).trim();</span>
+<span class="fc" id="L295">        String needle = name.trim().toLowerCase(Locale.ROOT);</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">        if (needle.startsWith(&quot;the &quot;)) {</span>
+<span class="nc" id="L297">            needle = needle.substring(4).trim();</span>
         }
 
-<span class="pc bpc" id="L295" title="1 of 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="fc" id="L296">            String storedName = archetype.getName().trim().toLowerCase(Locale.ROOT);</span>
-<span class="fc bfc" id="L297" title="All 2 branches covered.">            if (storedName.equals(needle)) {</span>
-<span class="fc" id="L298">                return archetype.getArchetypeId();</span>
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="fc" id="L301">            String storedName = archetype.getName().trim().toLowerCase(Locale.ROOT);</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">            if (storedName.equals(needle)) {</span>
+<span class="fc" id="L303">                return archetype.getArchetypeId();</span>
             }
         }
-<span class="nc" id="L301">        return null;</span>
+<span class="nc" id="L306">        return null;</span>
 
 //        try (PreparedStatement statement = connection.prepareStatement(
 //                &quot;&quot;&quot;
@@ -335,13 +340,13 @@ import java.util.Locale;
      * @return The description, or null if no row matches
      * @throws SQLException Database Access Failure
      */
-    public static String GetArchetypeDescription(int archetypeId) throws SQLException {
-<span class="nc bnc" id="L339" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
-<span class="nc bnc" id="L340" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
-<span class="nc" id="L341">                return archetype.getSmallDescription();</span>
+    public String GetArchetypeDescription(int archetypeId) throws SQLException {
+<span class="nc bnc" id="L344" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
+<span class="nc bnc" id="L345" title="All 2 branches missed.">            if (archetype.getArchetypeId() == archetypeId){</span>
+<span class="nc" id="L346">                return archetype.getSmallDescription();</span>
             }
         }
-<span class="nc" id="L344">        return null;</span>
+<span class="nc" id="L349">        return null;</span>
 //        Connection connection = SQLite.getConnection();
 //        try (PreparedStatement statement = connection.prepareStatement(
 //                &quot;&quot;&quot;
@@ -363,22 +368,21 @@ import java.util.Locale;
      * @return the amount of quests in the database for the archetypeId
      * @throws SQLException Database Access Failure
      */
-    private static int GetCountOfQuestsForArchetypeId(int archetypeId) throws SQLException {
-<span class="fc" id="L367">        Connection connection = SQLite.getConnection();</span>
-<span class="fc" id="L368">        PreparedStatement statement = connection.prepareStatement(</span>
+    private int GetCountOfQuestsForArchetypeId(int archetypeId) throws SQLException {
+<span class="fc" id="L372">        PreparedStatement statement = connection.prepareStatement(</span>
                 &quot;&quot;&quot;
                     SELECT COUNT(*) FROM Quests
                     WHERE archetypeId = ?
                     &quot;&quot;&quot;);
-<span class="fc" id="L373">        statement.setInt(1, archetypeId);</span>
-<span class="fc" id="L374">        ResultSet rs = statement.executeQuery();</span>
+<span class="fc" id="L377">        statement.setInt(1, archetypeId);</span>
+<span class="fc" id="L378">        ResultSet rs = statement.executeQuery();</span>
 
-<span class="fc" id="L376">        int count = 0;</span>
-<span class="pc bpc" id="L377" title="1 of 2 branches missed.">        if (rs.next()){</span>
-<span class="fc" id="L378">            count = rs.getInt(1);</span>
+<span class="fc" id="L380">        int count = 0;</span>
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">        if (rs.next()){</span>
+<span class="fc" id="L382">            count = rs.getInt(1);</span>
         }
 
-<span class="fc" id="L381">        return count;</span>
+<span class="fc" id="L385">        return count;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

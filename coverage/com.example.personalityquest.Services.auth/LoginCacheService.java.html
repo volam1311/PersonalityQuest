@@ -2,24 +2,28 @@
 
 import com.example.personalityquest.Model.auth.LoginCache;
 import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.ParentService;
 import com.example.personalityquest.Services.navigation.NavigationService;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.prefs.Preferences;
 
-public class LoginCacheService {
+public class LoginCacheService extends ParentService {
 
 
     public Preferences preferences;
 
-<span class="nc" id="L16">    public LoginCacheService(){</span>
-<span class="nc" id="L17">        preferences = Preferences.userRoot();</span>
-<span class="nc" id="L18">    }</span>
+    public LoginCacheService(){
+<span class="nc" id="L18">        super();</span>
+<span class="nc" id="L19">        preferences = Preferences.userRoot();</span>
+<span class="nc" id="L20">    }</span>
 
-<span class="fc" id="L20">    public LoginCacheService(Preferences preferences){</span>
-<span class="fc" id="L21">        this.preferences = preferences;</span>
-<span class="fc" id="L22">    }</span>
+    public LoginCacheService(Preferences preferences){
+<span class="fc" id="L23">        super();</span>
+<span class="fc" id="L24">        this.preferences = preferences;</span>
+<span class="fc" id="L25">    }</span>
+
     private final static int days = 7;
 
 
@@ -28,9 +32,9 @@ public class LoginCacheService {
      * @return A Login Cache object containing an email and the last time the user logged in
      */
     public LoginCache GetLoginCache(){
-<span class="fc" id="L31">        return new LoginCache(</span>
-<span class="fc" id="L32">                preferences.get(&quot;LoginEmail&quot;, &quot;&quot;),</span>
-<span class="fc" id="L33">                LocalDate.parse(preferences.get(&quot;TimeOfLogin&quot;, LocalDate.now().toString()))</span>
+<span class="fc" id="L35">        return new LoginCache(</span>
+<span class="fc" id="L36">                preferences.get(&quot;LoginEmail&quot;, &quot;&quot;),</span>
+<span class="fc" id="L37">                LocalDate.parse(preferences.get(&quot;TimeOfLogin&quot;, LocalDate.now().toString()))</span>
         );
     }
 
@@ -39,29 +43,29 @@ public class LoginCacheService {
      * @param email The email you want to set the login cache to
      */
     public void UpdateCache(String email){
-<span class="fc" id="L42">        preferences.put(&quot;LoginEmail&quot;, email);</span>
-<span class="fc" id="L43">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L46">        preferences.put(&quot;LoginEmail&quot;, email);</span>
+<span class="fc" id="L47">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
+<span class="fc" id="L48">    }</span>
 
     /**
      * Clears the current login data from the cache
      */
     public void ClearCache(){
-<span class="fc" id="L50">        preferences.put(&quot;LoginEmail&quot;, &quot;&quot;);</span>
-<span class="fc" id="L51">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L54">        preferences.put(&quot;LoginEmail&quot;, &quot;&quot;);</span>
+<span class="fc" id="L55">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
+<span class="fc" id="L56">    }</span>
 
     /**
      * Checks to see if the given parsed date is past the allowed cache time. Clears the cache if it is past expired time.
      * @return Whether the login cache is now expired
      */
     public boolean IsPastTimeLimit(LocalDate parsedDate){
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (ChronoUnit.DAYS.between(parsedDate, LocalDate.now()) &gt; days){</span>
-<span class="fc" id="L60">            ClearCache();</span>
-<span class="fc" id="L61">            return true;</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (ChronoUnit.DAYS.between(parsedDate, LocalDate.now()) &gt; days){</span>
+<span class="fc" id="L64">            ClearCache();</span>
+<span class="fc" id="L65">            return true;</span>
         }
 
-<span class="fc" id="L64">        return false;</span>
+<span class="fc" id="L68">        return false;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

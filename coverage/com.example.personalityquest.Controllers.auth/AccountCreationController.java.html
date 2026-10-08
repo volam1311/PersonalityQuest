@@ -54,222 +54,225 @@ import java.util.Objects;
     @FXML
     private Label Message;
 
+    private QuizService QuizService;
     @FXML
     private void initialize() {
-<span class="nc" id="L59">        Rectangle clip = new Rectangle();</span>
-<span class="nc" id="L60">        clip.setArcWidth(56);</span>
-<span class="nc" id="L61">        clip.setArcHeight(56);</span>
-<span class="nc" id="L62">        clip.widthProperty().bind(brandingPane.widthProperty());</span>
-<span class="nc" id="L63">        clip.heightProperty().bind(brandingPane.heightProperty());</span>
-<span class="nc" id="L64">        brandingPane.setClip(clip);</span>
+<span class="nc" id="L60">        QuizService = new QuizService();</span>
+<span class="nc" id="L61">        Rectangle clip = new Rectangle();</span>
+<span class="nc" id="L62">        clip.setArcWidth(56);</span>
+<span class="nc" id="L63">        clip.setArcHeight(56);</span>
+<span class="nc" id="L64">        clip.widthProperty().bind(brandingPane.widthProperty());</span>
+<span class="nc" id="L65">        clip.heightProperty().bind(brandingPane.heightProperty());</span>
+<span class="nc" id="L66">        brandingPane.setClip(clip);</span>
 
-<span class="nc" id="L66">        brandingImage.fitWidthProperty().bind(brandingPane.widthProperty());</span>
-<span class="nc" id="L67">        brandingImage.fitHeightProperty().bind(brandingPane.heightProperty());</span>
+<span class="nc" id="L68">        brandingImage.fitWidthProperty().bind(brandingPane.widthProperty());</span>
+<span class="nc" id="L69">        brandingImage.fitHeightProperty().bind(brandingPane.heightProperty());</span>
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        for (TextField field : allFields()) {</span>
-<span class="nc" id="L70">            field.textProperty().addListener((obs, oldText, newText) -&gt; clearFieldError(field));</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        for (TextField field : allFields()) {</span>
+<span class="nc" id="L72">            field.textProperty().addListener((obs, oldText, newText) -&gt; clearFieldError(field));</span>
         }
 
-<span class="nc" id="L73">        root.widthProperty().addListener((obs, oldWidth, newWidth) -&gt; applyResponsiveLayout());</span>
-<span class="nc" id="L74">        root.heightProperty().addListener((obs, oldHeight, newHeight) -&gt; applyResponsiveLayout());</span>
-<span class="nc" id="L75">        Platform.runLater(this::applyResponsiveLayout);</span>
-<span class="nc" id="L76">    }</span>
+<span class="nc" id="L75">        root.widthProperty().addListener((obs, oldWidth, newWidth) -&gt; applyResponsiveLayout());</span>
+<span class="nc" id="L76">        root.heightProperty().addListener((obs, oldHeight, newHeight) -&gt; applyResponsiveLayout());</span>
+<span class="nc" id="L77">        Platform.runLater(this::applyResponsiveLayout);</span>
+<span class="nc" id="L78">    }</span>
 
     private void applyResponsiveLayout() {
-<span class="nc bnc" id="L79" title="All 4 branches missed.">        if (root.getWidth() &lt;= 0 || contentGrid.getColumnConstraints().size() &lt; 2) {</span>
-<span class="nc" id="L80">            return;</span>
+<span class="nc bnc" id="L81" title="All 4 branches missed.">        if (root.getWidth() &lt;= 0 || contentGrid.getColumnConstraints().size() &lt; 2) {</span>
+<span class="nc" id="L82">            return;</span>
         }
 
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        boolean compact = root.getWidth() &lt; COMPACT_BREAKPOINT;</span>
-<span class="nc" id="L84">        toggleStyleClass(root, &quot;compact&quot;, compact);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        boolean compact = root.getWidth() &lt; COMPACT_BREAKPOINT;</span>
+<span class="nc" id="L86">        toggleStyleClass(root, &quot;compact&quot;, compact);</span>
 
-<span class="nc" id="L86">        ColumnConstraints leftColumn = contentGrid.getColumnConstraints().get(0);</span>
-<span class="nc" id="L87">        ColumnConstraints rightColumn = contentGrid.getColumnConstraints().get(1);</span>
-<span class="nc" id="L88">        RowConstraints firstRow = contentGrid.getRowConstraints().get(0);</span>
-<span class="nc" id="L89">        RowConstraints secondRow = contentGrid.getRowConstraints().get(1);</span>
+<span class="nc" id="L88">        ColumnConstraints leftColumn = contentGrid.getColumnConstraints().get(0);</span>
+<span class="nc" id="L89">        ColumnConstraints rightColumn = contentGrid.getColumnConstraints().get(1);</span>
+<span class="nc" id="L90">        RowConstraints firstRow = contentGrid.getRowConstraints().get(0);</span>
+<span class="nc" id="L91">        RowConstraints secondRow = contentGrid.getRowConstraints().get(1);</span>
 
-<span class="nc" id="L91">        brandingPane.setMinSize(0, 0);</span>
-<span class="nc" id="L92">        formPane.setMinSize(0, 0);</span>
-<span class="nc" id="L93">        brandingPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);</span>
-<span class="nc" id="L94">        formPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);</span>
+<span class="nc" id="L93">        brandingPane.setMinSize(0, 0);</span>
+<span class="nc" id="L94">        formPane.setMinSize(0, 0);</span>
+<span class="nc" id="L95">        brandingPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);</span>
+<span class="nc" id="L96">        formPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);</span>
 
-<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (compact) {</span>
-<span class="nc" id="L97">            GridPane.setConstraints(brandingPane, 0, 0);</span>
-<span class="nc" id="L98">            GridPane.setConstraints(formPane, 0, 1);</span>
-<span class="nc" id="L99">            leftColumn.setPercentWidth(100);</span>
-<span class="nc" id="L100">            rightColumn.setPercentWidth(0);</span>
-<span class="nc" id="L101">            rightColumn.setMinWidth(0);</span>
-<span class="nc" id="L102">            rightColumn.setMaxWidth(0);</span>
-<span class="nc" id="L103">            firstRow.setPercentHeight(24);</span>
-<span class="nc" id="L104">            firstRow.setVgrow(Priority.SOMETIMES);</span>
-<span class="nc" id="L105">            secondRow.setPercentHeight(76);</span>
-<span class="nc" id="L106">            secondRow.setVgrow(Priority.ALWAYS);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (compact) {</span>
+<span class="nc" id="L99">            GridPane.setConstraints(brandingPane, 0, 0);</span>
+<span class="nc" id="L100">            GridPane.setConstraints(formPane, 0, 1);</span>
+<span class="nc" id="L101">            leftColumn.setPercentWidth(100);</span>
+<span class="nc" id="L102">            rightColumn.setPercentWidth(0);</span>
+<span class="nc" id="L103">            rightColumn.setMinWidth(0);</span>
+<span class="nc" id="L104">            rightColumn.setMaxWidth(0);</span>
+<span class="nc" id="L105">            firstRow.setPercentHeight(24);</span>
+<span class="nc" id="L106">            firstRow.setVgrow(Priority.SOMETIMES);</span>
+<span class="nc" id="L107">            secondRow.setPercentHeight(76);</span>
+<span class="nc" id="L108">            secondRow.setVgrow(Priority.ALWAYS);</span>
         } else {
-<span class="nc" id="L108">            GridPane.setConstraints(brandingPane, 0, 0);</span>
-<span class="nc" id="L109">            GridPane.setConstraints(formPane, 1, 0);</span>
-<span class="nc" id="L110">            leftColumn.setPercentWidth(50);</span>
-<span class="nc" id="L111">            rightColumn.setPercentWidth(50);</span>
-<span class="nc" id="L112">            rightColumn.setMinWidth(0);</span>
-<span class="nc" id="L113">            rightColumn.setMaxWidth(Double.MAX_VALUE);</span>
-<span class="nc" id="L114">            firstRow.setPercentHeight(100);</span>
-<span class="nc" id="L115">            firstRow.setVgrow(Priority.ALWAYS);</span>
-<span class="nc" id="L116">            secondRow.setPercentHeight(0);</span>
-<span class="nc" id="L117">            secondRow.setVgrow(Priority.NEVER);</span>
+<span class="nc" id="L110">            GridPane.setConstraints(brandingPane, 0, 0);</span>
+<span class="nc" id="L111">            GridPane.setConstraints(formPane, 1, 0);</span>
+<span class="nc" id="L112">            leftColumn.setPercentWidth(50);</span>
+<span class="nc" id="L113">            rightColumn.setPercentWidth(50);</span>
+<span class="nc" id="L114">            rightColumn.setMinWidth(0);</span>
+<span class="nc" id="L115">            rightColumn.setMaxWidth(Double.MAX_VALUE);</span>
+<span class="nc" id="L116">            firstRow.setPercentHeight(100);</span>
+<span class="nc" id="L117">            firstRow.setVgrow(Priority.ALWAYS);</span>
+<span class="nc" id="L118">            secondRow.setPercentHeight(0);</span>
+<span class="nc" id="L119">            secondRow.setVgrow(Priority.NEVER);</span>
         }
 
-<span class="nc" id="L120">        applyNameRowLayout(compact);</span>
-<span class="nc" id="L121">    }</span>
+<span class="nc" id="L122">        applyNameRowLayout(compact);</span>
+<span class="nc" id="L123">    }</span>
 
     private void applyNameRowLayout(boolean compact) {
-<span class="nc bnc" id="L124" title="All 4 branches missed.">        if (nameGrid == null || nameGrid.getColumnConstraints().size() &lt; 2) {</span>
-<span class="nc" id="L125">            return;</span>
+<span class="nc bnc" id="L126" title="All 4 branches missed.">        if (nameGrid == null || nameGrid.getColumnConstraints().size() &lt; 2) {</span>
+<span class="nc" id="L127">            return;</span>
         }
 
-<span class="nc" id="L128">        ColumnConstraints firstNameColumn = nameGrid.getColumnConstraints().get(0);</span>
-<span class="nc" id="L129">        ColumnConstraints lastNameColumn = nameGrid.getColumnConstraints().get(1);</span>
+<span class="nc" id="L130">        ColumnConstraints firstNameColumn = nameGrid.getColumnConstraints().get(0);</span>
+<span class="nc" id="L131">        ColumnConstraints lastNameColumn = nameGrid.getColumnConstraints().get(1);</span>
 
-<span class="nc" id="L131">        firstNameEntry.setMinWidth(0);</span>
-<span class="nc" id="L132">        lastNameEntry.setMinWidth(0);</span>
-<span class="nc" id="L133">        firstNameEntry.setMaxWidth(Double.MAX_VALUE);</span>
-<span class="nc" id="L134">        lastNameEntry.setMaxWidth(Double.MAX_VALUE);</span>
+<span class="nc" id="L133">        firstNameEntry.setMinWidth(0);</span>
+<span class="nc" id="L134">        lastNameEntry.setMinWidth(0);</span>
+<span class="nc" id="L135">        firstNameEntry.setMaxWidth(Double.MAX_VALUE);</span>
+<span class="nc" id="L136">        lastNameEntry.setMaxWidth(Double.MAX_VALUE);</span>
 
-<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (compact) {</span>
-<span class="nc" id="L137">            GridPane.setConstraints(firstNameEntry, 0, 0);</span>
-<span class="nc" id="L138">            GridPane.setConstraints(lastNameEntry, 0, 1);</span>
-<span class="nc" id="L139">            firstNameColumn.setPercentWidth(100);</span>
-<span class="nc" id="L140">            lastNameColumn.setPercentWidth(0);</span>
-<span class="nc" id="L141">            lastNameColumn.setMinWidth(0);</span>
-<span class="nc" id="L142">            lastNameColumn.setMaxWidth(0);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (compact) {</span>
+<span class="nc" id="L139">            GridPane.setConstraints(firstNameEntry, 0, 0);</span>
+<span class="nc" id="L140">            GridPane.setConstraints(lastNameEntry, 0, 1);</span>
+<span class="nc" id="L141">            firstNameColumn.setPercentWidth(100);</span>
+<span class="nc" id="L142">            lastNameColumn.setPercentWidth(0);</span>
+<span class="nc" id="L143">            lastNameColumn.setMinWidth(0);</span>
+<span class="nc" id="L144">            lastNameColumn.setMaxWidth(0);</span>
         } else {
-<span class="nc" id="L144">            GridPane.setConstraints(firstNameEntry, 0, 0);</span>
-<span class="nc" id="L145">            GridPane.setConstraints(lastNameEntry, 1, 0);</span>
-<span class="nc" id="L146">            firstNameColumn.setPercentWidth(50);</span>
-<span class="nc" id="L147">            lastNameColumn.setPercentWidth(50);</span>
-<span class="nc" id="L148">            lastNameColumn.setMinWidth(0);</span>
-<span class="nc" id="L149">            lastNameColumn.setMaxWidth(Double.MAX_VALUE);</span>
+<span class="nc" id="L146">            GridPane.setConstraints(firstNameEntry, 0, 0);</span>
+<span class="nc" id="L147">            GridPane.setConstraints(lastNameEntry, 1, 0);</span>
+<span class="nc" id="L148">            firstNameColumn.setPercentWidth(50);</span>
+<span class="nc" id="L149">            lastNameColumn.setPercentWidth(50);</span>
+<span class="nc" id="L150">            lastNameColumn.setMinWidth(0);</span>
+<span class="nc" id="L151">            lastNameColumn.setMaxWidth(Double.MAX_VALUE);</span>
         }
-<span class="nc" id="L151">    }</span>
+<span class="nc" id="L153">    }</span>
 
     private void toggleStyleClass(Node node, String styleClass, boolean enabled) {
-<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (enabled) {</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (!node.getStyleClass().contains(styleClass)) {</span>
-<span class="nc" id="L156">                node.getStyleClass().add(styleClass);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (enabled) {</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            if (!node.getStyleClass().contains(styleClass)) {</span>
+<span class="nc" id="L158">                node.getStyleClass().add(styleClass);</span>
             }
         } else {
-<span class="nc" id="L159">            node.getStyleClass().remove(styleClass);</span>
+<span class="nc" id="L161">            node.getStyleClass().remove(styleClass);</span>
         }
-<span class="nc" id="L161">    }</span>
+<span class="nc" id="L163">    }</span>
 
     @FXML
     private void OnSignUp() throws SQLException, IOException {
-<span class="nc" id="L165">        clearAllFieldErrors();</span>
-<span class="nc" id="L166">        Message.setText(&quot;&quot;);</span>
+<span class="nc" id="L167">        clearAllFieldErrors();</span>
+<span class="nc" id="L168">        Message.setText(&quot;&quot;);</span>
 
-<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (hasBlankFields()) {</span>
-<span class="nc" id="L169">            markBlankFields();</span>
-<span class="nc" id="L170">            Message.setText(&quot;*Required&quot;);</span>
-<span class="nc" id="L171">            return;</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (hasBlankFields()) {</span>
+<span class="nc" id="L171">            markBlankFields();</span>
+<span class="nc" id="L172">            Message.setText(&quot;*Required&quot;);</span>
+<span class="nc" id="L173">            return;</span>
         }
 
-<span class="nc" id="L174">        String validationError = AccountSignUpValidator.validationError(</span>
-<span class="nc" id="L175">                emailEntry.getText(),</span>
-<span class="nc" id="L176">                userNameEntry.getText(),</span>
-<span class="nc" id="L177">                firstNameEntry.getText(),</span>
-<span class="nc" id="L178">                lastNameEntry.getText(),</span>
-<span class="nc" id="L179">                passwordEntry.getText(),</span>
-<span class="nc" id="L180">                reEnterPasswordEntry.getText());</span>
+<span class="nc" id="L176">        String validationError = AccountSignUpValidator.validationError(</span>
+<span class="nc" id="L177">                emailEntry.getText(),</span>
+<span class="nc" id="L178">                userNameEntry.getText(),</span>
+<span class="nc" id="L179">                firstNameEntry.getText(),</span>
+<span class="nc" id="L180">                lastNameEntry.getText(),</span>
+<span class="nc" id="L181">                passwordEntry.getText(),</span>
+<span class="nc" id="L182">                reEnterPasswordEntry.getText());</span>
 
-<span class="nc bnc" id="L182" title="All 2 branches missed.">        if (validationError != null) {</span>
-<span class="nc" id="L183">            Message.setText(validationError);</span>
-<span class="nc bnc" id="L184" title="All 2 branches missed.">            if (&quot;Passwords do not match&quot;.equals(validationError)</span>
-<span class="nc bnc" id="L185" title="All 2 branches missed.">                    || validationError.contains(&quot;Password length&quot;)) {</span>
-<span class="nc" id="L186">                markFieldError(passwordEntry);</span>
-<span class="nc" id="L187">                markFieldError(reEnterPasswordEntry);</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        if (validationError != null) {</span>
+<span class="nc" id="L185">            Message.setText(validationError);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">            if (&quot;Passwords do not match&quot;.equals(validationError)</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                    || validationError.contains(&quot;Password length&quot;)) {</span>
+<span class="nc" id="L188">                markFieldError(passwordEntry);</span>
+<span class="nc" id="L189">                markFieldError(reEnterPasswordEntry);</span>
             }
-<span class="nc" id="L189">            return;</span>
+<span class="nc" id="L191">            return;</span>
         }
 
-<span class="nc bnc" id="L192" title="All 2 branches missed.">        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText())) {</span>
-<span class="nc" id="L193">            markFieldError(emailEntry);</span>
-<span class="nc" id="L194">            Message.setText(&quot;An account with this email already exists&quot;);</span>
-<span class="nc" id="L195">            return;</span>
+<span class="nc" id="L194">        EmailService emailService = new EmailService();</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        if (emailService.DoesAccountWithEmailExist(emailEntry.getText())) {</span>
+<span class="nc" id="L196">            markFieldError(emailEntry);</span>
+<span class="nc" id="L197">            Message.setText(&quot;An account with this email already exists&quot;);</span>
+<span class="nc" id="L198">            return;</span>
         }
 
         try {
-<span class="nc" id="L199">            AccountRepository.createAccount(</span>
-<span class="nc" id="L200">                    SQLite.getConnection(),</span>
-<span class="nc" id="L201">                    emailEntry.getText(),</span>
-<span class="nc" id="L202">                    userNameEntry.getText(),</span>
-<span class="nc" id="L203">                    firstNameEntry.getText(),</span>
-<span class="nc" id="L204">                    lastNameEntry.getText(),</span>
-<span class="nc" id="L205">                    passwordEntry.getText());</span>
-<span class="nc" id="L206">        } catch (SQLException e) {</span>
-<span class="nc bnc" id="L207" title="All 2 branches missed.">            if (Objects.equals(e.getMessage(), USERNAME_FAIL_STR)){</span>
-<span class="nc" id="L208">                System.out.println(e.getMessage());</span>
-<span class="nc" id="L209">                markFieldError(userNameEntry);</span>
-<span class="nc" id="L210">                Message.setText(&quot;Username is already in use. Please try again&quot;);</span>
-<span class="nc" id="L211">                return;</span>
+<span class="nc" id="L202">            AccountRepository.createAccount(</span>
+<span class="nc" id="L203">                    SQLite.getConnection(),</span>
+<span class="nc" id="L204">                    emailEntry.getText(),</span>
+<span class="nc" id="L205">                    userNameEntry.getText(),</span>
+<span class="nc" id="L206">                    firstNameEntry.getText(),</span>
+<span class="nc" id="L207">                    lastNameEntry.getText(),</span>
+<span class="nc" id="L208">                    passwordEntry.getText());</span>
+<span class="nc" id="L209">        } catch (SQLException e) {</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (Objects.equals(e.getMessage(), USERNAME_FAIL_STR)){</span>
+<span class="nc" id="L211">                System.out.println(e.getMessage());</span>
+<span class="nc" id="L212">                markFieldError(userNameEntry);</span>
+<span class="nc" id="L213">                Message.setText(&quot;Username is already in use. Please try again&quot;);</span>
+<span class="nc" id="L214">                return;</span>
             }
 
-<span class="nc" id="L214">            markFieldError(emailEntry);</span>
-<span class="nc" id="L215">            Message.setText(&quot;Could not create account. Email may already be in use, Please Try Again.&quot;);</span>
-<span class="nc" id="L216">            return;</span>
-<span class="nc" id="L217">        }</span>
+<span class="nc" id="L217">            markFieldError(emailEntry);</span>
+<span class="nc" id="L218">            Message.setText(&quot;Could not create account. Email may already be in use, Please Try Again.&quot;);</span>
+<span class="nc" id="L219">            return;</span>
+<span class="nc" id="L220">        }</span>
 
-<span class="nc" id="L219">        ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());</span>
-<span class="nc" id="L220">        QuizService.StartQuiz();</span>
-<span class="nc" id="L221">        NavigationService.LoadScreen(ScreenEnum.QUIZ);</span>
-<span class="nc" id="L222">        System.out.println(&quot;Account created&quot;);</span>
-<span class="nc" id="L223">    }</span>
+<span class="nc" id="L222">        ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());</span>
+<span class="nc" id="L223">        QuizService.StartQuiz();</span>
+<span class="nc" id="L224">        NavigationService.LoadScreen(ScreenEnum.QUIZ);</span>
+<span class="nc" id="L225">        System.out.println(&quot;Account created&quot;);</span>
+<span class="nc" id="L226">    }</span>
 
     @FXML
     private void OnSignIn(MouseEvent event) throws IOException {
-<span class="nc" id="L227">        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();</span>
-<span class="nc" id="L228">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);</span>
-<span class="nc" id="L229">    }</span>
+<span class="nc" id="L230">        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();</span>
+<span class="nc" id="L231">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_SIGN_IN);</span>
+<span class="nc" id="L232">    }</span>
 
     private TextField[] allFields() {
-<span class="nc" id="L232">        return new TextField[]{</span>
+<span class="nc" id="L235">        return new TextField[]{</span>
                 userNameEntry, emailEntry, firstNameEntry,
                 lastNameEntry, passwordEntry, reEnterPasswordEntry
         };
     }
 
     private boolean hasBlankFields() {
-<span class="nc bnc" id="L239" title="All 2 branches missed.">        for (TextField field : allFields()) {</span>
-<span class="nc bnc" id="L240" title="All 2 branches missed.">            if (isBlank(field.getText())) {</span>
-<span class="nc" id="L241">                return true;</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        for (TextField field : allFields()) {</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">            if (isBlank(field.getText())) {</span>
+<span class="nc" id="L244">                return true;</span>
             }
         }
-<span class="nc" id="L244">        return false;</span>
+<span class="nc" id="L247">        return false;</span>
     }
 
     private void markBlankFields() {
-<span class="nc bnc" id="L248" title="All 2 branches missed.">        for (TextField field : allFields()) {</span>
-<span class="nc bnc" id="L249" title="All 2 branches missed.">            if (isBlank(field.getText())) {</span>
-<span class="nc" id="L250">                markFieldError(field);</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        for (TextField field : allFields()) {</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">            if (isBlank(field.getText())) {</span>
+<span class="nc" id="L253">                markFieldError(field);</span>
             }
         }
-<span class="nc" id="L253">    }</span>
+<span class="nc" id="L256">    }</span>
 
     private void clearAllFieldErrors() {
-<span class="nc bnc" id="L256" title="All 2 branches missed.">        for (TextField field : allFields()) {</span>
-<span class="nc" id="L257">            clearFieldError(field);</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        for (TextField field : allFields()) {</span>
+<span class="nc" id="L260">            clearFieldError(field);</span>
         }
-<span class="nc" id="L259">    }</span>
+<span class="nc" id="L262">    }</span>
 
     private boolean isBlank(String value) {
-<span class="nc bnc" id="L262" title="All 4 branches missed.">        return value == null || value.isBlank();</span>
+<span class="nc bnc" id="L265" title="All 4 branches missed.">        return value == null || value.isBlank();</span>
     }
 
     private void markFieldError(TextField field) {
-<span class="nc bnc" id="L266" title="All 2 branches missed.">        if (!field.getStyleClass().contains(&quot;error&quot;)) {</span>
-<span class="nc" id="L267">            field.getStyleClass().add(&quot;error&quot;);</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        if (!field.getStyleClass().contains(&quot;error&quot;)) {</span>
+<span class="nc" id="L270">            field.getStyleClass().add(&quot;error&quot;);</span>
         }
-<span class="nc" id="L269">    }</span>
+<span class="nc" id="L272">    }</span>
 
     private void clearFieldError(TextField field) {
-<span class="nc" id="L272">        field.getStyleClass().remove(&quot;error&quot;);</span>
-<span class="nc" id="L273">    }</span>
+<span class="nc" id="L275">        field.getStyleClass().remove(&quot;error&quot;);</span>
+<span class="nc" id="L276">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
