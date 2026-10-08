@@ -3,6 +3,7 @@ module com.example.personalityquest {
     requires javafx.fxml;
     requires java.xml;
     requires java.desktop;
+    requires java.prefs;
     requires java.sql;
     requires java.net.http;
     requires bcrypt;

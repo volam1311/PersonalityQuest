@@ -5,7 +5,6 @@ import java.io.IOException;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEHEIGHT;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEWIDTH;
 
-import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Applications.auth.UpdateAccountPersonalDetailsApplication;
 import com.example.personalityquest.ScreenEnum;
 
@@ -19,12 +18,23 @@ public class NavigationService {
     public final static String fxmlPrefix = "/com/example/personalityquest/";
 
     public static Stage stage;
+    private static ThemeService themeService;
 
     /** Sets the primary stage used for navigation
      * @param currentStage the primary JavaFX stage
      */
     public static void Init(Stage currentStage){
         stage = currentStage;
+        if (themeService == null) {
+            themeService = new ThemeService();
+        }
+    }
+
+    public static ThemeService GetThemeService() {
+        if (themeService == null) {
+            themeService = new ThemeService();
+        }
+        return themeService;
     }
 
     /** Loads the requested screen into the primary stage
@@ -37,7 +47,7 @@ public class NavigationService {
         FXMLLoader fxmlLoader = new FXMLLoader(UpdateAccountPersonalDetailsApplication.class.getResource(fxmlString));
         Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
         scene.getStylesheets().add(UpdateAccountPersonalDetailsApplication.class.getResource(
-                fxmlPrefix + "css/" + ApplicationManager.ThemeSettings.getStylesheetName()).toExternalForm());
+                fxmlPrefix + "css/" + GetThemeService().getCurrentTheme().getStylesheetName()).toExternalForm());
         stage.setTitle(TitleFor(screen));
         stage.setScene(scene);
         stage.show();

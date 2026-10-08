@@ -58,17 +58,17 @@
 
 .signin-input {
     -fx-font-family: "Alegreya Sans";
-    -fx-background-color: #1a142c;
-    -fx-control-inner-background: #1a142c;
+    -fx-background-color: -raised-bg;
+    -fx-control-inner-background: -raised-bg;
     -fx-background-radius: 40;
     -fx-background-insets: 0;
-    -fx-border-color: #8b7cf6;
+    -fx-border-color: -purple-text;
     -fx-border-radius: 40;
     -fx-border-width: 1.5;
-    -fx-text-fill: #ffffff;
-    -fx-prompt-text-fill: #c4b5fd;
-    -fx-highlight-fill: #6d28d9;
-    -fx-highlight-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-secondary;
+    -fx-highlight-fill: -purple-fill;
+    -fx-highlight-text-fill: -text-primary;
     -fx-padding: 14 22 14 22;
     -fx-font-size: 15px;
     -fx-focus-color: transparent;
@@ -76,7 +76,7 @@
 }
 
 .signin-input:focused {
-    -fx-border-color: #a78bfa;
+    -fx-border-color: -purple-text;
     -fx-border-width: 1.8;
 }
 
@@ -116,7 +116,7 @@
 }
 
 .signup-link:hover {
-    -fx-text-fill: #c4b5fd;
+    -fx-text-fill: -purple-text;
 }
 
 .login-button {

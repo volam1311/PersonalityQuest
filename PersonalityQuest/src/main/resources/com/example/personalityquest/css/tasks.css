@@ -175,7 +175,7 @@
 
 .status-icon-tick {
     -fx-fill: transparent;
-    -fx-stroke: #1F1A24;
+    -fx-stroke: -text-on-accent;
     -fx-stroke-width: 1.8;
     -fx-stroke-line-cap: round;
     -fx-stroke-line-join: round;
@@ -396,14 +396,14 @@
     -fx-min-width: 120;
     -fx-min-height: 46px;
     -fx-pref-height: 46px;
-    -fx-background-color: #9a72ff;
+    -fx-background-color: -purple-fill;
     -fx-background-radius: 999;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-font-family: "Alegreya Sans";
     -fx-font-size: 16px;
     -fx-font-weight: 500;
-    -fx-text-fill: #140e25;
+    -fx-text-fill: -text-on-accent;
     -fx-padding: 0 28 0 28;
     -fx-cursor: hand;
     -fx-focus-color: transparent;
@@ -411,16 +411,16 @@
 }
 
 .pill-button:hover {
-    -fx-background-color: #b08cff;
+    -fx-background-color: -purple-hover;
 }
 
 .pill-button:pressed {
-    -fx-background-color: #7e58e0;
+    -fx-background-color: -purple-text;
 }
 
 .pill-button:disabled {
-    -fx-background-color: #2d2745;
-    -fx-text-fill: #c4b5fd;
+    -fx-background-color: -disabled-bg;
+    -fx-text-fill: -disabled-text;
     -fx-opacity: 1;
 }
 
@@ -429,13 +429,13 @@
     -fx-pref-height: 46px;
     -fx-background-color: transparent;
     -fx-background-radius: 999;
-    -fx-border-color: #8c5dff;
+    -fx-border-color: -purple-text;
     -fx-border-radius: 999;
     -fx-border-width: 1.5;
     -fx-font-family: "Alegreya Sans";
     -fx-font-size: 16px;
     -fx-font-weight: 500;
-    -fx-text-fill: #a884ff;
+    -fx-text-fill: -purple-text;
     -fx-padding: 0 22 0 22;
     -fx-cursor: hand;
     -fx-focus-color: transparent;
@@ -443,7 +443,7 @@
 }
 
 .draft-button:hover {
-    -fx-background-color: #2d2745;
+    -fx-background-color: -purple-tint;
 }
 
 .draft-button:disabled {

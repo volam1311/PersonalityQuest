@@ -58,7 +58,7 @@
 
     -fx-background-color: transparent;
     -fx-background-radius: 10;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -purple-text;
     -fx-cursor: hand;
     -fx-padding: 0;
     -fx-alignment: CENTER;
@@ -67,7 +67,7 @@
 
 .menu-button:hover,
 .settings-button:hover {
-    -fx-background-color: #30284a;
+    -fx-background-color: -purple-tint;
 }
 
 .navigation-list {
@@ -129,7 +129,7 @@
 .nav-button:hover,
 .profile-button:hover,
 .logout-button:hover {
-    -fx-background-color: #423761;
+    -fx-background-color: -purple-tint;
 }
 
 .nav-button.selected-nav-button,
@@ -139,33 +139,33 @@
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-text-fill: #140e25;
+    -fx-text-fill: -text-on-accent;
 }
 
 .nav-button.nav-flash {
-    -fx-background-color: #ffcf6b;
+    -fx-background-color: -gold-accent;
     -fx-background-insets: 0;
 }
 
 .nav-button.nav-flash .nav-label {
-    -fx-text-fill: #140e25;
+    -fx-text-fill: -text-on-accent;
 }
 
 .nav-button.nav-flash .material-symbol {
-    -fx-fill: #140e25;
-    -fx-text-fill: #140e25;
+    -fx-fill: -text-on-accent;
+    -fx-text-fill: -text-on-accent;
 }
 
 .nav-button.selected-nav-button .material-symbol,
 .profile-button.selected-nav-button .material-symbol,
 .profile-button.selected-nav-button .material-symbol {
-    -fx-fill: #140e25;
-    -fx-text-fill: #140e25;
+    -fx-fill: -text-on-accent;
+    -fx-text-fill: -text-on-accent;
 }
 
 .nav-button.selected-nav-button .nav-label,
 .profile-button.selected-nav-button .nav-label {
-    -fx-text-fill: #140e25;
+    -fx-text-fill: -text-on-accent;
 }
 
 .profile-button.selected-nav-button,
@@ -175,7 +175,7 @@
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-text-fill: #140e25;
+    -fx-text-fill: -text-on-accent;
 }
 
 .sidebar-footer-stack {
@@ -191,7 +191,7 @@
 }
 
 .settings-button {
-    -fx-background-color: #2d2745;
+    -fx-background-color: -raised-bg;
     -fx-background-radius: 9;
     -fx-text-fill: -text-secondary;
 }
@@ -203,7 +203,7 @@
 }
 
 .settings-button.selected-settings-button .material-symbol {
-    -fx-fill: #140e25;
+    -fx-fill: -text-on-accent;
 }
 
 .sidebar-collapsed .nav-button,
@@ -256,14 +256,14 @@
     -fx-scale-x: 1.25;
     -fx-scale-y: 1.25;
     -fx-translate-y: 2px;
-    -fx-fill: #ffffff;
+    -fx-fill: -text-on-accent;
 }
 
 .streak-text {
     -fx-font-family: Marcellus;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-on-accent;
 }
 
 .card {
@@ -371,12 +371,12 @@
 }
 
 .progress-bar > .track {
-    -fx-background-color: #090909;
+    -fx-background-color: -raised-bg;
     -fx-background-radius: 6;
 }
 
 .progress-bar > .bar {
-    -fx-background-color: #a172ff;
+    -fx-background-color: -purple-fill;
     -fx-background-radius: 6;
     -fx-background-insets: 0;
 }
@@ -404,7 +404,7 @@
 }
 
 .progress-chart .default-color0.chart-bar {
-    -fx-bar-fill: #a172ff;
+    -fx-bar-fill: -purple-fill;
     -fx-background-radius: 4 4 0 0;
 }
 
@@ -422,7 +422,7 @@
     -fx-background-color: transparent;
     -fx-background-radius: 8;
     -fx-padding: 4 6 4 6;
-    -fx-text-fill: #aa86ff;
+    -fx-text-fill: -purple-text;
 }
 
 .task-list .list-cell:filled {
@@ -444,7 +444,7 @@
 }
 
 .task-list .scroll-bar:vertical .thumb {
-    -fx-background-color: #8460df;
+    -fx-background-color: -purple-fill;
     -fx-background-radius: 6;
 }
 
@@ -512,16 +512,16 @@
 
 .task-row .check-box .box {
     -fx-background-color: transparent;
-    -fx-border-color: #a172ff;
+    -fx-border-color: -purple-text;
     -fx-border-radius: 5;
     -fx-border-width: 1.5;
     -fx-padding: 5;
 }
 
 .task-row .check-box:selected .box {
-    -fx-background-color: #8860dd;
+    -fx-background-color: -purple-fill;
 }
 
 .task-row .check-box:selected .mark {
-    -fx-background-color: #ffffff;
+    -fx-background-color: -text-primary;
 }

@@ -46,25 +46,25 @@
     -fx-font-family: "Alegreya Sans";
     -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #140e25;
-    -fx-background-color: #c4b5fd;
+    -fx-text-fill: -text-on-accent;
+    -fx-background-color: -purple-tint;
     -fx-background-radius: 999;
     -fx-padding: 6 14 6 14;
 }
 
 .status-chip.status-active {
-    -fx-background-color: #9a72ff;
-    -fx-text-fill: #140e25;
+    -fx-background-color: -purple-fill;
+    -fx-text-fill: -text-on-accent;
 }
 
 .status-chip.status-complete {
     -fx-background-color: #72a34d;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-on-accent;
 }
 
 .status-chip.status-other {
-    -fx-background-color: #2d2745;
-    -fx-text-fill: #c4b5fd;
+    -fx-background-color: -raised-bg;
+    -fx-text-fill: -purple-text;
 }
 
 .history-row,
@@ -106,27 +106,27 @@
 }
 
 .viewer-tab-button {
-    -fx-background-color: #2d2745;
+    -fx-background-color: -raised-bg;
     -fx-background-radius: 9;
     -fx-border-color: transparent;
     -fx-border-width: 0;
     -fx-font-family: "Alegreya Sans";
     -fx-font-size: 16px;
     -fx-font-weight: 500;
-    -fx-text-fill: #a884ff;
+    -fx-text-fill: -purple-text;
     -fx-padding: 10 18 10 18;
     -fx-cursor: hand;
 }
 
 .viewer-tab-button:hover {
-    -fx-background-color: #423761
+    -fx-background-color: -purple-tint;
 }
 
 .viewer-tab-button.selected-viewer-tab,
 .viewer-tab-button.selected-viewer-tab:hover,
 .viewer-tab-button.selected-viewer-tab:focused {
     -fx-background-color: -gold-accent;
-    -fx-text-fill: #140e25;
+    -fx-text-fill: -text-on-accent;
 }
 
 .viewer-tab-button:disabled {
@@ -141,17 +141,17 @@
 }
 
 .resolution-card {
-    -fx-border-color: #9a72ff;
+    -fx-border-color: -purple-text;
     -fx-border-width: 1.5;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
-    -fx-background-color: rgba(154, 114, 255, 0.08);
+    -fx-background-color: -purple-tint;
     -fx-padding: 12;
 }
 
 .viewer-tab-button.flashing-tab {
-    -fx-background-color: #ffcf6b;
-    -fx-text-fill: #140e25;
+    -fx-background-color: -gold-accent;
+    -fx-text-fill: -text-on-accent;
 }
 
 .labour-task-title {

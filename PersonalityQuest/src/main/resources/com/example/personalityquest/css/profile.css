@@ -100,17 +100,17 @@
     -fx-min-height: 280px;
     -fx-pref-height: 290px;
     -fx-padding: 14 10 12 10;
-    -fx-background-color: #171321;
+    -fx-background-color: -card-bg;
     -fx-background-radius: 18;
-    -fx-border-color: #33264c;
+    -fx-border-color: -border-color;
     -fx-border-radius: 18;
     -fx-border-width: 1;
     -fx-alignment: TOP_CENTER;
 }
 
 .achievement-card:hover {
-    -fx-background-color: #201936;
-    -fx-border-color: #8b5cf6;
+    -fx-background-color: -raised-bg;
+    -fx-border-color: -purple-text;
 }
 
 .achievement-card.unlocked {
@@ -143,12 +143,12 @@
 .achievement-fallback-icon {
     -fx-scale-x: 1.6;
     -fx-scale-y: 1.6;
-    -fx-fill: #c4b5fd;
+    -fx-fill: -purple-text;
     -fx-effect: dropshadow(gaussian, rgba(196, 181, 253, 0.7), 12, 0.35, 0, 1);
 }
 
 .achievement-card.locked .achievement-fallback-icon {
-    -fx-fill: #81798e;
+    -fx-fill: -text-secondary;
     -fx-effect: none;
 }
 
@@ -156,7 +156,7 @@
     -fx-font-family: Marcellus;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
     -fx-alignment: CENTER;
     -fx-text-alignment: CENTER;
 }
@@ -164,7 +164,7 @@
 .achievement-description {
     -fx-font-family: "Alegreya Sans";
     -fx-font-size: 12px;
-    -fx-text-fill: #a9a0c7;
+    -fx-text-fill: -text-secondary;
     -fx-alignment: CENTER;
     -fx-text-alignment: CENTER;
 }
@@ -173,9 +173,9 @@
     -fx-font-family: "Alegreya Sans";
     -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .achievement-card.unlocked .achievement-description {
-    -fx-text-fill: #c4b5fd;
+    -fx-text-fill: -purple-text;
 }
