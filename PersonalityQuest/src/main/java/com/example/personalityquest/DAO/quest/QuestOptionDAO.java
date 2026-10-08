@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.QuestOption;
 import com.example.personalityquest.SQLite;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestOptionDAO {
+public class QuestOptionDAO extends ParentDAO {
     private static final String CREATE_QUEST_OPTIONS = """
             CREATE TABLE IF NOT EXISTS QuestOptions (
             questOptionId INTEGER PRIMARY KEY,
@@ -18,18 +19,23 @@ public class QuestOptionDAO {
             )
             """;
 
-    private QuestOptionDAO() {}
+    public QuestOptionDAO() {
+        super();
 
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    }
+
+    public QuestOptionDAO(Connection connection){
+        super(connection);
+    }
+
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_QUEST_OPTIONS);
         }
     }
 
-    public static boolean HasCatalog() throws SQLException {
+    public boolean HasCatalog() throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT COUNT(*) FROM QuestOptions")){
             ResultSet resultSet = statement.executeQuery();
@@ -37,10 +43,9 @@ public class QuestOptionDAO {
         }
     }
 
-    public static void InsertQuestOption(int questOptionId, int labourId, int archetypeId,
+    public void InsertQuestOption(int questOptionId, int labourId, int archetypeId,
                                          QuestOption.ReactionType reactionType, String text) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT OR IGNORE INTO QuestOptions (questOptionId, labourId, archetypeId, reactionType, text)
@@ -55,9 +60,8 @@ public class QuestOptionDAO {
         }
     }
 
-    public static List<QuestOption> GetQuestOptionsForLabourId(int labourId) throws SQLException {
+    public List<QuestOption> GetQuestOptionsForLabourId(int labourId) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                     """
                         SELECT * FROM QuestOptions
@@ -80,7 +84,7 @@ public class QuestOptionDAO {
         }
     }
 
-    public static void SeedCatalog() throws SQLException {
+    public void SeedCatalog() throws SQLException {
 
 
         // Hero Questions
@@ -121,8 +125,7 @@ public class QuestOptionDAO {
                 " Option 2 Excess");
     }
 
-    public static void ResetAndSeedCatalog() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void ResetAndSeedCatalog() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE IF EXISTS QuestOptions");
         }

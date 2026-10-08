@@ -1,15 +1,15 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.UserQuest;
-import com.example.personalityquest.SQLite;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /** Stores and retrieves each account's storyline quest progress */
-public class UserQuestDAO {
+public class UserQuestDAO extends ParentDAO {
 
     private static final String CREATE_USER_QUESTS = """
             CREATE TABLE IF NOT EXISTS UserQuests (
@@ -24,11 +24,18 @@ public class UserQuestDAO {
             )
             """;
 
+    public UserQuestDAO(){
+        super();
+    }
+
+    public UserQuestDAO(Connection connection) {
+        super(connection);
+    }
+
     /** Creates the user quest progress table if it does not already exist
      * @throws SQLException if the table cannot be created
      */
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_USER_QUESTS);
         }
@@ -37,8 +44,7 @@ public class UserQuestDAO {
         AddColumnIfMissing("reactionType", "TEXT NOT NULL DEFAULT ''");
     }
 
-    private static void AddColumnIfMissing(String columnName, String definition) {
-        Connection connection = SQLite.getConnection();
+    private void AddColumnIfMissing(String columnName, String definition) {
         try (Statement statement = connection.createStatement()){
             statement.executeUpdate("ALTER TABLE UserQuests ADD COLUMN " + columnName + " " + definition);
         } catch (SQLException alreadyExists){
@@ -49,8 +55,7 @@ public class UserQuestDAO {
     /** Deletes storyline quest progress for every account
      * @throws SQLException if the quest progress cannot be deleted
      */
-    public static void ClearAll()  throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void ClearAll()  throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DELETE FROM UserQuests");
         }
@@ -63,8 +68,7 @@ public class UserQuestDAO {
      * @throws IllegalArgumentException If the given email is empty
      * @throws SQLException Database Access Failure
      */
-    public static UserQuest GetCurrentActiveUserQuestForEmail(String email) throws IllegalArgumentException, SQLException {
-        Connection connection = SQLite.getConnection();
+    public UserQuest GetCurrentActiveUserQuestForEmail(String email) throws IllegalArgumentException, SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * FROM UserQuests
@@ -96,8 +100,7 @@ public class UserQuestDAO {
      * @return A list of UserQuests, empty if the account has none
      * @throws SQLException Database Access Failure
      */
-    public static List<UserQuest> GetUserQuestsForEmail(String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public List<UserQuest> GetUserQuestsForEmail(String email) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * FROM UserQuests
@@ -135,8 +138,7 @@ public class UserQuestDAO {
      * have an active quest
      * @throws SQLException Database Update Failure
      */
-    public static void SetUserQuesStatusAsActive(UserQuest userQuest, String email) throws IllegalArgumentException, SQLException {
-        Connection connection = SQLite.getConnection();
+    public void SetUserQuesStatusAsActive(UserQuest userQuest, String email) throws IllegalArgumentException, SQLException {
 
         PreparedStatement statement = connection.prepareStatement(
                 """
@@ -156,8 +158,7 @@ public class UserQuestDAO {
      * @param email The account you want to insert a new quest for
      * @throws SQLException If A constraint on foreign keys fails or Database Update Failure
      */
-    public static void InsertNewQuestForEmail(Quest quest, String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void InsertNewQuestForEmail(Quest quest, String email) throws SQLException {
         try{
             PreparedStatement statement = connection.prepareStatement(
                     """
@@ -182,8 +183,7 @@ public class UserQuestDAO {
      * @throws IllegalArgumentException If quest is null or email is empty
      * @throws SQLException Database Access and Update Failure
      */
-    public static void SetUserQuestStatusAsComplete(UserQuest quest, String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void SetUserQuestStatusAsComplete(UserQuest quest, String email) throws SQLException {
 
         PreparedStatement statement = connection.prepareStatement(
                 """
@@ -205,9 +205,8 @@ public class UserQuestDAO {
      * 0 and 1
      * @throws SQLException Database Access or Update Failure
      */
-    public static void SetUserQuestToPercentageComplete(UserQuest quest, String email, float percentage) throws SQLException {
+    public void SetUserQuestToPercentageComplete(UserQuest quest, String email, float percentage) throws SQLException {
 
-        Connection connection = SQLite.getConnection();
 
         PreparedStatement statement = connection.prepareStatement(
                 """
@@ -229,8 +228,7 @@ public class UserQuestDAO {
      * @throws IllegalArgumentException If the user has more than 1 active quest
      * @throws SQLException Database Access Failure
      */
-    public static boolean DoesUserHaveActiveQuest(String email) throws IllegalArgumentException, SQLException {
-        Connection connection = SQLite.getConnection();
+    public boolean DoesUserHaveActiveQuest(String email) throws IllegalArgumentException, SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT COUNT(*) FROM UserQuests
@@ -258,8 +256,7 @@ public class UserQuestDAO {
      * @return The UserQuest matching the email and labourId given OR null if none could be retrived
      * @throws SQLException Database Access Failure
      */
-    public static UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public UserQuest GetUserQuestForEmailAndLabourId(String email, int labourId) throws SQLException {
 
         PreparedStatement statement = connection.prepareStatement(
                 """
@@ -305,8 +302,7 @@ public class UserQuestDAO {
             WHERE accountEmail = ? AND labourId = ?
             """;
 
-    public static void UpdateGivenQuestReflectionToDraft(UserQuest quest, String reflection, String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void UpdateGivenQuestReflectionToDraft(UserQuest quest, String reflection, String email) throws SQLException {
         try (PreparedStatement statement =  connection.prepareStatement(SQL_UPDATE_REFLECTION_DRAFT)){
             statement.setString(1, reflection);
             statement.setString(2, email);
@@ -315,8 +311,8 @@ public class UserQuestDAO {
         }
     }
 
-    public static void UpdateGivenQuestReflectionToBeFinished(UserQuest quest, String reflection, String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void UpdateGivenQuestReflectionToBeFinished(UserQuest quest, String reflection, String email) throws SQLException {
+
         try (PreparedStatement statement =  connection.prepareStatement(SQL_FINISH_REFLECTION)){
             statement.setString(1, reflection);
             statement.setString(2, email);
@@ -325,8 +321,8 @@ public class UserQuestDAO {
         }
     }
 
-    public static void DeactivateUserQuest(UserQuest quest, String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void DeactivateUserQuest(UserQuest quest, String email) throws SQLException {
+
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     UPDATE UserQuests
@@ -346,8 +342,8 @@ public class UserQuestDAO {
             WHERE accountEmail = ? AND labourId = ?
             """;
 
-    public static void UpdateUserQuestReactionType(UserQuest quest, String email, String reactionType) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void UpdateUserQuestReactionType(UserQuest quest, String email, String reactionType) throws SQLException {
+
         try (PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_REACTION_TYPE)){
             statement.setString(1, reactionType);
             statement.setString(2, email);

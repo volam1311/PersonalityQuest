@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.SQLite;
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.Locale;
 
 /** Stores and retrieves quest catalog records */
-public class QuestDAO {
+public class QuestDAO extends ParentDAO {
     /**
      * Gets an Array of Quests for the given archetypeId
      * @param archetypeId The archetypeId you want to get quests for
@@ -128,17 +129,24 @@ public class QuestDAO {
     };
 
 
-    private static void EnsureTables() throws SQLException {
+    public QuestDAO(){
+        super();
+    }
+
+    public QuestDAO(Connection connection){
+        super(connection);
+    }
+
+    private void EnsureTables() throws SQLException {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_QUESTS);
         }
     }
 
-    private static void InsertQuest(int labourId, int archetypeId, String name, String narrative,
+    private void InsertQuest(int labourId, int archetypeId, String name, String narrative,
                                     String decisionQuestion, String resolution) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT OR IGNORE INTO Quests (LabourId, archetypeId, name, narrative, decisionQuestion, resolution) VALUES (?, ?, ?, ?, ?, ?)")){
             statement.setInt(1, labourId);
@@ -151,7 +159,7 @@ public class QuestDAO {
         }
     }
 
-    private static void SeedCatalog() throws SQLException {
+    private void SeedCatalog() throws SQLException {
         for (Archetype archetype : Archetype.values()) {
             int archetypeId = archetype.getArchetypeId();
             InsertQuest(archetypeId, archetypeId, LABOUR_NAMES[archetypeId - 1], LABOUR_NARRATIVES[archetypeId - 1],
@@ -162,8 +170,7 @@ public class QuestDAO {
     /** Recreates the quest catalog and inserts its default records
      * @throws SQLException if the catalog cannot be recreated
      */
-    public static void ResetAndSeedCatalog() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void ResetAndSeedCatalog() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE IF EXISTS Quests");
         }
@@ -177,7 +184,7 @@ public class QuestDAO {
      * @return the quests assigned to the archetype
      * @throws SQLException if the quests cannot be loaded
      */
-    public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
+    public Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
 
         int count = GetCountOfQuestsForArchetypeId(archetypeId);
         // no quests exist for this given ID
@@ -185,7 +192,6 @@ public class QuestDAO {
             return null;
         }
 
-        Connection connection = SQLite.getConnection();
         PreparedStatement getQuestsForArchetypeId = connection.prepareStatement(
                 """
                     SELECT * FROM Quests
@@ -225,8 +231,7 @@ public class QuestDAO {
      * @return The Quest is successful or null if labourId doesn't match a quest in the database
      * @throws SQLException Database Access Failure
      */
-    public static Quest GetQuestForLabourId(int labourId) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public Quest GetQuestForLabourId(int labourId) throws SQLException {
         PreparedStatement getQuestForLabourID = connection.prepareStatement(
                 """
                     SELECT * FROM Quests
@@ -257,7 +262,7 @@ public class QuestDAO {
      * @return The archetype name, or null if no row matches
      * @throws SQLException Database Access Failure
      */
-    public static String GetArchetypeName(int archetypeId) throws SQLException {
+    public String GetArchetypeName(int archetypeId) throws SQLException {
         for (Archetype archetype : Archetype.values()) {
             if (archetype.getArchetypeId() == archetypeId){
                 return archetype.getName();
@@ -285,7 +290,7 @@ public class QuestDAO {
      * @return The archetypeId, or null if none matches
      * @throws SQLException Database Access Failure
      */
-    public static Integer GetArchetypeIdForName(String name) throws SQLException {
+    public Integer GetArchetypeIdForName(String name) throws SQLException {
         //Connection connection = SQLite.getConnection();
         String needle = name.trim().toLowerCase(Locale.ROOT);
         if (needle.startsWith("the ")) {
@@ -335,7 +340,7 @@ public class QuestDAO {
      * @return The description, or null if no row matches
      * @throws SQLException Database Access Failure
      */
-    public static String GetArchetypeDescription(int archetypeId) throws SQLException {
+    public String GetArchetypeDescription(int archetypeId) throws SQLException {
         for (Archetype archetype : Archetype.values()) {
             if (archetype.getArchetypeId() == archetypeId){
                 return archetype.getSmallDescription();
@@ -363,8 +368,7 @@ public class QuestDAO {
      * @return the amount of quests in the database for the archetypeId
      * @throws SQLException Database Access Failure
      */
-    private static int GetCountOfQuestsForArchetypeId(int archetypeId) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    private int GetCountOfQuestsForArchetypeId(int archetypeId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT COUNT(*) FROM Quests

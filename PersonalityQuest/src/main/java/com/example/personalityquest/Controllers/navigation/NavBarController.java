@@ -65,12 +65,16 @@ public class NavBarController implements Initializable {
     private final ChangeListener<Number> sceneWidthListener =
             (observable, oldWidth, newWidth) -> ApplyResponsiveLayout(newWidth.doubleValue());
 
+    private EmailService EmailService;
+    private QuizService QuizService;
     /** Initialises the navigation bar controls
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        EmailService = new EmailService();
+        QuizService = new QuizService();
         SetProfileLabel();
         SetSidebarExpanded(sidebarExpanded);
 

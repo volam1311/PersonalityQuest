@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services.auth;
 
+import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Services.auth.EmailService;
@@ -22,9 +23,13 @@ public class EmailServiceTest {
             "test",
             "test"
     );
+
+    private EmailService EmailService;
     @BeforeEach
     public void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        AccountDAO accountDAO = new AccountDAO(connection);
+        EmailService = new EmailService(accountDAO);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (

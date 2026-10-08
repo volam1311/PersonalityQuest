@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.ReflectionPrompt;
 import com.example.personalityquest.SQLite;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReflectionPromptDAO {
+public class ReflectionPromptDAO extends ParentDAO {
     private static final String CREATE_REFLECTION_PROMPTS = """
             CREATE TABLE IF NOT EXISTS ReflectionPrompts (
             reflectionId INTEGER PRIMARY KEY,
@@ -19,17 +20,21 @@ public class ReflectionPromptDAO {
             )
             """;
 
-    private ReflectionPromptDAO() {    }
+    public ReflectionPromptDAO() {
+        super();
+    }
+    public ReflectionPromptDAO(Connection connection) {
+        super(connection);
+    }
 
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_REFLECTION_PROMPTS);
         }
     }
 
-    public static boolean HasCatalog() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public boolean HasCatalog() throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT COUNT(*) FROM ReflectionPrompts")){
             ResultSet rs = statement.executeQuery();
@@ -37,10 +42,9 @@ public class ReflectionPromptDAO {
         }
     }
 
-    public static void InsertReflectionPrompt(int reflectionId, int labourId, String reactionType,
+    public void InsertReflectionPrompt(int reflectionId, int labourId, String reactionType,
                                               String name, String prompt, String overview) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT OR IGNORE INTO ReflectionPrompts(reflectionId, labourId, reactionType, name, prompt, overview)
@@ -61,9 +65,8 @@ public class ReflectionPromptDAO {
      * @return The labour's reflection prompts, empty if none are seeded
      * @throws SQLException Database Access Failure
      */
-    public static List<ReflectionPrompt> GetReflectionPromptsForLabourId(int labourId) throws SQLException {
+    public List<ReflectionPrompt> GetReflectionPromptsForLabourId(int labourId) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * FROM ReflectionPrompts 
@@ -87,7 +90,7 @@ public class ReflectionPromptDAO {
         }
     }
 
-    public static void SeedCatalog() throws SQLException {
+    public void SeedCatalog() throws SQLException {
 
         InsertReflectionPrompt(23, 12, "DEFICIT",
                 "Deficit Reflection",
@@ -133,7 +136,7 @@ public class ReflectionPromptDAO {
                 "Going forward, when is that caution genuinely serving you, and when is it costing you good outcomes you never gave a chance?");
     }
 
-    public static void ResetAndSeedCatalog() throws SQLException {
+    public void ResetAndSeedCatalog() throws SQLException {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE IF EXISTS ReflectionPrompts");

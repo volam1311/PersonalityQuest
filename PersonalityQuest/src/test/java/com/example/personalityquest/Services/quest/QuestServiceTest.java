@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services.quest;
 
+import com.example.personalityquest.DAO.quest.QuestDAO;
 import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Services.auth.HashingService;
@@ -19,9 +20,13 @@ public class QuestServiceTest {
     private int labourId;
     private int archetypeId;
 
+    private QuestService QuestService;
     @BeforeEach
     void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        QuestDAO questDAO = new QuestDAO(connection);
+        QuestService = new QuestService(questDAO);
+
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (

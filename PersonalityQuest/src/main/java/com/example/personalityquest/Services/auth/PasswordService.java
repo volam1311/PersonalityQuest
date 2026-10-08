@@ -2,6 +2,7 @@ package com.example.personalityquest.Services.auth;
 
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.auth.AccountDAO;
+import com.example.personalityquest.Services.ParentService;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -10,8 +11,23 @@ import java.util.Objects;
  * This class managers everything to do with password and has utility functions to check
  * weather a password matches an email in the database or to update the password in the database
  */
-public class PasswordService {
+public class PasswordService extends ParentService {
 
+    private AccountDAO AccountDAO;
+
+    private EmailService EmailService;
+    public PasswordService(){
+        super();
+        this.AccountDAO = new AccountDAO();
+        EmailService = new EmailService();
+    }
+
+    public PasswordService(AccountDAO accountDAO){
+        super();
+        this.AccountDAO = accountDAO;
+
+        EmailService = new EmailService(accountDAO);
+    }
     /**
      * Checks to see if the given password is for the given email's account
      * @param email "The email of the account that is for the password"
@@ -19,7 +35,7 @@ public class PasswordService {
      * @return "Whether password matches the given account email"
      * @throws SQLException "Database Access Failure"
      */
-    public static boolean isPasswordForEmail(String email, String password) throws SQLException {
+    public boolean isPasswordForEmail(String email, String password) throws SQLException {
         // check nulls
         if (ApplicationManager.isEmpty(email)) {
             System.out.println("Email is null and therefore the password wont match");
@@ -47,7 +63,7 @@ public class PasswordService {
      * @return "Whether the update to the database was successful"
      * @throws SQLException "Database Access Failure"
      */
-    public static boolean UpdatePasswordForEmail(String email, String currentPassword, String newPassword) throws SQLException {
+    public boolean UpdatePasswordForEmail(String email, String currentPassword, String newPassword) throws SQLException {
         // check nulls
         if (ApplicationManager.isEmpty(email)) {
             System.out.println("Email is null and therefore password can not be updated for account");
@@ -59,7 +75,7 @@ public class PasswordService {
         }
 
         // current password entered does not match account
-        if (!PasswordService.isPasswordForEmail(email, currentPassword)){
+        if (!isPasswordForEmail(email, currentPassword)){
             System.out.println("Current Password is incorrect");
             return false;
         }

@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.QuizResult;
 import com.example.personalityquest.SQLite;
@@ -9,7 +10,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuizResultDAO {
+public class QuizResultDAO extends ParentDAO {
     private static final String CREATE_QUIZ_RESULTS = """
             CREATE TABLE IF NOT EXISTS QuizResults(
             accountEmail TEXT PRIMARY KEY,
@@ -18,8 +19,14 @@ public class QuizResultDAO {
             )
             """;
 
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public QuizResultDAO(){
+        super();
+    }
+
+    public QuizResultDAO(Connection connection){
+        super(connection);
+    }
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()){
             statement.execute(CREATE_QUIZ_RESULTS);
         }
@@ -32,9 +39,8 @@ public class QuizResultDAO {
      * @throws SQLException Database Access Failure
      */
 
-    public static void SaveResult(String email, QuizResult result) throws SQLException {
+    public void SaveResult(String email, QuizResult result) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT OR REPLACE INTO QuizResults (accountEmail, winnerArchetypeId, scores) VALUES (?, ?, ?)")){
             statement.setString(1, email);
@@ -51,9 +57,8 @@ public class QuizResultDAO {
      * @throws SQLException Database Access Failure
      */
 
-    public static QuizResult LoadResult(String email) throws SQLException {
+    public QuizResult LoadResult(String email) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement("" +
                 "SELECT * FROM QuizResults WHERE accountEmail = ?")){
             statement.setString(1, email);

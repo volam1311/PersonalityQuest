@@ -69,12 +69,24 @@ public class ArchetypeController implements Initializable {
     private Map<Archetype, Quest> pinnedQuests = Map.of();
     private Archetype selectedArchetype;
 
+    private QuestService QuestService;
+    private UserQuestService UserQuestService;
+    private TaskService TaskService;
+    private UserProfileService UserProfileService;
+    private ArchetypeDAO ArchetypeDAO;
+    private QuizService QuizService;
     /** Initialises archetype controls and loads the selected archetype
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        QuizService = new QuizService();
+        TaskService = new TaskService();
+        UserQuestService = new UserQuestService();
+        QuestService = new QuestService();
+        UserProfileService = new UserProfileService();
+        ArchetypeDAO = new ArchetypeDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);
         quadrantRealms = Map.of(
                 egoQuadrantButton, "Ego",

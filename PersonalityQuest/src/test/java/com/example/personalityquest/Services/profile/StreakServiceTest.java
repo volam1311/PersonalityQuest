@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services.profile;
 
+import com.example.personalityquest.DAO.profile.StreakDAO;
 import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Services.profile.StreakService;
 import org.junit.jupiter.api.AfterEach;
@@ -18,9 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 public class StreakServiceTest {
     private Connection connection;
 
+    private StreakService StreakService;
     @BeforeEach
     void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        StreakDAO streakDAO = new StreakDAO(connection);
+        StreakService = new StreakService(streakDAO);
+
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (

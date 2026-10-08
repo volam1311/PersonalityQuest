@@ -1,9 +1,9 @@
 package com.example.personalityquest.DAO.profile;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.profile.Achievement;
 import com.example.personalityquest.Model.profile.UserProfile;
-import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * SQLite persistence for achievement definitions, unlocks, and profile progress totals.
  */
-public class AchievementDAO {
+public class AchievementDAO extends ParentDAO {
     private static final String CREATE_ACHIEVEMENTS = """
             CREATE TABLE IF NOT EXISTS Achievements (
                 achievementId INTEGER PRIMARY KEY,
@@ -44,15 +44,20 @@ public class AchievementDAO {
             )
             """;
 
-    private AchievementDAO() {
+
+
+    public AchievementDAO(){
+        super();
     }
 
+    public AchievementDAO(Connection connection) {
+        super(connection);
+    }
     /**
      * Creates the achievement tables when they do not already exist.
      * @throws SQLException Database Access Failure
      */
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.execute(CREATE_ACHIEVEMENTS);
             EnsureLevelColumn(connection);
@@ -60,7 +65,7 @@ public class AchievementDAO {
         }
     }
 
-    private static void EnsureLevelColumn(Connection connection) throws SQLException {
+    private void EnsureLevelColumn(Connection connection) throws SQLException {
         boolean hasLevelColumn = false;
 
         try (Statement statement = connection.createStatement();
@@ -86,9 +91,8 @@ public class AchievementDAO {
      * @return Whether the Achievements table currently has any rows
      * @throws SQLException Database Access Failure
      */
-    public static boolean HasCatalog() throws SQLException {
+    public boolean HasCatalog() throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT COUNT(*) FROM Achievements")) {
             ResultSet rs = statement.executeQuery();
@@ -99,14 +103,13 @@ public class AchievementDAO {
     /**
      * Inserts or updates an achievement definition.
      */
-    public static void InsertAchievement(
+    public void InsertAchievement(
             int achievementId,
             String name,
             String description,
             String criteriaType,
             double threshold, int level) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT INTO Achievements
@@ -133,9 +136,8 @@ public class AchievementDAO {
      * @return Every achievement definition, ordered by id
      * @throws SQLException Database Access Failure
      */
-    public static List<Achievement> GetCatalog() throws SQLException {
+    public List<Achievement> GetCatalog() throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT achievementId, name, description, criteriaType, threshold, level
@@ -164,14 +166,13 @@ public class AchievementDAO {
      * @return Achievement ids this account has already unlocked
      * @throws SQLException Database Access Failure
      */
-    public static Set<Integer> GetUnlockedIds(String email) throws SQLException {
+    public Set<Integer> GetUnlockedIds(String email) throws SQLException {
         EnsureTables();
         Set<Integer> unlocked = new HashSet<>();
         if (ApplicationManager.isEmpty(email)) {
             return unlocked;
         }
 
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT achievementId FROM UserAchievements
@@ -189,13 +190,12 @@ public class AchievementDAO {
     /**
      * Stores an unlock for the given account. Repeated calls are ignored.
      */
-    public static void Unlock(String email, int achievementId) throws SQLException {
+    public void Unlock(String email, int achievementId) throws SQLException {
         if (ApplicationManager.isEmpty(email)) {
             return;
         }
 
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 """
                     INSERT OR IGNORE INTO UserAchievements
@@ -246,7 +246,7 @@ public class AchievementDAO {
      * @return Progress totals, or {@link UserProfile#empty()} when the email is blank
      * @throws SQLException Database Access Failure
      */
-    public static UserProfile GetProgress(String email) throws SQLException {
+    public UserProfile GetProgress(String email) throws SQLException {
         if (ApplicationManager.isEmpty(email)) {
             return UserProfile.empty();
         }
@@ -300,8 +300,7 @@ public class AchievementDAO {
         );
     }
 
-    private static int CountInt(String sql, String email, int defaultValue) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    private int CountInt(String sql, String email, int defaultValue) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
@@ -312,8 +311,7 @@ public class AchievementDAO {
         }
     }
 
-    private static double CountDouble(String sql, String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    private double CountDouble(String sql, String email) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
@@ -324,8 +322,7 @@ public class AchievementDAO {
         }
     }
 
-    private static int CountIntWithWeek(String sql, String email, String weekStart) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    private int CountIntWithWeek(String sql, String email, String weekStart) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);
             statement.setString(2, weekStart);

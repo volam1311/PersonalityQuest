@@ -2,24 +2,38 @@ package com.example.personalityquest.Services.auth;
 
 import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
+import com.example.personalityquest.Services.ParentService;
 
 import java.sql.SQLException;
 import java.util.Objects;
 
 /** Coordinates account profile updates */
-public class AccountService {
+public class AccountService extends ParentService {
 
+    private AccountDAO AccountDAO;
+
+    public AccountService(){
+        super();
+        this.AccountDAO = new AccountDAO();
+    }
+
+    public AccountService(AccountDAO accountDAO){
+        super();
+        this.AccountDAO = accountDAO;
+    }
     /**
      * updates an account's details through account data service
      * @param emailDetails the new account details
      * @param currentEmail the email address associated with the account
      * @throws SQLException if account details cannot be updated
      */
-    public static void UpdateEmailDetailsForAccount(EmailDetails emailDetails, String currentEmail) throws SQLException {
+    public void UpdateEmailDetailsForAccount(EmailDetails emailDetails, String currentEmail) throws SQLException {
+
+        EmailService emailService = new EmailService();
         /*
          * Does the new email already exist and is the email being updated
          * */
-        if (EmailService.DoesAccountWithEmailExist(emailDetails.getEmail()) && !Objects.equals(currentEmail,emailDetails.getEmail())){
+        if (emailService.DoesAccountWithEmailExist(emailDetails.getEmail()) && !Objects.equals(currentEmail,emailDetails.getEmail())){
             throw new IllegalArgumentException("Email of " + emailDetails.getEmail() + " Already exists");
         }
 

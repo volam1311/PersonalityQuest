@@ -75,6 +75,7 @@ public class ProfileController implements Initializable {
         return labels;
     }
 
+
     @FXML
     private NavBarController navBarController;
     @FXML
@@ -94,12 +95,24 @@ public class ProfileController implements Initializable {
     private double[] radarValues = new double[RADAR_AXIS_COUNT];
     private List<Achievement> achievements = List.of();
 
+    private UserQuestService UserQuestService;
+    private QuestService QuestService;
+    private AchievementService AchievementService;
+    private EmailService EmailService;
+    private UserProfileService UserProfileService;
+    private QuizService QuizService;
     /** Initialises profile controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        AchievementService = new AchievementService();
+        UserQuestService = new UserQuestService();
+        QuestService = new QuestService();
+        EmailService = new EmailService();
+        UserProfileService = new UserProfileService();
+        QuizService = new QuizService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);
         ConfigureAchievementsGrid(DEFAULT_ACHIEVEMENT_COLUMNS);
         LoadProfile();
@@ -164,9 +177,12 @@ public class ProfileController implements Initializable {
 
         try {
             achievements = AchievementService.GetAchievementsForEmail(email);
+            System.out.println(achievements.size());
             PopulateAchievements(achievements);
         } catch (Exception ignored) {
+            ignored.printStackTrace();
             achievements = List.of();
+            System.out.println("True:" + achievements.size());
             PopulateAchievements(List.of());
         }
 
