@@ -66,6 +66,7 @@ public class MainApplication extends Application {
 
             LoginCache loginCache = loginCacheService.GetLoginCache();
 
+            System.out.println(loginCacheService.toString());
             // do we have login details
             if (loginCache.GetEmail().isEmpty()){
                 NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
