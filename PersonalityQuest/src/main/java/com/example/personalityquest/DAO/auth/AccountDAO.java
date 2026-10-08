@@ -1,21 +1,20 @@
 package com.example.personalityquest.DAO.auth;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.SQLite;
-import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.Services.auth.HashingService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 
 /**
  * This DAO is used to retrieve or update data pertaining to the Accounts table
  *
  */
-public class AccountDAO {
+public class AccountDAO extends ParentDAO {
     protected final static String accountExists =
             "SELECT * FROM Accounts WHERE email = ?";
 
@@ -29,19 +28,15 @@ public class AccountDAO {
             """;
 
 
-    private final Connection connection;
 
     public AccountDAO(){
-        connection = SQLite.getConnection();
+        super();
     }
 
-    public AccountDAO(Connection connection){
-        this.connection = connection;
+    public AccountDAO(Connection connection) {
+        super(connection);
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
 
     // EMAIL
     /**

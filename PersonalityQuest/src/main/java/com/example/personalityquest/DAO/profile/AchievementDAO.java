@@ -1,9 +1,9 @@
 package com.example.personalityquest.DAO.profile;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.profile.Achievement;
 import com.example.personalityquest.Model.profile.UserProfile;
-import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * SQLite persistence for achievement definitions, unlocks, and profile progress totals.
  */
-public class AchievementDAO {
+public class AchievementDAO extends ParentDAO {
     private static final String CREATE_ACHIEVEMENTS = """
             CREATE TABLE IF NOT EXISTS Achievements (
                 achievementId INTEGER PRIMARY KEY,
@@ -47,16 +47,12 @@ public class AchievementDAO {
     private Connection connection;
 
 
-    public AchievementDAO() {
-        connection = SQLite.getConnection();
+    public AchievementDAO(){
+        super();
     }
 
     public AchievementDAO(Connection connection) {
-        this.connection = connection;
-    }
-
-    public Connection getConnection(){
-        return connection;
+        super(connection);
     }
     /**
      * Creates the achievement tables when they do not already exist.

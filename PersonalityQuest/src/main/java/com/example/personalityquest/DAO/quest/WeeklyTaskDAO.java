@@ -1,9 +1,9 @@
 package com.example.personalityquest.DAO.quest;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quest.WeeklyTask;
-import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Services.quest.TaskService;
 import com.example.personalityquest.Services.quest.UserQuestService;
 
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 /** Stores and updates each account's weekly task records */
-public class WeeklyTaskDAO {
+public class WeeklyTaskDAO extends ParentDAO {
     private final static int AMOUNT_OF_TASKS = ApplicationManager.TaskConfig.getAmountOfTasks();
 
     private final static int FALLBACK_WEEKLY_LABOUR_ID = 1;
@@ -50,19 +50,13 @@ public class WeeklyTaskDAO {
             """;
 
 
-    private final Connection connection;
     public WeeklyTaskDAO(){
-        connection = SQLite.getConnection();
+        super();
     }
 
-    public WeeklyTaskDAO(Connection connection){
-        this.connection = connection;
+    public WeeklyTaskDAO(Connection connection) {
+        super(connection);
     }
-
-    public Connection getConnection() {
-        return connection;
-    }
-
     /**
      * Gets a Weekly Task for a given taskId, email and weekStart
      * @param email The email of the acccount you want to get the WeeklyTask from

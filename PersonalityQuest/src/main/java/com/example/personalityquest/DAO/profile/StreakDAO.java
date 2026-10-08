@@ -1,20 +1,19 @@
 package com.example.personalityquest.DAO.profile;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.profile.StreakProgress;
-import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 
 /**
  * Provides database operations for account streak progress.
  */
-public class StreakDAO {
+public class StreakDAO extends ParentDAO {
 
     private static final String ENSURE_PROGRESS_ROW = """
             INSERT OR IGNORE INTO UserProgress (accountEmail)
@@ -41,13 +40,12 @@ public class StreakDAO {
             WHERE accountEmail = ?
             """;
 
-    private final Connection connection;
-    public StreakDAO() {
-        connection = SQLite.getConnection();
+    public StreakDAO(){
+        super();
     }
 
-    public StreakDAO(Connection connection){
-        this.connection = connection;
+    public StreakDAO(Connection connection) {
+        super(connection);
     }
 
     /**

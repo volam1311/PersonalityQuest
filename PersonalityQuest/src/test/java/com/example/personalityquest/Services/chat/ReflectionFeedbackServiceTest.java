@@ -5,6 +5,7 @@ import com.example.personalityquest.Model.chat.ReflectionContext;
 import com.example.personalityquest.Services.chat.ChatCompletionClient;
 import com.example.personalityquest.Services.chat.ReflectionFeedbackService;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,9 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReflectionFeedbackServiceTest {
+
+    ReflectionFeedbackService ReflectionFeedbackService;
     @AfterEach
     void tearDown() {
         ReflectionFeedbackService.Reset();
+    }
+
+    @BeforeEach
+    void setUp(){
+        ReflectionFeedbackService = new ReflectionFeedbackService();
     }
 
     @Test

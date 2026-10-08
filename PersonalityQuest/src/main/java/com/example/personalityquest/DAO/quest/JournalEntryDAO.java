@@ -1,14 +1,14 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.JournalEntry;
-import com.example.personalityquest.SQLite;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JournalEntryDAO {
+public class JournalEntryDAO extends ParentDAO {
 
     private static final String CREATE_JOURNAL_TABLE = """
             CREATE TABLE IF NOT EXISTS JournalEntries(
@@ -23,14 +23,16 @@ public class JournalEntryDAO {
             )""";
 
 
-    private Connection connection;
+
     public JournalEntryDAO(){
-        connection = SQLite.getConnection();
+        super();
     }
 
-    public JournalEntryDAO(Connection connection){
-        this.connection = SQLite.getConnection();
+    public JournalEntryDAO(Connection connection) {
+        super(connection);
     }
+
+
     public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_JOURNAL_TABLE);

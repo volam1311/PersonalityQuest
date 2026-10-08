@@ -93,12 +93,14 @@ public class QuestViewerController implements Initializable {
     private TaskService TaskService;
     private  QuestService QuestService;
     private JournalEntryService JournalEntryService;
+    private ReflectionFeedbackService ReflectionFeedbackService;
     @Override
     public void initialize(URL location, ResourceBundle resources){
         TaskService = new TaskService();
         UserQuestService = new UserQuestService();
         QuestService = new QuestService();
         JournalEntryService = new JournalEntryService();
+        ReflectionFeedbackService = new ReflectionFeedbackService();
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUEST_VIEWER);
         UpdateTabLocks();
         SelectTab(Tab.STORYLINE);

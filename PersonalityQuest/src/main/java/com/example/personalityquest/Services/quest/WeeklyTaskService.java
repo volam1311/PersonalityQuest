@@ -20,6 +20,7 @@ import java.time.temporal.TemporalAdjusters;
 public class WeeklyTaskService {
     private final WeeklyTaskDAO WeeklyTaskDAO;
     private EmailService EmailService;
+
     public WeeklyTaskService(){
         WeeklyTaskDAO = new WeeklyTaskDAO();
         EmailService = new EmailService();

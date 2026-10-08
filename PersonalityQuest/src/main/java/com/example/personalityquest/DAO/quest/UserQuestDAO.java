@@ -1,15 +1,15 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.UserQuest;
-import com.example.personalityquest.SQLite;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /** Stores and retrieves each account's storyline quest progress */
-public class UserQuestDAO {
+public class UserQuestDAO extends ParentDAO {
 
     private static final String CREATE_USER_QUESTS = """
             CREATE TABLE IF NOT EXISTS UserQuests (
@@ -24,14 +24,14 @@ public class UserQuestDAO {
             )
             """;
 
-    private Connection connection;
     public UserQuestDAO(){
-        connection = SQLite.getConnection();
+        super();
     }
 
-    public UserQuestDAO(Connection connection){
-        this.connection = connection;
+    public UserQuestDAO(Connection connection) {
+        super(connection);
     }
+
     /** Creates the user quest progress table if it does not already exist
      * @throws SQLException if the table cannot be created
      */

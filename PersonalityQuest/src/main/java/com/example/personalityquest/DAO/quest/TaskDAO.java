@@ -1,14 +1,14 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.Task;
-import com.example.personalityquest.SQLite;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /** Stores and retrieves task catalog records */
-public class TaskDAO {
+public class TaskDAO extends ParentDAO {
     private static final String FIND_TASK_INFO = """
             SELECT * FROM Tasks
             WHERE taskId = ?;
@@ -36,14 +36,14 @@ public class TaskDAO {
             ORDER BY taskId
             """;
 
-    private Connection connection;
     public TaskDAO(){
-        connection = SQLite.getConnection();
+        super();
     }
 
-    public TaskDAO(Connection connection){
-        this.connection = connection;
+    public TaskDAO(Connection connection) {
+        super(connection);
     }
+
     /**
      * Gets a Task from the database that matches the given id
      * @param taskId The taskId you of the Task you want to retrieve

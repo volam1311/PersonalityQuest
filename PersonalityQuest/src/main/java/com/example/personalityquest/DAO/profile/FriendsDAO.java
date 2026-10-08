@@ -1,8 +1,8 @@
 package com.example.personalityquest.DAO.profile;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
-import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Services.auth.EmailService;
 
 import java.sql.Connection;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Stores and retrieves account friendship relationships */
-public class FriendsDAO {
+public class FriendsDAO extends ParentDAO {
     public static final String GET_FRIENDS = """
         SELECT friendsEmail
         FROM Friends
@@ -31,18 +31,12 @@ public class FriendsDAO {
         AND friendsEmail = ?
     """;
 
-
-    private Connection connection;
     public FriendsDAO(){
-        connection = SQLite.getConnection();
+        super();
     }
 
-    public FriendsDAO(Connection connection){
-        this.connection = connection;
-    }
-
-    public Connection getConnection() {
-        return connection;
+    public FriendsDAO(Connection connection) {
+        super(connection);
     }
 
     /** Returns account details for the friends of the supplied account
