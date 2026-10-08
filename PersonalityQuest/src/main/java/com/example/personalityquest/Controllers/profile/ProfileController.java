@@ -172,9 +172,12 @@ public class ProfileController implements Initializable {
 
         try {
             achievements = AchievementService.GetAchievementsForEmail(email);
+            System.out.println(achievements.size());
             PopulateAchievements(achievements);
         } catch (Exception ignored) {
+            ignored.printStackTrace();
             achievements = List.of();
+            System.out.println("True:" + achievements.size());
             PopulateAchievements(List.of());
         }
     }

@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.auth;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.DAO.SQLiteConnection;
 import com.example.personalityquest.Model.auth.User;
 
@@ -12,7 +13,7 @@ import java.sql.Statement;
 /**
  * SQLite persistence for {@link User} against the existing Accounts table.
  */
-public class UserDAO implements IUserDAO {
+public class UserDAO extends ParentDAO implements IUserDAO {
     private static final String CREATE_TABLE = """
             CREATE TABLE IF NOT EXISTS Accounts (
                 email TEXT NOT NULL,
@@ -36,13 +37,12 @@ public class UserDAO implements IUserDAO {
     private static final String SELECT_USER =
             "SELECT rowid AS id, email, userName, firstName, lastName, password FROM Accounts WHERE rowid = ?";
 
-    private final Connection connection;
 
     /**
      * Creates a DAO that uses the shared application database connection.
      */
     public UserDAO() {
-        this(SQLiteConnection.getInstance());
+        super();
     }
 
     /**
@@ -50,8 +50,7 @@ public class UserDAO implements IUserDAO {
      * @param connection The JDBC connection to use
      */
     public UserDAO(Connection connection) {
-        this.connection = connection;
-        createTable();
+        super(connection);
     }
 
     private void createTable() {

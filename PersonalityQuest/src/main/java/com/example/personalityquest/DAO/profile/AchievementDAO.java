@@ -44,7 +44,6 @@ public class AchievementDAO extends ParentDAO {
             )
             """;
 
-    private Connection connection;
 
 
     public AchievementDAO(){
