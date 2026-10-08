@@ -1,0 +1,17 @@
+/* theme-light.css */
+.root {
+    -page-bg: #FAF7F2;
+    -card-bg: #FFFFFF;
+    -raised-bg: #FFFFFF;
+    -border-color: #E7E0D6;
+    -text-primary: #1F1A24;
+    -text-secondary: #625A6C;
+    -purple-text: #5B3A9E;
+    -purple-fill: #5B3A9E;
+    -purple-hover: #4A2E85;
+    -purple-tint: #F0EBF8;
+    -gold-accent: #D29A2E;
+    -gold-tint: #FBF2DE;
+    -purple-glow: rgba(91,58,158,0.22);
+    -icon-outline: #B9B0C9;
+}

@@ -1,97 +1,136 @@
 .page-title {
-    -fx-font-family: Montserrat;
-    -fx-font-size: 30px;
+    -fx-font-family: Marcellus;
+    -fx-font-size: 36px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .page-subtitle {
-    -fx-font-family: Poppins;
-    -fx-font-size: 14px;
-    -fx-text-fill: #c4b5fd;
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 16px;
+    -fx-text-fill: -text-secondary;
 }
 
 .archetype-card {
-    -fx-background-color: linear-gradient(to bottom right, #33275c, #21183c);
-    -fx-background-radius: 14;
-    -fx-border-color: #7650d6;
-    -fx-border-radius: 14;
-    -fx-border-width: 1.5;
+    -fx-background-color: -card-bg;
+    -fx-background-radius: 16;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
     -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(31,26,36,0.06), 16, 0, 0, 6);
 }
 
 .archetype-image-panel {
-    -fx-background-color: linear-gradient(to bottom, #7250c9, #4a347f);
-    -fx-background-radius: 14;
-    -fx-border-color: #b79cff;
-    -fx-border-radius: 14;
-    -fx-border-width: 1.5;
+    /* Flat paper-tone base with a very soft purple glow behind the illustration */
+    -fx-background-color: -purple-tint, radial-gradient(center 50% 42%, radius 65%, -purple-glow, transparent 70%);
+    -fx-background-radius: 16, 16;
+    -fx-background-insets: 0, 0;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
     -fx-border-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(31,26,36,0.06), 16, 0, 0, 6);
 }
 
 .archetype-panel {
-    -fx-background-color: linear-gradient(to bottom right, #33275c, #21183c);
-    -fx-background-radius: 14;
-    -fx-border-color: #7650d6;
-    -fx-border-radius: 14;
-    -fx-border-width: 1.5;
+    -fx-background-color: -card-bg;
+    -fx-background-radius: 16;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
     -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(31,26,36,0.06), 16, 0, 0, 6);
 }
 
 .archetype-detail-panel {
+    -fx-background-color: -card-bg;
+    -fx-background-radius: 16;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(31,26,36,0.06), 16, 0, 0, 6);
+}
+
+/* Lets the detail panel's own content scroll internally instead of stretching the page */
+.detail-panel-scroll,
+.detail-panel-scroll > .viewport {
     -fx-background-color: transparent;
-    -fx-border-color: #7650d6;
-    -fx-border-radius: 14;
-    -fx-border-width: 1.5;
-    -fx-padding: 14;
+}
+
+.detail-panel-scroll {
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.detail-panel-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.detail-panel-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: -purple-text;
+    -fx-background-radius: 6;
+}
+
+.detail-panel-scroll .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
 }
 
 .image-placeholder {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 14px;
-    -fx-text-fill: rgba(255, 255, 255, 0.55);
+    -fx-text-fill: -text-secondary;
 }
 
 .archetype-details {
     -fx-padding: 22;
 }
 
+/* Small gold badge next to the archetype name, instead of coloured text */
 .archetype-rank {
-    -fx-font-family: Montserrat;
-    -fx-font-size: 20px;
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffc400;
+    -fx-background-color: -gold-accent;
+    -fx-background-radius: 999;
+    -fx-padding: 2 10 2 10;
+    -fx-text-fill: #191326;
 }
 
 .archetype-name {
-    -fx-font-family: Montserrat;
-    -fx-font-size: 31px;
+    -fx-font-family: Marcellus;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .section-icon {
     -fx-scale-x: 0.92;
     -fx-scale-y: 0.92;
-    -fx-fill: #e0d2ff;
+    -fx-fill: -purple-text;
 }
 
 .section-heading-label {
-    -fx-font-family: Montserrat;
-    -fx-font-size: 15px;
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #b794ff;
+    -fx-letter-spacing: 0.08em;
+    -fx-text-fill: -text-secondary;
 }
 
 .lore-body {
-    -fx-font-family: Poppins;
-    -fx-font-size: 14px;
-    -fx-text-fill: #f4f0ff;
-    -fx-line-spacing: 2px;
+    -fx-font-family: Alegreya;
+    -fx-font-size: 17px;
+    -fx-text-fill: -text-primary;
+    -fx-line-spacing: 6px;
 }
 
 .strengths-list {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #5eead4;
@@ -107,10 +146,11 @@
 }
 
 .radar-title {
-    -fx-font-family: Montserrat;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #b794ff;
+    -fx-letter-spacing: 0.08em;
+    -fx-text-fill: -text-secondary;
 }
 
 .archetype-selector {
@@ -120,49 +160,71 @@
 .archetype-option-button {
     -fx-pref-width: 9999;
     -fx-min-height: 92px;
-    -fx-background-color: linear-gradient(to right, #30284a, #25203a);
-    -fx-background-radius: 13;
-    -fx-border-color: #4c3c72;
-    -fx-border-radius: 13;
-    -fx-border-width: 1.5;
+    -fx-background-color: -card-bg;
+    -fx-background-radius: 10;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
     -fx-padding: 16;
     -fx-alignment: CENTER_LEFT;
-    -fx-font-family: Montserrat;
-    -fx-font-size: 17px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #d8ccff;
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -text-primary;
     -fx-cursor: hand;
 }
 
 .archetype-option-button:hover {
-    -fx-background-color: #423761;
-    -fx-border-color: #a884ff;
+    -fx-background-color: -purple-tint;
+    -fx-border-color: -purple-text;
 }
 
 .archetype-option-button.selected-archetype {
-    -fx-background-color: #f5aa16;
+    -fx-background-color: -gold-accent;
     -fx-border-color: #ffe79a;
     -fx-text-fill: #191326;
     -fx-effect: dropshadow(gaussian, rgba(255, 170, 22, 0.28), 10, 0.18, 0, 0);
 }
 
+/* Quiet secondary button (Retake quiz): subtle, not a primary action */
 .pill-button-small {
     -fx-min-height: 32px;
     -fx-padding: 4 14 4 14;
-    -fx-background-radius: 16;
-    -fx-background-color: #2d2745;
-    -fx-border-color: #4c3c72;
-    -fx-border-radius: 16;
-    -fx-border-width: 1.5;
-    -fx-text-fill: #e8ddff;
-    -fx-font-family: Poppins;
+    -fx-background-radius: 10;
+    -fx-background-color: transparent;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-text-fill: -text-secondary;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 13px;
-    -fx-font-weight: bold;
+    -fx-font-weight: 500;
     -fx-cursor: hand;
 }
 .pill-button-small:hover {
-    -fx-background-color: #423761;
-    -fx-border-color: #a884ff;
+    -fx-background-color: -purple-tint;
+    -fx-border-color: -purple-text;
+    -fx-text-fill: -purple-text;
+}
+
+/* Primary call-to-action button, e.g. "Read the story" */
+.primary-action-button {
+    -fx-background-color: -purple-fill;
+    -fx-background-radius: 10;
+    -fx-border-width: 0;
+    -fx-text-fill: white;
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+}
+.primary-action-button:hover {
+    -fx-background-color: -purple-hover;
+}
+.primary-action-button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
 }
 
 /* Realm wheel (top-scoring archetype per realm) */
@@ -175,35 +237,57 @@
     -fx-border-insets: 0;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
-    -fx-border-width: 1.5;
-    -fx-border-color: #4c3c72;
-    -fx-background-color: linear-gradient(to bottom right, #30284a, #25203a);
-    -fx-text-fill: #d8ccff;
-    -fx-font-family: Montserrat;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
+    -fx-border-width: 1;
+    -fx-border-color: -border-color;
+    -fx-background-color: -card-bg;
     -fx-text-alignment: center;
     -fx-alignment: CENTER;
     -fx-wrap-text: true;
     -fx-cursor: hand;
     -fx-min-width: 70px;
     -fx-min-height: 70px;
+    -fx-padding: 6;
 }
 
 .realm-quadrant-button:hover {
-    -fx-background-color: #423761;
-    -fx-border-color: #a884ff;
+    -fx-background-color: -purple-tint;
+    -fx-border-color: -purple-text;
 }
 
 .realm-quadrant-button.selected-archetype {
-    -fx-background-color: #f5aa16;
+    -fx-background-color: -gold-accent;
     -fx-border-color: #ffe79a;
-    -fx-text-fill: #191326;
     -fx-effect: dropshadow(gaussian, rgba(255, 170, 22, 0.28), 10, 0.18, 0, 0);
 }
 
 .realm-quadrant-button:disabled {
     -fx-opacity: 0.45;
+}
+
+/* Two-level realm tile text: small eyebrow (realm name) + Marcellus archetype name */
+.realm-tile-eyebrow {
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.1em;
+    -fx-text-fill: -text-secondary;
+    -fx-alignment: center;
+}
+
+.realm-tile-name {
+    -fx-font-family: Marcellus;
+    -fx-font-size: 22px;
+    -fx-text-fill: -text-primary;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.realm-quadrant-button.selected-archetype .realm-tile-eyebrow {
+    -fx-text-fill: rgba(25,19,38,0.65);
+}
+
+.realm-quadrant-button.selected-archetype .realm-tile-name {
+    -fx-text-fill: #191326;
 }
 
 /* Rounder outer corners so the 2x2 grid reads as a single wheel */
@@ -235,9 +319,7 @@
 }
 
 .ranked-list-scroll {
-    -fx-min-height: 170px;
-    -fx-pref-height: 170px;
-    -fx-max-height: 170px;
+    -fx-min-height: 0;
 }
 
 /* Hide the scroll bar visual entirely; the list still scrolls with the mouse wheel. */
@@ -255,25 +337,25 @@
 
 .ranked-archetype-button {
     -fx-min-height: 40px;
-    -fx-background-color: linear-gradient(to right, #30284a, #25203a);
+    -fx-background-color: -card-bg;
     -fx-background-radius: 10;
-    -fx-border-color: #4c3c72;
+    -fx-border-color: -border-color;
     -fx-border-radius: 10;
-    -fx-border-width: 1.5;
+    -fx-border-width: 1;
     -fx-padding: 8 14 8 14;
     -fx-alignment: CENTER_LEFT;
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #d8ccff;
+    -fx-text-fill: -text-primary;
     -fx-cursor: hand;
 }
 
 .ranked-archetype-name {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #d8ccff;
+    -fx-text-fill: -text-primary;
 }
 
 .ranked-archetype-button.selected-archetype .ranked-archetype-name {
@@ -281,10 +363,10 @@
 }
 
 .ranked-archetype-points {
-    -fx-font-family: Poppins;
-    -fx-font-size: 13px;
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #b794ff;
+    -fx-text-fill: -text-secondary;
 }
 
 .ranked-archetype-button.selected-archetype .ranked-archetype-points {
@@ -292,12 +374,20 @@
 }
 
 .ranked-archetype-button:hover {
-    -fx-background-color: #423761;
-    -fx-border-color: #a884ff;
+    -fx-background-color: -purple-tint;
+    -fx-border-color: -purple-text;
+}
+
+/* Rank #1 is always marked with a gold tint + ring, independent of whether it's
+   the currently-selected/viewed archetype (gold fill below takes priority when both apply). */
+.ranked-archetype-button.rank-one {
+    -fx-background-color: -gold-tint;
+    -fx-border-color: -gold-accent;
+    -fx-border-width: 1.5;
 }
 
 .ranked-archetype-button.selected-archetype {
-    -fx-background-color: #f5aa16;
+    -fx-background-color: -gold-accent;
     -fx-border-color: #ffe79a;
     -fx-text-fill: #191326;
 }

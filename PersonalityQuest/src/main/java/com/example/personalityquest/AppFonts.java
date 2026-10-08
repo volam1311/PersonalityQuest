@@ -13,7 +13,14 @@ public final class AppFonts {
             "/com/example/personalityquest/fonts/Poppins-Italic.ttf",
             "/com/example/personalityquest/fonts/Montserrat-Regular.ttf",
             "/com/example/personalityquest/fonts/Montserrat-Bold.ttf",
-            "/com/example/personalityquest/fonts/MaterialSymbolsRounded.ttf"
+            "/com/example/personalityquest/fonts/MaterialSymbolsRounded.ttf",
+            "/com/example/personalityquest/fonts/Marcellus-Regular.ttf",
+            "/com/example/personalityquest/fonts/Alegreya-Regular.ttf",
+            "/com/example/personalityquest/fonts/Alegreya-Italic.ttf",
+            "/com/example/personalityquest/fonts/Alegreya-Bold.ttf",
+            "/com/example/personalityquest/fonts/AlegreyaSans-Regular.ttf",
+            "/com/example/personalityquest/fonts/AlegreyaSans-Medium.ttf",
+            "/com/example/personalityquest/fonts/AlegreyaSans-Bold.ttf"
     };
 
     private static boolean loaded;

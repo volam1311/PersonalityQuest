@@ -1,5 +1,8 @@
 package com.example.personalityquest.Controllers.navigation;
 
+import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.ScreenEnum;
+import com.example.personalityquest.Services.navigation.NavigationService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -7,6 +10,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -46,9 +50,17 @@ public class SettingsController implements Initializable {
 
     @FXML
     private void OnSave() {
-        feedbackLabel.setText("Saved " + GetSelectedColorName() + " / " + GetSelectedLanguageName());
-        System.out.println("Saved settings: colour=" + GetSelectedColorName()
-                + ", language=" + GetSelectedLanguageName());
+        ApplicationManager.ThemeSettings.Theme theme = backgroundColorGroup.getSelectedToggle() == colorLightButton
+                ? ApplicationManager.ThemeSettings.Theme.LIGHT
+                : ApplicationManager.ThemeSettings.Theme.DARK;
+        ApplicationManager.ThemeSettings.setCurrentTheme(theme);
+
+        try {
+            NavigationService.LoadScreen(ScreenEnum.SETTINGS);
+        } catch (IOException exception) {
+            feedbackLabel.setText("Saved, but could not refresh the screen.");
+            return;
+        }
     }
 
     @FXML

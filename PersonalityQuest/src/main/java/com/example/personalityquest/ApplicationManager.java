@@ -59,6 +59,35 @@ public class ApplicationManager {
         }
     }
 
+    public static class ThemeSettings {
+        public enum Theme {DARK, LIGHT}
+
+        private static Theme currentTheme = Theme.DARK;
+
+        /**
+         * Returns the active theme
+         * @return the current theme
+         */
+
+        public static Theme getCurrentTheme(){
+            return currentTheme;
+        }
+
+        /** Sets the active theme
+         * @param theme the theme to switch to
+         */
+        public static void setCurrentTheme(Theme theme){
+            currentTheme = theme;
+        }
+
+        /** Returns the CSS file name for the active theme
+         * @return the theme stylesheet's file name
+         */
+        public static String getStylesheetName(){
+            return currentTheme == Theme.LIGHT ? "theme-light.css" : "theme-dark.css";
+        }
+    }
+
     /**
      * Checks to see if a given string is null or empty
      * @param value the string you want to check

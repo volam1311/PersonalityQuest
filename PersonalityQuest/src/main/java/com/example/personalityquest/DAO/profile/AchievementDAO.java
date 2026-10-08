@@ -210,6 +210,37 @@ public class AchievementDAO {
     }
 
     /**
+     * @param email The account to look up
+     * @param limit The maximum number of ids to return
+     * @return Achievement ids this account has unlocked, most recently unlocked first
+     * @throws SQLException Database Access Failure
+     */
+    public static List<Integer> GetRecentlyUnlockedIds(String email, int limit) throws SQLException {
+        EnsureTables();
+        List<Integer> recentIds = new ArrayList<>();
+        if (ApplicationManager.isEmpty(email)) {
+            return recentIds;
+        }
+
+        Connection connection = SQLite.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    SELECT achievementId FROM UserAchievements
+                    WHERE accountEmail = ?
+                    ORDER BY unlockedAt DESC, achievementId DESC
+                    LIMIT ?
+                    """)) {
+            statement.setString(1, email);
+            statement.setInt(2, limit);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                recentIds.add(rs.getInt("achievementId"));
+            }
+        }
+        return recentIds;
+    }
+
+    /**
      * Loads streak, quest, and weekly-task totals for an account from the database.
      * @param email The account email
      * @return Progress totals, or {@link UserProfile#empty()} when the email is blank

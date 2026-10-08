@@ -1,6 +1,8 @@
 .material-symbol {
-    -fx-fill: #c4a7ff;
+    -fx-fill: -purple-text;
+    -fx-text-fill: -purple-text;
     -fx-translate-y: 2px;
+    -fx-font-size: 20px;
 }
 
 .nav-button .material-symbol,
@@ -13,12 +15,14 @@
 }
 
 .dashboard-root {
-    -fx-background-color: #050505;
-    -fx-font-family: Poppins;
+    -fx-background-color: -page-bg;
+    -fx-font-family: "Alegreya Sans";
 }
 
 .sidebar {
-    -fx-background-color: #191919;
+    -fx-background-color: -card-bg;
+    -fx-border-color: -border-color;
+    -fx-border-width: 0 1 0 0;
     -fx-padding: 14 12 14 12;
     -fx-pref-width: 250;
     -fx-min-width: 250;
@@ -36,10 +40,10 @@
 }
 
 .brand-label {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .menu-button,
@@ -86,18 +90,18 @@
     -fx-max-width: 9999;
     -fx-min-height: 44px;
     -fx-alignment: CENTER_LEFT;
-    -fx-background-color: #2d2745;
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 9;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 16px;
-    -fx-font-weight: bold;
+    -fx-font-weight: 500;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-content-display: GRAPHIC_ONLY;
-    -fx-text-fill: #a884ff;
+    -fx-text-fill: -text-secondary;
     -fx-padding: 0 12 0 12;
     -fx-cursor: hand;
 }
@@ -116,10 +120,10 @@
 }
 
 .nav-label {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #a884ff;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-primary;
 }
 
 .nav-button:hover,
@@ -131,7 +135,7 @@
 .nav-button.selected-nav-button,
 .nav-button.selected-nav-button:hover,
 .nav-button.selected-nav-button:focused {
-    -fx-background-color: #9a72ff;
+    -fx-background-color: -gold-accent;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
@@ -149,12 +153,14 @@
 
 .nav-button.nav-flash .material-symbol {
     -fx-fill: #140e25;
+    -fx-text-fill: #140e25;
 }
 
 .nav-button.selected-nav-button .material-symbol,
 .profile-button.selected-nav-button .material-symbol,
 .profile-button.selected-nav-button .material-symbol {
     -fx-fill: #140e25;
+    -fx-text-fill: #140e25;
 }
 
 .nav-button.selected-nav-button .nav-label,
@@ -165,7 +171,7 @@
 .profile-button.selected-nav-button,
 .profile-button.selected-nav-button:hover,
 .profile-button.selected-nav-button:focused {
-    -fx-background-color: #9a72ff;
+    -fx-background-color: -gold-accent;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
@@ -187,13 +193,13 @@
 .settings-button {
     -fx-background-color: #2d2745;
     -fx-background-radius: 9;
-    -fx-text-fill: #a884ff;
+    -fx-text-fill: -text-secondary;
 }
 
 .settings-button.selected-settings-button,
 .settings-button.selected-settings-button:hover,
 .settings-button.selected-settings-button:focused {
-    -fx-background-color: #9a72ff;
+    -fx-background-color: -gold-accent;
 }
 
 .settings-button.selected-settings-button .material-symbol {
@@ -215,7 +221,7 @@
 
 .content-scroll,
 .content-scroll > .viewport {
-    -fx-background-color: #050505;
+    -fx-background-color: -page-bg;
 }
 
 .content-scroll > .scroll-bar:vertical {
@@ -224,20 +230,20 @@
 }
 
 .content-scroll > .scroll-bar:vertical .thumb {
-    -fx-background-color: #ffffff;
+    -fx-background-color: -text-secondary;
     -fx-background-radius: 8;
 }
 
 
 .content-container {
-    -fx-background-color: #050505;
+    -fx-background-color: -page-bg;
 }
 
 .welcome-label {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .streak-badge {
@@ -254,19 +260,20 @@
 }
 
 .streak-text {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
 }
 
 .card {
-    -fx-background-color: #1a1a1a;
-    -fx-background-radius: 10;
-    -fx-border-color: #8c5dff;
-    -fx-border-radius: 10;
-    -fx-border-width: 1.5;
+    -fx-background-color: -card-bg;
+    -fx-background-radius: 16;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
     -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(31,26,36,0.06), 16, 0, 0, 6);
 }
 
 .quest-card {
@@ -275,28 +282,44 @@
 }
 
 #questCard {
-    -fx-background-color: #1a1a1a;
-    -fx-background-radius: 10;
-    -fx-border-color: #8c5dff;
-    -fx-border-radius: 10;
-    -fx-border-width: 1.5;
+    -fx-background-color: -card-bg;
+    -fx-background-radius: 16;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
     -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(31,26,36,0.06), 16, 0, 0, 6);
 }
 
 .card-title {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
+    -fx-font-size: 20px;
+    -fx-font-weight: normal;
+    -fx-text-fill: -text-primary;
+}
+
+.card-title-lg {
+    -fx-font-family: Marcellus;
     -fx-font-size: 24px;
     -fx-font-weight: 900;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
+}
+
+/* "{emoji} {Archetype Name}" header above the overview/value text on the home screen */
+.archetype-overview-header {
+    -fx-font-family: Marcellus;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -purple-text;
 }
 
 #dailiesTitle,
 #tasksTitle,
 #progressTitle {
-    -fx-font-family: Montserrat;
-    -fx-font-size: 24px;
-    -fx-font-weight: 900;
-    -fx-text-fill: #ffffff;
+    -fx-font-family: Marcellus;
+    -fx-font-size: 20px;
+    -fx-font-weight: normal;
+    -fx-text-fill: -text-primary;
 }
 
 .centered-title {
@@ -308,13 +331,15 @@
 .quest-divider {
     -fx-font-size: 17px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .quest-description {
-    -fx-font-size: 16px;
+    -fx-font-family: Alegreya;
+    -fx-font-size: 19px;
     -fx-font-weight: normal;
-    -fx-text-fill: #ffffff;
+    -fx-line-spacing: 8px;
+    -fx-text-fill: -text-primary;
     -fx-text-alignment: LEFT;
 }
 
@@ -338,7 +363,7 @@
 .progress-label {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .progress-bar {
@@ -367,8 +392,8 @@
 }
 
 .progress-chart .axis {
-    -fx-tick-label-fill: #ffffff;
-    -fx-font-family: Poppins;
+    -fx-tick-label-fill: -text-primary;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
@@ -401,7 +426,7 @@
 }
 
 .task-list .list-cell:filled {
-    -fx-background-color: #2d2745;
+    -fx-background-color: transparent;
 }
 
 .task-list .list-cell:empty {
@@ -411,7 +436,7 @@
 
 .task-list .list-cell:filled:selected,
 .task-list .list-cell:filled:hover {
-    -fx-background-color: #403460;
+    -fx-background-color: -purple-tint;
 }
 
 .task-list .scroll-bar:vertical {
@@ -430,6 +455,46 @@
     -fx-padding: 0;
 }
 
+/* Unlocks card: clickable summary rows linking to Journal/Profile screens */
+.unlock-row {
+    -fx-cursor: hand;
+    -fx-padding: 6 8 6 8;
+    -fx-background-radius: 8;
+}
+
+.unlock-row:hover {
+    -fx-background-color: -purple-tint;
+}
+
+.unlock-count {
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -purple-text;
+}
+
+/* Unlocks card: small icons for the most recently unlocked achievements */
+.mini-achievement-icon-holder {
+    -fx-min-width: 40px;
+    -fx-pref-width: 40px;
+    -fx-max-width: 40px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+    -fx-max-height: 40px;
+    -fx-alignment: CENTER;
+    -fx-cursor: hand;
+}
+
+.mini-achievement-icon-holder.locked {
+    -fx-opacity: 0.35;
+}
+
+.mini-achievement-fallback-icon {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-fill: -purple-text;
+}
+
 .task-row {
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 2 0 2 0;
@@ -438,7 +503,7 @@
 .task-row .label {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #aa86ff;
+    -fx-text-fill: -text-secondary;
 }
 
 .task-row .check-box {

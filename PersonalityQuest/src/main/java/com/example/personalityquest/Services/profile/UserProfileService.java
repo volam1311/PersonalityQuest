@@ -41,6 +41,22 @@ public class UserProfileService {
     }
 
     /**
+     * Returns the account's username, falling back to {@link #DEFAULT_DISPLAY_NAME} when blank.
+     */
+    public static String Username(EmailDetails details) {
+        if (details == null) {
+            return DEFAULT_DISPLAY_NAME;
+        }
+
+        String userName = SafeTrim(details.getUserName());
+        if (!userName.isEmpty()) {
+            return userName;
+        }
+
+        return DEFAULT_DISPLAY_NAME;
+    }
+
+    /**
      * Formats an archetype for display, adding "The" when it is missing.
      */
     public static String FormatArchetypeName(String name) {

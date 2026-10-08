@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.navigation.DashboardController">
+<BorderPane fx:id="dashboardRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css, @css/tasks.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.navigation.DashboardController">
     <left>
         <fx:include fx:id="navBar" source="NavBar.fxml" />
     </left>
@@ -37,7 +37,7 @@
                         </HBox>
                     </HBox>
 
-                    <!-- Placeholder 2x3 home layout: boxes reused directly from the Profile and Quest screens -->
+                    <!-- 3-column home layout: boxes reused directly from the Profile and Quest screens -->
                     <GridPane fx:id="homeGrid" hgap="12" vgap="12" VBox.vgrow="ALWAYS" maxHeight="Infinity" maxWidth="Infinity" minHeight="0" minWidth="0">
                         <columnConstraints>
                             <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
@@ -49,24 +49,78 @@
                             <RowConstraints percentHeight="50" vgrow="ALWAYS" />
                         </rowConstraints>
 
-                        <!-- Row 1, Col 1: Archetype Balance (copied from Profile.fxml progressCard) -->
-                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" minWidth="0" minHeight="0"
-                              GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label id="progressTitle" styleClass="card-title centered-title" text="Archetype Balance" />
-                            <Canvas fx:id="progressChart" height="280" width="480" />
+                        <!-- Col 1, Rows 1-2: Your #1 archetype at a glance (replaces the old Archetype
+                             Balance radar chart; takes the same tall column the stats card used to use) -->
+                        <VBox fx:id="progressCard" alignment="TOP_LEFT" spacing="10" styleClass="card" minWidth="0" minHeight="0"
+                              GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.rowSpan="2">
+                            <Label fx:id="topArchetypeHeaderLabel" styleClass="archetype-overview-header" text="Take the quiz to discover your archetype" wrapText="true" />
+                            <VBox spacing="3">
+                                <Label styleClass="section-label" text="Overview" />
+                                <Label fx:id="topArchetypeOverviewLabel" styleClass="lore-body" wrapText="true" text="" />
+                            </VBox>
+                            <VBox spacing="3">
+                                <Label styleClass="section-label" text="Value" />
+                                <Label fx:id="topArchetypeValueLabel" styleClass="lore-body" wrapText="true" text="" />
+                            </VBox>
+                            <VBox spacing="3">
+                                <Label styleClass="section-label" text="Strengths" />
+                                <Label fx:id="topArchetypeStrengthsLabel" styleClass="lore-body" wrapText="true" text="" />
+                            </VBox>
+                            <VBox spacing="3">
+                                <Label styleClass="section-label" text="Weaknesses" />
+                                <Label fx:id="topArchetypeWeaknessesLabel" styleClass="lore-body" wrapText="true" text="" />
+                            </VBox>
                         </VBox>
 
-                        <!-- Row 1, Col 2: Why this labour (copied from Quest.fxml traitCard) -->
-                        <VBox fx:id="traitCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <!-- Col 2, Row 1: Your quests (copied from Quest.fxml historyCard) -->
+                        <VBox fx:id="historyCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label styleClass="card-title" text="Your quests" />
+                            <Label styleClass="page-subtitle" text="Select a quest to read its story." />
+                            <ListView fx:id="questHistory" focusTraversable="false" prefHeight="280" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        </VBox>
+
+                        <!-- Col 2, Row 2: Why this labour (copied from Quest.fxml traitCard) -->
+                        <VBox fx:id="traitCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <Label styleClass="card-title" text="Why this labour" />
-                            <Label styleClass="section-label" text="Trait focus" />
+                            <Label styleClass="section-label" text="Theme" />
                             <Label fx:id="traitLabel" styleClass="lore-body" wrapText="true" text="—" />
-                            <Label styleClass="section-label" text="Reflection" />
-                            <Label fx:id="reflectionPromptLabel" styleClass="lore-body" wrapText="true" text="—" />
                         </VBox>
 
-                        <!-- Row 1 and 2, Col 3: Three thermometers (vertical progress bars) -->
+                        <!-- Col 3, Row 1: Weekly Tasks (tick-box list) -->
+                        <VBox fx:id="weeklyTasksCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label styleClass="card-title" text="Weekly Tasks" />
+                            <ListView fx:id="weeklyTasksList" focusTraversable="false" onMouseClicked="#OnWeeklyTaskClick" styleClass="task-list" VBox.vgrow="ALWAYS" />
+                        </VBox>
+
+                        <!-- Col 3, Row 2: Unlocks (reflection/challenge/achievement progress + recent badges) -->
+                        <VBox fx:id="unlocksCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label styleClass="card-title" text="Unlocks" />
+
+                            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="unlock-row" onMouseClicked="#OnReflectionsUnlockClick">
+                                <Label styleClass="history-name" text="Reflections" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="reflectionsUnlockCountLabel" styleClass="unlock-count" text="0 / 0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="unlock-row" onMouseClicked="#OnChallengesUnlockClick">
+                                <Label styleClass="history-name" text="Challenges" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="challengesUnlockCountLabel" styleClass="unlock-count" text="0 / 0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="unlock-row" onMouseClicked="#OnProfileUnlockClick">
+                                <Label styleClass="history-name" text="Profile" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="profileUnlockCountLabel" styleClass="unlock-count" text="0 / 0" />
+                            </HBox>
+
+                            <HBox fx:id="recentAchievementsRow" alignment="CENTER_LEFT" spacing="10" />
+                        </VBox>
+
+                        <!-- Three thermometers (vertical progress bars): hidden for now, not deleted,
+                             so the code can be reused later. Overlaps col 3 harmlessly since it's unmanaged. -->
                         <VBox fx:id="verticalProgressCard" alignment="CENTER" spacing="10" styleClass="card" minWidth="0" minHeight="0"
+                              visible="false" managed="false"
                               GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.rowSpan="2">
                             <Label styleClass="card-title centered-title" text="Progress" />
                             <HBox fx:id="thermometerRow" alignment="CENTER" spacing="12" VBox.vgrow="ALWAYS" minHeight="0">
@@ -89,19 +143,6 @@
                                     <Region VBox.vgrow="ALWAYS" />
                                 </VBox>
                             </HBox>
-                        </VBox>
-
-                        <!-- Row 2, Col 1: Your quests (copied from Quest.fxml historyCard) -->
-                        <VBox fx:id="historyCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                            <Label styleClass="card-title" text="Your quests" />
-                            <Label styleClass="page-subtitle" text="Select a quest to read its story." />
-                            <ListView fx:id="questHistory" focusTraversable="false" prefHeight="280" styleClass="task-list" VBox.vgrow="ALWAYS" />
-                        </VBox>
-
-                        <!-- Row 2, Col 2: Weekly Tasks (tick-box list) -->
-                        <VBox fx:id="weeklyTasksCard" spacing="10" styleClass="card" minWidth="0" minHeight="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <Label styleClass="card-title" text="Weekly Tasks" />
-                            <ListView fx:id="weeklyTasksList" focusTraversable="false" onMouseClicked="#OnWeeklyTaskClick" styleClass="task-list" VBox.vgrow="ALWAYS" />
                         </VBox>
                     </GridPane>
                 </VBox>

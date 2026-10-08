@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEHEIGHT;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEWIDTH;
+
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Applications.auth.UpdateAccountPersonalDetailsApplication;
 import com.example.personalityquest.ScreenEnum;
 
@@ -33,6 +35,8 @@ public class NavigationService {
 
         FXMLLoader fxmlLoader = new FXMLLoader(UpdateAccountPersonalDetailsApplication.class.getResource(fxmlString));
         Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
+        scene.getStylesheets().add(UpdateAccountPersonalDetailsApplication.class.getResource(
+                fxmlPrefix + "css/" + ApplicationManager.ThemeSettings.getStylesheetName()).toExternalForm());
         stage.setTitle(TitleFor(screen));
         stage.setScene(scene);
         stage.show();

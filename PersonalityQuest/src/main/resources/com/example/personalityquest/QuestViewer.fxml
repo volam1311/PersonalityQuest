@@ -20,7 +20,8 @@
     </left>
 
     <center>
-        <GridPane fx:id="questViewerGrid" vgap="16">
+        <StackPane>
+        <GridPane fx:id="questViewerGrid" vgap="16" visible="false" managed="false">
             <padding>
                 <Insets bottom="24" left="24" right="24" top="24" />
             </padding>
@@ -107,5 +108,24 @@
                 </VBox>
             </StackPane>
         </GridPane>
+
+        <!-- Shown every time the Quest Viewer is opened, in place of the storyline, until the
+             user clicks "Start Quest". A simple fixed-size card, centered both ways in the stack. -->
+        <VBox fx:id="questIntroOverlay" alignment="CENTER" maxWidth="560" prefWidth="560" spacing="14" styleClass="card quest-intro-card" StackPane.alignment="CENTER">
+            <Label fx:id="introQuestNameLabel" styleClass="quest-intro-name" text="—" textAlignment="CENTER" wrapText="true" />
+
+            <VBox alignment="CENTER" spacing="4">
+                <Label styleClass="quest-intro-archetype" text="Theme" />
+                <Label fx:id="introThemeLabel" styleClass="lore-body" text="—" textAlignment="CENTER" wrapText="true" />
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="4">
+                <Label styleClass="quest-intro-archetype" text="Growth" />
+                <Label fx:id="introGrowthLabel" styleClass="lore-body" text="—" textAlignment="CENTER" wrapText="true" />
+            </VBox>
+
+            <Button fx:id="startQuestButton" maxWidth="360" mnemonicParsing="false" onAction="#OnStartQuest" styleClass="pill-button, quest-intro-start-button" text="Start Quest" />
+        </VBox>
+        </StackPane>
     </center>
 </BorderPane>

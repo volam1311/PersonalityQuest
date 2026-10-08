@@ -11,7 +11,9 @@ public enum Archetype {
             "Ego",
             "Innocent",
             "You approach life with optimism, simplicity, and trust in others.",
-            "Filler",
+            "The Innocent believes the world can still be good, and acts as if that belief is worth protecting. "
+                    + "That isn't a failure to see the dark — it's a choice to keep faith anyway: trusting without "
+                    + "becoming naive, and staying open without hardening into cynicism when the world disappoints.",
             "Positive, honest, hopeful, and able to make others feel safe.",
             "Can be overly trusting, avoid difficult realities, or appear naive.",
             "Faith",
@@ -28,7 +30,9 @@ public enum Archetype {
             "Ego",
             "Everyman",
             "You value belonging, fairness, and building genuine connections with others.",
-            "Filler",
+            "The Everyman finds dignity in ordinary life and connection in shared experience. Their gift is making "
+                    + "people feel like they belong — not by standing apart as an elite, and not by dissolving into "
+                    + "the crowd without a voice of their own, but by meeting others as equals.",
             "Approachable, dependable, cooperative, and good at bringing people together.",
             "Can suppress individuality, fear standing out, or follow the group too readily.",
             "Solidarity",
@@ -45,7 +49,9 @@ public enum Archetype {
             "Ego",
             "Hero",
             "You meet challenges directly and aim to prove yourself through courageous action.",
-            "Filler",
+            "The Hero steps forward when something needs to be done, even when the outcome is uncertain. Courage, "
+                    + "for them, isn't the absence of fear but the refusal to let it decide everything — holding the "
+                    + "line between cowardice, which lets fear choose for you, and recklessness, which ignores it altogether.",
             "Brave, determined, disciplined, and able to inspire others.",
             "Can become overly competitive, arrogant, or focused on winning at any cost.",
             "Courage",
@@ -63,7 +69,9 @@ public enum Archetype {
             "Soul",
             "Caregiver",
             "You protect and support others, especially when they are facing hardship.",
-            "Filler",
+            "The Caregiver shows love through action — showing up, tending wounds, and carrying what others can't "
+                    + "carry alone. Their challenge is finding the line between care and self-erasure: present "
+                    + "without disappearing into others' needs, and supportive without smothering the independence it's meant to protect.",
             "Compassionate, generous, patient, and dependable.",
             "Can neglect personal needs, become overprotective, or feel taken for granted.",
             "Compassion",
@@ -80,7 +88,9 @@ public enum Archetype {
             "Soul",
             "Magician",
             "You transform ideas and perspectives to make meaningful change possible.",
-            "Filler",
+            "The Magician sees the hidden mechanics behind things and uses that understanding to make real change "
+                    + "happen. Vision is their gift, but it has to stay honest — grounded enough to resist rigidity "
+                    + "when the old ways stop working, and restrained enough to avoid bending people and truth for their own ends.",
             "Visionary, imaginative, persuasive, and skilled at creating transformation.",
             "Can become manipulative, unrealistic, or overly secretive.",
             "Vision",
@@ -97,7 +107,9 @@ public enum Archetype {
             "Soul",
             "Sage",
             "You seek truth, knowledge, and a deeper understanding of how things work.",
-            "Filler",
+            "The Sage is driven by the need to understand — to look past the surface of things until the truth "
+                    + "becomes clear. Wisdom means questioning carefully rather than believing too easily, and "
+                    + "staying curious without retreating so far into thought that understanding never becomes action.",
             "Intelligent, thoughtful, analytical, and able to provide useful insight.",
             "Can overthink decisions, appear emotionally distant, or delay action.",
             "Wisdom",
@@ -115,7 +127,9 @@ public enum Archetype {
             "Self",
             "Lover",
             "You value emotional connection, honesty, beauty, and meaningful relationships.",
-            "Filler",
+            "The Lover moves through the world led by feeling — drawn to beauty, intimacy, and the people they care "
+                    + "about most. Passion held with integrity means staying open enough to resist going numb, "
+                    + "but disciplined enough not to chase every desire at others' expense.",
             "Passionate, empathetic, loyal, and attentive to others.",
             "Can become dependent, jealous, overly emotional, or afraid of rejection.",
             "Passion",
@@ -132,7 +146,9 @@ public enum Archetype {
             "Self",
             "Jester",
             "You use humour, playfulness, and creativity to bring joy and challenge stale thinking.",
-            "Filler",
+            "The Jester knows laughter can hold truths a serious face never could. Their lightness is a skill, not "
+                    + "an escape — bringing joy and perspective to hard moments without going so flat that nothing "
+                    + "lands, and never trading someone else's dignity for a laugh.",
             "Funny, energetic, spontaneous, and able to lighten difficult situations.",
             "Can avoid serious responsibilities, become insensitive, or use humour defensively.",
             "Witty",
@@ -149,7 +165,9 @@ public enum Archetype {
             "Self",
             "Explorer",
             "You seek freedom, discovery, and new experiences beyond familiar boundaries.",
-            "Filler",
+            "The Explorer is happiest with a horizon still to cross, pulled forward by the belief that there's "
+                    + "always something worth discovering. That curiosity has to be tempered — awake enough to "
+                    + "resist settling for comfort, but grounded enough to actually arrive somewhere instead of forever chasing what's next.",
             "Independent, adventurous, curious, and willing to try new paths.",
             "Can become restless, unreliable, or dissatisfied with stability.",
             "Curiosity",
@@ -167,7 +185,9 @@ public enum Archetype {
             "Mark",
             "Creator",
             "You turn original ideas into meaningful work and express yourself through what you build.",
-            "Filler",
+            "The Creator turns what's only imagined into something real, shaped with care until it holds together. "
+                    + "Their work lives between two failures: never starting at all, and starting everything but "
+                    + "finishing nothing — ideas that stay dreams instead of becoming things.",
             "Creative, innovative, expressive, and committed to producing high-quality work.",
             "Can become perfectionistic, impractical, self-critical, or afraid to finish.",
             "Craftiness",
@@ -184,7 +204,9 @@ public enum Archetype {
             "Mark",
             "Ruler",
             "You create order, accept responsibility, and guide others towards shared goals.",
-            "Filler",
+            "The Ruler steps up to bring order where things would otherwise fall apart, and carries that "
+                    + "responsibility seriously. Real leadership stays accountable to the people it serves — firm "
+                    + "enough to prevent chaos, but never so controlling that authority becomes its own reward.",
             "Confident, organised, responsible, and effective at leadership and delegation.",
             "Can become controlling, authoritarian, inflexible, or overly concerned with status.",
             "Order",
@@ -201,7 +223,9 @@ public enum Archetype {
             "Mark",
             "Outlaw",
             "You challenge unfair systems and reject rules that prevent meaningful change.",
-            "Filler",
+            "The Outlaw refuses to accept that \"this is just how things are\" when the way things are isn't "
+                    + "working. Their defiance is meant to free people, not just tear things down — pushing back "
+                    + "hard enough to resist quiet submission, while staying focused enough that it doesn't collapse into vengeance for its own sake.",
             "Bold, independent, disruptive, and courageous enough to question authority.",
             "Can become destructive, reckless, confrontational, or rebellious without purpose.",
             "Liberation",

@@ -1,40 +1,49 @@
 .page-title {
-    -fx-font-family: Montserrat;
-    -fx-font-size: 28px;
+    -fx-font-family: Marcellus;
+    -fx-font-size: 36px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .page-subtitle {
-    -fx-font-family: Poppins;
-    -fx-font-size: 15px;
-    -fx-text-fill: #c4b5fd;
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 16px;
+    -fx-text-fill: -text-secondary;
 }
 
 .section-label {
-    -fx-font-family: Poppins;
-    -fx-font-size: 14px;
+    -fx-font-family: "Alegreya Sans";
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #a884ff;
+    -fx-letter-spacing: 0.08em;
 }
 
 .quest-meta {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e8ddff;
+    -fx-text-fill: -text-secondary;
 }
 
-.quest-story,
-.lore-body {
-    -fx-font-family: Poppins;
-    -fx-font-size: 15px;
+/* Fixed-background green quest banner card - text stays fixed off-white since the banner never changes with theme */
+.quest-story {
+    -fx-font-family: Alegreya;
+    -fx-font-size: 19px;
     -fx-text-fill: #f4f0ff;
-    -fx-line-spacing: 3px;
+    -fx-line-spacing: 8px;
+}
+
+/* Sits on the theme-adaptive .card surface - text must adapt too */
+.lore-body {
+    -fx-font-family: Alegreya;
+    -fx-font-size: 19px;
+    -fx-text-fill: -text-primary;
+    -fx-line-spacing: 8px;
 }
 
 .status-chip {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #140e25;
@@ -67,29 +76,29 @@
 
 .history-name,
 .labour-task-name {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #aa86ff;
+    -fx-text-fill: -purple-text;
 }
 
 .history-detail,
 .labour-task-detail {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 13px;
-    -fx-text-fill: #c4b5fd;
+    -fx-text-fill: -text-secondary;
 }
 
 .task-list .list-cell:filled:selected .history-name,
 .task-list .list-cell:filled:selected .labour-task-name,
 .task-list .list-cell:filled:selected .history-detail,
 .task-list .list-cell:filled:selected .labour-task-detail {
-    -fx-text-fill: #e8ddff;
+    -fx-text-fill: -purple-text;
 }
 
 .task-list .placeholder .label {
-    -fx-font-family: Poppins;
-    -fx-text-fill: #c4b5fd;
+    -fx-font-family: "Alegreya Sans";
+    -fx-text-fill: -text-secondary;
 }
 
 .viewer-tab-bar {
@@ -101,9 +110,9 @@
     -fx-background-radius: 9;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-font-family: Poppins;
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
     -fx-text-fill: #a884ff;
     -fx-padding: 10 18 10 18;
     -fx-cursor: hand;
@@ -116,7 +125,7 @@
 .viewer-tab-button.selected-viewer-tab,
 .viewer-tab-button.selected-viewer-tab:hover,
 .viewer-tab-button.selected-viewer-tab:focused {
-    -fx-background-color: #9a72ff;
+    -fx-background-color: -gold-accent;
     -fx-text-fill: #140e25;
 }
 
@@ -126,7 +135,9 @@
 }
 
 .storyline-description {
+    -fx-font-family: Alegreya;
     -fx-font-size: 19px;
+    -fx-line-spacing: 8px;
 }
 
 .resolution-card {
@@ -144,8 +155,38 @@
 }
 
 .labour-task-title {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
+}
+
+/* Quest Viewer "cover page": shown every time the screen opens, in place of the storyline,
+   until "Start Quest" is clicked. Sized in the controller to match the available area's ratio. */
+.quest-intro-card {
+    -fx-padding: 40;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(31,26,36,0.18), 28, 0, 0, 10);
+}
+
+.quest-intro-start-button {
+    -fx-min-height: 58px;
+    -fx-pref-height: 58px;
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 40 0 40;
+}
+
+.quest-intro-name {
+    -fx-font-family: Marcellus;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+}
+
+.quest-intro-archetype {
+    -fx-font-family: "Alegreya Sans";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -purple-text;
 }

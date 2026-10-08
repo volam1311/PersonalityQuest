@@ -9,10 +9,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<BorderPane fx:id="profileRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/profile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.profile.ProfileController">
+<BorderPane fx:id="profileRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css, @css/profile.css, @css/archetype.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.profile.ProfileController">
     <left>
         <fx:include fx:id="navBar" source="NavBar.fxml" />
     </left>
@@ -28,8 +29,6 @@
                     <HBox alignment="CENTER_LEFT" spacing="20" styleClass="card profile-header">
                         <VBox spacing="4">
                             <Label fx:id="displayNameLabel" styleClass="profile-name" text="Adventurer" />
-                            <Label fx:id="personalityTypeLabel" styleClass="profile-type" text="—" />
-                            <Button fx:id="archetypeLink" mnemonicParsing="false" onAction="#OnArchetypeClick" styleClass="archetype-link" text="Unassigned (Click to view)" />
                         </VBox>
                     </HBox>
 
@@ -39,18 +38,32 @@
                             <ColumnConstraints hgrow="ALWAYS" percentWidth="68" />
                         </columnConstraints>
 
-                        <VBox fx:id="identityCard" spacing="12" styleClass="identity-stack" GridPane.columnIndex="0">
-                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="identity-badge streak-identity" VBox.vgrow="ALWAYS">
+                        <!-- Stats: streak banner, Reflections/Challenges progress, and the archetype link -->
+                        <VBox fx:id="identityCard" spacing="10" styleClass="card" GridPane.columnIndex="0">
+                            <HBox alignment="CENTER_LEFT" spacing="8" maxWidth="Infinity" styleClass="streak-badge">
                                 <SVGPath styleClass="material-symbol streak-icon" style="-fx-fill: #ffffff;" content="M13.5 .67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.03 0-3.58-1.64-3.58-3.67l.03-.43C5.21 7.48 3 10.2 3 13.5 3 18.19 6.81 22 11.5 22S20 18.19 20 13.5c0-5.06-3.41-9.31-6.5-12.83zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.72 1.11-2.99 2.94-4.1-.02.11-.03.23-.03.35 0 .98-.08.8-.08-.8 1.78 1.7 2.87 3.48 2.87 4.84 0 1.6-1.34 2.9-3 2.9z" />
-                                <Label fx:id="streakLabel" styleClass="identity-badge-text" text="Week 0" />
+                                <Label fx:id="streakLabel" styleClass="streak-text" text="Week 0" />
                             </HBox>
-                            <Button fx:id="archetypeBadge" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnArchetypeClick" styleClass="identity-badge archetype-identity" text="Unassigned" VBox.vgrow="ALWAYS" />
-                            <Label fx:id="typeBadge" maxWidth="Infinity" styleClass="identity-badge type-identity" text="—" VBox.vgrow="ALWAYS" />
+
+                            <Label styleClass="card-title" text="Stats" />
+
+                            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="unlock-row" onMouseClicked="#OnReflectionsUnlockClick">
+                                <Label styleClass="history-name" text="Reflections" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="reflectionsUnlockCountLabel" styleClass="unlock-count" text="0 / 0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="unlock-row" onMouseClicked="#OnChallengesUnlockClick">
+                                <Label styleClass="history-name" text="Challenges" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="challengesUnlockCountLabel" styleClass="unlock-count" text="0 / 0" />
+                            </HBox>
+
+                            <Button fx:id="archetypeBadge" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnArchetypeClick" styleClass="primary-action-button" text="Unassigned (Do the Quiz)" />
                         </VBox>
 
-                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="1">
-                            <Label id="progressTitle" styleClass="card-title centered-title" text="Archetype Balance" />
-                            <Canvas fx:id="progressChart" height="280" width="480" />
+                        <VBox fx:id="progressCard" alignment="TOP_CENTER" spacing="6" styleClass="card" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                            <Canvas fx:id="progressChart" height="220" width="480" />
                         </VBox>
                     </GridPane>
 

@@ -3,14 +3,14 @@
 }
 
 .profile-name {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .profile-type {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: #5eead4;
@@ -21,17 +21,17 @@
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-padding: 0;
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #c4b5fd;
+    -fx-text-fill: -purple-text;
     -fx-underline: true;
     -fx-cursor: hand;
     -fx-alignment: CENTER_LEFT;
 }
 
 .archetype-link:hover {
-    -fx-text-fill: #e8ddff;
+    -fx-text-fill: -gold-accent;
 }
 
 .identity-stack {
@@ -50,7 +50,7 @@
 .identity-badge-text,
 .button.identity-badge,
 .label.type-identity {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 26px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -79,16 +79,16 @@
 }
 
 #achievementsTitle {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 24px;
     -fx-font-weight: 900;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .achievement-summary {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 14px;
-    -fx-text-fill: #a9a0c7;
+    -fx-text-fill: -text-secondary;
     -fx-alignment: CENTER;
 }
 
@@ -153,7 +153,7 @@
 }
 
 .achievement-name {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -162,7 +162,7 @@
 }
 
 .achievement-description {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 12px;
     -fx-text-fill: #a9a0c7;
     -fx-alignment: CENTER;
@@ -170,7 +170,7 @@
 }
 
 .achievement-level {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;

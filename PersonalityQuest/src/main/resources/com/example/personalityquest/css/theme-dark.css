@@ -1,0 +1,17 @@
+/* theme-dark.css */
+.root {
+    -page-bg: #1A191D;
+    -card-bg: #211C28;
+    -raised-bg: #2A2433;
+    -border-color: #352E3F;
+    -text-primary: #F2EEF5;
+    -text-secondary: #A79FB0;
+    -purple-text: #A78BDB;
+    -purple-fill: #6B4BB5;
+    -purple-hover: #7C5CC4;
+    -purple-tint: #2A2238;
+    -gold-accent: #D9A441;
+    -gold-tint: #3A2E17;
+    -purple-glow: rgba(107,75,181,0.35);
+    -icon-outline: #5A5266;
+}

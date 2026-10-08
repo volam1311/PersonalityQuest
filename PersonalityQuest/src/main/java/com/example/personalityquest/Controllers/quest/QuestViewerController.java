@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
@@ -35,6 +36,12 @@ public class QuestViewerController implements Initializable {
 
     @FXML
     private NavBarController navBarController;
+    @FXML
+    private GridPane questViewerGrid;
+    @FXML
+    private VBox questIntroOverlay;
+    @FXML
+    private Label introQuestNameLabel, introThemeLabel, introGrowthLabel;
     @FXML
     private Button storylineTabButton, reactionTabButton, challengeTabButton, reflectionTabButton;
     @FXML
@@ -94,6 +101,54 @@ public class QuestViewerController implements Initializable {
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUEST_VIEWER);
         UpdateTabLocks();
         SelectTab(Tab.STORYLINE);
+        PopulateIntroOverlay();
+    }
+
+    /** Fills the cover page's "Why this Quest?" summary with the active quest's name, archetype, theme, and growth. */
+    private void PopulateIntroOverlay() {
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        if (ApplicationManager.isEmpty(email)) {
+            ShowEmptyIntroOverlay("Sign in to begin a labour.");
+            return;
+        }
+
+        try {
+            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            if (userQuest == null) {
+                ShowEmptyIntroOverlay("Complete the quiz to begin a labour.");
+                return;
+            }
+
+            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            if (quest == null) {
+                ShowEmptyIntroOverlay("Complete the quiz to begin a labour.");
+                return;
+            }
+
+            LabourInsight insight = LabourInsight.ForLabourId(quest.getLabourId());
+            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
+
+            introQuestNameLabel.setText(quest.getName() + " - " + archetypeName);
+            introThemeLabel.setText(insight == null ? "—" : insight.getTheme());
+            introGrowthLabel.setText(insight == null ? "—" : insight.getGrowth());
+        } catch (Exception exception) {
+            ShowEmptyIntroOverlay("Could not load your questline right now.");
+        }
+    }
+
+    private void ShowEmptyIntroOverlay(String message) {
+        introQuestNameLabel.setText(message);
+        introThemeLabel.setText("");
+        introGrowthLabel.setText("");
+    }
+
+    /** Reveals the storyline (and the rest of the tabbed quest content) behind the cover page. */
+    @FXML
+    private void OnStartQuest() {
+        questIntroOverlay.setVisible(false);
+        questIntroOverlay.setManaged(false);
+        questViewerGrid.setVisible(true);
+        questViewerGrid.setManaged(true);
     }
 
     @FXML

@@ -20,7 +20,7 @@
     </left>
 
     <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
+        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" vbarPolicy="AS_NEEDED">
             <content>
                 <VBox spacing="18" styleClass="content-container">
                     <padding>
@@ -34,90 +34,107 @@
                             <Label styleClass="page-subtitle" text="Discover the different sides of you and the strengths guiding your journey." />
                         </VBox>
                         <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="redoQuizButton" mnemonicParsing="false" onAction="#OnRedoQuiz" styleClass="pill-button-small" text="Redo" />
+                        <Button fx:id="redoQuizButton" mnemonicParsing="false" onAction="#OnRedoQuiz" styleClass="pill-button-small" text="Retake quiz" />
                     </HBox>
 
-                    <GridPane hgap="12" vgap="12">
+                    <GridPane hgap="12" vgap="12" minHeight="0" VBox.vgrow="ALWAYS">
                         <columnConstraints>
                             <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="25" />
-                            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="37.5" />
-                            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="37.5" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="40" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="0" percentWidth="35" />
                         </columnConstraints>
                         <rowConstraints>
                             <RowConstraints vgrow="ALWAYS" />
-                            <RowConstraints vgrow="ALWAYS" />
                         </rowConstraints>
 
-                        <!-- Row 1, Column 1: Archetype image (placeholder) -->
-                        <StackPane minHeight="220" minWidth="0" styleClass="card, archetype-image-panel" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <ImageView fx:id="archetypeImageView" fitHeight="200" fitWidth="200" preserveRatio="true" smooth="true" visible="false" />
-                            <Label fx:id="archetypeImageLabel" styleClass="archetype-emoji" text="" />
-                        </StackPane>
+                        <!-- Column 1: image panel (fixed-ish height) + quest focus (fills the rest).
+                             A plain VBox so this column's split is independent of column 3's. -->
+                        <VBox minHeight="0" minWidth="0" spacing="12" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <StackPane minHeight="140" minWidth="0" styleClass="card, archetype-image-panel">
+                                <ImageView fx:id="archetypeImageView" fitHeight="150" fitWidth="150" preserveRatio="true" smooth="true" visible="false" />
+                                <Label fx:id="archetypeImageLabel" styleClass="archetype-emoji" text="" />
+                            </StackPane>
 
-                        <!-- Row 2, Column 1: Quest focus -->
-                        <VBox minHeight="170" minWidth="0" spacing="8" styleClass="card, archetype-panel" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                            <Label styleClass="section-heading-label" text="Quest focus" />
-                            <Label fx:id="questFocusLabel" styleClass="lore-body" wrapText="true" text="Your quest focus will appear here." />
-                        </VBox>
-
-                        <!-- Row 1 & 2, Column 2: Archetype detail panel -->
-                        <VBox minHeight="0" minWidth="0" spacing="12" styleClass="archetype-detail-panel" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="2">
-                            <HBox alignment="BASELINE_LEFT" spacing="8">
-                                <Label fx:id="archetypeRankLabel" styleClass="archetype-rank" text="#1" />
-                                <Label fx:id="archetypeNameLabel" styleClass="archetype-name" text="The Hero" />
-                            </HBox>
-
-                            <VBox spacing="5">
-                                <Label styleClass="section-heading-label" text="Overview" />
-                                <Label fx:id="overviewLabel" styleClass="lore-body" wrapText="true" text="Your archetype overview will appear here." />
-                            </VBox>
-
-                            <VBox spacing="5">
-                                <Label styleClass="section-heading-label" text="Value" />
-                                <Label fx:id="valueLabel" styleClass="lore-body" wrapText="true" text="" />
-                            </VBox>
-
-                            <VBox spacing="5">
-                                <Label styleClass="section-heading-label" text="Strengths" />
-                                <Label fx:id="strengthsLabel" styleClass="lore-body" wrapText="true" text="" />
-                            </VBox>
-
-                            <VBox spacing="5">
-                                <Label styleClass="section-heading-label" text="Weaknesses" />
-                                <Label fx:id="weaknessesLabel" styleClass="lore-body" wrapText="true" text="" />
-                            </VBox>
-
-                            <VBox spacing="5">
-                                <Label styleClass="section-heading-label" text="Description" />
-                                <Label fx:id="descriptionLabel" styleClass="lore-body" wrapText="true" text="" />
+                            <VBox minHeight="170" minWidth="0" spacing="8" styleClass="card, archetype-panel" VBox.vgrow="ALWAYS">
+                                <Label styleClass="section-heading-label" text="QUEST FOCUS" />
+                                <Label fx:id="questFocusSubjectLabel" styleClass="card-title" wrapText="true" text="Your labour" />
+                                <Label styleClass="section-heading-label" text="CHALLENGES" />
+                                <Label fx:id="questFocusLabel" styleClass="lore-body" wrapText="true" text="Your quest focus will appear here." />
+                                <Label styleClass="section-heading-label" text="REFLECTIONS" />
+                                <Label fx:id="questReflectionsLabel" styleClass="lore-body" wrapText="true" text="Your reflections will appear here." />
+                                <Region VBox.vgrow="ALWAYS" />
+                                <Button fx:id="beginLabourButton" mnemonicParsing="false" onAction="#OnBeginLabour" styleClass="primary-action-button" text="Begin the Labour" />
                             </VBox>
                         </VBox>
 
-                        <!-- Row 1, Column 3: Realm wheel (top scoring archetype per realm) -->
-                        <GridPane minHeight="170" minWidth="0" hgap="8" styleClass="realm-wheel" vgap="8" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
-                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints vgrow="ALWAYS" percentHeight="50" />
-                                <RowConstraints vgrow="ALWAYS" percentHeight="50" />
-                            </rowConstraints>
-
-                            <Button fx:id="egoQuadrantButton" maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnRealmQuadrantClick" styleClass="realm-quadrant-button, ego-quadrant" text="Ego" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                            <Button fx:id="soulQuadrantButton" maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnRealmQuadrantClick" styleClass="realm-quadrant-button, soul-quadrant" text="Soul" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                            <Button fx:id="markQuadrantButton" maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnRealmQuadrantClick" styleClass="realm-quadrant-button, mark-quadrant" text="Mark" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                            <Button fx:id="selfQuadrantButton" maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnRealmQuadrantClick" styleClass="realm-quadrant-button, self-quadrant" text="Self" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        </GridPane>
-
-                        <!-- Row 2, Column 3: All 12 archetypes ranked by score -->
-                        <VBox minHeight="170" minWidth="0" spacing="8" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                            <Label styleClass="section-heading-label" text="All archetypes" />
-                            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="ranked-list-scroll" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+                        <!-- Column 2: Archetype detail panel. Its content scrolls internally
+                             rather than stretching the page past the window height. -->
+                        <VBox minHeight="0" minWidth="0" styleClass="archetype-detail-panel" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minHeight="0" prefHeight="0" maxHeight="1.7976931348623157E308" styleClass="detail-panel-scroll" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
                                 <content>
-                                    <VBox fx:id="rankedListBox" spacing="8" styleClass="ranked-list-box" />
+                                    <VBox spacing="20">
+                                        <HBox alignment="BASELINE_LEFT" spacing="8">
+                                            <Label fx:id="archetypeRankLabel" styleClass="archetype-rank" text="#1" />
+                                            <Label fx:id="archetypeNameLabel" styleClass="archetype-name" text="The Hero" />
+                                        </HBox>
+
+                                        <VBox spacing="4">
+                                            <Label styleClass="section-heading-label" text="OVERVIEW" />
+                                            <Label fx:id="overviewLabel" styleClass="lore-body" wrapText="true" text="Your archetype overview will appear here." />
+                                        </VBox>
+
+                                        <VBox spacing="4">
+                                            <Label styleClass="section-heading-label" text="VALUE" />
+                                            <Label fx:id="valueLabel" styleClass="lore-body" wrapText="true" text="" />
+                                        </VBox>
+
+                                        <VBox spacing="4">
+                                            <Label styleClass="section-heading-label" text="STRENGTHS" />
+                                            <Label fx:id="strengthsLabel" styleClass="lore-body" wrapText="true" text="" />
+                                        </VBox>
+
+                                        <VBox spacing="4">
+                                            <Label styleClass="section-heading-label" text="WEAKNESSES" />
+                                            <Label fx:id="weaknessesLabel" styleClass="lore-body" wrapText="true" text="" />
+                                        </VBox>
+
+                                        <VBox spacing="4">
+                                            <Label styleClass="section-heading-label" text="DESCRIPTION" />
+                                            <Label fx:id="descriptionLabel" styleClass="lore-body" wrapText="true" text="" />
+                                        </VBox>
+                                    </VBox>
                                 </content>
                             </ScrollPane>
+                        </VBox>
+
+                        <!-- Column 3: Realm wheel (fixed-ish height, 20% taller tiles) + ranked list
+                             (fills whatever height remains). A plain VBox so this column's split is
+                             independent of column 1's. -->
+                        <VBox minHeight="0" minWidth="0" spacing="12" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <GridPane minHeight="204" minWidth="0" hgap="8" styleClass="realm-wheel" vgap="8">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                                </rowConstraints>
+
+                                <Button fx:id="egoQuadrantButton" maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnRealmQuadrantClick" styleClass="realm-quadrant-button, ego-quadrant" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Button fx:id="soulQuadrantButton" maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnRealmQuadrantClick" styleClass="realm-quadrant-button, soul-quadrant" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <Button fx:id="markQuadrantButton" maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnRealmQuadrantClick" styleClass="realm-quadrant-button, mark-quadrant" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <Button fx:id="selfQuadrantButton" maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#OnRealmQuadrantClick" styleClass="realm-quadrant-button, self-quadrant" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            </GridPane>
+
+                            <VBox minHeight="0" minWidth="0" spacing="8" VBox.vgrow="ALWAYS">
+                                <Label styleClass="section-heading-label" text="ALL ARCHETYPES" />
+                                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minHeight="0" styleClass="ranked-list-scroll" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+                                    <content>
+                                        <VBox fx:id="rankedListBox" spacing="8" styleClass="ranked-list-box" />
+                                    </content>
+                                </ScrollPane>
+                            </VBox>
                         </VBox>
                     </GridPane>
                 </VBox>

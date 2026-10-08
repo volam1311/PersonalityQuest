@@ -3,21 +3,21 @@
 }
 
 .quiz-question {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 22px;
     -fx-font-weight: normal;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-primary;
 }
 
 .quiz-result-name {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 36px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e8ddff;
+    -fx-text-fill: -purple-text;
 }
 
 .quiz-feedback {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 14px;
     -fx-text-fill: #f0a8a8;
     -fx-min-height: 20;
@@ -34,7 +34,7 @@
     -fx-border-color: transparent;
     -fx-border-radius: 10;
     -fx-border-width: 1.5;
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 15px;
     -fx-font-weight: normal;
     -fx-text-fill: #e8ddff;
@@ -51,7 +51,7 @@
 .quiz-option.selected,
 .quiz-option.selected:hover,
 .quiz-option.selected:focused {
-    -fx-background-color: #9a72ff;
+    -fx-background-color: -gold-accent;
     -fx-text-fill: #140e25;
-    -fx-border-color: #c4b5fd;
+    -fx-border-color: -gold-tint;
 }

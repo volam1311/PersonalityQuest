@@ -7,7 +7,9 @@ import com.example.personalityquest.Model.profile.UserProfile;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -63,6 +65,33 @@ public class AchievementService {
         }
 
         return achievements;
+    }
+
+    /**
+     * Returns the account's most recently unlocked achievements (most recent first),
+     * capped at {@code limit}. Also unlocks any achievements the account now qualifies for.
+     */
+    public static List<Achievement> GetRecentlyUnlockedAchievements(String email, int limit) throws SQLException {
+        if (ApplicationManager.isEmpty(email)) {
+            return List.of();
+        }
+
+        List<Achievement> achievements = GetAchievementsForEmail(email);
+        List<Integer> recentIds = AchievementDAO.GetRecentlyUnlockedIds(email, limit);
+
+        Map<Integer, Achievement> achievementsById = new HashMap<>();
+        for (Achievement achievement : achievements) {
+            achievementsById.put(achievement.achievementId(), achievement);
+        }
+
+        List<Achievement> recent = new ArrayList<>();
+        for (Integer achievementId : recentIds) {
+            Achievement achievement = achievementsById.get(achievementId);
+            if (achievement != null) {
+                recent.add(achievement);
+            }
+        }
+        return recent;
     }
 
     static boolean MeetsCriteria(Achievement achievement, UserProfile progress) {

@@ -7,14 +7,17 @@ import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Model.profile.UserProfile;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.UserQuest;
+import com.example.personalityquest.Model.quest.WeeklyTask;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.profile.AchievementService;
 import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import com.example.personalityquest.Services.profile.UserProfileService;
+import com.example.personalityquest.Services.quest.JournalEntryService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.Services.quest.UserQuestService;
+import com.example.personalityquest.Services.quest.WeeklyTaskService;
 import com.example.personalityquest.Services.quiz.QuizService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -27,6 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -42,6 +46,7 @@ import javafx.scene.text.TextAlignment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -55,8 +60,10 @@ public class ProfileController implements Initializable {
     private static final int DEFAULT_ACHIEVEMENT_COLUMNS = 4;
     private static final int RADAR_AXIS_COUNT = Archetype.values().length;
     private static final int RADAR_LEVEL_COUNT = 5;
-    private static final double RADAR_CENTER_Y_OFFSET = 8;
-    private static final double RADAR_RADIUS_RATIO = 0.26;
+    private static final double RADAR_CENTER_Y_OFFSET = 0;
+    // Fixed pixel radius (not derived from the canvas size) so the chart keeps the same
+    // visual size even though the canvas height was trimmed to remove empty padding.
+    private static final double RADAR_RADIUS = 73;
     private static final String[] RADAR_LABELS = BuildRadarLabels();
 
     private static String[] BuildRadarLabels() {
@@ -77,10 +84,10 @@ public class ProfileController implements Initializable {
     @FXML
     private VBox progressCard;
     @FXML
-    private Label displayNameLabel, personalityTypeLabel, streakLabel, typeBadge,
-            achievementSummaryLabel;
+    private Label displayNameLabel, streakLabel, achievementSummaryLabel,
+            reflectionsUnlockCountLabel, challengesUnlockCountLabel;
     @FXML
-    private Button archetypeLink, archetypeBadge;
+    private Button archetypeBadge;
     @FXML
     private Canvas progressChart;
 
@@ -118,7 +125,7 @@ public class ProfileController implements Initializable {
                 details = null;
             }
         }
-        displayNameLabel.setText(UserProfileService.DisplayName(details));
+        displayNameLabel.setText(UserProfileService.Username(details));
 
         UserProfile progress = UserProfile.empty();
         if (signedIn) {
@@ -132,7 +139,6 @@ public class ProfileController implements Initializable {
         radarValues = QuizService.ArchetypeScores(QuizService.LoadStoredResult(email));
 
         String archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;
-        String personalityType = UserProfileService.UNKNOWN_TYPE;
         if (signedIn) {
             try {
                 UserQuest selectedQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
@@ -147,8 +153,6 @@ public class ProfileController implements Initializable {
                     if (quest != null) {
                         archetypeName = UserProfileService.FormatArchetypeName(
                                 QuestService.GetArchetypeName(quest.getArchetypeId()));
-                        personalityType = UserProfileService.PersonalityType(
-                                QuestService.GetArchetypeDescription(quest.getArchetypeId()));
                     }
                 }
             } catch (Exception ignored) {
@@ -156,10 +160,7 @@ public class ProfileController implements Initializable {
             }
         }
 
-        personalityTypeLabel.setText(personalityType);
-        typeBadge.setText(personalityType);
-        archetypeLink.setText(archetypeName + " (Click to view)");
-        archetypeBadge.setText(archetypeName);
+        archetypeBadge.setText("Main Archetype: " + archetypeName );
 
         try {
             achievements = AchievementService.GetAchievementsForEmail(email);
@@ -168,6 +169,83 @@ public class ProfileController implements Initializable {
             achievements = List.of();
             PopulateAchievements(List.of());
         }
+
+        PopulateUnlocks(email);
+    }
+
+    // ---- Stats tile (reflection/challenge progress + recent achievement badges) ----
+
+    /** Fills the Stats box's reflection and challenge completion counts. */
+    private void PopulateUnlocks(String email) {
+        PopulateReflectionsUnlock(email);
+        PopulateChallengesUnlock(email);
+    }
+
+    private void PopulateReflectionsUnlock(String email) {
+        int total = 0;
+        int finished = 0;
+
+        if (!ApplicationManager.isEmpty(email)) {
+            try {
+                for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {
+                    if (ApplicationManager.isEmpty(userQuest.getReactionType())) {
+                        continue; // quest not started yet, no reflection assigned
+                    }
+                    total++;
+                    if ("Finished".equalsIgnoreCase(userQuest.getReflectionStatus())) {
+                        finished++;
+                    }
+                }
+            } catch (Exception exception) {
+                System.err.println("Could not load reflection counts: " + exception.getMessage());
+            }
+        }
+
+        reflectionsUnlockCountLabel.setText(finished + " / " + total);
+    }
+
+    private void PopulateChallengesUnlock(String email) {
+        int total = 0;
+        int finished = 0;
+
+        if (!ApplicationManager.isEmpty(email)) {
+            try {
+                int journalChallenges = JournalEntryService.GetChallengesForEmail(email).size();
+                total += journalChallenges;
+                finished += journalChallenges; // a journal entry only exists once submitted
+            } catch (Exception exception) {
+                System.err.println("Could not load journal challenge counts: " + exception.getMessage());
+            }
+
+            try {
+                WeeklyTask[] weeklyTasks = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
+                if (weeklyTasks == null) {
+                    weeklyTasks = WeeklyTaskService.GenerateTasksForThisWeek(email);
+                }
+                if (weeklyTasks != null) {
+                    total += weeklyTasks.length;
+                    finished += (int) Arrays.stream(weeklyTasks)
+                            .filter(task -> "Finished".equalsIgnoreCase(task.getStatus()))
+                            .count();
+                }
+            } catch (Exception exception) {
+                System.err.println("Could not load weekly challenge counts: " + exception.getMessage());
+            }
+        }
+
+        challengesUnlockCountLabel.setText(finished + " / " + total);
+    }
+
+    /** Opens the Tasks/Journal screen from the Stats box's Reflections row */
+    @FXML
+    private void OnReflectionsUnlockClick(MouseEvent event) throws IOException {
+        NavigationService.LoadScreen(ScreenEnum.TASKS);
+    }
+
+    /** Opens the Tasks/Journal screen from the Stats box's Challenges row */
+    @FXML
+    private void OnChallengesUnlockClick(MouseEvent event) throws IOException {
+        NavigationService.LoadScreen(ScreenEnum.TASKS);
     }
 
     private void ConfigureAchievementsGrid(int columnCount) {
@@ -308,7 +386,7 @@ public class ProfileController implements Initializable {
         double height = progressChart.getHeight();
         double centerX = width / 2;
         double centerY = height / 2 + RADAR_CENTER_Y_OFFSET;
-        double radius = Math.min(width, height) * RADAR_RADIUS_RATIO;
+        double radius = RADAR_RADIUS;
         int axes = RADAR_AXIS_COUNT;
 
         graphics.clearRect(0, 0, width, height);
