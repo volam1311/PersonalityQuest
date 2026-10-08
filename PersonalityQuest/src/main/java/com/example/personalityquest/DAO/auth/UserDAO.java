@@ -51,6 +51,7 @@ public class UserDAO extends ParentDAO implements IUserDAO {
      */
     public UserDAO(Connection connection) {
         super(connection);
+        createTable();
     }
 
     private void createTable() {
