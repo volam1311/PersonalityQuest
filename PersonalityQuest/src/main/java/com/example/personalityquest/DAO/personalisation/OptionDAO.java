@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.personalisation;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quiz.Option;
 import com.example.personalityquest.SQLite;
 
@@ -7,7 +8,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptionDAO {
+/** Stores and retrieves quiz answer-option records */
+public class OptionDAO extends ParentDAO {
     public static final String CREATE_OPTIONS =
             """
             CREATE TABLE IF NOT EXISTS Options (
@@ -20,18 +22,29 @@ public class OptionDAO {
             option3 TEXT NOT NULL)
             """;
 
-    private OptionDAO() {}
+    public OptionDAO() {
+        super();
+    }
+
+    public OptionDAO(Connection connection){
+        super(connection);
+    }
 
 
-    public static void EnsureTables() throws SQLException {
-        Connection conn = SQLite.getConnection();
-        try (Statement stmt = conn.createStatement()) {
+    /** Creates option tables if they do not already exist
+     * @throws SQLException if the tables cannot be created
+     */
+    public void EnsureTables() throws SQLException {
+        try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(CREATE_OPTIONS);
         }
     }
 
-    public static boolean HasCatalog() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    /** Checks whether option catalog records exist
+     * @return true when the catalog contains records
+     * @throws SQLException if the catalog cannot be checked
+     */
+    public boolean HasCatalog() throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT COUNT(*) FROM Options"
         )) {
@@ -40,7 +53,19 @@ public class OptionDAO {
         }
     }
 
-    public static void InsertOptions(
+    /**
+     * insert a set of answer options if its ID is not present
+     *
+     * @param optionsID the option set's unique ID
+     * @param option1Archetype the archetype ID associated with the first answer
+     * @param option2Archetype the archetype ID associated with the second answer
+     * @param option3Archetype the archetype ID associated with the third answer
+     * @param option1 the text of the first answer
+     * @param option2 the text of the second answer
+     * @param option3 the text of the third answer
+     * @throws SQLException if the option set cannot be inserted
+     */
+    public void InsertOptions(
             int optionsID,
             int option1Archetype,
             int option2Archetype,
@@ -50,8 +75,7 @@ public class OptionDAO {
             String option3) throws SQLException {
         EnsureTables();
 
-        Connection conn = SQLite.getConnection();
-        try (PreparedStatement statement = conn.prepareStatement(
+        try (PreparedStatement statement = connection.prepareStatement(
                 """
                    INSERT OR IGNORE INTO Options 
                    (optionsID, option1Archetype, option2Archetype, option3Archetype, option1, option2, option3)
@@ -70,10 +94,13 @@ public class OptionDAO {
 
     }
 
-    public static List<Option> GetOptions() throws SQLException {
+    /** Returns option records ordered by ID
+     * @return the options in the catalog
+     * @throws SQLException if the options cannot be read
+     */
+    public List<Option> GetOptions() throws SQLException {
         EnsureTables();
-        Connection conn = SQLite.getConnection();
-        try (PreparedStatement statement = conn.prepareStatement(
+        try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * FROM Options ORDER BY optionsID
                     """)){
@@ -94,10 +121,14 @@ public class OptionDAO {
         }
     }
 
-    public static Option GetOptionById(int optionsID) throws SQLException {
+    /** Returns the option record matching the supplied ID
+     * @param optionsID the option ID to find
+     * @return the matching option, or null if no option is found
+     * @throws SQLException if the option cannot be read
+     */
+    public Option GetOptionById(int optionsID) throws SQLException {
         EnsureTables();
-        Connection conn = SQLite.getConnection();
-        try (PreparedStatement statement = conn.prepareStatement(
+        try (PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * FROM Options WHERE optionsID = ?
                     """
@@ -121,7 +152,10 @@ public class OptionDAO {
         }
     }
 
-    public static void SeedCatalog() throws SQLException {
+    /** Inserts the default option catalog
+     * @throws SQLException if the catalog cannot be inserted
+     */
+    public void SeedCatalog() throws SQLException {
 
         InsertOptions(1, 1, 2, 3,
                 "Trust that things will work out and see the good in people",

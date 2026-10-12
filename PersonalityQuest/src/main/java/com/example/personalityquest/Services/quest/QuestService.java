@@ -1,10 +1,14 @@
 package com.example.personalityquest.Services.quest;
 
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.quest.QuestDAO;
+import com.example.personalityquest.DAO.quest.UserQuestDAO;
 import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.quest.UserQuest;
 
 import java.sql.SQLException;
 import java.util.Random;
+
 
 /**
  * This class managers everything to do with quests and has utility functions to retrieve
@@ -12,13 +16,26 @@ import java.util.Random;
  * match an archetypeId
  */
 public class QuestService {
+
+    private final QuestDAO QuestDAO;
+
+    public QuestService(){
+        super();
+        QuestDAO = new QuestDAO();
+    }
+
+    public QuestService(QuestDAO questDAO)
+    {
+        super();
+        QuestDAO = questDAO;
+    }
     /**
      * Gets an Array of Quests for the given archetypeId
      * @param archetypeId The archetypeId you want to get quests for
      * @return Array of quests matching archetypeId
      * @throws SQLException "Database Access Failure"
      */
-    public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
+    public Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
         if (archetypeId == 0){
             throw new IllegalArgumentException("Bad archetypeId of 0");
         }
@@ -32,7 +49,7 @@ public class QuestService {
      * @return The Quest is successful or null if labourId doesn't match a quest in the database
      * @throws SQLException Database Access Failure
      */
-    public static Quest GetQuestForLabourId(int labourId) throws SQLException {
+    public Quest GetQuestForLabourId(int labourId) throws SQLException {
         if (labourId == 0){
             throw new IllegalArgumentException("Bad labourId of 0");
         }
@@ -46,7 +63,7 @@ public class QuestService {
      * @return The archetype name, or "Unknown archetype" if none matches
      * @throws SQLException Database Access Failure
      */
-    public static String GetArchetypeName(int archetypeId) throws SQLException {
+    public String GetArchetypeName(int archetypeId) throws SQLException {
         if (archetypeId == 0) {
             throw new IllegalArgumentException("Bad archetypeId of 0");
         }
@@ -64,7 +81,7 @@ public class QuestService {
      * @return The archetypeId, or null if none matches
      * @throws SQLException Database Access Failure
      */
-    public static Integer GetArchetypeIdForName(String name) throws SQLException {
+    public Integer GetArchetypeIdForName(String name) throws SQLException {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Archetype name is empty");
         }
@@ -78,7 +95,7 @@ public class QuestService {
      * @return The description, or an empty string if none is stored
      * @throws SQLException Database Access Failure
      */
-    public static String GetArchetypeDescription(int archetypeId) throws SQLException {
+    public String GetArchetypeDescription(int archetypeId) throws SQLException {
         if (archetypeId == 0) {
             throw new IllegalArgumentException("Bad archetypeId of 0");
         }
@@ -96,7 +113,7 @@ public class QuestService {
      * @return The Random Quests information
      * @throws SQLException "Database Access Failure"
      */
-    public static Quest GetRandomQuestForArchetypeId(int archetypeId) throws SQLException {
+    public Quest GetRandomQuestForArchetypeId(int archetypeId) throws SQLException {
         Quest[] quests = GetQuestsForArchetypeId(archetypeId);
 
         if (quests == null){
@@ -108,5 +125,6 @@ public class QuestService {
 
         return quests[randomInt];
     }
+
 
 }

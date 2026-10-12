@@ -1,5 +1,6 @@
 package com.example.personalityquest;
 
+import com.example.personalityquest.DAO.profile.FriendsDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Services.auth.HashingService;
 import com.example.personalityquest.Services.profile.FriendsService;
@@ -13,9 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FriendsServiceTest {
     private Connection connection;
+
+    private FriendsService FriendsService;
     @BeforeEach
     void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        FriendsDAO friendsDAO = new FriendsDAO(connection);
+        FriendsService = new FriendsService(friendsDAO);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (

@@ -3,21 +3,21 @@
 }
 
 .quiz-question {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-font-weight: normal;
+    -fx-text-fill: -text-primary;
 }
 
 .quiz-result-name {
-    -fx-font-family: Montserrat;
+    -fx-font-family: Marcellus;
     -fx-font-size: 36px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e8ddff;
+    -fx-text-fill: -purple-text;
 }
 
 .quiz-feedback {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 14px;
     -fx-text-fill: #f0a8a8;
     -fx-min-height: 20;
@@ -28,16 +28,16 @@
     -fx-alignment: CENTER_LEFT;
     -fx-wrap-text: true;
     -fx-min-height: 58px;
-    -fx-background-color: #2d2745;
+    -fx-background-color: -raised-bg;
     -fx-background-radius: 10;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-border-radius: 10;
     -fx-border-width: 1.5;
-    -fx-font-family: Poppins;
+    -fx-font-family: "Alegreya Sans";
     -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #e8ddff;
+    -fx-font-weight: normal;
+    -fx-text-fill: -text-primary;
     -fx-padding: 12 18 12 18;
     -fx-cursor: hand;
     -fx-focus-color: transparent;
@@ -45,13 +45,13 @@
 }
 
 .quiz-option:hover {
-    -fx-background-color: #423761;
+    -fx-background-color: -purple-tint;
 }
 
 .quiz-option.selected,
 .quiz-option.selected:hover,
 .quiz-option.selected:focused {
-    -fx-background-color: #9a72ff;
-    -fx-text-fill: #140e25;
-    -fx-border-color: #c4b5fd;
+    -fx-background-color: -gold-accent;
+    -fx-text-fill: -text-on-accent;
+    -fx-border-color: -gold-tint;
 }

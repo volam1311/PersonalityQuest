@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEHEIGHT;
 import static com.example.personalityquest.ApplicationManager.SceneInfo.SCENEWIDTH;
+
 import com.example.personalityquest.Applications.auth.UpdateAccountPersonalDetailsApplication;
 import com.example.personalityquest.ScreenEnum;
 
@@ -11,25 +12,51 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/** Loads application screens and manages the primary stage */
 public class NavigationService {
+
     public final static String fxmlPrefix = "/com/example/personalityquest/";
 
     public static Stage stage;
+    private static ThemeService themeService;
 
+    /** Sets the primary stage used for navigation
+     * @param currentStage the primary JavaFX stage
+     */
     public static void Init(Stage currentStage){
         stage = currentStage;
+        if (themeService == null) {
+            themeService = new ThemeService();
+        }
     }
 
+    public static ThemeService GetThemeService() {
+        if (themeService == null) {
+            themeService = new ThemeService();
+        }
+        return themeService;
+    }
+
+    /** Loads the requested screen into the primary stage
+     * @param screen the screen to load
+     * @throws IOException if the screen resource cannot be loaded
+     */
     public static void LoadScreen(ScreenEnum screen) throws IOException {
         String fxmlString = SetFxmlDoc(screen);
 
         FXMLLoader fxmlLoader = new FXMLLoader(UpdateAccountPersonalDetailsApplication.class.getResource(fxmlString));
         Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
+        scene.getStylesheets().add(UpdateAccountPersonalDetailsApplication.class.getResource(
+                fxmlPrefix + "css/" + GetThemeService().getCurrentTheme().getStylesheetName()).toExternalForm());
         stage.setTitle(TitleFor(screen));
         stage.setScene(scene);
         stage.show();
     }
 
+    /** Returns the FXML resource path for a screen
+     * @param screenEnum the screen whose FXML path is requested
+     * @return the FXML resource path
+     */
     public static String SetFxmlDoc(ScreenEnum screenEnum){
         return fxmlPrefix + switch (screenEnum){
             case ScreenEnum.ACCOUNT_CREATION -> "AccountCreation.fxml";
@@ -38,6 +65,7 @@ public class NavigationService {
             case ScreenEnum.PROFILE -> "Profile.fxml";
             case ScreenEnum.ARCHETYPE -> "Archetype.fxml";
             case ScreenEnum.QUESTS -> "Quest.fxml";
+            case ScreenEnum.QUEST_VIEWER ->  "QuestViewer.fxml";
             case ScreenEnum.QUIZ -> "Quiz.fxml";
             case ScreenEnum.QUIZ_RESULT -> "QuizResult.fxml";
             case ScreenEnum.SETTINGS -> "Settings.fxml";
@@ -56,10 +84,11 @@ public class NavigationService {
             case PROFILE -> "Profile";
             case ARCHETYPE -> "Archetype";
             case QUESTS -> "Questline";
+            case QUEST_VIEWER -> "Quest Viewer";
             case QUIZ -> "Archetype Quiz";
             case QUIZ_RESULT -> "Your Archetype";
             case SETTINGS -> "Settings";
-            case TASKS -> "Tasks";
+            case TASKS -> "Journal";
             case UPDATE_ACCOUNT_PASSWORD -> "Update Password";
             case UPDATE_PERSONAL_DETAILS -> "Update Details";
             case WEEKLY_TASK_REFLECTION -> "Weekly Reflection";

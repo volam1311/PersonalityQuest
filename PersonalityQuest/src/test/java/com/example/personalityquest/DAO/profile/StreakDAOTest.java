@@ -18,9 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StreakDAOTest {
     private Connection connection;
 
+    private StreakDAO StreakDAO;
     @BeforeEach
     void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        StreakDAO = new StreakDAO(connection);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (

@@ -3,24 +3,26 @@ package com.example.personalityquest.Services.profile;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Model.profile.UserProfile;
+import com.example.personalityquest.Services.ParentService;
 
 import java.util.Locale;
 
 /**
  * Display helpers for the profile page: name formatting, archetype labels, and radar values.
  */
-public class UserProfileService {
+public class UserProfileService extends ParentService {
     public static final String UNASSIGNED_ARCHETYPE = "Unassigned";
     public static final String UNKNOWN_TYPE = "—";
     public static final String DEFAULT_DISPLAY_NAME = "Adventurer";
 
-    private UserProfileService() {
+    public UserProfileService() {
+        super();
     }
 
     /**
      * Builds a display name from first and last name, falling back to username.
      */
-    public static String DisplayName(EmailDetails details) {
+    public String DisplayName(EmailDetails details) {
         if (details == null) {
             return DEFAULT_DISPLAY_NAME;
         }
@@ -41,9 +43,25 @@ public class UserProfileService {
     }
 
     /**
+     * Returns the account's username, falling back to {@link #DEFAULT_DISPLAY_NAME} when blank.
+     */
+    public static String Username(EmailDetails details) {
+        if (details == null) {
+            return DEFAULT_DISPLAY_NAME;
+        }
+
+        String userName = SafeTrim(details.getUserName());
+        if (!userName.isEmpty()) {
+            return userName;
+        }
+
+        return DEFAULT_DISPLAY_NAME;
+    }
+
+    /**
      * Formats an archetype for display, adding "The" when it is missing.
      */
-    public static String FormatArchetypeName(String name) {
+    public String FormatArchetypeName(String name) {
         if (ApplicationManager.isEmpty(name)) {
             return UNASSIGNED_ARCHETYPE;
         }
@@ -58,7 +76,7 @@ public class UserProfileService {
     /**
      * Returns a stored archetype description, or {@link #UNKNOWN_TYPE} when none exists.
      */
-    public static String PersonalityType(String archetypeDescription) {
+    public String PersonalityType(String archetypeDescription) {
         String description = SafeTrim(archetypeDescription);
         if (description.isEmpty()) {
             return UNKNOWN_TYPE;
@@ -69,7 +87,7 @@ public class UserProfileService {
     /**
      * Builds five radar-chart values between 0 and 1 from database profile totals.
      */
-    public static double[] RadarValues(UserProfile profile) {
+    public double[] RadarValues(UserProfile profile) {
         if (profile == null) {
             return new double[]{0, 0, 0, 0, 0};
         }
@@ -88,7 +106,7 @@ public class UserProfileService {
         };
     }
 
-    private static double Ratio(int numerator, int denominator) {
+    private double Ratio(int numerator, int denominator) {
         if (denominator <= 0) {
             return 0;
         }
@@ -99,7 +117,7 @@ public class UserProfileService {
         return value == null ? "" : value.trim();
     }
 
-    private static String TitleCase(String value) {
+    private String TitleCase(String value) {
         String[] words = value.split("\\s+");
         StringBuilder titled = new StringBuilder();
         for (String word : words) {
@@ -117,7 +135,7 @@ public class UserProfileService {
         return titled.toString();
     }
 
-    private static double Clamp(double value) {
+    private double Clamp(double value) {
         if (Double.isNaN(value) || value < 0) {
             return 0;
         }

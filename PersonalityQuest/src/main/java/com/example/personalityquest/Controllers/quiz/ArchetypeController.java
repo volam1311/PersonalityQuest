@@ -3,8 +3,10 @@ package com.example.personalityquest.Controllers.quiz;
 import com.example.personalityquest.Controllers.navigation.NavBarController;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.personalisation.ArchetypeDAO;
+import com.example.personalityquest.DAO.quest.ReflectionPromptDAO;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.quest.ReflectionPrompt;
 import com.example.personalityquest.Model.quiz.QuizResult;
 import com.example.personalityquest.Model.quest.Task;
 import com.example.personalityquest.Model.quest.UserQuest;
@@ -22,12 +24,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/** Controls the display of archetype information */
 public class ArchetypeController implements Initializable {
     private static final String SELECTED_ARCHETYPE = "selected-archetype";
 
@@ -43,13 +49,17 @@ public class ArchetypeController implements Initializable {
     private NavBarController navBarController;
     @FXML
     private Label archetypeRankLabel, archetypeNameLabel, overviewLabel, valueLabel,
-            strengthsLabel, weaknessesLabel, descriptionLabel, questFocusLabel;
+            strengthsLabel, weaknessesLabel, descriptionLabel, questFocusLabel,
+            questFocusSubjectLabel, questReflectionsLabel;
     @FXML
-    private Button redoQuizButton, egoQuadrantButton, soulQuadrantButton, selfQuadrantButton, markQuadrantButton;
+    private Button redoQuizButton, egoQuadrantButton, soulQuadrantButton, selfQuadrantButton, markQuadrantButton,
+            beginLabourButton;
     @FXML
     private VBox rankedListBox;
     @FXML
     private Label archetypeImageLabel;
+    @FXML
+    private ImageView archetypeImageView;
 
     private Map<Button, String> quadrantRealms;
     private QuizResult currentResult;
@@ -59,21 +69,53 @@ public class ArchetypeController implements Initializable {
     private Map<Archetype, Quest> pinnedQuests = Map.of();
     private Archetype selectedArchetype;
 
+    private QuestService QuestService;
+    private UserQuestService UserQuestService;
+    private TaskService TaskService;
+    private UserProfileService UserProfileService;
+    private ArchetypeDAO ArchetypeDAO;
+    private QuizService QuizService;
+    private ReflectionPromptDAO ReflectionPromptDAO;
+    /** Initialises archetype controls and loads the selected archetype
+     * @param location the location used to resolve relative paths
+     * @param resources the localisation resources for the screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        QuizService = new QuizService();
+        TaskService = new TaskService();
+        UserQuestService = new UserQuestService();
+        QuestService = new QuestService();
+        UserProfileService = new UserProfileService();
+        ArchetypeDAO = new ArchetypeDAO();
+        ReflectionPromptDAO = new ReflectionPromptDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);
         quadrantRealms = Map.of(
                 egoQuadrantButton, "Ego",
                 soulQuadrantButton, "Soul",
                 selfQuadrantButton, "Self",
                 markQuadrantButton, "Mark");
+        LockQuadrantsToSquare();
         LoadArchetypes();
+    }
+
+    /** Keeps each realm-wheel tile about 20% taller than it is wide, following its rendered width. */
+    private void LockQuadrantsToSquare() {
+        for (Button button : quadrantRealms.keySet()) {
+            button.prefHeightProperty().bind(button.widthProperty().multiply(1.2));
+            button.maxHeightProperty().bind(button.widthProperty().multiply(1.2));
+        }
     }
 
     @FXML
     private void OnRedoQuiz() throws IOException {
         QuizService.StartQuiz();
         NavigationService.LoadScreen(ScreenEnum.QUIZ);
+    }
+
+    @FXML
+    private void OnBeginLabour() throws IOException {
+        NavigationService.LoadScreen(ScreenEnum.QUEST_VIEWER);
     }
 
     private void EnsureCatalog() throws SQLException {
@@ -103,7 +145,7 @@ public class ArchetypeController implements Initializable {
         }
 
         try {
-            QuizResult quizResult = QuizService.GetResult();
+            QuizResult quizResult = QuizService.LoadStoredResult(email);
             if (quizResult != null) {
                 ShowQuizResult(quizResult);
                 return;
@@ -210,31 +252,64 @@ public class ArchetypeController implements Initializable {
         return null;
     }
 
-    private String QuestFocusFromDatabase(Archetype archetype, Quest assignedQuest) {
+    /** Populates the quest-focus card's heading, challenges, and reflections. */
+    private void DisplayQuestFocus(Archetype archetype, Quest assignedQuest) {
         try {
             Quest quest = assignedQuest;
             if (quest == null) {
                 Integer archetypeId = QuestService.GetArchetypeIdForName(archetype.getName());
-                if (archetypeId == null) {
-                    return "No labour is stored for this archetype yet.";
+                if (archetypeId != null) {
+                    Quest[] quests = QuestService.GetQuestsForArchetypeId(archetypeId);
+                    if (quests != null && quests.length > 0) {
+                        quest = quests[0];
+                    }
                 }
+            }
 
-                Quest[] quests = QuestService.GetQuestsForArchetypeId(archetypeId);
-                if (quests == null || quests.length == 0) {
-                    return "No labour is stored for this archetype yet.";
-                }
-                quest = quests[0];
+            if (quest == null) {
+                questFocusSubjectLabel.setText("No labour yet");
+                questFocusLabel.setText("No labour is stored for this archetype yet.");
+                questReflectionsLabel.setText("No labour is stored for this archetype yet.");
+                beginLabourButton.setDisable(true);
+                return;
             }
 
             List<Task> tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
-            String names = TaskService.JoinTaskNames(tasks);
-            if (names.isEmpty()) {
-                return quest.getName();
-            }
-            return quest.getName() + "\n" + names;
+            String names = JoinNamesOnSeparateLines(tasks.stream().map(Task::getName).toList());
+            questFocusSubjectLabel.setText(LabourSubject(quest.getName()));
+            questFocusLabel.setText(names.isEmpty() ? "Challenge details will appear here." : names);
+
+            List<ReflectionPrompt> reflections = ReflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());
+            String reflectionNames = JoinNamesOnSeparateLines(reflections.stream().map(ReflectionPrompt::name).toList());
+            questReflectionsLabel.setText(reflectionNames.isEmpty() ? "Reflection details will appear here." : reflectionNames);
+
+            beginLabourButton.setDisable(false);
         } catch (Exception exception) {
-            return "Could not load this archetype's labour from the database.";
+            questFocusSubjectLabel.setText("Quest focus");
+            questFocusLabel.setText("Could not load this archetype's labour from the database.");
+            questReflectionsLabel.setText("Could not load this archetype's labour from the database.");
+            beginLabourButton.setDisable(true);
         }
+    }
+
+    /** Joins names with newlines so they render one per line. */
+    private static String JoinNamesOnSeparateLines(List<String> names) {
+        if (names == null || names.isEmpty()) {
+            return "";
+        }
+        return String.join("\n", names);
+    }
+
+    /** Strips a leading "Labour of the " from a quest name, e.g. "Labour of the Nemean Lion" -&gt; "The Nemean Lion". */
+    private static String LabourSubject(String questName) {
+        if (ApplicationManager.isEmpty(questName)) {
+            return questName;
+        }
+        String prefix = "labour of the ";
+        if (questName.toLowerCase().startsWith(prefix)) {
+            return "The " + questName.substring(prefix.length());
+        }
+        return questName;
     }
 
     /**
@@ -249,9 +324,23 @@ public class ArchetypeController implements Initializable {
         Archetype best = TopArchetypeForRealm(realm);
         button.setUserData(best);
         button.setDisable(best == null);
-        button.setText(best == null
-                ? realm + "\n—"
-                : realm + "\n" + UserProfileService.FormatArchetypeName(best.getName()));
+        button.setText(null);
+
+        Label eyebrow = new Label(realm.toUpperCase());
+        eyebrow.getStyleClass().add("realm-tile-eyebrow");
+        eyebrow.setAlignment(Pos.CENTER);
+        eyebrow.setMaxWidth(Double.MAX_VALUE);
+
+        Label name = new Label(best == null ? "—" : best.getName());
+        name.getStyleClass().add("realm-tile-name");
+        name.setWrapText(true);
+        name.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        name.setAlignment(Pos.CENTER);
+        name.maxWidthProperty().bind(button.widthProperty().subtract(16));
+
+        VBox content = new VBox(2, eyebrow, name);
+        content.setAlignment(Pos.CENTER);
+        button.setGraphic(content);
     }
 
     private Archetype TopArchetypeForRealm(String realm) {
@@ -287,7 +376,8 @@ public class ArchetypeController implements Initializable {
             nameLabel.getStyleClass().add("ranked-archetype-name");
 
             Integer points = scoreByArchetype.get(archetype);
-            Label pointsLabel = new Label(points != null ? points + " pts" : "");
+            String pointsText = points == null ? "" : points + (points == 1 ? " pt" : " pts");
+            Label pointsLabel = new Label(pointsText);
             pointsLabel.getStyleClass().add("ranked-archetype-points");
 
             Region spacer = new Region();
@@ -301,6 +391,9 @@ public class ArchetypeController implements Initializable {
             button.setMaxWidth(Double.MAX_VALUE);
             button.setMnemonicParsing(false);
             button.getStyleClass().add("ranked-archetype-button");
+            if (rank == 1) {
+                button.getStyleClass().add("rank-one");
+            }
             button.setUserData(archetype);
             button.setOnAction(event -> DisplayArchetype(archetype));
             row.prefWidthProperty().bind(button.widthProperty().subtract(28));
@@ -320,10 +413,45 @@ public class ArchetypeController implements Initializable {
         strengthsLabel.setText(archetype.getStrengths());
         weaknessesLabel.setText(archetype.getWeaknesses());
         descriptionLabel.setText(archetype.getLongDescription());
-        questFocusLabel.setText(QuestFocusFromDatabase(archetype, pinnedQuests.get(archetype)));
-        archetypeImageLabel.setText(archetype.getEmoji());
+        DisplayQuestFocus(archetype, pinnedQuests.get(archetype));
+        DisplayArchetypeImage(archetype);
 
         HighlightSelection();
+    }
+
+    private void DisplayArchetypeImage(Archetype archetype) {
+        String resourcePath = switch (archetype) {
+            case HERO -> "/com/example/personalityquest/img/archetypes/hero.png";
+            case INNOCENT -> "/com/example/personalityquest/img/archetypes/innocent.png";
+            case EVERYMAN -> "/com/example/personalityquest/img/archetypes/everyman.png";
+            default -> null;
+        };
+
+        if (resourcePath == null) {
+            ShowArchetypeEmoji(archetype);
+            return;
+        }
+
+        try (InputStream stream = getClass().getResourceAsStream(resourcePath)) {
+            if (stream == null) {
+                ShowArchetypeEmoji(archetype);
+                return;
+            }
+
+            archetypeImageView.setImage(new Image(stream));
+            archetypeImageView.setVisible(true);
+            archetypeImageLabel.setText("");
+            archetypeImageLabel.setVisible(false);
+        } catch (Exception exception) {
+            ShowArchetypeEmoji(archetype);
+        }
+    }
+
+    private void ShowArchetypeEmoji(Archetype archetype) {
+        archetypeImageView.setImage(null);
+        archetypeImageView.setVisible(false);
+        archetypeImageLabel.setText(archetype.getEmoji());
+        archetypeImageLabel.setVisible(true);
     }
 
     private void HighlightSelection() {
@@ -356,8 +484,14 @@ public class ArchetypeController implements Initializable {
         strengthsLabel.setText("—");
         weaknessesLabel.setText("—");
         descriptionLabel.setText("—");
+        questFocusSubjectLabel.setText("Quest focus");
         questFocusLabel.setText("Your quest focus will appear here once an archetype is assigned.");
+        questReflectionsLabel.setText("Your reflections will appear here once an archetype is assigned.");
+        beginLabourButton.setDisable(true);
+        archetypeImageView.setImage(null);
+        archetypeImageView.setVisible(false);
         archetypeImageLabel.setText("");
+        archetypeImageLabel.setVisible(false);
 
         ConfigureRealmWheel();
         rankedListBox.getChildren().clear();

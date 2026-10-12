@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
+<BorderPane fx:id="questViewerRoot" styleClass="dashboard-root" stylesheets="@css/dashboard.css, @css/quest.css, @css/quiz.css, @css/tasks.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.quest.QuestViewerController">
+    <left>
+        <fx:include fx:id="navBar" source="NavBar.fxml" />
+    </left>
+
+    <center>
+        <StackPane>
+        <GridPane fx:id="questViewerGrid" vgap="16" visible="false" managed="false">
+            <padding>
+                <Insets bottom="24" left="24" right="24" top="24" />
+            </padding>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="16.6" vgrow="ALWAYS" />
+                <RowConstraints percentHeight="83.4" vgrow="ALWAYS" />
+            </rowConstraints>
+
+            <HBox fx:id="tabBar" alignment="CENTER" spacing="8" styleClass="card, viewer-tab-bar" GridPane.rowIndex="0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.fillWidth="false" GridPane.fillHeight="false">
+                <Button fx:id="storylineTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Storyline" />
+                <Button fx:id="reactionTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Your Reaction" />
+                <Button fx:id="reflectionTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Reflection" />
+                <Button fx:id="challengeTabButton" mnemonicParsing="false" onAction="#OnTabClick" styleClass="viewer-tab-button" text="Challenge" />
+            </HBox>
+
+            <StackPane fx:id="displayStack" GridPane.rowIndex="1">
+                <VBox fx:id="storylinePane" spacing="12" styleClass="card quest-card">
+                    <Label fx:id="storylineTitleLabel" styleClass="card-title" text="No active quest" />
+                    <ScrollPane fx:id="storylineDescriptionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" VBox.vgrow="ALWAYS">
+                        <content>
+                            <Label fx:id="storylineDescriptionLabel" styleClass="quest-description, storyline-description" wrapText="true" text="Complete the quiz to begin a labour." />
+                        </content>
+                    </ScrollPane>
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <ProgressBar fx:id="storylineProgress" maxWidth="1.7976931348623157E308" progress="0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="storylineProgressLabel" styleClass="progress-label" text="0% Complete" />
+                    </HBox>
+                </VBox>
+                <VBox fx:id="reactionPane" spacing="16" styleClass="card quiz-card">
+                    <Label fx:id="reactionQuestionLabel" styleClass="quiz-question" wrapText="true" text="How would you react in this moment?" />
+                    <VBox fx:id="reactionOptionsBox" spacing="12" />
+                    <VBox fx:id="resolutionCard" spacing="8" styleClass="resolution-card" visible="false" managed="false">
+                        <Label styleClass="section-label" text="How It Ended" />
+                        <ScrollPane fx:id="resolutionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll">
+                            <content>
+                                <Label fx:id="resolutionLabel" styleClass="quest-description" wrapText="true" />
+                            </content>
+                        </ScrollPane>
+                    </VBox>
+                </VBox>
+                <VBox fx:id="reflectionPane" spacing="12" styleClass="card quest-card">
+                    <Label styleClass="card-title" text="Reflection" />
+                    <ScrollPane fx:id="reflectionScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" prefHeight="160">
+                        <content>
+                            <Label fx:id="reflectionPromptLabel" styleClass="quest-description" wrapText="true" text="Your reflection prompt will appear here once a quest is active." />
+                        </content>
+                    </ScrollPane>
+                    <Label fx:id="reflectionOverviewLabel" styleClass="quest-description" style="-fx-font-weight: bold;" wrapText="true" text="" />
+                    <TextArea fx:id="reflectionEntryArea" promptText="Enter your reflection here" styleClass="reflection-area" wrapText="true" VBox.vgrow="ALWAYS" />
+
+                    <VBox fx:id="reflectionAiFeedbackCard" spacing="8" styleClass="ai-feedback-card" visible="false" managed="false">
+                        <Label styleClass="section-label" text="AI Feedback" />
+                        <ScrollPane fx:id="reflectionAiFeedbackScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" prefHeight="150" styleClass="ai-feedback-scroll">
+                            <content>
+                                <Label fx:id="reflectionAiFeedbackLabel" styleClass="ai-feedback-body" wrapText="true" text="" />
+                            </content>
+                        </ScrollPane>
+                    </VBox>
+
+                    <Label fx:id="reflectionStatusLabel" styleClass="settings-feedback" wrapText="true" />
+
+                    <HBox alignment="CENTER" spacing="12">
+                        <Button fx:id="reflectionFeedbackButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnGetFeedback" styleClass="draft-button" text="Get Feedback" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="reflectionEditButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnEdit" styleClass="draft-button" text="Edit" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="reflectionSubmitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnSubmit" styleClass="pill-button" text="Submit" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </VBox>
+                <VBox fx:id="challengePane" spacing="12" styleClass="card quest-card">
+                    <Label styleClass="card-title" text="Challenge for this quest" />
+                    <ScrollPane fx:id="challengeScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="quest-description-scroll" prefHeight="160">
+                        <content>
+                            <Label fx:id="challengeDetailsLabel" styleClass="quest-description" wrapText="true" text="Your challenge will appear here once a quest is active." />
+                        </content>
+                    </ScrollPane>
+                    <Label fx:id="challengeOverviewLabel" styleClass="quest-description" style="-fx-font-weight: bold;" wrapText="true" text="" />
+                    <TextArea fx:id="challengeJournalEntryArea" promptText="Write your challenge focus" styleClass="reflection-area" wrapText="true" prefRowCount="2" />
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Button fx:id="challengeJournalButton" mnemonicParsing="false" onAction="#OnAddToJournal" styleClass="pill-button" text="Add to Journal" />
+                        <Label fx:id="challengeJournalFeedbackLabel" styleClass="quiz-feedback" wrapText="true" />
+                    </HBox>
+                </VBox>
+            </StackPane>
+        </GridPane>
+
+        <!-- Shown every time the Quest Viewer is opened, in place of the storyline, until the
+             user clicks "Start Quest". A simple fixed-size card, centered both ways in the stack. -->
+        <VBox fx:id="questIntroOverlay" alignment="CENTER" maxWidth="560" prefWidth="560" spacing="14" styleClass="card quest-intro-card" StackPane.alignment="CENTER">
+            <Label fx:id="introQuestNameLabel" styleClass="quest-intro-name" text="—" textAlignment="CENTER" wrapText="true" />
+
+            <VBox alignment="CENTER" spacing="4">
+                <Label styleClass="quest-intro-archetype" text="Theme" />
+                <Label fx:id="introThemeLabel" styleClass="lore-body" text="—" textAlignment="CENTER" wrapText="true" />
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="4">
+                <Label styleClass="quest-intro-archetype" text="Growth" />
+                <Label fx:id="introGrowthLabel" styleClass="lore-body" text="—" textAlignment="CENTER" wrapText="true" />
+            </VBox>
+
+            <Button fx:id="startQuestButton" maxWidth="360" mnemonicParsing="false" onAction="#OnStartQuest" styleClass="pill-button, quest-intro-start-button" text="Start Quest" />
+        </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.auth;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.DAO.SQLiteConnection;
 import com.example.personalityquest.Model.auth.User;
 
@@ -12,7 +13,7 @@ import java.sql.Statement;
 /**
  * SQLite persistence for {@link User} against the existing Accounts table.
  */
-public class UserDAO implements IUserDAO {
+public class UserDAO extends ParentDAO implements IUserDAO {
     private static final String CREATE_TABLE = """
             CREATE TABLE IF NOT EXISTS Accounts (
                 email TEXT NOT NULL,
@@ -36,13 +37,12 @@ public class UserDAO implements IUserDAO {
     private static final String SELECT_USER =
             "SELECT rowid AS id, email, userName, firstName, lastName, password FROM Accounts WHERE rowid = ?";
 
-    private final Connection connection;
 
     /**
      * Creates a DAO that uses the shared application database connection.
      */
     public UserDAO() {
-        this(SQLiteConnection.getInstance());
+        super();
     }
 
     /**
@@ -50,7 +50,7 @@ public class UserDAO implements IUserDAO {
      * @param connection The JDBC connection to use
      */
     public UserDAO(Connection connection) {
-        this.connection = connection;
+        super(connection);
         createTable();
     }
 
@@ -63,6 +63,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    /** {@inheritDoc} */
     public void createUser(User user) {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getEmail());
@@ -83,6 +84,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    /** {@inheritDoc} */
     public void updateUser(User user) {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             statement.setString(1, user.getEmail());
@@ -98,6 +100,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    /** {@inheritDoc} */
     public void deleteUser(User user) {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
             statement.setInt(1, user.getUserId());
@@ -108,6 +111,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    /** {@inheritDoc} */
     public User getUser(int id) {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_USER)) {
             statement.setInt(1, id);

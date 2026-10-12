@@ -1,7 +1,8 @@
 package com.example.personalityquest.DAO.profile;
 
+import com.example.personalityquest.DAO.ParentDAO;
+import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
-import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Services.auth.EmailService;
 
 import java.sql.Connection;
@@ -11,7 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsDAO {
+/** Stores and retrieves account friendship relationships */
+public class FriendsDAO extends ParentDAO {
     public static final String GET_FRIENDS = """
         SELECT friendsEmail
         FROM Friends
@@ -28,23 +30,45 @@ public class FriendsDAO {
         WHERE accountEmail = ?
         AND friendsEmail = ?
     """;
-    public static List<EmailDetails> GetFriendsForEmail(String email) throws Exception {
-        Connection connection = SQLite.getConnection();
+
+    public FriendsDAO(){
+        super();
+    }
+
+    public FriendsDAO(Connection connection) {
+        super(connection);
+    }
+
+    /** Returns account details for the friends of the supplied account
+     * @param email the account email whose friends should be loaded
+     * @return the friend's account details
+     * @throws Exception if the friend records cannot be loaded
+     */
+    public List<EmailDetails> GetFriendsForEmail(String email) throws Exception {
         PreparedStatement statement = connection.prepareStatement(GET_FRIENDS);
         statement.setString(1, email);
 
         ResultSet rs = statement.executeQuery();
         List<EmailDetails> detailsForFriends = new ArrayList<>();
+
+        AccountDAO accountDAO = new AccountDAO(connection);
+        EmailService emailService = new EmailService(accountDAO);
         while (rs.next()){
-            EmailDetails details = EmailService.GetDetailsForEmail(rs.getString(1));
+
+
+            EmailDetails details = emailService.GetDetailsForEmail(rs.getString(1));
             detailsForFriends.add(details);
         }
 
         return detailsForFriends;
     }
 
-    public static void AddFriend(String yourEmail, String friendsEmail) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    /** Adds a friendship between two accounts
+     * @param yourEmail the email address of the account adding the friend
+     * @param friendsEmail the email address of the account to add
+     * @throws SQLException if the friendship cannot be stored
+     */
+    public void AddFriend(String yourEmail, String friendsEmail) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(INSERT_FRIEND);
         statement.setString(1, yourEmail);
         statement.setString(2, friendsEmail);
@@ -52,8 +76,12 @@ public class FriendsDAO {
         statement.executeUpdate();
     }
 
-    public static void RemoveFriend(String yourEmail, String friendsEmail) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    /** Removes a friendship between two accounts
+     * @param yourEmail the email address of the account removing the friend
+     * @param friendsEmail the email address of the friend to remove
+     * @throws SQLException if the friendship cannot be removed
+     */
+    public void RemoveFriend(String yourEmail, String friendsEmail) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(REMOVE_FRIEND);
         statement.setString(1, yourEmail);
         statement.setString(2, friendsEmail);

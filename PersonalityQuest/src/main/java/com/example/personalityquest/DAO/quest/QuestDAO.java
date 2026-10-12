@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.quest;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.SQLite;
@@ -8,7 +9,8 @@ import com.example.personalityquest.SQLite;
 import java.sql.*;
 import java.util.Locale;
 
-public class QuestDAO {
+/** Stores and retrieves quest catalog records */
+public class QuestDAO extends ParentDAO {
     /**
      * Gets an Array of Quests for the given archetypeId
      * @param archetypeId The archetypeId you want to get quests for
@@ -21,7 +23,9 @@ public class QuestDAO {
             labourId INTEGER PRIMARY KEY,
             archetypeId INTEGER NOT NULL,
             name TEXT NOT NULL,
-            narrative TEXT NOT NULL Default ''
+            narrative TEXT NOT NULL Default '',
+            decisionQuestion TEXT NOT NULL Default '',
+            resolution TEXT NOT NULL Default ''
             )
             """;
 
@@ -45,10 +49,18 @@ public class QuestDAO {
             "As a third labour he ordered him to bring the Cerynitian hind alive to Mycenae. Now the hind was at Oenoe; it had golden horns and was sacred to Artemis; so wishing neither to kill nor wound it, Hercules hunted it a whole year. But when, weary with the chase, the beast took refuge on the mountain called Artemisius, and thence passed to the river Ladon, Hercules shot it just as it was about to cross the stream, and catching it put it on his shoulders and hastened through Arcadia. But Artemis with Apollo met him, and would have wrested the hind from him, and rebuked him for attempting to kill her sacred animal. Howbeit, by pleading necessity and laying the blame on Eurystheus, he appeased the anger of the goddess and carried the beast alive to Mycenae.",
 
             // 2  Everyman — Augean Stables (Apollodorus 2.5.5)
-            "The fifth labour he laid on him was to carry out the dung of the cattle of Augeas in a single day. Now Augeas was king of Elis; some say that he was a son of the Sun, others that he was a son of Poseidon, and others that he was a son of Phorbas; and he had many herds of cattle. Hercules accosted him, and without revealing the command of Eurystheus, said that he would carry out the dung in one day, if Augeas would give him the tithe of the cattle. Augeas was incredulous, but promised. Having taken Augeas's son Phyleus to witness, Hercules made a breach in the foundations of the cattle-yard, and then, diverting the courses of the Alpheus and Peneus, which flowed near each other, he turned them into the yard, having first made an outlet for the water through another opening. When Augeas learned that this had been accomplished at the command of Eurystheus, he would not pay the reward; nay more, he denied that he had promised to pay it, and on that point he professed himself ready to submit to arbitration. The arbitrators having taken their seats, Phyleus was called by Hercules and bore witness against his father, affirming that he had agreed to give him a reward. In a rage Augeas, before the voting took place, ordered both Phyleus and Hercules to pack out of Elis.",
+            "For his fifth labour, Eurystheus ordered Hercules to clean the stables of Augeas in a single day — a task meant to humiliate him. Augeas, king of Elis, owned more cattle than any man alive, and their stables had not been cleaned in years. The filth was beyond counting, and the command carried an insult: let the great son of Zeus stoop to shovelling dung like the lowest hand.\n\nHercules could have refused the task as beneath him. Instead, he met Augeas as an equal and struck an honest bargain: clean the stables in one day, and the king would owe him a tenth of his herds. Augeas, certain it was impossible, agreed — and Hercules called the king's own son, Phyleus, to stand as witness to the deal.\n\nThen he set to work, not with his hands but with his wits. He breached the foundations at both ends of the yard, and turned the courses of two rivers, the Alpheus and the Peneus, straight through the stables. The waters surged in and swept the years of filth away before the day was out.\n\nBut when the labour was done, Augeas broke his word. He denied he had ever promised a reward, and demanded the matter go to arbitration.\n\nHere was the pivotal moment. The judges took their seats. Augeas was a king; Hercules a stranger passing through. And the one man who could speak the truth was Phyleus — the king's own son, caught between his father and what was fair.",
 
             // 3  Hero — Nemean Lion (Apollodorus 2.5.1)
-            "First, Eurystheus ordered him to bring the skin of the Nemean lion; now that was an invulnerable beast begotten by Typhon. On his way to attack the lion he came to Cleonae and lodged at the house of a day-laborer, Molorchus; and when his host would have offered a victim in sacrifice, Hercules told him to wait for thirty days, and then, if he had returned safe from the hunt, to sacrifice to Saviour Zeus, but if he were dead, to sacrifice to him as to a hero. And having come to Nemea and tracked the lion, he first shot an arrow at him, but when he perceived that the beast was invulnerable, he heaved up his club and made after him. And when the lion took refuge in a cave with two mouths, Hercules built up the one entrance and came in upon the beast through the other, and putting his arm round its neck held it tight till he had choked it; so laying it on his shoulders he carried it to Cleonae.",
+            "For his first labour, Eurystheus ordered Hercules to bring back the skin of the Nemean lion — a beast begotten by Typhon, whose hide no arrow, blade, or stone could pierce. It had terrorised the region for years, and no hunter who went after it had ever returned.\n" +
+                    "\n" +
+                    "On his way, Hercules lodged with a poor day-labourer named Molorchus, who offered to sacrifice his only animal in the hero's honour. Hercules stopped him. Wait thirty days, he said. If I return safe, we sacrifice together to Zeus the Saviour. If I do not return, sacrifice to me as to a dead man. He went to face the lion with his eyes open to the fact that he might not come back.\n" +
+                    "\n" +
+                    "He tracked the beast to its lair and loosed an arrow — and watched it glance harmlessly off the lion's hide. Then a second. Then he understood: no weapon he carried could harm this creature. Everything he had trained for, everything he relied on, was useless against it.\n" +
+                    "\n" +
+                    "Here was the pivotal moment. The lion turned on him, and Hercules stood with a club that could not wound it and arrows that bounced away like twigs. He could feel the fear — any man would. The question was not whether he was afraid. The question was what he would do with the fear, now that his strength alone would not save him.\n" +
+                    "\n" +
+                    "What he chose: he drove the lion back into its cave, blocked one of its two entrances, and came at it through the other in the dark, where its claws and speed meant less. He threw his arms around its neck and held on, past its thrashing, past the pain, until it could no longer breathe.",
 
             // 4  Caregiver — Erymanthian Boar (Apollodorus 2.5.4, trimmed)
             "As a fourth labour he ordered him to bring the Erymanthian boar alive; now that animal ravaged Psophis, sallying from a mountain which they call Erymanthus. And when he had chased the boar with shouts from a certain thicket, he drove the exhausted animal into deep snow, trapped it, and brought it to Mycenae.",
@@ -78,36 +90,87 @@ public class QuestDAO {
             "A twelfth labour imposed on Hercules was to bring Cerberus from Hades. Now this Cerberus had three heads of dogs, the tail of a dragon, and on his back the heads of all sorts of snakes. And having come to Taenarum in Laconia, where is the mouth of the descent to Hades, he descended through it. But when the souls saw him, they fled, save Meleager and the Gorgon Medusa. And being come near to the gates of Hades he found Theseus and Pirithous. And Theseus, indeed, he took by the hand and raised up, but when he would have brought up Pirithous, the earth quaked and he let go. When Hercules asked Pluto for Cerberus, Pluto ordered him to take the animal provided he mastered him without the use of the weapons which he carried. Hercules found him at the gates of Acheron, and, cased in his cuirass and covered by the lion's skin, he flung his arms round the head of the brute, and though the dragon in its tail bit him, he never relaxed his grip and pressure till it yielded. So he carried it off and ascended through Troezen. And Hercules, after showing Cerberus to Eurystheus, carried him back to Hades.",
     };
 
+    private static final String[] LABOUR_DECISION_QUESTIONS = {
+            // 1  Innocent
+            "The hind is caught and bound across your shoulders. As you turn for home, Apollo appears at Artemis's side, angered that you have laid hands on her sacred beast. You will not abandon the labour — but how do you carry it through?",
+            // 2  Everyman
+            "Augeas has broken his word, and the dispute goes before the judges. You did the work fairly and in the open — but now a king's word stands against yours, and only Phyleus can confirm the truth. How do you carry it through?",
+            // 3  Hero
+            "Your arrows are useless and your club cannot pierce its hide. The lion turns on you, and the fear rises. Your weapons have failed — how do you meet it?",
+            "", // 4  Caregiver
+            "", // 5  Magician
+            "", // 6  Sage
+            "", // 7  Lover
+            "", // 8  Jester
+            "", // 9  Explorer
+            "", // 10 Creator
+            "", // 11 Ruler
+            ""  // 12 Outlaw
+    };
 
-    private static void EnsureTables() throws SQLException {
+    private static final String[] LABOUR_RESOLUTIONS = {
+            // 1 Innocent
+            "Hercules did not push past the gods, and he did not brace for a fight. He simply spoke the truth. He explained that he meant the hind no harm, that the labour had been forced on him by Eurystheus, and that he would never have raised a hand against something sacred by his own choice. He laid the matter bare and trusted Artemis to see his heart.\n\nAnd she did. The goddess's anger softened, and she let him pass. Hercules carried the hind alive to Mycenae — not by force, not by rank, and not by fear, but by holding honestly to good faith and trusting it would be understood.\n\nThis is the Innocent's lesson. Faith isn't blind, and it isn't armour against the world. It's a grounded trust — in others, and in how things can turn out — held with open eyes. Hercules faced down two gods with nothing but the truth and the belief that it would be enough. The naive over-promise and the cynic braces for a fight; the one who keeps honest faith simply says what is true, and finds that it carries further than either.",
+            // 2  Everyman
+            "Phyleus chose the truth and testified against his own father — a brave, fair act. And it still wasn't enough. Augeas, enraged, banished them both before a single vote was cast, and Eurystheus later refused to count the labour at all.\n" +
+                    "\n" +
+                    "This is the Everyman's hardest lesson: you can act fairly and trust the group to decide rightly, and sometimes it still goes against you. Fairness isn't a guarantee of fair treatment in return. But years later Hercules returned, set things right, restored Phyleus, and founded the Olympic Games on that ground — a gathering of equals that endures to this day. Hold to fair dealing because it's right, and trust that what's just can endure, even when the room gets it wrong today.",
+            // 3  Hero
+            "Hercules did not win by being fearless, and he did not win by throwing himself at the beast. He won by facing the fear and thinking clearly inside it. When his weapons failed, he didn't freeze and he didn't charge — he changed the fight. He drove the lion into the dark of its own cave, where its speed and claws counted for less, and there he closed his arms around its throat and held on through everything it did to him, until it fell still.\n\nThen he returned to Molorchus on the thirtieth day — the very day the labourer was about to mourn him as dead — and the two sacrificed together to Zeus the Saviour, as they had planned. Hercules had measured the danger honestly from the start, and come back alive because of it.\n\nThis is the Hero's lesson. Courage is not the absence of fear, and it is not rushing in to prove you have none. It's feeling the fear fully, judging the danger clearly, and acting well anyway — choosing the ground where your strength can win, and then committing to it completely. The reckless and the fearful both lose to the lion. The one who faces it with open eyes brings home its skin — and wears it as armour ever after.",
+            "", // 4  Caregiver
+            "", // 5  Magician
+            "", // 6  Sage
+            "", // 7  Lover
+            "", // 8  Jester
+            "", // 9  Explorer
+            "", // 10 Creator
+            "", // 11 Ruler
+            ""  // 12 Outlaw
+    };
+
+
+    public QuestDAO(){
+        super();
+    }
+
+    public QuestDAO(Connection connection){
+        super(connection);
+    }
+
+    private void EnsureTables() throws SQLException {
         Connection connection = SQLite.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_QUESTS);
         }
     }
 
-    private static void InsertQuest(int labourId, int archetypeId, String name, String narrative) throws SQLException {
+    private void InsertQuest(int labourId, int archetypeId, String name, String narrative,
+                                    String decisionQuestion, String resolution) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT OR IGNORE INTO Quests (LabourId, archetypeId, name, narrative) VALUES (?, ?, ?, ?)")){
+                "INSERT OR IGNORE INTO Quests (LabourId, archetypeId, name, narrative, decisionQuestion, resolution) VALUES (?, ?, ?, ?, ?, ?)")){
             statement.setInt(1, labourId);
             statement.setInt(2, archetypeId);
             statement.setString(3, name);
             statement.setString(4, narrative);
+            statement.setString(5, decisionQuestion);
+            statement.setString(6, resolution);
             statement.executeUpdate();
         }
     }
 
-    private static void SeedCatalog() throws SQLException {
+    private void SeedCatalog() throws SQLException {
         for (Archetype archetype : Archetype.values()) {
             int archetypeId = archetype.getArchetypeId();
-            InsertQuest(archetypeId, archetypeId, LABOUR_NAMES[archetypeId - 1], LABOUR_NARRATIVES[archetypeId - 1]);
+            InsertQuest(archetypeId, archetypeId, LABOUR_NAMES[archetypeId - 1], LABOUR_NARRATIVES[archetypeId - 1],
+                    LABOUR_DECISION_QUESTIONS[archetypeId - 1], LABOUR_RESOLUTIONS[archetypeId - 1]);
         }
     }
 
-    public static void ResetAndSeedCatalog() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    /** Recreates the quest catalog and inserts its default records
+     * @throws SQLException if the catalog cannot be recreated
+     */
+    public void ResetAndSeedCatalog() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE IF EXISTS Quests");
         }
@@ -116,7 +179,12 @@ public class QuestDAO {
     }
 
 
-    public static Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
+    /** Returns quests assigned to the supplied archetype
+     * @param archetypeId the archetype ID to look up
+     * @return the quests assigned to the archetype
+     * @throws SQLException if the quests cannot be loaded
+     */
+    public Quest[] GetQuestsForArchetypeId(int archetypeId) throws SQLException {
 
         int count = GetCountOfQuestsForArchetypeId(archetypeId);
         // no quests exist for this given ID
@@ -124,7 +192,6 @@ public class QuestDAO {
             return null;
         }
 
-        Connection connection = SQLite.getConnection();
         PreparedStatement getQuestsForArchetypeId = connection.prepareStatement(
                 """
                     SELECT * FROM Quests
@@ -146,7 +213,9 @@ public class QuestDAO {
                     rs.getInt("labourId"),
                     rs.getInt("archetypeId"),
                     rs.getString("name"),
-                    rs.getString("narrative")
+                    rs.getString("narrative"),
+                    rs.getString("decisionQuestion"),
+                    rs.getString("resolution")
             );
 
             index++;
@@ -162,8 +231,7 @@ public class QuestDAO {
      * @return The Quest is successful or null if labourId doesn't match a quest in the database
      * @throws SQLException Database Access Failure
      */
-    public static Quest GetQuestForLabourId(int labourId) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public Quest GetQuestForLabourId(int labourId) throws SQLException {
         PreparedStatement getQuestForLabourID = connection.prepareStatement(
                 """
                     SELECT * FROM Quests
@@ -179,7 +247,9 @@ public class QuestDAO {
                     rs.getInt("labourId"),
                     rs.getInt("archetypeId"),
                     rs.getString("name"),
-                    rs.getString("narrative")
+                    rs.getString("narrative"),
+                    rs.getString("decisionQuestion"),
+                    rs.getString("resolution")
             );
         }
 
@@ -192,7 +262,7 @@ public class QuestDAO {
      * @return The archetype name, or null if no row matches
      * @throws SQLException Database Access Failure
      */
-    public static String GetArchetypeName(int archetypeId) throws SQLException {
+    public String GetArchetypeName(int archetypeId) throws SQLException {
         for (Archetype archetype : Archetype.values()) {
             if (archetype.getArchetypeId() == archetypeId){
                 return archetype.getName();
@@ -220,7 +290,7 @@ public class QuestDAO {
      * @return The archetypeId, or null if none matches
      * @throws SQLException Database Access Failure
      */
-    public static Integer GetArchetypeIdForName(String name) throws SQLException {
+    public Integer GetArchetypeIdForName(String name) throws SQLException {
         //Connection connection = SQLite.getConnection();
         String needle = name.trim().toLowerCase(Locale.ROOT);
         if (needle.startsWith("the ")) {
@@ -270,7 +340,7 @@ public class QuestDAO {
      * @return The description, or null if no row matches
      * @throws SQLException Database Access Failure
      */
-    public static String GetArchetypeDescription(int archetypeId) throws SQLException {
+    public String GetArchetypeDescription(int archetypeId) throws SQLException {
         for (Archetype archetype : Archetype.values()) {
             if (archetype.getArchetypeId() == archetypeId){
                 return archetype.getSmallDescription();
@@ -298,8 +368,7 @@ public class QuestDAO {
      * @return the amount of quests in the database for the archetypeId
      * @throws SQLException Database Access Failure
      */
-    private static int GetCountOfQuestsForArchetypeId(int archetypeId) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    private int GetCountOfQuestsForArchetypeId(int archetypeId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT COUNT(*) FROM Quests

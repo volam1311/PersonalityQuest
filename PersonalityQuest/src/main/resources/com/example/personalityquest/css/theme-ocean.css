@@ -1,0 +1,19 @@
+.root {
+    -page-bg: #142332;
+    -card-bg: #1C3042;
+    -raised-bg: #253B50;
+    -border-color: #354D62;
+    -text-primary: #EDF5FC;
+    -text-secondary: #B4C4D2;
+    -purple-text: #B8A2E6;
+    -purple-fill: #7153AD;
+    -purple-hover: #8769C2;
+    -purple-tint: #332A47;
+    -gold-accent: #E0B24E;
+    -gold-tint: #47391A;
+    -purple-glow: rgba(113,83,173,0.35);
+    -icon-outline: #52697C;
+    -text-on-accent: #142332;
+    -disabled-bg: #253B50;
+    -disabled-text: #B4C4D2;
+}

@@ -9,12 +9,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.quest.WeeklyTaskReflectionController">
-    <left>
+<BorderPane styleClass="dashboard-root" stylesheets="@css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalityquest.Controllers.quest.WeeklyTaskReflectionController">    <left>
         <fx:include fx:id="navBar" source="NavBar.fxml" />
     </left>
     <center>
-        <VBox alignment="CENTER" spacing="10" style="-fx-background-color: lightblue;">
+        <VBox alignment="CENTER" spacing="10">
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reflection" textAlignment="CENTER">
                     <VBox.margin>

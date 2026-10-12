@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services.quest;
 
+import com.example.personalityquest.DAO.quest.TaskDAO;
 import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Model.quest.Task;
 import com.example.personalityquest.Model.quest.WeeklyTask;
@@ -22,9 +23,12 @@ public class TaskServiceTest {
 
 
 
+    private TaskService TaskService;
     @BeforeEach
     public void setUp() throws Exception {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        TaskDAO taskDAO = new TaskDAO(connection);
+        TaskService = new TaskService(taskDAO);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (
@@ -41,6 +45,7 @@ public class TaskServiceTest {
                         taskID INT PRIMARY KEY,
                         name TEXT NOT NULL,
                         description TEXT NOT NULL,
+                        overview TEXT NOT NULL DEFAULT '',
                         labourID INT NOT NULL,
                         taskType TEXT NOT NULL DEFAULT 'QUEST'
                     )
@@ -173,13 +178,11 @@ public class TaskServiceTest {
         }
 
         int[] tasks = TaskService.GetRandomAmountOfTaskIdsForLabourId(2);
-
         for(int task: tasks){
             if (task != 8001 && task != 8002){
                 throw new Exception("Didnt have correct Ids");
             }
         }
-
     }
 
     @Test

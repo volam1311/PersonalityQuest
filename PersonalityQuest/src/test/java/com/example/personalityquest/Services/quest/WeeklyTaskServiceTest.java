@@ -23,11 +23,14 @@ public class WeeklyTaskServiceTest {
 
     private Task[] dummyTasks;
 
+    private WeeklyTaskService WeeklyTaskService;
 
 
     @BeforeEach
     public void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        WeeklyTaskDAO dao = new WeeklyTaskDAO(connection);
+        WeeklyTaskService = new WeeklyTaskService(dao);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (
@@ -44,6 +47,7 @@ public class WeeklyTaskServiceTest {
                         taskID INT PRIMARY KEY,
                         name TEXT NOT NULL,
                         description TEXT NOT NULL,
+                        overview TEXT NOT NULL DEFAULT '',
                         labourID INT NOT NULL,
                         taskType TEXT NOT NULL DEFAULT 'QUEST'
                     )
@@ -405,6 +409,35 @@ public class WeeklyTaskServiceTest {
         WeeklyTask task = WeeklyTaskService.GetWeeklyTask("test", 9999, weekStart);
 
         assertThrowsExactly(IllegalArgumentException.class, () -> WeeklyTaskService.UpdateGivenTaskToBeFinished(task, null, "test"));
+    }
+
+    @Test
+    public void SavingDraftOnlyUpdatesSelectedWeek() throws Exception {
+        LocalDate thisWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate previousWeek = thisWeek.minusWeeks(1);
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                    INSERT INTO WeeklyTasks
+                        (accountEmail, taskId, status, reflection, weekStart)
+                    VALUES
+                        ('test', 9999, 'Finished', 'Older reflection', ?),
+                        ('test', 9999, 'NotStarted', '', ?)
+                    """)) {
+            statement.setString(1, previousWeek.toString());
+            statement.setString(2, thisWeek.toString());
+            statement.executeUpdate();
+        }
+
+        WeeklyTask currentTask = WeeklyTaskService.GetWeeklyTask("test", 9999, thisWeek);
+        WeeklyTaskService.UpdateGivenTaskToDraft(currentTask, "New reflection", "test");
+        WeeklyTask olderTask = WeeklyTaskService.GetWeeklyTask("test", 9999, previousWeek);
+        WeeklyTask updatedTask = WeeklyTaskService.GetWeeklyTask("test", 9999, thisWeek);
+
+        assertEquals("Older reflection", olderTask.getReflection());
+        assertEquals("Finished", olderTask.getStatus());
+        assertEquals("New reflection", updatedTask.getReflection());
+        assertEquals("Started", updatedTask.getStatus());
     }
 
 

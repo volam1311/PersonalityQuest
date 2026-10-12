@@ -2,6 +2,7 @@ package com.example.personalityquest.Services.profile;
 
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Services.profile.UserProfileService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -11,6 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserProfileServiceTest {
     private Connection connection;
 
+    private UserProfileService UserProfileService;
+    @BeforeEach
+    void setUp(){
+        UserProfileService = new UserProfileService();
+    }
     @Test
     void DisplayNameUsesFirstAndLastName() {
         EmailDetails details =

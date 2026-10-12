@@ -1,5 +1,7 @@
 package com.example.personalityquest.Services.quest;
 
+import com.example.personalityquest.DAO.quest.UserQuestDAO;
+import com.example.personalityquest.Model.auth.User;
 import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.UserQuest;
@@ -19,9 +21,13 @@ public class UserQuestServiceTest {
 
     private int labourId;
 
+    private UserQuestService UserQuestService;
     @BeforeEach
     void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        UserQuestDAO userQuestDAO = new UserQuestDAO(connection);
+        UserQuestService = new UserQuestService(userQuestDAO);
+
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (
@@ -63,6 +69,9 @@ public class UserQuestServiceTest {
                         labourId INT NOT NULL,
                         percentageComplete FLOAT NOT NULL,
                         status TEXT NOT NULL,
+                        reflection TEXT NOT NULL DEFAULT '',
+                        reflectionStatus TEXT NOT NULL DEFAULT 'Not Started',
+                        reactionType TEXT NOT NULL DEFAULT '',
                         PRIMARY KEY(accountEmail, labourId)
                         FOREIGN KEY(labourId) REFERENCES Quests(labourId)
                     )

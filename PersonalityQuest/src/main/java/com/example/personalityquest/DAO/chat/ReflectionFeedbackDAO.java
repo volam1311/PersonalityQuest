@@ -1,7 +1,9 @@
 package com.example.personalityquest.DAO.chat;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.SQLite;
+import com.example.personalityquest.Services.chat.ReflectionFeedbackService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +14,7 @@ import java.sql.Statement;
 /**
  * Stores AI coaching replies against a weekly task reflection.
  */
-public final class ReflectionFeedbackDAO {
+public final class ReflectionFeedbackDAO extends ParentDAO {
     private static final String CREATE_TABLE = """
             CREATE TABLE IF NOT EXISTS ReflectionFeedback (
                 accountEmail TEXT NOT NULL,
@@ -35,14 +37,19 @@ public final class ReflectionFeedbackDAO {
             WHERE accountEmail = ? AND taskId = ? AND weekStart = ?
             """;
 
-    private ReflectionFeedbackDAO() {
+
+    public ReflectionFeedbackDAO() {
+        super();
+    }
+
+    public ReflectionFeedbackDAO(Connection connection){
+        super(connection);
     }
 
     /**
      * Creates the feedback table when it does not already exist.
      */
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.execute(CREATE_TABLE);
         }
@@ -51,9 +58,8 @@ public final class ReflectionFeedbackDAO {
     /**
      * Saves or replaces AI feedback for a weekly task.
      */
-    public static void Save(String email, int taskId, String weekStart, String feedback) throws SQLException {
+    public void Save(String email, int taskId, String weekStart, String feedback) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(UPSERT)) {
             statement.setString(1, email);
             statement.setInt(2, taskId);
@@ -66,13 +72,12 @@ public final class ReflectionFeedbackDAO {
     /**
      * Loads previously stored AI feedback, or an empty string when none exists.
      */
-    public static String Find(String email, int taskId, String weekStart) throws SQLException {
+    public String Find(String email, int taskId, String weekStart) throws SQLException {
         EnsureTables();
         if (ApplicationManager.isEmpty(email) || ApplicationManager.isEmpty(weekStart) || taskId == 0) {
             return "";
         }
 
-        Connection connection = SQLite.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(FIND)) {
             statement.setString(1, email);
             statement.setInt(2, taskId);

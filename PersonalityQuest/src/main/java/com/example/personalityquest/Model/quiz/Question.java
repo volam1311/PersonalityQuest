@@ -14,6 +14,14 @@ public class Question {
     private final String questionPrompt;
     private final Option options;
 
+    /** Creates a quiz question with its answer options
+     * @param questionID the question's unique ID
+     * @param realmType the realm associated with the question
+     * @param questionType the question type
+     * @param questionPrompt the question text shown to the user
+     * @param options the answer options for the question
+     * @throws IllegalArgumentException if the ID or question prompt is invalid
+     */
     public Question(int questionID, String realmType, String questionType, String questionPrompt, Option options) {
         if (questionID <= 0) {
             throw new IllegalArgumentException("Question id is invalid");
@@ -38,18 +46,33 @@ public class Question {
         //this.options = List.copyOf(options);
     }
 
+    /** Returns the question ID
+     * @return the question ID
+     */
     public int getQuestionID() {
         return questionID;
     }
 
+    /** Returns the question prompt
+     * @return the question text
+     */
     public String getQuestionPrompt() {
         return questionPrompt;
     }
 
+    /** Returns the question's realm
+     * @return the realm type
+     */
     public String getRealmType() {return realmType;}
 
+    /** Returns the question type
+     * @return the question type
+     */
     public String getQuestionType() {return questionType;}
 
+    /** Returns the answer options
+     * @return the question's answer options
+     */
     public Option getOptions() {
         return options;
     }

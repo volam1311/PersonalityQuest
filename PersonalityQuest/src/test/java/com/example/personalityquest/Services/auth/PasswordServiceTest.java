@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services.auth;
 
+import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.SQLite;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Services.auth.HashingService;
@@ -23,9 +24,12 @@ public class PasswordServiceTest {
 
     private String currentPassword;
 
+    private PasswordService PasswordService;
     @BeforeEach
     public void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        AccountDAO accountDAO = new AccountDAO(connection);
+        PasswordService = new PasswordService(accountDAO);
         try (Statement statement = connection.createStatement()) {
             statement.execute("""
                     CREATE TABLE Accounts (

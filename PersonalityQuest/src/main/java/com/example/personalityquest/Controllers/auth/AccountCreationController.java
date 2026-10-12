@@ -26,10 +26,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
+/** Controls account creation and validation */
 public class AccountCreationController {
     private static final double COMPACT_BREAKPOINT = 700;
 
+    private static final String USERNAME_FAIL_STR = "[SQLITE_CONSTRAINT_UNIQUE] " +
+            " A UNIQUE constraint failed (UNIQUE constraint failed: Accounts.userName)";
     @FXML
     private StackPane root;
     @FXML
@@ -50,8 +54,10 @@ public class AccountCreationController {
     @FXML
     private Label Message;
 
+    private QuizService QuizService;
     @FXML
     private void initialize() {
+        QuizService = new QuizService();
         Rectangle clip = new Rectangle();
         clip.setArcWidth(56);
         clip.setArcHeight(56);
@@ -185,7 +191,8 @@ public class AccountCreationController {
             return;
         }
 
-        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText())) {
+        EmailService emailService = new EmailService();
+        if (emailService.DoesAccountWithEmailExist(emailEntry.getText())) {
             markFieldError(emailEntry);
             Message.setText("An account with this email already exists");
             return;
@@ -200,8 +207,15 @@ public class AccountCreationController {
                     lastNameEntry.getText(),
                     passwordEntry.getText());
         } catch (SQLException e) {
+            if (Objects.equals(e.getMessage(), USERNAME_FAIL_STR)){
+                System.out.println(e.getMessage());
+                markFieldError(userNameEntry);
+                Message.setText("Username is already in use. Please try again");
+                return;
+            }
+
             markFieldError(emailEntry);
-            Message.setText("Could not create account. Email may already be in use");
+            Message.setText("Could not create account. Email may already be in use, Please Try Again.");
             return;
         }
 

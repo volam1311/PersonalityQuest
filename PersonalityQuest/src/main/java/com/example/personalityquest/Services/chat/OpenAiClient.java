@@ -20,6 +20,7 @@ public class OpenAiClient implements ChatCompletionClient {
     private final HttpClient httpClient;
     private final String model;
 
+    /** Creates a client that sends requests to the configured OpenAI service */
     public OpenAiClient() {
         this(HttpClient.newBuilder().connectTimeout(TIMEOUT).build(), DEFAULT_MODEL);
     }
@@ -30,6 +31,12 @@ public class OpenAiClient implements ChatCompletionClient {
     }
 
     @Override
+    /** Sends a chat-completion request and returns the response text
+     * @param systemPrompt instructions that define the assistant's behaviour
+     * @param userPrompt the user's request
+     * @return the generated response text
+     * @throws Exception if the request fails or the response cannot be read
+     */
     public String Complete(String systemPrompt, String userPrompt) throws Exception {
         String apiKey = EnvLoader.Get("OPENAI_API_KEY");
         if (ApplicationManager.isEmpty(apiKey)) {
@@ -58,6 +65,12 @@ public class OpenAiClient implements ChatCompletionClient {
         return content.trim();
     }
 
+    /** Builds the JSON body for a chat-completion request
+     * @param model the model to use
+     * @param systemPrompt instructions that define the assistant's behaviour
+     * @param userPrompt the user's request
+     * @return the JSON request body
+     */
     public static String RequestBody(String model, String systemPrompt, String userPrompt) {
         return """
                 {
@@ -76,6 +89,11 @@ public class OpenAiClient implements ChatCompletionClient {
         );
     }
 
+    /** Extracts a readable error message from an API response
+     * @param statusCode the HTTP response status code
+     * @param json the response body
+     * @return the error message to display
+     */
     public static String ErrorMessage(int statusCode, String json) {
         String apiMessage = OpenAiJson.ExtractString(json, "message", "error");
         if (!ApplicationManager.isEmpty(apiMessage)) {

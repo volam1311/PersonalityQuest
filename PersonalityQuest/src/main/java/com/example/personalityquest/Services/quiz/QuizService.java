@@ -1,32 +1,58 @@
 package com.example.personalityquest.Services.quiz;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.personalisation.OptionDAO;
 import com.example.personalityquest.DAO.personalisation.QuestionDAO;
-import com.example.personalityquest.Services.quest.QuestService;
-import com.example.personalityquest.Services.quest.UserQuestService;
-import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.quest.QuestDAO;
+import com.example.personalityquest.DAO.quest.QuestOptionDAO;
+import com.example.personalityquest.DAO.quest.QuizResultDAO;
+import com.example.personalityquest.Model.quest.Quest;
+import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quiz.Archetype;
 import com.example.personalityquest.Model.quiz.Option;
-import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quiz.Question;
 import com.example.personalityquest.Model.quiz.QuizResult;
-import com.example.personalityquest.Model.quest.UserQuest;
-
-import java.sql.SQLException;
-import java.util.*;
+import com.example.personalityquest.Services.ParentService;
+import com.example.personalityquest.Services.quest.QuestService;
+import com.example.personalityquest.Services.quest.UserQuestService;
 
 /**
  * Runs the archetype quiz: dummy questions, answers, scoring, and quest assignment.
  */
-public class QuizService {
+public class QuizService extends ParentService {
     private static List<Question> questions = List.of();
     private static Integer[] answers = new Integer[0];
     private static int currentIndex;
     private static boolean inProgress;
     private static QuizResult result;
 
-    private QuizService() {
+    private QuestionDAO QuestionDAO;
+    private OptionDAO OptionDAO;
+    private QuizResultDAO QuizResultDAO;
+
+    public QuizService() {
+        super();
+        QuestionDAO = new QuestionDAO();
+        OptionDAO = new OptionDAO();
+        QuizResultDAO = new QuizResultDAO();
     }
+    public QuizService(QuestionDAO questionDAO, OptionDAO optionDAO, QuizResultDAO quizResultDAO) {
+        super();
+        QuestionDAO = questionDAO;
+        OptionDAO = optionDAO;
+        QuizResultDAO = quizResultDAO;
+    }
+
+
 
     /**
      * Clears any in-progress attempt or stored result.
@@ -39,17 +65,21 @@ public class QuizService {
         result = null;
     }
 
-    private static final boolean DEMO_MODE = Boolean.getBoolean("quiz.demo");
+    // Defaults to the 7-question demo quiz so every teammate gets it with zero setup.
+    // To run the full 16-question quiz instead, pass -Dquiz.demo=false at launch.
+    private boolean IsDemoMode() {
+    return Boolean.parseBoolean(System.getProperty("quiz.demo", "true"));
+} 
 
     /**
      * Starts a new attempt with the dummy five-question bank.
      */
-    public static void StartQuiz() {
+    public void StartQuiz() {
         try {
             EnsureCatalog();
             questions = QuestionDAO.GetQuestions();
-            if (DEMO_MODE){
-                questions = FirstQuestionPerRealm(questions);
+            if (IsDemoMode()){
+                questions = DemoQuestionSet(questions);
             }
         } catch (SQLException exception) {
             throw new IllegalStateException("Could not load quiz questions", exception);
@@ -60,7 +90,7 @@ public class QuizService {
         result = null;
     }
 
-    private static List<Question> FirstQuestionPerRealm(List<Question> all){
+    private List<Question> FirstQuestionPerRealm(List<Question> all){
         List<Question> shortList = new ArrayList<>();
         Set<String> seenRealms = new LinkedHashSet<>();
         for (Question question : all) {
@@ -71,7 +101,10 @@ public class QuizService {
         return shortList;
     }
 
-    public static void EnsureCatalog() throws SQLException {
+    /** Ensures the quiz catalog is available in the database
+     * @throws SQLException if the catalog cannot be prepared
+     */
+    public void EnsureCatalog() throws SQLException {
         QuestionDAO.EnsureTables();
         if (!QuestionDAO.HasCatalog()){
             QuestionDAO.SeedCatalog();
@@ -85,21 +118,21 @@ public class QuizService {
     /**
      * Whether an attempt is underway and has not been scored yet.
      */
-    public static boolean HasActiveAttempt() {
+    public boolean HasActiveAttempt() {
         return inProgress && result == null && !questions.isEmpty();
     }
 
     /**
      * The most recent scored result, or null if the quiz has not been finished.
      */
-    public static QuizResult GetResult() {
+    public QuizResult GetResult() {
         return result;
     }
 
     /**
      * The dummy question bank used by the current attempt.
      */
-    public static List<Question> GetQuestions() {
+    public List<Question> GetQuestions() {
         EnsureInProgress();
         return questions;
     }
@@ -107,7 +140,7 @@ public class QuizService {
     /**
      * The question currently on screen.
      */
-    public static Question GetCurrentQuestion() {
+    public Question GetCurrentQuestion() {
         EnsureInProgress();
         return questions.get(currentIndex);
     }
@@ -115,7 +148,7 @@ public class QuizService {
     /**
      * Zero-based index of the current question.
      */
-    public static int GetCurrentQuestionIndex() {
+    public int GetCurrentQuestionIndex() {
         EnsureInProgress();
         return currentIndex;
     }
@@ -123,7 +156,7 @@ public class QuizService {
     /**
      * How many questions are in the current attempt.
      */
-    public static int GetQuestionCount() {
+    public int GetQuestionCount() {
         EnsureInProgress();
         return questions.size();
     }
@@ -131,7 +164,7 @@ public class QuizService {
     /**
      * Whether the current question is the last one.
      */
-    public static boolean IsLastQuestion() {
+    public boolean IsLastQuestion() {
         EnsureInProgress();
         return currentIndex == questions.size() - 1;
     }
@@ -139,14 +172,14 @@ public class QuizService {
     /**
      * Whether the user can move back from the current question.
      */
-    public static boolean CanGoBack() {
+    public boolean CanGoBack() {
         return HasActiveAttempt() && currentIndex > 0;
     }
 
     /**
      * Archetype id chosen for the current question, or null if not yet answered
      */
-    public static Integer GetAnswerForCurrentQuestion() {
+    public Integer GetAnswerForCurrentQuestion() {
         EnsureInProgress();
         return answers[currentIndex];
     }
@@ -155,7 +188,7 @@ public class QuizService {
      * Stores the selected option for the current question.
      * @param archetypeId The archetypes corresponding with the selected question
      */
-    public static void AnswerCurrentQuestion(int archetypeId) {
+    public void AnswerCurrentQuestion(int archetypeId) {
         EnsureInProgress();
         Option option = GetCurrentQuestion().getOptions();
         if (archetypeId != option.getOption1Archetype()
@@ -169,7 +202,7 @@ public class QuizService {
     /**
      * Moves to the previous question so the user can change an answer.
      */
-    public static void GoToPreviousQuestion() {
+    public void GoToPreviousQuestion() {
         EnsureInProgress();
         if (currentIndex == 0) {
             throw new IllegalStateException("Already on the first question");
@@ -180,7 +213,7 @@ public class QuizService {
     /**
      * Moves to the next question after the current one has been answered.
      */
-    public static void GoToNextQuestion() {
+    public void GoToNextQuestion() {
         EnsureInProgress();
         if (answers[currentIndex] == null) {
             throw new IllegalStateException("Current question has not been answered");
@@ -195,7 +228,7 @@ public class QuizService {
      * Scores every answer and stores the result.
      * @return The winning archetype and per-archetype counts
      */
-    public static QuizResult CompleteQuiz() {
+    public QuizResult CompleteQuiz() {
         EnsureInProgress();
         for (int index = 0; index < answers.length; index++) {
             if (answers[index] == null) {
@@ -214,7 +247,7 @@ public class QuizService {
      * @param email The account to assign a quest to
      * @return The stored result, with an assigned quest when one could be created
      */
-    public static QuizResult AssignQuestForCurrentResult(String email) {
+    public QuizResult AssignQuestForCurrentResult(String email) {
         if (result == null) {
             throw new IllegalStateException("Quiz has not been completed");
         }
@@ -223,11 +256,14 @@ public class QuizService {
         }
 
         try {
-            UserQuest activeQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
-            if (activeQuest != null) {
-                return result;
-            }
+            QuizResultDAO.SaveResult(email, result);
+        } catch (Exception ignored){
+            // Continue to show result if persistence fails
+        }
 
+        try {
+            UserQuestService UserQuestService = new UserQuestService();
+            QuestService QuestService = new QuestService();
             Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());
             if (archetypeId == null) {
                 return result;
@@ -238,10 +274,10 @@ public class QuizService {
                 return result;
             }
 
-            UserQuest inserted = UserQuestService.InsertNewQuestForEmail(quest, email);
-            UserQuestService.SetUserQuesStatusAsActive(inserted, email);
+            UserQuestService.ChangeActiveQuest(quest,email);
             result = result.withAssignedQuest(quest);
             return result;
+
         } catch (Exception exception) {
             return result;
         }
@@ -250,7 +286,7 @@ public class QuizService {
     /**
      * Counts answers per archetype. Ties go to the later answer among the tied winners.
      */
-    public static QuizResult Score(List<Integer> selectedArchetypeIds) {
+    public QuizResult Score(List<Integer> selectedArchetypeIds) {
         if (selectedArchetypeIds == null || selectedArchetypeIds.isEmpty()) {
             throw new IllegalArgumentException("Quiz answers are empty");
         }
@@ -283,7 +319,7 @@ public class QuizService {
      * Resolves a stored archetype id back to its enum constant
      */
 
-    private static Archetype ArchetypeById(int archetypeId) {
+    private Archetype ArchetypeById(int archetypeId) {
         for (Archetype archetype : Archetype.values()){
             if (archetype.getArchetypeId() == archetypeId){
                 return archetype;
@@ -295,7 +331,7 @@ public class QuizService {
     /**
      * Archetypes from a quiz result, winner first, then remaining scores high to low.
      */
-    public static List<Archetype> RankedArchetypes(QuizResult quizResult) {
+    public List<Archetype> RankedArchetypes(QuizResult quizResult) {
         if (quizResult == null) {
             throw new IllegalArgumentException("Quiz result is null");
         }
@@ -316,7 +352,7 @@ public class QuizService {
      * highest-scoring archetype reaches 1.0. Used to plot the 12-axis archetype radar
      * chart. Returns all zeros when there is no quiz result yet.
      */
-    public static double[] ArchetypeScores(QuizResult quizResult) {
+    public double[] ArchetypeScores(QuizResult quizResult) {
         Archetype[] archetypes = Archetype.values();
         double[] values = new double[archetypes.length];
         if (quizResult == null) {
@@ -340,11 +376,55 @@ public class QuizService {
         return values;
     }
 
-    private static void EnsureInProgress() {
+    private void EnsureInProgress() {
         if (!HasActiveAttempt()) {
             throw new IllegalStateException("Quiz has not been started");
         }
     }
+
+    public QuizResult LoadStoredResult(String email){
+        if (result != null){
+            return result;
+        }
+        if (ApplicationManager.isEmpty(email)){
+            return null;
+        }
+        try {
+            UserQuestService UserQuestService = new UserQuestService();
+            QuestService QuestService = new QuestService();
+            QuizResult stored = QuizResultDAO.LoadResult(email);
+            if (stored != null){
+            UserQuest activeQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            if (activeQuest != null){
+                Quest quest = QuestService.GetQuestForLabourId(activeQuest.getLabourId());
+                if (quest != null){
+                    stored = stored.withAssignedQuest(quest);
+                }
+            }
+            result = stored;
+            }
+            return result;
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    // Use Quiz questions for hero, Everyman and Innocent
+    private static final String FEATURED_DEMO_REALM = "Ego";
+
+    private List<Question> DemoQuestionSet(List<Question> all){
+        List<Question> selected = new ArrayList<>();
+        Set<String> seenOtherRealms = new LinkedHashSet<>();
+        for (Question question : all){
+            if (FEATURED_DEMO_REALM.equals(question.getRealmType())){
+                selected.add(question);
+            } else if (seenOtherRealms.add(question.getRealmType())){
+                selected.add(question);
+            }
+        }
+        return selected;
+    }
+
 
 
 

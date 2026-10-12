@@ -1,5 +1,6 @@
 package com.example.personalityquest.DAO.personalisation;
 
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.quiz.Option;
 import com.example.personalityquest.Model.quiz.Question;
 import com.example.personalityquest.SQLite;
@@ -16,7 +17,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class QuestionDAO {
+/** Stores and retrieves quiz question records */
+public class QuestionDAO extends ParentDAO {
     private static final String CREATE_QUESTIONS = """
             CREATE TABLE IF NOT EXISTS Questions (
             questionID INTEGER PRIMARY KEY,
@@ -25,10 +27,21 @@ public class QuestionDAO {
             questionPrompt TEXT NOT NULL
             )""";
 
-    private QuestionDAO() {
+    private final OptionDAO OptionDAO;
+    public QuestionDAO() {
+        super();
+        OptionDAO = new OptionDAO();
     }
 
-    public static void SeedCatalog() throws SQLException {
+    public QuestionDAO(Connection connection){
+        super(connection);
+        OptionDAO = new OptionDAO(connection);
+    }
+
+    /** Inserts the default question catalog
+     * @throws SQLException if the catalog cannot be inserted
+     */
+    public void SeedCatalog() throws SQLException {
 
         // The Four Realms are Ego, Soul, Self and Mark --> Each Realm contains 3 Archetypes
         // There are four questions for each Realm, for a total of 16 Questions
@@ -62,15 +75,20 @@ public class QuestionDAO {
         InsertQuestion(16, "Mark", "Scenario", "You discover a long-standing rule at work is holding good people back, but plenty of others just quietly follow it. What do you do? (scenario)");
     }
 
-    public static void EnsureTables() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    /** Creates question tables if they do not already exist
+     * @throws SQLException if the tables cannot be created
+     */
+    public void EnsureTables() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_QUESTIONS);
         }
     }
 
-    public static boolean HasCatalog() throws SQLException {
-        Connection connection = SQLite.getConnection();
+    /** Checks whether question catalog records exist
+     * @return true when the catalog contains records
+     * @throws SQLException if the catalog cannot be checked
+     */
+    public boolean HasCatalog() throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT COUNT(*) FROM Questions")) {
             ResultSet resultSet = statement.executeQuery();
@@ -78,13 +96,21 @@ public class QuestionDAO {
         }
     }
 
-    public static void InsertQuestion(
+    /**
+     * Inserts a question if its ID is not present
+     *
+     * @param questionID the question's unique ID
+     * @param realmType the realm associated with the question
+     * @param questionType the type of question
+     * @param questionPrompt the text shown to the user
+     * @throws SQLException if the question cannot be inserted
+     */
+    public void InsertQuestion(
             int questionID,
             String realmType,
             String questionType,
             String questionPrompt) throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
 
         try (PreparedStatement statement = connection.prepareStatement(
                 """ 
@@ -101,9 +127,12 @@ public class QuestionDAO {
         }
     }
 
-    public static List<Question> GetQuestions() throws SQLException {
+    /** Returns question records ordered by ID
+     * @return the questions in the catalog
+     * @throws SQLException if the questions cannot be read
+     */
+    public List<Question> GetQuestions() throws SQLException {
         EnsureTables();
-        Connection connection = SQLite.getConnection();
         try(PreparedStatement statement = connection.prepareStatement(
                 """
                     SELECT * From Questions ORDER BY questionID

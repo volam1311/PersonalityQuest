@@ -1,20 +1,19 @@
 package com.example.personalityquest.DAO.profile;
 
 import com.example.personalityquest.ApplicationManager;
+import com.example.personalityquest.DAO.ParentDAO;
 import com.example.personalityquest.Model.profile.StreakProgress;
-import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 
 /**
  * Provides database operations for account streak progress.
  */
-public class StreakDAO {
+public class StreakDAO extends ParentDAO {
 
     private static final String ENSURE_PROGRESS_ROW = """
             INSERT OR IGNORE INTO UserProgress (accountEmail)
@@ -41,7 +40,12 @@ public class StreakDAO {
             WHERE accountEmail = ?
             """;
 
-    private StreakDAO() {
+    public StreakDAO(){
+        super();
+    }
+
+    public StreakDAO(Connection connection) {
+        super(connection);
     }
 
     /**
@@ -68,13 +72,12 @@ public class StreakDAO {
      * @return The saved streak progress, or null if the account does not exist
      * @throws SQLException If the progress cannot be retrieved
      */
-    public static StreakProgress GetProgress(String email)
+    public StreakProgress GetProgress(String email)
         throws SQLException {
         if (ApplicationManager.isEmpty(email)) {
             return null;
         }
 
-        Connection connection = SQLite.getConnection();
         EnsureProgressRow(connection, email);
 
         int currentStreak;
@@ -111,13 +114,12 @@ public class StreakDAO {
      * @param completionDate The latest completion date
      * @throws SQLException If the progress cannot be saved
      */
-    public static void SaveProgress(String email, int currentStreak, int bestStreak, LocalDate completionDate)
+    public void SaveProgress(String email, int currentStreak, int bestStreak, LocalDate completionDate)
             throws SQLException {
         if (ApplicationManager.isEmpty(email)) {
             return;
         }
 
-        Connection connection = SQLite.getConnection();
         EnsureProgressRow(connection, email);
 
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_PROGRESS)) {
@@ -135,8 +137,7 @@ public class StreakDAO {
      * @return total quests for that account
      * @throws SQLException Database Access Failure
      */
-    public static int GetTotalQuestsCompleted(String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public int GetTotalQuestsCompleted(String email) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(GET_TOTAL_QUESTS_COMPLETED);
         statement.setString(1, email);
 
@@ -154,8 +155,7 @@ public class StreakDAO {
      * @param totalQuestsCompleted The new total quests completed
      * @throws SQLException Database Update Failure
      */
-    public static void SetTotalQuestsCompleted(String email, int totalQuestsCompleted) throws SQLException {
-        Connection connection = SQLite.getConnection();
+    public void SetTotalQuestsCompleted(String email, int totalQuestsCompleted) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(UPDATE_TOTAL_QUESTS_COMPLETED);
         statement.setInt(1, totalQuestsCompleted);
         statement.setString(2, email);
