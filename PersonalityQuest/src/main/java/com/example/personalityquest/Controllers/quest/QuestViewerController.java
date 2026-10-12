@@ -105,11 +105,11 @@ public class QuestViewerController implements Initializable {
     private QuestOptionDAO QuestOptionDAO;
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        TaskService = new TaskService();
-        UserQuestService = new UserQuestService();
-        QuestService = new QuestService();
-        JournalEntryService = new JournalEntryService();
-        ReflectionFeedbackService = new ReflectionFeedbackService();
+        TaskService = TaskService.GetInstance();
+        UserQuestService = UserQuestService.GetInstance();
+        QuestService = QuestService.GetInstance();
+        JournalEntryService = JournalEntryService.GetInstance();
+        ReflectionFeedbackService = ReflectionFeedbackService.GetInstance();
         ReflectionPromptDAO = new ReflectionPromptDAO();
         QuestOptionDAO = new QuestOptionDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUEST_VIEWER);

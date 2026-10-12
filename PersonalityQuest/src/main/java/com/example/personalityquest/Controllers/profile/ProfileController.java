@@ -107,12 +107,12 @@ public class ProfileController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        AchievementService = new AchievementService();
-        UserQuestService = new UserQuestService();
-        QuestService = new QuestService();
-        EmailService = new EmailService();
-        UserProfileService = new UserProfileService();
-        QuizService = new QuizService();
+        AchievementService = AchievementService.GetInstance();
+        UserQuestService = UserQuestService.GetInstance();
+        QuestService = QuestService.GetInstance();
+        EmailService = EmailService.GetInstance();
+        UserProfileService = UserProfileService.GetInstance();
+        QuizService = QuizService.GetInstance();
         navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);
         JournalEntryService = new JournalEntryService();
         WeeklyTaskService = new WeeklyTaskService();

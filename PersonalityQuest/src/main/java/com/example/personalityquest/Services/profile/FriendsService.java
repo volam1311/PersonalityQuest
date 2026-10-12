@@ -32,6 +32,15 @@ public class FriendsService {
         EmailService = new EmailService(accountDAO);
     }
 
+    private static FriendsService instance;
+    public FriendsService GetInstance(){
+        if (instance == null){
+            instance = new FriendsService();
+        }
+
+        return instance;
+    }
+
     /**
      * Gets the List of details for a friend
      * @param accountEmail the account you want to get the friends for

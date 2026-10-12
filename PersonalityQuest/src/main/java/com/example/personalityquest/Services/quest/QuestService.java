@@ -29,6 +29,16 @@ public class QuestService {
         super();
         QuestDAO = questDAO;
     }
+
+    private static QuestService instance;
+    public QuestService GetInstance(){
+        if (instance == null){
+            instance = new QuestService();
+        }
+
+        return instance;
+    }
+
     /**
      * Gets an Array of Quests for the given archetypeId
      * @param archetypeId The archetypeId you want to get quests for

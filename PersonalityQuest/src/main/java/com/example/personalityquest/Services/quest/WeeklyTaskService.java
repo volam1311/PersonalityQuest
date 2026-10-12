@@ -36,6 +36,14 @@ public class WeeklyTaskService {
         EmailService = new EmailService(accountDAO);
     }
 
+    private static WeeklyTaskService instance;
+    public WeeklyTaskService GetInstance(){
+        if (instance == null){
+            instance = new WeeklyTaskService();
+        }
+
+        return instance;
+    }
     /// RETRIEVING
     /**
      * Gets an Array of this current weeks WeeklyTasks for an email

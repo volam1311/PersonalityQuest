@@ -31,9 +31,9 @@ public class QuizResultController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        QuizService = new QuizService();
-        QuestService = new QuestService();
-        UserProfileService = new UserProfileService();
+        QuizService = QuizService.GetInstance();
+        QuestService = QuestService.GetInstance();
+        UserProfileService = UserProfileService.GetInstance();
         QuizResult result = QuizService.GetResult();
         if (result == null) {
             archetypeNameLabel.setText(UserProfileService.UNASSIGNED_ARCHETYPE);

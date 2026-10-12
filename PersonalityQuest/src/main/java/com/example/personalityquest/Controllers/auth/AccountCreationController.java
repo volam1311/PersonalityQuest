@@ -57,7 +57,7 @@ public class AccountCreationController {
     private QuizService QuizService;
     @FXML
     private void initialize() {
-        QuizService = new QuizService();
+        QuizService = QuizService.GetInstance();
         Rectangle clip = new Rectangle();
         clip.setArcWidth(56);
         clip.setArcHeight(56);

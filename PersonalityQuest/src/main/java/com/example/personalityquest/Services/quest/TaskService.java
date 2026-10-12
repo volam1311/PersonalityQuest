@@ -23,6 +23,17 @@ public class TaskService {
         super();
         this.TaskDAO = taskDAO;
     }
+
+
+    private static TaskService instance;
+    public TaskService GetInstance(){
+        if (instance == null){
+            instance = new TaskService();
+        }
+
+        return instance;
+    }
+
     /**
      * Gets a Task from the database that matches the given id
      * @param taskId The taskId you of the Task you want to retrieve

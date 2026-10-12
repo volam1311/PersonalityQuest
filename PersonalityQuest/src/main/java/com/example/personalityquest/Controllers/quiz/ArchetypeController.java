@@ -82,11 +82,11 @@ public class ArchetypeController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        QuizService = new QuizService();
-        TaskService = new TaskService();
-        UserQuestService = new UserQuestService();
-        QuestService = new QuestService();
-        UserProfileService = new UserProfileService();
+        QuizService = QuizService.GetInstance();
+        TaskService = TaskService.GetInstance();
+        UserQuestService = UserQuestService.GetInstance();
+        QuestService = QuestService.GetInstance();
+        UserProfileService = UserProfileService.GetInstance();
         ArchetypeDAO = new ArchetypeDAO();
         ReflectionPromptDAO = new ReflectionPromptDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);

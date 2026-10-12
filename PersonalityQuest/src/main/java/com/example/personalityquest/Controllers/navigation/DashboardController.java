@@ -124,14 +124,14 @@ public class DashboardController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TaskService = new TaskService();
-        UserQuestService = new UserQuestService();
-        WeeklyTaskService = new WeeklyTaskService();
-        QuestService = new QuestService();
-        JournalEntryService = new JournalEntryService();
-        StreakService = new StreakService();
-        EmailService = new EmailService();
-        QuizService = new QuizService();
+        TaskService = TaskService.GetInstance();
+        UserQuestService = UserQuestService.GetInstance();
+        WeeklyTaskService = WeeklyTaskService.GetInstance();
+        QuestService = QuestService.GetInstance();
+        JournalEntryService = JournalEntryService.GetInstance();
+        StreakService = StreakService.GetInstance();
+        EmailService = EmailService.GetInstance();
+        QuizService = QuizService.GetInstance();
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
         AchievementService = new AchievementService();
         ConfigureHistoryList();

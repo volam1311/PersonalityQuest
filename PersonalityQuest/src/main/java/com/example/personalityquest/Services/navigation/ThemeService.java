@@ -1,11 +1,14 @@
 package com.example.personalityquest.Services.navigation;
 
+import com.example.personalityquest.Services.ParentService;
+import com.example.personalityquest.Services.profile.AchievementService;
+
 import java.util.Objects;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /** Stores the selected application theme and its local preference */
-public final class ThemeService {
+public final class ThemeService extends ParentService {
     private static final String THEME_PREFERENCE_KEY = "theme";
 
     public enum Theme {
@@ -34,9 +37,20 @@ public final class ThemeService {
     }
 
     public ThemeService(Preferences preferences) {
+        super();
         this.preferences = Objects.requireNonNull(preferences);
         this.currentTheme = ReadSavedTheme();
     }
+
+    private static ThemeService instance;
+    public ThemeService GetInstance(){
+        if (instance == null){
+            instance = new ThemeService();
+        }
+
+        return instance;
+    }
+
 
     public Theme getCurrentTheme() {
         return currentTheme;

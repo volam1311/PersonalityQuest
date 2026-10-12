@@ -28,6 +28,15 @@ public class StreakService {
         this.StreakDAO = streakDAO;
     }
 
+    private static StreakService instance;
+    public StreakService GetInstance(){
+        if (instance == null){
+            instance = new StreakService();
+        }
+
+        return instance;
+    }
+
     /**
      * Helper function to get the start of the week for streaks
      * @param date The date to normalise to its week's start

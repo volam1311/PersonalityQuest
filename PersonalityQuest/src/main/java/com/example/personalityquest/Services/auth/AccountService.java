@@ -21,6 +21,16 @@ public class AccountService extends ParentService {
         super();
         this.AccountDAO = accountDAO;
     }
+
+    private static AccountService instance;
+    public AccountService GetInstance(){
+        if (instance == null){
+            instance = new AccountService();
+        }
+
+        return instance;
+    }
+
     /**
      * updates an account's details through account data service
      * @param emailDetails the new account details
