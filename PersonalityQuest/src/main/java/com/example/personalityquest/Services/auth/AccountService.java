@@ -23,7 +23,7 @@ public class AccountService extends ParentService {
     }
 
     private static AccountService instance;
-    public AccountService GetInstance(){
+    public static AccountService GetInstance(){
         if (instance == null){
             instance = new AccountService();
         }

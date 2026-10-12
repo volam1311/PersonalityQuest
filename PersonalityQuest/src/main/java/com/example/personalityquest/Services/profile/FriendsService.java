@@ -33,7 +33,7 @@ public class FriendsService {
     }
 
     private static FriendsService instance;
-    public FriendsService GetInstance(){
+    public static FriendsService GetInstance(){
         if (instance == null){
             instance = new FriendsService();
         }

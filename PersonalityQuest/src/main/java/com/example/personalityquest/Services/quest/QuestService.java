@@ -31,7 +31,7 @@ public class QuestService {
     }
 
     private static QuestService instance;
-    public QuestService GetInstance(){
+    public static QuestService GetInstance(){
         if (instance == null){
             instance = new QuestService();
         }

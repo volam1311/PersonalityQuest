@@ -53,7 +53,7 @@ public class QuizService extends ParentService {
     }
 
     private static QuizService instance;
-    public QuizService GetInstance(){
+    public static QuizService GetInstance(){
         if (instance == null){
             instance = new QuizService();
         }

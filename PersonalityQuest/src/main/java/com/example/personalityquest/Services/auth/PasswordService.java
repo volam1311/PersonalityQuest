@@ -31,7 +31,7 @@ public class PasswordService extends ParentService {
     }
 
     private static PasswordService instance;
-    public PasswordService GetInstance(){
+    public static PasswordService GetInstance(){
         if (instance == null){
             instance = new PasswordService();
         }

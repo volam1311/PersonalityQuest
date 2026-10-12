@@ -44,7 +44,7 @@ public class AchievementService {
     }
 
     private static AchievementService instance;
-    public AchievementService GetInstance(){
+    public static AchievementService GetInstance(){
         if (instance == null){
             instance = new AchievementService();
         }

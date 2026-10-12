@@ -41,7 +41,7 @@ public final class ReflectionFeedbackService extends ParentService {
     }
 
     private static ReflectionFeedbackService instance;
-    public ReflectionFeedbackService GetInstance(){
+    public static ReflectionFeedbackService GetInstance(){
         if (instance == null){
             instance = new ReflectionFeedbackService();
         }

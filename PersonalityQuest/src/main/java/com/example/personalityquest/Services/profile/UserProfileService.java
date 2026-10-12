@@ -21,7 +21,7 @@ public class UserProfileService extends ParentService {
     }
 
     private static UserProfileService instance;
-    public UserProfileService GetInstance(){
+    public static UserProfileService GetInstance(){
         if (instance == null){
             instance = new UserProfileService();
         }

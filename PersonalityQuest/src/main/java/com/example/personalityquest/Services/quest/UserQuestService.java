@@ -28,7 +28,7 @@ public class UserQuestService {
 
 
     private static UserQuestService instance;
-    public UserQuestService GetInstance(){
+    public static UserQuestService GetInstance(){
         if (instance == null){
             instance = new UserQuestService();
         }

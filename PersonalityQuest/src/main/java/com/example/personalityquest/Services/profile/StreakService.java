@@ -29,7 +29,7 @@ public class StreakService {
     }
 
     private static StreakService instance;
-    public StreakService GetInstance(){
+    public static StreakService GetInstance(){
         if (instance == null){
             instance = new StreakService();
         }

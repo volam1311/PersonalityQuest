@@ -27,7 +27,7 @@ public class LoginCacheService extends ParentService {
     private final static int days = 7;
 
     private static LoginCacheService instance;
-    public LoginCacheService GetInstance(){
+    public static LoginCacheService GetInstance(){
         if (instance == null){
             instance = new LoginCacheService();
         }

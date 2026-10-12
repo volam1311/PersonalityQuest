@@ -26,7 +26,7 @@ public class TaskService {
 
 
     private static TaskService instance;
-    public TaskService GetInstance(){
+    public static TaskService GetInstance(){
         if (instance == null){
             instance = new TaskService();
         }

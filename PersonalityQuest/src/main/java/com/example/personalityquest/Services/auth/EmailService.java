@@ -25,7 +25,7 @@ public class EmailService extends ParentService {
     }
 
     private static EmailService instance;
-    public EmailService GetInstance(){
+    public static EmailService GetInstance(){
         if (instance == null){
             instance = new EmailService();
         }

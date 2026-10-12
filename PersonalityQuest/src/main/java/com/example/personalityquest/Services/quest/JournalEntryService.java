@@ -23,7 +23,7 @@ public class JournalEntryService {
     }
 
     private static JournalEntryService instance;
-    public JournalEntryService GetInstance(){
+    public static JournalEntryService GetInstance(){
         if (instance == null){
             instance = new JournalEntryService();
         }

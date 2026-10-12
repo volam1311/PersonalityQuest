@@ -8,7 +8,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /** Stores the selected application theme and its local preference */
-public final class ThemeService extends ParentService {
+public final class ThemeService {
     private static final String THEME_PREFERENCE_KEY = "theme";
 
     public enum Theme {
@@ -37,13 +37,12 @@ public final class ThemeService extends ParentService {
     }
 
     public ThemeService(Preferences preferences) {
-        super();
         this.preferences = Objects.requireNonNull(preferences);
         this.currentTheme = ReadSavedTheme();
     }
 
     private static ThemeService instance;
-    public ThemeService GetInstance(){
+    public static ThemeService GetInstance(){
         if (instance == null){
             instance = new ThemeService();
         }

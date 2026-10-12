@@ -37,7 +37,7 @@ public class WeeklyTaskService {
     }
 
     private static WeeklyTaskService instance;
-    public WeeklyTaskService GetInstance(){
+    public static WeeklyTaskService GetInstance(){
         if (instance == null){
             instance = new WeeklyTaskService();
         }
