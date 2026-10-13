@@ -105,11 +105,11 @@ import javafx.util.Duration;
     private QuestOptionDAO QuestOptionDAO;
     @Override
     public void initialize(URL location, ResourceBundle resources){
-<span class="nc" id="L108">        TaskService = new TaskService();</span>
-<span class="nc" id="L109">        UserQuestService = new UserQuestService();</span>
-<span class="nc" id="L110">        QuestService = new QuestService();</span>
-<span class="nc" id="L111">        JournalEntryService = new JournalEntryService();</span>
-<span class="nc" id="L112">        ReflectionFeedbackService = new ReflectionFeedbackService();</span>
+<span class="nc" id="L108">        TaskService = TaskService.GetInstance();</span>
+<span class="nc" id="L109">        UserQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L110">        QuestService = QuestService.GetInstance();</span>
+<span class="nc" id="L111">        JournalEntryService = JournalEntryService.GetInstance();</span>
+<span class="nc" id="L112">        ReflectionFeedbackService = ReflectionFeedbackService.GetInstance();</span>
 <span class="nc" id="L113">        ReflectionPromptDAO = new ReflectionPromptDAO();</span>
 <span class="nc" id="L114">        QuestOptionDAO = new QuestOptionDAO();</span>
 <span class="nc" id="L115">        navBarController.setCurrentDestination(NavBarController.NavDestination.QUEST_VIEWER);</span>

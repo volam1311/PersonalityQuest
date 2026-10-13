@@ -36,6 +36,14 @@ public class WeeklyTaskService {
 <span class="fc" id="L36">        EmailService = new EmailService(accountDAO);</span>
 <span class="fc" id="L37">    }</span>
 
+    private static WeeklyTaskService instance;
+    public static WeeklyTaskService GetInstance(){
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (instance == null){</span>
+<span class="nc" id="L42">            instance = new WeeklyTaskService();</span>
+        }
+
+<span class="nc" id="L45">        return instance;</span>
+    }
     /// RETRIEVING
     /**
      * Gets an Array of this current weeks WeeklyTasks for an email
@@ -47,31 +55,31 @@ public class WeeklyTaskService {
      * @throws Exception From GetTaskId's SQL Exception to Database Access Failure.
      */
     public WeeklyTask[] GetTasksForEmailForThisWeek(String email) throws Exception {
-<span class="pc bpc" id="L50" title="1 of 4 branches missed.">        if (IsEmailNull(email) || !EmailService.DoesAccountWithEmailExist(email)) {</span>
-<span class="fc" id="L51">            throw new IllegalArgumentException(&quot;Null Email or this account does not exist&quot;);</span>
+<span class="pc bpc" id="L58" title="1 of 4 branches missed.">        if (IsEmailNull(email) || !EmailService.DoesAccountWithEmailExist(email)) {</span>
+<span class="fc" id="L59">            throw new IllegalArgumentException(&quot;Null Email or this account does not exist&quot;);</span>
         }
 
         // gets the week start
         // to find the tasks that have been assigned this week
-<span class="fc" id="L56">        LocalDate localDate = LocalDate.now();</span>
-<span class="fc" id="L57">        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));</span>
+<span class="fc" id="L64">        LocalDate localDate = LocalDate.now();</span>
+<span class="fc" id="L65">        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));</span>
 
-<span class="fc" id="L59">        int[] taskIds = GetTaskIdsAssignedForWeek(email, weekStart);</span>
+<span class="fc" id="L67">        int[] taskIds = GetTaskIdsAssignedForWeek(email, weekStart);</span>
 
         // checks to see if tasks are empty e.g. all 0's
         // if so return null (Means we need to generate some)
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (int i = 0; i &lt; taskIds.length; i++){</span>
-<span class="fc" id="L64">            System.out.println(taskIds[i]);</span>
-<span class="fc bfc" id="L65" title="All 2 branches covered.">            if (taskIds[i] == 0) {</span>
-<span class="fc" id="L66">                System.out.println(&quot;Tasks is null&quot;);</span>
-<span class="fc" id="L67">                return null;}</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (int i = 0; i &lt; taskIds.length; i++){</span>
+<span class="fc" id="L72">            System.out.println(taskIds[i]);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            if (taskIds[i] == 0) {</span>
+<span class="fc" id="L74">                System.out.println(&quot;Tasks is null&quot;);</span>
+<span class="fc" id="L75">                return null;}</span>
         }
 
-<span class="fc" id="L70">        WeeklyTask[] tasks = new WeeklyTask[taskIds.length];</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (int i = 0; i &lt; taskIds.length; i++) {</span>
-<span class="fc" id="L72">            tasks[i] = GetWeeklyTask(email, taskIds[i], weekStart);</span>
+<span class="fc" id="L78">        WeeklyTask[] tasks = new WeeklyTask[taskIds.length];</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (int i = 0; i &lt; taskIds.length; i++) {</span>
+<span class="fc" id="L80">            tasks[i] = GetWeeklyTask(email, taskIds[i], weekStart);</span>
         }
-<span class="fc" id="L74">        return tasks;</span>
+<span class="fc" id="L82">        return tasks;</span>
     }
 
     /**
@@ -85,11 +93,11 @@ public class WeeklyTaskService {
      * @throws Exception If a &quot;Bad&quot; Weekly Task is made
      */
     public WeeklyTask GetWeeklyTask(String email, int taskId, LocalDate weekStart) throws Exception {
-<span class="pc bpc" id="L88" title="2 of 6 branches missed.">        if (IsWeekStartNull(weekStart) || IsTaskIdNull(taskId) || IsEmailNull(email)){</span>
-<span class="fc" id="L89">            throw new IllegalArgumentException(&quot;WeekStart, TaskId or Email is Null&quot;);</span>
+<span class="pc bpc" id="L96" title="2 of 6 branches missed.">        if (IsWeekStartNull(weekStart) || IsTaskIdNull(taskId) || IsEmailNull(email)){</span>
+<span class="fc" id="L97">            throw new IllegalArgumentException(&quot;WeekStart, TaskId or Email is Null&quot;);</span>
         }
 
-<span class="fc" id="L92">        return WeeklyTaskDAO.GetWeeklyTaskMatchingId(email, taskId, weekStart);</span>
+<span class="fc" id="L100">        return WeeklyTaskDAO.GetWeeklyTaskMatchingId(email, taskId, weekStart);</span>
     }
 
     /**
@@ -101,11 +109,11 @@ public class WeeklyTaskService {
      * @throws SQLException Database Access Failure
      */
     private int[] GetTaskIdsAssignedForWeek(String email, LocalDate weekStart) throws Exception {
-<span class="pc bpc" id="L104" title="2 of 4 branches missed.">        if (IsWeekStartNull(weekStart) || IsEmailNull(email)){</span>
-<span class="nc" id="L105">            throw new IllegalArgumentException(&quot;Week start or email is null&quot;);</span>
+<span class="pc bpc" id="L112" title="2 of 4 branches missed.">        if (IsWeekStartNull(weekStart) || IsEmailNull(email)){</span>
+<span class="nc" id="L113">            throw new IllegalArgumentException(&quot;Week start or email is null&quot;);</span>
         }
 
-<span class="fc" id="L108">        return WeeklyTaskDAO.GetTaskIdsAssignedForWeek(email, weekStart);</span>
+<span class="fc" id="L116">        return WeeklyTaskDAO.GetTaskIdsAssignedForWeek(email, weekStart);</span>
     }
 
     /// GENERATING
@@ -117,28 +125,28 @@ public class WeeklyTaskService {
      * @throws Exception For Database Access and Update Failures and for when retrieving tasks with GetTaskIdsAssignedForWeek
      */
     public WeeklyTask[] GenerateTasksForThisWeek(String email) throws Exception {
-<span class="pc bpc" id="L120" title="1 of 4 branches missed.">        if (IsEmailNull(email) || !EmailService.DoesAccountWithEmailExist(email)) {</span>
-<span class="fc" id="L121">            throw new IllegalArgumentException(&quot;Email is null or this account does not exist&quot;);</span>
+<span class="pc bpc" id="L128" title="1 of 4 branches missed.">        if (IsEmailNull(email) || !EmailService.DoesAccountWithEmailExist(email)) {</span>
+<span class="fc" id="L129">            throw new IllegalArgumentException(&quot;Email is null or this account does not exist&quot;);</span>
         }
 
 
         // gets the week start
         // to find the tasks that have been assigned this week
-<span class="fc" id="L127">        LocalDate localDate = LocalDate.now();</span>
-<span class="fc" id="L128">        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));</span>
+<span class="fc" id="L135">        LocalDate localDate = LocalDate.now();</span>
+<span class="fc" id="L136">        LocalDate weekStart = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));</span>
 
-<span class="fc" id="L130">        InsertTasks(email, weekStart);</span>
-<span class="fc" id="L131">        int[] taskIds = GetTaskIdsAssignedForWeek(email, weekStart);</span>
+<span class="fc" id="L138">        InsertTasks(email, weekStart);</span>
+<span class="fc" id="L139">        int[] taskIds = GetTaskIdsAssignedForWeek(email, weekStart);</span>
 
-<span class="fc" id="L133">        WeeklyTask[] tasks = new WeeklyTask[taskIds.length];</span>
-<span class="fc" id="L134">        TaskService taskService = new TaskService();</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        for (int i = 0; i &lt; taskIds.length; i++) {</span>
-<span class="fc" id="L136">            Task task = taskService.GetTaskForId(taskIds[i]);</span>
-<span class="fc" id="L137">            tasks[i] = new WeeklyTask(email, task.getTaskId(), &quot;Not Started&quot;, &quot;&quot;, String.valueOf(weekStart));</span>
+<span class="fc" id="L141">        WeeklyTask[] tasks = new WeeklyTask[taskIds.length];</span>
+<span class="fc" id="L142">        TaskService taskService = new TaskService();</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        for (int i = 0; i &lt; taskIds.length; i++) {</span>
+<span class="fc" id="L144">            Task task = taskService.GetTaskForId(taskIds[i]);</span>
+<span class="fc" id="L145">            tasks[i] = new WeeklyTask(email, task.getTaskId(), &quot;Not Started&quot;, &quot;&quot;, String.valueOf(weekStart));</span>
 
         }
 
-<span class="fc" id="L141">        return tasks;</span>
+<span class="fc" id="L149">        return tasks;</span>
     }
     /**
      * Inserts this week's weekly practices. These are not storyline quest tasks.
@@ -147,19 +155,19 @@ public class WeeklyTaskService {
      * @throws Exception For Database Update Failures and if week start or email is null or empty
      */
     private void InsertTasks(String email, LocalDate weekStart) throws Exception {
-<span class="pc bpc" id="L150" title="2 of 4 branches missed.">        if (IsWeekStartNull(weekStart) || IsEmailNull(email)){</span>
-<span class="nc" id="L151">            throw new IllegalArgumentException(&quot;Week start or email is null&quot;);</span>
+<span class="pc bpc" id="L158" title="2 of 4 branches missed.">        if (IsWeekStartNull(weekStart) || IsEmailNull(email)){</span>
+<span class="nc" id="L159">            throw new IllegalArgumentException(&quot;Week start or email is null&quot;);</span>
         }
 
 
-<span class="fc" id="L155">        WeeklyTask[] tasks = GetTasksForEmailForThisWeek(email);</span>
+<span class="fc" id="L163">        WeeklyTask[] tasks = GetTasksForEmailForThisWeek(email);</span>
 
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (tasks != null){</span>
-<span class="nc" id="L158">            throw new Exception(&quot;Tried to generate tasks when they already exist&quot;);</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        if (tasks != null){</span>
+<span class="nc" id="L166">            throw new Exception(&quot;Tried to generate tasks when they already exist&quot;);</span>
         }
 
-<span class="fc" id="L161">        WeeklyTaskDAO.InsertTasks(email, weekStart);</span>
-<span class="fc" id="L162">    }</span>
+<span class="fc" id="L169">        WeeklyTaskDAO.InsertTasks(email, weekStart);</span>
+<span class="fc" id="L170">    }</span>
 
     /// UPDATING
     /**
@@ -171,15 +179,15 @@ public class WeeklyTaskService {
      * @throws Exception If a Database Access Failure Or if the weekly task , reflection or email is null or empty
      */
     public WeeklyTask UpdateGivenTaskToDraft(WeeklyTask task, String reflection, String email) throws Exception {
-<span class="fc bfc" id="L174" title="All 6 branches covered.">        if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){</span>
-<span class="fc" id="L175">            throw new IllegalArgumentException(&quot;Null weekly task, reflection or email&quot;);</span>
+<span class="fc bfc" id="L182" title="All 6 branches covered.">        if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){</span>
+<span class="fc" id="L183">            throw new IllegalArgumentException(&quot;Null weekly task, reflection or email&quot;);</span>
         }
 
         // update the task
-<span class="fc" id="L179">        WeeklyTaskDAO.UpdateGivenTaskToDraft(task, reflection, email);</span>
+<span class="fc" id="L187">        WeeklyTaskDAO.UpdateGivenTaskToDraft(task, reflection, email);</span>
 
         // find it and return it
-<span class="fc" id="L182">        return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));</span>
+<span class="fc" id="L190">        return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));</span>
     }
     /**
      * Updates the given Weekly Tasks to be finished
@@ -190,13 +198,13 @@ public class WeeklyTaskService {
      * @throws Exception If a Database Access Failure Or if the weekly task , reflection or email is null or empty
      */
     public WeeklyTask UpdateGivenTaskToBeFinished(WeeklyTask task, String reflection, String email) throws Exception {
-<span class="fc bfc" id="L193" title="All 6 branches covered.">        if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){</span>
-<span class="fc" id="L194">            throw new IllegalArgumentException(&quot;Null weekly task, reflection or email&quot;);</span>
+<span class="fc bfc" id="L201" title="All 6 branches covered.">        if (IsWeeklyTaskNull(task) || IsReflectionNull(reflection) || IsEmailNull(email)){</span>
+<span class="fc" id="L202">            throw new IllegalArgumentException(&quot;Null weekly task, reflection or email&quot;);</span>
         }
 
-<span class="fc" id="L197">        WeeklyTaskDAO.UpdateGivenTaskToBeFinished(task, reflection, email);</span>
+<span class="fc" id="L205">        WeeklyTaskDAO.UpdateGivenTaskToBeFinished(task, reflection, email);</span>
 
-<span class="fc" id="L199">        return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));</span>
+<span class="fc" id="L207">        return GetWeeklyTask(email, task.getTaskId(), LocalDate.parse(task.getWeekStarted()));</span>
     }
 
     /// NULL CHECKING
@@ -206,7 +214,7 @@ public class WeeklyTaskService {
      * @return Whether the email is Empty or Null
      */
     private static boolean IsEmailNull(String email){
-<span class="fc" id="L209">        return ApplicationManager.isEmpty(email);</span>
+<span class="fc" id="L217">        return ApplicationManager.isEmpty(email);</span>
     }
 
     /**
@@ -215,7 +223,7 @@ public class WeeklyTaskService {
      * @return Whether the weeklyTask is null
      */
     private static boolean IsWeeklyTaskNull(WeeklyTask weeklyTask){
-<span class="fc bfc" id="L218" title="All 2 branches covered.">        return weeklyTask == null;</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        return weeklyTask == null;</span>
     }
     /**
      * Checks if the given weekStart is null
@@ -223,9 +231,9 @@ public class WeeklyTaskService {
      * @return Whether the weekStart is null
      */
     private static boolean IsWeekStartNull(LocalDate weekStart){
-<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (weekStart == null) {return false;}</span>
-<span class="fc bfc" id="L227" title="All 2 branches covered.">        if (weekStart.isAfter(LocalDate.now())) {return false;}</span>
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        return String.valueOf(weekStart) == null;</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (weekStart == null) {return false;}</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (weekStart.isAfter(LocalDate.now())) {return false;}</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        return String.valueOf(weekStart) == null;</span>
     }
     /**
      * Checks if the given reflection is null
@@ -233,7 +241,7 @@ public class WeeklyTaskService {
      * @return Whether the reflection is null or empty
      */
     private static boolean IsReflectionNull(String reflection){
-<span class="fc" id="L236">        return ApplicationManager.isEmpty(reflection);</span>
+<span class="fc" id="L244">        return ApplicationManager.isEmpty(reflection);</span>
     }
     /**
      * Checks if the given taskId is equal to 0
@@ -241,7 +249,7 @@ public class WeeklyTaskService {
      * @return Whether the taskId is equal to 0
      */
     private static boolean IsTaskIdNull(int taskId){
-<span class="pc bpc" id="L244" title="1 of 2 branches missed.">        return taskId == 0;</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">        return taskId == 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

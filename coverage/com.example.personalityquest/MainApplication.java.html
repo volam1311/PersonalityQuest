@@ -79,31 +79,33 @@ import java.util.prefs.Preferences;
 <span class="nc" id="L79">            catch (Exception e) {</span>
 <span class="nc" id="L80">                System.out.println(e.getMessage());</span>
 <span class="nc" id="L81">                NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
-<span class="nc" id="L82">            }</span>
+<span class="nc" id="L82">                return;</span>
+<span class="nc" id="L83">            }</span>
         }
-<span class="nc" id="L84">        catch (IOException e){</span>
-<span class="nc" id="L85">            System.out.println(e.getMessage());</span>
-<span class="nc" id="L86">        }</span>
-<span class="nc" id="L87">    }</span>
+<span class="nc" id="L85">        catch (IOException e){</span>
+<span class="nc" id="L86">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L87">        }</span>
+
+<span class="nc" id="L89">        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);</span>
+
+<span class="nc" id="L91">    }</span>
 
     static void initialiseUserQuestData() throws Exception{
-<span class="fc" id="L90">        UserQuestDAO userQuestDAO = new UserQuestDAO();</span>
-<span class="fc" id="L91">        userQuestDAO.EnsureTables();</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L94">        UserQuestDAO userQuestDAO = new UserQuestDAO();</span>
+<span class="fc" id="L95">        userQuestDAO.EnsureTables();</span>
+<span class="fc" id="L96">    }</span>
 
     void AttemptLogin(LoginCache loginCache) throws Exception {
-
-<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (loginCacheService.IsPastTimeLimit(loginCache.GetLastLoginDate())){</span>
-<span class="nc" id="L97">            throw new Exception(&quot;Login Cache Expired&quot;);</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (loginCacheService.IsPastTimeLimit(loginCache.GetLastLoginDate())){</span>
+<span class="nc" id="L100">            throw new Exception(&quot;Login Cache Expired&quot;);</span>
         }
 
-<span class="nc" id="L100">        EmailService emailService = new EmailService();</span>
-<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (!emailService.DoesAccountWithEmailExist(loginCache.GetEmail())){</span>
-<span class="nc" id="L102">            throw new Exception(&quot;Account does not exist with this email&quot;);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (!EmailService.GetInstance().DoesAccountWithEmailExist(loginCache.GetEmail())){</span>
+<span class="nc" id="L104">            throw new Exception(&quot;Account does not exist with this email&quot;);</span>
         }
 
-<span class="nc" id="L105">        ApplicationManager.CurrentAccount.setCurrentEmail(loginCache.GetEmail());</span>
-<span class="nc" id="L106">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
-<span class="nc" id="L107">    }</span>
+<span class="nc" id="L107">        ApplicationManager.CurrentAccount.setCurrentEmail(loginCache.GetEmail());</span>
+<span class="nc" id="L108">        NavigationService.LoadScreen(ScreenEnum.DASHBOARD);</span>
+<span class="nc" id="L109">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -47,8 +47,8 @@ import java.util.prefs.Preferences;
     private EmailService EmailService;
     @FXML
     private void initialize() {
-<span class="nc" id="L50">        PasswordService = new PasswordService();</span>
-<span class="nc" id="L51">        EmailService = new EmailService();</span>
+<span class="nc" id="L50">        PasswordService = PasswordService.GetInstance();</span>
+<span class="nc" id="L51">        EmailService = EmailService.GetInstance();</span>
 <span class="nc" id="L52">        Rectangle clip = new Rectangle();</span>
 <span class="nc" id="L53">        clip.setArcWidth(56);</span>
 <span class="nc" id="L54">        clip.setArcHeight(56);</span>

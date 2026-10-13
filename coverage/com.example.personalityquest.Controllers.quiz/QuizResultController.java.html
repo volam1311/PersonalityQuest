@@ -31,9 +31,9 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L34">        QuizService = new QuizService();</span>
-<span class="nc" id="L35">        QuestService = new QuestService();</span>
-<span class="nc" id="L36">        UserProfileService = new UserProfileService();</span>
+<span class="nc" id="L34">        QuizService = QuizService.GetInstance();</span>
+<span class="nc" id="L35">        QuestService = QuestService.GetInstance();</span>
+<span class="nc" id="L36">        UserProfileService = UserProfileService.GetInstance();</span>
 <span class="nc" id="L37">        QuizResult result = QuizService.GetResult();</span>
 <span class="nc bnc" id="L38" title="All 2 branches missed.">        if (result == null) {</span>
 <span class="nc" id="L39">            archetypeNameLabel.setText(UserProfileService.UNASSIGNED_ARCHETYPE);</span>

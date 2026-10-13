@@ -73,8 +73,8 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L76">        EmailService = new EmailService();</span>
-<span class="nc" id="L77">        QuizService = new QuizService();</span>
+<span class="nc" id="L76">        EmailService =  EmailService.GetInstance();</span>
+<span class="nc" id="L77">        QuizService =  QuizService.GetInstance();</span>
 <span class="nc" id="L78">        SetProfileLabel();</span>
 <span class="nc" id="L79">        SetSidebarExpanded(sidebarExpanded);</span>
 

@@ -124,14 +124,14 @@ import java.util.ArrayList;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L127">        TaskService = new TaskService();</span>
-<span class="nc" id="L128">        UserQuestService = new UserQuestService();</span>
-<span class="nc" id="L129">        WeeklyTaskService = new WeeklyTaskService();</span>
-<span class="nc" id="L130">        QuestService = new QuestService();</span>
-<span class="nc" id="L131">        JournalEntryService = new JournalEntryService();</span>
-<span class="nc" id="L132">        StreakService = new StreakService();</span>
-<span class="nc" id="L133">        EmailService = new EmailService();</span>
-<span class="nc" id="L134">        QuizService = new QuizService();</span>
+<span class="nc" id="L127">        TaskService = TaskService.GetInstance();</span>
+<span class="nc" id="L128">        UserQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L129">        WeeklyTaskService = WeeklyTaskService.GetInstance();</span>
+<span class="nc" id="L130">        QuestService = QuestService.GetInstance();</span>
+<span class="nc" id="L131">        JournalEntryService = JournalEntryService.GetInstance();</span>
+<span class="nc" id="L132">        StreakService = StreakService.GetInstance();</span>
+<span class="nc" id="L133">        EmailService = EmailService.GetInstance();</span>
+<span class="nc" id="L134">        QuizService = QuizService.GetInstance();</span>
 <span class="nc" id="L135">        navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);</span>
 <span class="nc" id="L136">        AchievementService = new AchievementService();</span>
 <span class="nc" id="L137">        ConfigureHistoryList();</span>

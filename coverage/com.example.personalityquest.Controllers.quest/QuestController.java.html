@@ -61,9 +61,9 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L64">        TaskService = new TaskService();</span>
-<span class="nc" id="L65">        UserQuestService = new UserQuestService();</span>
-<span class="nc" id="L66">        QuestService = new QuestService();</span>
+<span class="nc" id="L64">        TaskService = TaskService.GetInstance();</span>
+<span class="nc" id="L65">        UserQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L66">        QuestService = QuestService.GetInstance();</span>
 <span class="nc" id="L67">        navBarController.setCurrentDestination(NavBarController.NavDestination.QUESTS);</span>
 <span class="nc" id="L68">        ConfigureTaskList();</span>
 <span class="nc" id="L69">        ConfigureHistoryList();</span>

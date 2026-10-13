@@ -95,13 +95,13 @@ import java.util.concurrent.CompletableFuture;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L98">        QuestService = new QuestService();</span>
-<span class="nc" id="L99">        UserQuestService = new UserQuestService();</span>
-<span class="nc" id="L100">        WeeklyTaskService = new WeeklyTaskService();</span>
-<span class="nc" id="L101">        TaskService = new TaskService();</span>
-<span class="nc" id="L102">        JournalEntryService = new JournalEntryService();</span>
-<span class="nc" id="L103">        StreakService = new StreakService();</span>
-<span class="nc" id="L104">        ReflectionFeedbackService = new ReflectionFeedbackService();</span>
+<span class="nc" id="L98">        QuestService = QuestService.GetInstance();</span>
+<span class="nc" id="L99">        UserQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L100">        WeeklyTaskService = WeeklyTaskService.GetInstance();</span>
+<span class="nc" id="L101">        TaskService = TaskService.GetInstance();</span>
+<span class="nc" id="L102">        JournalEntryService = JournalEntryService.GetInstance();</span>
+<span class="nc" id="L103">        StreakService = StreakService.GetInstance();</span>
+<span class="nc" id="L104">        ReflectionFeedbackService = ReflectionFeedbackService.GetInstance();</span>
 <span class="nc" id="L105">        ReflectionPromptDAO = new ReflectionPromptDAO();</span>
 <span class="nc" id="L106">        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);</span>
 <span class="nc" id="L107">        ConfigureQuestChallengesList();</span>

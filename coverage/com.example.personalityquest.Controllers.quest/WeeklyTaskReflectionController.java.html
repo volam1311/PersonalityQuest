@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L37">        WeeklyTaskService = new WeeklyTaskService();</span>
+<span class="nc" id="L37">        WeeklyTaskService = WeeklyTaskService.GetInstance();</span>
 <span class="nc" id="L38">        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);</span>
 <span class="nc" id="L39">    }</span>
 

@@ -107,12 +107,12 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L110">        AchievementService = new AchievementService();</span>
-<span class="nc" id="L111">        UserQuestService = new UserQuestService();</span>
-<span class="nc" id="L112">        QuestService = new QuestService();</span>
-<span class="nc" id="L113">        EmailService = new EmailService();</span>
-<span class="nc" id="L114">        UserProfileService = new UserProfileService();</span>
-<span class="nc" id="L115">        QuizService = new QuizService();</span>
+<span class="nc" id="L110">        AchievementService = AchievementService.GetInstance();</span>
+<span class="nc" id="L111">        UserQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L112">        QuestService = QuestService.GetInstance();</span>
+<span class="nc" id="L113">        EmailService = EmailService.GetInstance();</span>
+<span class="nc" id="L114">        UserProfileService = UserProfileService.GetInstance();</span>
+<span class="nc" id="L115">        QuizService = QuizService.GetInstance();</span>
 <span class="nc" id="L116">        navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);</span>
 <span class="nc" id="L117">        JournalEntryService = new JournalEntryService();</span>
 <span class="nc" id="L118">        WeeklyTaskService = new WeeklyTaskService();</span>

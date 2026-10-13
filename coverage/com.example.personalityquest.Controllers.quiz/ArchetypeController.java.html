@@ -82,11 +82,11 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L85">        QuizService = new QuizService();</span>
-<span class="nc" id="L86">        TaskService = new TaskService();</span>
-<span class="nc" id="L87">        UserQuestService = new UserQuestService();</span>
-<span class="nc" id="L88">        QuestService = new QuestService();</span>
-<span class="nc" id="L89">        UserProfileService = new UserProfileService();</span>
+<span class="nc" id="L85">        QuizService = QuizService.GetInstance();</span>
+<span class="nc" id="L86">        TaskService = TaskService.GetInstance();</span>
+<span class="nc" id="L87">        UserQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L88">        QuestService = QuestService.GetInstance();</span>
+<span class="nc" id="L89">        UserProfileService = UserProfileService.GetInstance();</span>
 <span class="nc" id="L90">        ArchetypeDAO = new ArchetypeDAO();</span>
 <span class="nc" id="L91">        ReflectionPromptDAO = new ReflectionPromptDAO();</span>
 <span class="nc" id="L92">        navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);</span>

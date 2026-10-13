@@ -21,6 +21,16 @@ public class AccountService extends ParentService {
 <span class="nc" id="L21">        super();</span>
 <span class="nc" id="L22">        this.AccountDAO = accountDAO;</span>
 <span class="nc" id="L23">    }</span>
+
+    private static AccountService instance;
+    public static AccountService GetInstance(){
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (instance == null){</span>
+<span class="nc" id="L28">            instance = new AccountService();</span>
+        }
+
+<span class="nc" id="L31">        return instance;</span>
+    }
+
     /**
      * updates an account's details through account data service
      * @param emailDetails the new account details
@@ -29,15 +39,15 @@ public class AccountService extends ParentService {
      */
     public void UpdateEmailDetailsForAccount(EmailDetails emailDetails, String currentEmail) throws SQLException {
 
-<span class="nc" id="L32">        EmailService emailService = new EmailService();</span>
+<span class="nc" id="L42">        EmailService emailService = new EmailService();</span>
         /*
          * Does the new email already exist and is the email being updated
          * */
-<span class="nc bnc" id="L36" title="All 4 branches missed.">        if (emailService.DoesAccountWithEmailExist(emailDetails.getEmail()) &amp;&amp; !Objects.equals(currentEmail,emailDetails.getEmail())){</span>
-<span class="nc" id="L37">            throw new IllegalArgumentException(&quot;Email of &quot; + emailDetails.getEmail() + &quot; Already exists&quot;);</span>
+<span class="nc bnc" id="L46" title="All 4 branches missed.">        if (emailService.DoesAccountWithEmailExist(emailDetails.getEmail()) &amp;&amp; !Objects.equals(currentEmail,emailDetails.getEmail())){</span>
+<span class="nc" id="L47">            throw new IllegalArgumentException(&quot;Email of &quot; + emailDetails.getEmail() + &quot; Already exists&quot;);</span>
         }
 
-<span class="nc" id="L40">        AccountDAO.UpdateAccountDetails(emailDetails, currentEmail);</span>
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L50">        AccountDAO.UpdateAccountDetails(emailDetails, currentEmail);</span>
+<span class="nc" id="L51">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

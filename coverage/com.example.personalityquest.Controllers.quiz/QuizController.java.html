@@ -41,7 +41,7 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L44">        QuizService = new QuizService();</span>
+<span class="nc" id="L44">        QuizService = QuizService.GetInstance();</span>
 <span class="nc bnc" id="L45" title="All 2 branches missed.">        if (!QuizService.HasActiveAttempt()) {</span>
 <span class="nc" id="L46">            QuizService.StartQuiz();</span>
         }

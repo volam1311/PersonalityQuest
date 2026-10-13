@@ -23,6 +23,16 @@ public class EmailService extends ParentService {
 <span class="fc" id="L23">        super();</span>
 <span class="fc" id="L24">        this.AccountDAO = accountDAO;</span>
 <span class="fc" id="L25">    }</span>
+
+    private static EmailService instance;
+    public static EmailService GetInstance(){
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (instance == null){</span>
+<span class="nc" id="L30">            instance = new EmailService();</span>
+        }
+
+<span class="nc" id="L33">        return instance;</span>
+    }
+
     /**
      * Checks to see whether an account exists in the database with the given email
      * @param email &quot;The email for the presumed account you want to check&quot;
@@ -31,11 +41,11 @@ public class EmailService extends ParentService {
      */
     public boolean DoesAccountWithEmailExist(String email) throws SQLException {
         // check nulls
-<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="fc" id="L35">            System.out.println(&quot;Email is null therefor it does not exist&quot;);</span>
-<span class="fc" id="L36">            return false;}</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="fc" id="L45">            System.out.println(&quot;Email is null therefor it does not exist&quot;);</span>
+<span class="fc" id="L46">            return false;}</span>
 
-<span class="fc" id="L38">        return AccountDAO.DoesAccountWithEmailExist(email);</span>
+<span class="fc" id="L48">        return AccountDAO.DoesAccountWithEmailExist(email);</span>
     }
 
     /**
@@ -46,11 +56,11 @@ public class EmailService extends ParentService {
      */
     public EmailDetails GetDetailsForEmail(String email) throws Exception {
         // check nulls
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)) {</span>
-<span class="fc" id="L50">            System.out.println(&quot;Email is null therefore details can not be gotten&quot;);</span>
-<span class="fc" id="L51">            return null;}</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (ApplicationManager.isEmpty(email)) {</span>
+<span class="fc" id="L60">            System.out.println(&quot;Email is null therefore details can not be gotten&quot;);</span>
+<span class="fc" id="L61">            return null;}</span>
 
-<span class="fc" id="L53">        return AccountDAO.GetDetailsForEmail(email);</span>
+<span class="fc" id="L63">        return AccountDAO.GetDetailsForEmail(email);</span>
     }
 
 }

@@ -41,8 +41,8 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L44">        AccountService = new AccountService();</span>
-<span class="nc" id="L45">        EmailService = new EmailService();</span>
+<span class="nc" id="L44">        AccountService = AccountService.GetInstance();</span>
+<span class="nc" id="L45">        EmailService = EmailService.GetInstance();</span>
 <span class="nc" id="L46">        oldEmail = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
 
         // attempt to populate the entry fields with the users current account details
