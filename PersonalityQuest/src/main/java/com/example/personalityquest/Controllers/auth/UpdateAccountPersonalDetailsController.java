@@ -1,7 +1,5 @@
 package com.example.personalityquest.Controllers.auth;
 
-import com.example.personalityquest.*;
-import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Services.auth.AccountService;
 import com.example.personalityquest.Services.auth.EmailService;
@@ -12,8 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -33,16 +29,16 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     private String oldEmail;
 
 
-    private EmailService EmailService;
-    private AccountService AccountService;
+    private EmailService emailService;
+    private AccountService accountService;
     /** Initialises the personal-details form
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        AccountService = AccountService.GetInstance();
-        EmailService = EmailService.GetInstance();
+        accountService = AccountService.GetInstance();
+        emailService = EmailService.GetInstance();
         oldEmail = ApplicationManager.CurrentAccount.getCurrentEmail();
 
         // attempt to populate the entry fields with the users current account details
@@ -73,7 +69,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
             lastNameEntry.getText());
 
         try{
-            AccountService.UpdateEmailDetailsForAccount(newDetails, oldEmail);
+            accountService.UpdateEmailDetailsForAccount(newDetails, oldEmail);
             Message.setText("Updated Details");
             System.out.println("Updated Details");
         }
@@ -101,7 +97,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
         /*
         * Does the new email already exist and is the email being updated
         * */
-        if (EmailService.DoesAccountWithEmailExist(emailEntry.getText()) && !Objects.equals(oldEmail, emailEntry.getText())){
+        if (emailService.DoesAccountWithEmailExist(emailEntry.getText()) && !Objects.equals(oldEmail, emailEntry.getText())){
             Message.setText("Email of " + emailEntry.getText() + " Already exists. Please Use Another");
             System.out.println("Email of " + emailEntry.getText() + " Already exists");
             return false;
@@ -114,7 +110,7 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
     * Populates the entry fields with their current values
     * */
     private boolean PopulateEntryFields() throws Exception {
-        EmailDetails emailDetails = EmailService.GetDetailsForEmail(oldEmail);
+        EmailDetails emailDetails = emailService.GetDetailsForEmail(oldEmail);
 
         if (Objects.equals(emailDetails, null)){
             System.out.println("Account doesnt exist with the given email " + oldEmail);

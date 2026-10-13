@@ -1,7 +1,6 @@
 package com.example.personalityquest.Controllers.quest;
 
 import com.example.personalityquest.Controllers.navigation.NavBarController;
-import com.example.personalityquest.Applications.navigation.DashboardApplication;
 import com.example.personalityquest.Model.quest.WeeklyTask;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.ScreenEnum;
@@ -10,7 +9,6 @@ import com.example.personalityquest.Services.quest.WeeklyTaskService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,14 +25,14 @@ public class WeeklyTaskReflectionController implements Initializable {
     private WeeklyTask currentTask;
 
 
-    private WeeklyTaskService WeeklyTaskService;
+    private WeeklyTaskService weeklyTaskService;
     /** Initialises the weekly-reflection form
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        WeeklyTaskService = WeeklyTaskService.GetInstance();
+        weeklyTaskService = WeeklyTaskService.GetInstance();
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
     }
 
@@ -66,7 +64,7 @@ public class WeeklyTaskReflectionController implements Initializable {
 
 
         System.out.println(reflection.getText());
-        WeeklyTaskService.UpdateGivenTaskToDraft(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());
+        weeklyTaskService.UpdateGivenTaskToDraft(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());
         GoToDashboard();
     }
 
@@ -76,7 +74,7 @@ public class WeeklyTaskReflectionController implements Initializable {
 
         // Use this to mark a task as Finished
         System.out.println(reflection.getText());
-        WeeklyTaskService.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());
+        weeklyTaskService.UpdateGivenTaskToBeFinished(currentTask, reflection.getText(), ApplicationManager.CurrentAccount.getCurrentEmail());
 
         GoToDashboard();
     }

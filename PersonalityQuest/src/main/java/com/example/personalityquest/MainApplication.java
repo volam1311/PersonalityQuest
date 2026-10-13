@@ -75,6 +75,7 @@ public class MainApplication extends Application {
 
             try{
                 AttemptLogin(loginCache);
+                return;
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -100,7 +101,9 @@ public class MainApplication extends Application {
             throw new Exception("Login Cache Expired");
         }
 
+
         if (!EmailService.GetInstance().DoesAccountWithEmailExist(loginCache.GetEmail())){
+            loginCacheService.ClearCache();
             throw new Exception("Account does not exist with this email");
         }
 

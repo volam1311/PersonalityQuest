@@ -22,21 +22,21 @@ public class QuizResultController implements Initializable {
     @FXML
     private Label archetypeNameLabel, archetypeDescriptionLabel, strengthsLabel, weaknessesLabel, questLabel;
 
-    private QuestService QuestService;
-    private UserProfileService UserProfileService;
-    private QuizService QuizService;
+    private QuestService questService;
+    private UserProfileService userProfileService;
+    private QuizService quizService;
     /** Initialises the quiz-results screen
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        QuizService = QuizService.GetInstance();
-        QuestService = QuestService.GetInstance();
-        UserProfileService = UserProfileService.GetInstance();
-        QuizResult result = QuizService.GetResult();
+        quizService = QuizService.GetInstance();
+        questService = QuestService.GetInstance();
+        userProfileService = UserProfileService.GetInstance();
+        QuizResult result = quizService.GetResult();
         if (result == null) {
-            archetypeNameLabel.setText(UserProfileService.UNASSIGNED_ARCHETYPE);
+            archetypeNameLabel.setText(userProfileService.UNASSIGNED_ARCHETYPE);
             archetypeDescriptionLabel.setText("Complete the quiz to discover your archetype.");
             strengthsLabel.setText("");
             weaknessesLabel.setText("");
@@ -44,7 +44,7 @@ public class QuizResultController implements Initializable {
             return;
         }
 
-        String name = UserProfileService.FormatArchetypeName(result.archetype().getName());
+        String name = userProfileService.FormatArchetypeName(result.archetype().getName());
         archetypeNameLabel.setText(name);
         archetypeDescriptionLabel.setText(DescriptionFor(result));
         strengthsLabel.setText(result.archetype().getStrengths());
@@ -59,9 +59,9 @@ public class QuizResultController implements Initializable {
 
     private String DescriptionFor(QuizResult result) {
         try {
-            Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());
+            Integer archetypeId = questService.GetArchetypeIdForName(result.archetype().getName());
             if (archetypeId != null) {
-                String stored = QuestService.GetArchetypeDescription(archetypeId);
+                String stored = questService.GetArchetypeDescription(archetypeId);
                 if (!stored.isBlank()) {
                     return stored;
                 }
@@ -74,7 +74,7 @@ public class QuizResultController implements Initializable {
 
     @FXML
     private void OnRetake() throws IOException {
-        QuizService.StartQuiz();
+        quizService.StartQuiz();
         NavigationService.LoadScreen(ScreenEnum.QUIZ);
     }
 

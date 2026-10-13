@@ -69,26 +69,26 @@ public class ArchetypeController implements Initializable {
     private Map<Archetype, Quest> pinnedQuests = Map.of();
     private Archetype selectedArchetype;
 
-    private QuestService QuestService;
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private UserProfileService UserProfileService;
-    private ArchetypeDAO ArchetypeDAO;
-    private QuizService QuizService;
-    private ReflectionPromptDAO ReflectionPromptDAO;
+    private QuestService questService;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private UserProfileService userProfileService;
+    private ArchetypeDAO archetypeDAO;
+    private QuizService quizService;
+    private ReflectionPromptDAO reflectionPromptDAO;
     /** Initialises archetype controls and loads the selected archetype
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        QuizService = QuizService.GetInstance();
-        TaskService = TaskService.GetInstance();
-        UserQuestService = UserQuestService.GetInstance();
-        QuestService = QuestService.GetInstance();
-        UserProfileService = UserProfileService.GetInstance();
-        ArchetypeDAO = new ArchetypeDAO();
-        ReflectionPromptDAO = new ReflectionPromptDAO();
+        quizService = QuizService.GetInstance();
+        taskService = TaskService.GetInstance();
+        userQuestService = UserQuestService.GetInstance();
+        questService = QuestService.GetInstance();
+        userProfileService = UserProfileService.GetInstance();
+        archetypeDAO = new ArchetypeDAO();
+        reflectionPromptDAO = new ReflectionPromptDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);
         quadrantRealms = Map.of(
                 egoQuadrantButton, "Ego",
@@ -109,7 +109,7 @@ public class ArchetypeController implements Initializable {
 
     @FXML
     private void OnRedoQuiz() throws IOException {
-        QuizService.StartQuiz();
+        quizService.StartQuiz();
         NavigationService.LoadScreen(ScreenEnum.QUIZ);
     }
 
@@ -123,9 +123,9 @@ public class ArchetypeController implements Initializable {
         // startup (MainApplication). Running DROP/CREATE TABLE here on every
         // visit risks SQLITE_LOCKED if any other DAO still has an open
         // statement on the shared connection.
-        ArchetypeDAO.EnsureTables();
-        if (!ArchetypeDAO.HasCatalog()) {
-            ArchetypeDAO.SeedCatalog();
+        archetypeDAO.EnsureTables();
+        if (!archetypeDAO.HasCatalog()) {
+            archetypeDAO.SeedCatalog();
         }
     }
 
@@ -145,25 +145,25 @@ public class ArchetypeController implements Initializable {
         }
 
         try {
-            QuizResult quizResult = QuizService.LoadStoredResult(email);
+            QuizResult quizResult = quizService.LoadStoredResult(email);
             if (quizResult != null) {
                 ShowQuizResult(quizResult);
                 return;
             }
 
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
             if (userQuest == null) {
                 ShowEmptyArchetype("Complete the onboarding quiz to discover your archetype.");
                 return;
             }
 
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
             if (quest == null) {
                 ShowEmptyArchetype("Your current quest does not have an archetype yet.");
                 return;
             }
 
-            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
+            String archetypeName = questService.GetArchetypeName(quest.getArchetypeId());
             Archetype archetype = ArchetypeByName(archetypeName);
             if (archetype == null) {
                 ShowEmptyArchetype("Your current quest does not have an archetype yet.");
@@ -206,7 +206,7 @@ public class ArchetypeController implements Initializable {
      * at the end in declaration order.
      */
     private List<Archetype> FullRankedArchetypes(QuizResult quizResult) {
-        List<Archetype> ranked = new ArrayList<>(QuizService.RankedArchetypes(quizResult));
+        List<Archetype> ranked = new ArrayList<>(quizService.RankedArchetypes(quizResult));
         for (Archetype archetype : Archetype.values()) {
             if (!ranked.contains(archetype)) {
                 ranked.add(archetype);
@@ -257,9 +257,9 @@ public class ArchetypeController implements Initializable {
         try {
             Quest quest = assignedQuest;
             if (quest == null) {
-                Integer archetypeId = QuestService.GetArchetypeIdForName(archetype.getName());
+                Integer archetypeId = questService.GetArchetypeIdForName(archetype.getName());
                 if (archetypeId != null) {
-                    Quest[] quests = QuestService.GetQuestsForArchetypeId(archetypeId);
+                    Quest[] quests = questService.GetQuestsForArchetypeId(archetypeId);
                     if (quests != null && quests.length > 0) {
                         quest = quests[0];
                     }
@@ -274,12 +274,12 @@ public class ArchetypeController implements Initializable {
                 return;
             }
 
-            List<Task> tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
+            List<Task> tasks = taskService.GetTasksForLabourId(quest.getLabourId());
             String names = JoinNamesOnSeparateLines(tasks.stream().map(Task::getName).toList());
             questFocusSubjectLabel.setText(LabourSubject(quest.getName()));
             questFocusLabel.setText(names.isEmpty() ? "Challenge details will appear here." : names);
 
-            List<ReflectionPrompt> reflections = ReflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());
+            List<ReflectionPrompt> reflections = reflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());
             String reflectionNames = JoinNamesOnSeparateLines(reflections.stream().map(ReflectionPrompt::name).toList());
             questReflectionsLabel.setText(reflectionNames.isEmpty() ? "Reflection details will appear here." : reflectionNames);
 
@@ -372,7 +372,7 @@ public class ArchetypeController implements Initializable {
             Archetype archetype = rankedArchetypes.get(index);
             int rank = index + 1;
 
-            Label nameLabel = new Label("#" + rank + "  " + UserProfileService.FormatArchetypeName(archetype.getName()));
+            Label nameLabel = new Label("#" + rank + "  " + userProfileService.FormatArchetypeName(archetype.getName()));
             nameLabel.getStyleClass().add("ranked-archetype-name");
 
             Integer points = scoreByArchetype.get(archetype);
@@ -407,7 +407,7 @@ public class ArchetypeController implements Initializable {
 
         Integer rank = rankByArchetype.get(archetype);
         archetypeRankLabel.setText(rank != null ? "#" + rank : "—");
-        archetypeNameLabel.setText(UserProfileService.FormatArchetypeName(archetype.getName()));
+        archetypeNameLabel.setText(userProfileService.FormatArchetypeName(archetype.getName()));
         overviewLabel.setText(archetype.getSmallDescription());
         valueLabel.setText(archetype.getValue() + " — " + archetype.getValueDefinition());
         strengthsLabel.setText(archetype.getStrengths());

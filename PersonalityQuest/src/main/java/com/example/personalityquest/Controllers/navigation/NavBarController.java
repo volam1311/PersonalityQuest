@@ -1,12 +1,7 @@
 package com.example.personalityquest.Controllers.navigation;
 
 import com.example.personalityquest.ApplicationManager;
-import com.example.personalityquest.Applications.navigation.DashboardApplication;
-import com.example.personalityquest.Applications.quest.QuestApplication;
-import com.example.personalityquest.Applications.navigation.SettingsApplication;
-import com.example.personalityquest.Applications.quest.TasksApplication;
 import com.example.personalityquest.Model.auth.EmailDetails;
-import com.example.personalityquest.Model.auth.LoginCache;
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.Services.auth.LoginCacheService;
@@ -65,16 +60,16 @@ public class NavBarController implements Initializable {
     private final ChangeListener<Number> sceneWidthListener =
             (observable, oldWidth, newWidth) -> ApplyResponsiveLayout(newWidth.doubleValue());
 
-    private EmailService EmailService;
-    private QuizService QuizService;
+    private EmailService emailService;
+    private QuizService quizService;
     /** Initialises the navigation bar controls
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        EmailService =  EmailService.GetInstance();
-        QuizService =  QuizService.GetInstance();
+        emailService =  EmailService.GetInstance();
+        quizService =  QuizService.GetInstance();
         SetProfileLabel();
         SetSidebarExpanded(sidebarExpanded);
 
@@ -114,7 +109,7 @@ public class NavBarController implements Initializable {
      * and picking it abandons the in-progress attempt (see OnNavigationClick).
      */
     private void ApplyQuizProgressLock() {
-        boolean quizInProgress = QuizService.HasActiveAttempt();
+        boolean quizInProgress = quizService.HasActiveAttempt();
         homeButton.setDisable(quizInProgress);
         tasksButton.setDisable(quizInProgress);
         questViewerButton.setDisable(quizInProgress);
@@ -142,7 +137,7 @@ public class NavBarController implements Initializable {
     private void SetProfileLabel() {
         String profileText = "Profile";
         try {
-            EmailDetails emailDetails = EmailService.GetDetailsForEmail(
+            EmailDetails emailDetails = emailService.GetDetailsForEmail(
                     ApplicationManager.CurrentAccount.getCurrentEmail());
             if (emailDetails != null) {
                 profileText = emailDetails.getUserName();
@@ -271,10 +266,10 @@ public class NavBarController implements Initializable {
             case SETTINGS -> NavigationService.LoadScreen(ScreenEnum.SETTINGS);
             case PROFILE -> NavigationService.LoadScreen(ScreenEnum.PROFILE);
             case ARCHETYPE -> {
-                if (QuizService.HasActiveAttempt()) {
+                if (quizService.HasActiveAttempt()) {
                     // Abandon the in-progress attempt - nothing has been saved yet, so this
                     // reverts the user straight back to whatever result they had before.
-                    QuizService.Reset();
+                    quizService.Reset();
                 }
                 NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);
             }
