@@ -27,12 +27,10 @@ import com.example.personalityquest.Services.quest.UserQuestService;
 import com.example.personalityquest.Services.quest.WeeklyTaskService;
 import com.example.personalityquest.Services.quiz.QuizService;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -110,28 +108,28 @@ public class DashboardController implements Initializable {
     private double[] radarValues = new double[RADAR_AXIS_COUNT];
     private boolean isRefreshingQuestline = false;
 
-    private WeeklyTaskService WeeklyTaskService;
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private QuestService QuestService;
-    private JournalEntryService JournalEntryService;
-    private StreakService StreakService;
-    private EmailService EmailService;
-    private QuizService QuizService;
+    private WeeklyTaskService weeklyTaskService;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private QuestService questService;
+    private JournalEntryService journalEntryService;
+    private StreakService streakService;
+    private EmailService emailService;
+    private QuizService quizService;
     /** Initialises dashboard controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TaskService = TaskService.GetInstance();
-        UserQuestService = UserQuestService.GetInstance();
-        WeeklyTaskService = WeeklyTaskService.GetInstance();
-        QuestService = QuestService.GetInstance();
-        JournalEntryService = JournalEntryService.GetInstance();
-        StreakService = StreakService.GetInstance();
-        EmailService = EmailService.GetInstance();
-        QuizService = QuizService.GetInstance();
+        taskService = TaskService.GetInstance();
+        userQuestService = UserQuestService.GetInstance();
+        weeklyTaskService = WeeklyTaskService.GetInstance();
+        questService = QuestService.GetInstance();
+        journalEntryService = JournalEntryService.GetInstance();
+        streakService = StreakService.GetInstance();
+        emailService = EmailService.GetInstance();
+        quizService = QuizService.GetInstance();
         navBarController.setCurrentDestination(NavBarController.NavDestination.HOME);
         AchievementService = new AchievementService();
         ConfigureHistoryList();
@@ -146,8 +144,8 @@ public class DashboardController implements Initializable {
             streakLabel.setText("Week 0");
         }
 
-        radarValues = QuizService.ArchetypeScores(
-                QuizService.LoadStoredResult(ApplicationManager.CurrentAccount.getCurrentEmail()));
+        radarValues = quizService.ArchetypeScores(
+                quizService.LoadStoredResult(ApplicationManager.CurrentAccount.getCurrentEmail()));
 
         LoadQuestline();
         PopulateTopArchetypeOverview();
@@ -171,13 +169,13 @@ public class DashboardController implements Initializable {
     private void PopulateTopArchetypeOverview() {
         String email = ApplicationManager.CurrentAccount.getCurrentEmail();
         try {
-            QuizResult quizResult = QuizService.LoadStoredResult(email);
+            QuizResult quizResult = quizService.LoadStoredResult(email);
             if (quizResult == null) {
                 ShowEmptyTopArchetype();
                 return;
             }
 
-            List<Archetype> ranked = QuizService.RankedArchetypes(quizResult);
+            List<Archetype> ranked = quizService.RankedArchetypes(quizResult);
             if (ranked.isEmpty()) {
                 ShowEmptyTopArchetype();
                 return;
@@ -218,7 +216,7 @@ public class DashboardController implements Initializable {
 
         if (!ApplicationManager.isEmpty(email)) {
             try {
-                for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {
+                for (UserQuest userQuest : userQuestService.GetUserQuestsForEmail(email)) {
                     if (ApplicationManager.isEmpty(userQuest.getReactionType())) {
                         continue; // quest not started yet, no reflection assigned
                     }
@@ -241,7 +239,7 @@ public class DashboardController implements Initializable {
 
         if (!ApplicationManager.isEmpty(email)) {
             try {
-                int journalChallenges = JournalEntryService.GetChallengesForEmail(email).size();
+                int journalChallenges = journalEntryService.GetChallengesForEmail(email).size();
                 total += journalChallenges;
                 finished += journalChallenges; // a journal entry only exists once submitted
             } catch (Exception exception) {
@@ -249,9 +247,9 @@ public class DashboardController implements Initializable {
             }
 
             try {
-                WeeklyTask[] weeklyTasks = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
+                WeeklyTask[] weeklyTasks = weeklyTaskService.GetTasksForEmailForThisWeek(email);
                 if (weeklyTasks == null) {
-                    weeklyTasks = WeeklyTaskService.GenerateTasksForThisWeek(email);
+                    weeklyTasks = weeklyTaskService.GenerateTasksForThisWeek(email);
                 }
                 if (weeklyTasks != null) {
                     total += weeklyTasks.length;
@@ -390,10 +388,10 @@ public class DashboardController implements Initializable {
 
         if (!ApplicationManager.isEmpty(email)) {
             try {
-                List<UserQuest> userQuests = UserQuestService.GetUserQuestsForEmail(email);
+                List<UserQuest> userQuests = userQuestService.GetUserQuestsForEmail(email);
                 int totalLabours = userQuests.size();
 
-                int completedChallenges = JournalEntryService.GetChallengesForEmail(email).size();
+                int completedChallenges = journalEntryService.GetChallengesForEmail(email).size();
                 challengesRatio = RatioOf(completedChallenges, totalLabours);
 
                 long completedReflections = userQuests.stream()
@@ -406,9 +404,9 @@ public class DashboardController implements Initializable {
             }
 
             try {
-                WeeklyTask[] weeklyTasks = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
+                WeeklyTask[] weeklyTasks = weeklyTaskService.GetTasksForEmailForThisWeek(email);
                 if (weeklyTasks == null) {
-                    weeklyTasks = WeeklyTaskService.GenerateTasksForThisWeek(email);
+                    weeklyTasks = weeklyTaskService.GenerateTasksForThisWeek(email);
                 }
                 if (weeklyTasks != null) {
                     long completedWeekly = Arrays.stream(weeklyTasks)
@@ -444,9 +442,9 @@ public class DashboardController implements Initializable {
             return;
         }
 
-        WeeklyTask[] tasks = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
+        WeeklyTask[] tasks = weeklyTaskService.GetTasksForEmailForThisWeek(email);
         if (tasks == null) {
-            tasks = WeeklyTaskService.GenerateTasksForThisWeek(email);
+            tasks = weeklyTaskService.GenerateTasksForThisWeek(email);
         }
 
         if (tasks != null) {
@@ -523,7 +521,7 @@ public class DashboardController implements Initializable {
 
     private String WeeklyTaskDisplayName(WeeklyTask weeklyTask) {
         try {
-            Task task = TaskService.GetTaskForId(weeklyTask.getTaskId());
+            Task task = taskService.GetTaskForId(weeklyTask.getTaskId());
             if (task != null && !ApplicationManager.isEmpty(task.getName())) {
                 return task.getName();
             }
@@ -591,7 +589,7 @@ public class DashboardController implements Initializable {
     }
 
     private void SetWelcome() throws Exception {
-        EmailDetails emailDetails = EmailService.GetDetailsForEmail(
+        EmailDetails emailDetails = emailService.GetDetailsForEmail(
                 ApplicationManager.CurrentAccount.getCurrentEmail());
 
         if (emailDetails == null) {
@@ -604,7 +602,7 @@ public class DashboardController implements Initializable {
 
     private void UpdateStreakLabel() {
         try {
-            int streak = StreakService.GetCurrentStreak(
+            int streak = streakService.GetCurrentStreak(
                     ApplicationManager.CurrentAccount.getCurrentEmail());
             streakLabel.setText("Week " + streak);
         } catch (Exception exception) {
@@ -626,16 +624,16 @@ public class DashboardController implements Initializable {
         EnsureSecondArchetypeQuestIsAvailable(email);
 
         try {
-            List<UserQuest> userQuests = UserQuestService.GetUserQuestsForEmail(email);
+            List<UserQuest> userQuests = userQuestService.GetUserQuestsForEmail(email);
             QuestListItem selected = null;
 
             for (UserQuest userQuest : userQuests) {
-                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+                Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
                 if (quest == null) {
                     continue;
                 }
 
-                String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
+                String archetypeName = questService.GetArchetypeName(quest.getArchetypeId());
                 QuestListItem item = new QuestListItem(userQuest, quest, archetypeName);
                 questHistory.getItems().add(item);
 
@@ -662,25 +660,25 @@ public class DashboardController implements Initializable {
      */
     private void EnsureSecondArchetypeQuestIsAvailable(String email) {
         try {
-            QuizResult quizResult = QuizService.LoadStoredResult(email);
+            QuizResult quizResult = quizService.LoadStoredResult(email);
             if (quizResult == null) {
                 return;
             }
 
-            List<Archetype> ranked = QuizService.RankedArchetypes(quizResult);
+            List<Archetype> ranked = quizService.RankedArchetypes(quizResult);
             if (ranked.size() < 2) {
                 return;
             }
 
             Archetype secondArchetype = ranked.get(1);
-            Quest secondQuest = QuestService.GetRandomQuestForArchetypeId(secondArchetype.getArchetypeId());
+            Quest secondQuest = questService.GetRandomQuestForArchetypeId(secondArchetype.getArchetypeId());
             if (secondQuest == null) {
                 return;
             }
 
-            UserQuest existing = UserQuestService.GetUserQuestForEmailAndLabourId(email, secondQuest.getLabourId());
+            UserQuest existing = userQuestService.GetUserQuestForEmailAndLabourId(email, secondQuest.getLabourId());
             if (existing == null) {
-                UserQuestService.InsertNewQuestForEmail(secondQuest, email);
+                userQuestService.InsertNewQuestForEmail(secondQuest, email);
             }
         } catch (Exception exception) {
             System.err.println("Could not prepare second archetype quest: " + exception.getMessage());
@@ -757,7 +755,7 @@ public class DashboardController implements Initializable {
         }
 
         try {
-            UserQuestService.ChangeActiveQuest(item.quest(), email);
+            userQuestService.ChangeActiveQuest(item.quest(), email);
             isRefreshingQuestline = true;
             LoadQuestline();
         } catch (Exception exception) {
