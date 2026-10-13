@@ -81,28 +81,28 @@ import java.util.concurrent.CompletableFuture;
 
     private boolean updatingJournalSelection;
 
-    private WeeklyTaskService WeeklyTaskService;
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private QuestService QuestService;
-    private JournalEntryService JournalEntryService;
-    private StreakService StreakService;
-    private ReflectionFeedbackService ReflectionFeedbackService;
-    private ReflectionPromptDAO ReflectionPromptDAO;
+    private WeeklyTaskService weeklyTaskService;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private QuestService questService;
+    private JournalEntryService journalEntryService;
+    private StreakService streakService;
+    private ReflectionFeedbackService reflectionFeedbackService;
+    private ReflectionPromptDAO reflectionPromptDAO;
     /** Initialises quest challenge/reflection controls and loads the active quest's data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L98">        QuestService = QuestService.GetInstance();</span>
-<span class="nc" id="L99">        UserQuestService = UserQuestService.GetInstance();</span>
-<span class="nc" id="L100">        WeeklyTaskService = WeeklyTaskService.GetInstance();</span>
-<span class="nc" id="L101">        TaskService = TaskService.GetInstance();</span>
-<span class="nc" id="L102">        JournalEntryService = JournalEntryService.GetInstance();</span>
-<span class="nc" id="L103">        StreakService = StreakService.GetInstance();</span>
-<span class="nc" id="L104">        ReflectionFeedbackService = ReflectionFeedbackService.GetInstance();</span>
-<span class="nc" id="L105">        ReflectionPromptDAO = new ReflectionPromptDAO();</span>
+<span class="nc" id="L98">        questService = QuestService.GetInstance();</span>
+<span class="nc" id="L99">        userQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L100">        weeklyTaskService = WeeklyTaskService.GetInstance();</span>
+<span class="nc" id="L101">        taskService = TaskService.GetInstance();</span>
+<span class="nc" id="L102">        journalEntryService = JournalEntryService.GetInstance();</span>
+<span class="nc" id="L103">        streakService = StreakService.GetInstance();</span>
+<span class="nc" id="L104">        reflectionFeedbackService = ReflectionFeedbackService.GetInstance();</span>
+<span class="nc" id="L105">        reflectionPromptDAO = new ReflectionPromptDAO();</span>
 <span class="nc" id="L106">        navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);</span>
 <span class="nc" id="L107">        ConfigureQuestChallengesList();</span>
 <span class="nc" id="L108">        ConfigureQuestReflectionsList();</span>
@@ -263,7 +263,7 @@ import java.util.concurrent.CompletableFuture;
 <span class="nc" id="L263">            WeeklyTask weeklyTask = submitted.weeklyTask();</span>
             try {
 <span class="nc" id="L265">                boolean alreadyFinished = IsFinished(weeklyTask.getStatus());</span>
-<span class="nc" id="L266">                WeeklyTaskService.UpdateGivenTaskToBeFinished(weeklyTask, reflection, email);</span>
+<span class="nc" id="L266">                weeklyTaskService.UpdateGivenTaskToBeFinished(weeklyTask, reflection, email);</span>
 <span class="nc" id="L267">                RequestWeeklyAiFeedback(submitted, reflection, &quot;Task submitted. Generating AI feedback...&quot;);</span>
 <span class="nc" id="L268">                LoadQuestChallenges();</span>
 <span class="nc" id="L269">                ReselectWeeklyChallenge(weeklyTask);</span>
@@ -287,7 +287,7 @@ import java.util.concurrent.CompletableFuture;
 <span class="nc" id="L287">            JournalEntry entry = submitted.entry();</span>
             try {
 <span class="nc bnc" id="L289" title="All 2 branches missed.">                String title = submitted.task() == null ? entry.getTitle() : submitted.task().getName();</span>
-<span class="nc" id="L290">                JournalEntryService.AddChallengeEntry(email, entry.getLabourId(), title, reflection);</span>
+<span class="nc" id="L290">                journalEntryService.AddChallengeEntry(email, entry.getLabourId(), title, reflection);</span>
 <span class="nc" id="L291">                LoadQuestChallenges();</span>
 <span class="nc" id="L292">                ReselectJournalChallenge(entry.getLabourId());</span>
 <span class="nc" id="L293">                feedbackLabel.setText(&quot;Saved!&quot;);</span>
@@ -301,7 +301,7 @@ import java.util.concurrent.CompletableFuture;
 <span class="nc bnc" id="L301" title="All 2 branches missed.">        if (selectedReflectionItem != null) {</span>
 <span class="nc" id="L302">            ReflectionListItem submitted = selectedReflectionItem;</span>
             try {
-<span class="nc" id="L304">                UserQuest updated = UserQuestService.UpdateQuestReflectionToBeFinished(</span>
+<span class="nc" id="L304">                UserQuest updated = userQuestService.UpdateQuestReflectionToBeFinished(</span>
 <span class="nc" id="L305">                        submitted.userQuest(), reflection, email);</span>
 <span class="nc" id="L306">                RequestQuestAiFeedback(submitted, reflection, &quot;Reflection submitted. Generating AI feedback...&quot;);</span>
 <span class="nc" id="L307">                LoadQuestReflections();</span>
@@ -336,15 +336,15 @@ import java.util.concurrent.CompletableFuture;
 <span class="nc" id="L336">                return;</span>
             }
 
-<span class="nc" id="L339">            StreakService.RecordCompletion(email, LocalDate.now());</span>
-<span class="nc" id="L340">            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L339">            streakService.RecordCompletion(email, LocalDate.now());</span>
+<span class="nc" id="L340">            UserQuest currentActiveQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 
-<span class="nc" id="L342">            UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(</span>
+<span class="nc" id="L342">            UserQuest updatedQuest = userQuestService.SetUserQuestToPercentageComplete(</span>
 <span class="nc" id="L343">                    currentActiveQuest, email, currentActiveQuest.getPercentageComplete() + 0.1f);</span>
 
 <span class="nc bnc" id="L345" title="All 2 branches missed.">            if (updatedQuest.getPercentageComplete() &gt;= 1.0f) {</span>
-<span class="nc" id="L346">                UserQuestService.SetUserQuestStatusAsComplete(updatedQuest, email);</span>
-<span class="nc" id="L347">                StreakService.IncreaseTotalQuestsCompleted(email);</span>
+<span class="nc" id="L346">                userQuestService.SetUserQuestStatusAsComplete(updatedQuest, email);</span>
+<span class="nc" id="L347">                streakService.IncreaseTotalQuestsCompleted(email);</span>
             }
 <span class="nc" id="L349">        } catch (Exception exception) {</span>
 <span class="nc" id="L350">            System.out.println(exception.getMessage());</span>
@@ -409,8 +409,8 @@ import java.util.concurrent.CompletableFuture;
 
 <span class="nc" id="L410">        CompletableFuture.supplyAsync(() -&gt; {</span>
             try {
-<span class="nc" id="L412">                return ReflectionFeedbackService.FeedbackFor(</span>
-<span class="nc" id="L413">                        ReflectionFeedbackService.ContextFor(task, questName, reflection));</span>
+<span class="nc" id="L412">                return reflectionFeedbackService.FeedbackFor(</span>
+<span class="nc" id="L413">                        reflectionFeedbackService.ContextFor(task, questName, reflection));</span>
 <span class="nc" id="L414">            } catch (Exception exception) {</span>
 <span class="nc" id="L415">                throw new RuntimeException(exception);</span>
             }
@@ -432,7 +432,7 @@ import java.util.concurrent.CompletableFuture;
             }
 
             try {
-<span class="nc" id="L435">                ReflectionFeedbackService.Save(weeklyTask, text);</span>
+<span class="nc" id="L435">                reflectionFeedbackService.Save(weeklyTask, text);</span>
 <span class="nc" id="L436">            } catch (Exception ignored) {</span>
                 // Showing the reply still helps even if it cannot be stored.
 <span class="nc" id="L438">            }</span>
@@ -454,8 +454,8 @@ import java.util.concurrent.CompletableFuture;
 
 <span class="nc" id="L455">        CompletableFuture.supplyAsync(() -&gt; {</span>
             try {
-<span class="nc" id="L457">                return ReflectionFeedbackService.FeedbackFor(</span>
-<span class="nc" id="L458">                        ReflectionFeedbackService.ContextFor(null, questName, reflection));</span>
+<span class="nc" id="L457">                return reflectionFeedbackService.FeedbackFor(</span>
+<span class="nc" id="L458">                        reflectionFeedbackService.ContextFor(null, questName, reflection));</span>
 <span class="nc" id="L459">            } catch (Exception exception) {</span>
 <span class="nc" id="L460">                throw new RuntimeException(exception);</span>
             }
@@ -478,7 +478,7 @@ import java.util.concurrent.CompletableFuture;
             }
 
             try {
-<span class="nc" id="L481">                ReflectionFeedbackService.SaveForQuest(userQuest.getAccountEmail(), userQuest.getLabourId(), text);</span>
+<span class="nc" id="L481">                reflectionFeedbackService.SaveForQuest(userQuest.getAccountEmail(), userQuest.getLabourId(), text);</span>
 <span class="nc" id="L482">            } catch (Exception ignored) {</span>
                 // Showing the reply still helps even if it cannot be stored.
 <span class="nc" id="L484">            }</span>
@@ -493,7 +493,7 @@ import java.util.concurrent.CompletableFuture;
 <span class="nc" id="L493">            return &quot;your current quest&quot;;</span>
         }
         try {
-<span class="nc" id="L496">            Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());</span>
+<span class="nc" id="L496">            Quest quest = questService.GetQuestForLabourId(task.getLabourId());</span>
 <span class="nc bnc" id="L497" title="All 4 branches missed.">            if (quest != null &amp;&amp; !ApplicationManager.isEmpty(quest.getName())) {</span>
 <span class="nc" id="L498">                return quest.getName();</span>
             }
@@ -505,7 +505,7 @@ import java.util.concurrent.CompletableFuture;
 
     private void ShowStoredFeedback(WeeklyTask weeklyTask) {
         try {
-<span class="nc" id="L508">            String stored = ReflectionFeedbackService.Find(weeklyTask);</span>
+<span class="nc" id="L508">            String stored = reflectionFeedbackService.Find(weeklyTask);</span>
 <span class="nc bnc" id="L509" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
 <span class="nc" id="L510">                HideAiFeedback();</span>
 <span class="nc" id="L511">                return;</span>
@@ -583,14 +583,14 @@ import java.util.concurrent.CompletableFuture;
     private void PopulateActiveQuestHeader(){
 <span class="nc" id="L584">        String email = ApplicationManager.CurrentAccount.getCurrentEmail();</span>
         try {
-<span class="nc" id="L586">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L586">            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 <span class="nc bnc" id="L587" title="All 2 branches missed.">            if (userQuest == null) {</span>
 <span class="nc" id="L588">                questTitleLabel.setText(&quot;No active quest&quot;);</span>
 <span class="nc" id="L589">                questProgress.setProgress(0);</span>
 <span class="nc" id="L590">                questProgressLabel.setText(&quot;0% Complete&quot;);</span>
 <span class="nc" id="L591">                return;</span>
             }
-<span class="nc" id="L593">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L593">            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc" id="L594">            questTitleLabel.setText(LabourSubject(quest.getName()));</span>
 <span class="nc" id="L595">            questProgress.setProgress(userQuest.getPercentageComplete());</span>
 <span class="nc" id="L596">            questProgressLabel.setText(String.format(&quot;%.0f%% Complete&quot;, userQuest.getPercentageComplete() *100));</span>
@@ -710,8 +710,8 @@ import java.util.concurrent.CompletableFuture;
         }
 
         try {
-<span class="nc bnc" id="L713" title="All 2 branches missed.">            for (JournalEntry entry : JournalEntryService.GetChallengesForEmail(email)) {</span>
-<span class="nc" id="L714">                Quest quest = QuestService.GetQuestForLabourId(entry.getLabourId());</span>
+<span class="nc bnc" id="L713" title="All 2 branches missed.">            for (JournalEntry entry : journalEntryService.GetChallengesForEmail(email)) {</span>
+<span class="nc" id="L714">                Quest quest = questService.GetQuestForLabourId(entry.getLabourId());</span>
 <span class="nc" id="L715">                Task task = FindChallengeTask(email, entry.getLabourId());</span>
 <span class="nc" id="L716">                questChallengesList.getItems().add(new ChallengeListItem(entry, quest, task, null));</span>
 <span class="nc" id="L717">            }</span>
@@ -720,13 +720,13 @@ import java.util.concurrent.CompletableFuture;
 <span class="nc" id="L720">        }</span>
 
         try {
-<span class="nc" id="L723">            WeeklyTask[] weekly = WeeklyTaskService.GetTasksForEmailForThisWeek(email);</span>
+<span class="nc" id="L723">            WeeklyTask[] weekly = weeklyTaskService.GetTasksForEmailForThisWeek(email);</span>
 <span class="nc bnc" id="L724" title="All 2 branches missed.">            if (weekly == null) {</span>
-<span class="nc" id="L725">                weekly = WeeklyTaskService.GenerateTasksForThisWeek(email);</span>
+<span class="nc" id="L725">                weekly = weeklyTaskService.GenerateTasksForThisWeek(email);</span>
             }
 <span class="nc bnc" id="L727" title="All 2 branches missed.">            if (weekly != null) {</span>
 <span class="nc bnc" id="L728" title="All 2 branches missed.">                for (WeeklyTask weeklyTask : weekly) {</span>
-<span class="nc" id="L729">                    Task task = TaskService.GetTaskForId(weeklyTask.getTaskId());</span>
+<span class="nc" id="L729">                    Task task = taskService.GetTaskForId(weeklyTask.getTaskId());</span>
 <span class="nc" id="L730">                    questChallengesList.getItems().add(new ChallengeListItem(null, null, task, weeklyTask));</span>
                 }
             }
@@ -752,9 +752,9 @@ import java.util.concurrent.CompletableFuture;
 
     private Task FindChallengeTask(String email, int labourId) {
         try {
-<span class="nc" id="L755">            UserQuest userQuest = UserQuestService.GetUserQuestForEmailAndLabourId(email, labourId);</span>
+<span class="nc" id="L755">            UserQuest userQuest = userQuestService.GetUserQuestForEmailAndLabourId(email, labourId);</span>
 <span class="nc bnc" id="L756" title="All 4 branches missed.">            if (userQuest == null || ApplicationManager.isEmpty(userQuest.getReactionType())) return null;</span>
-<span class="nc" id="L757">            List&lt;Task&gt; tasks = TaskService.GetTasksForLabourIdAndReactionType(labourId, userQuest.getReactionType());</span>
+<span class="nc" id="L757">            List&lt;Task&gt; tasks = taskService.GetTasksForLabourIdAndReactionType(labourId, userQuest.getReactionType());</span>
 <span class="nc bnc" id="L758" title="All 2 branches missed.">            return tasks.isEmpty() ? null : tasks.get(0);</span>
 <span class="nc" id="L759">        } catch (Exception ignored) {</span>
 <span class="nc" id="L760">            return null;</span>
@@ -770,9 +770,9 @@ import java.util.concurrent.CompletableFuture;
         }
 
         try {
-<span class="nc bnc" id="L773" title="All 2 branches missed.">            for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {</span>
+<span class="nc bnc" id="L773" title="All 2 branches missed.">            for (UserQuest userQuest : userQuestService.GetUserQuestsForEmail(email)) {</span>
 <span class="nc bnc" id="L774" title="All 2 branches missed.">                if (ApplicationManager.isEmpty(userQuest.getReactionType())) continue; // quest not started yet</span>
-<span class="nc" id="L775">                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L775">                Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc" id="L776">                ReflectionPrompt prompt = FindReflectionPrompt(userQuest);</span>
 <span class="nc" id="L777">                questReflectionsList.getItems().add(new ReflectionListItem(userQuest, quest, prompt));</span>
 <span class="nc" id="L778">            }</span>
@@ -798,7 +798,7 @@ import java.util.concurrent.CompletableFuture;
 
     private ReflectionPrompt FindReflectionPrompt(UserQuest userQuest) {
         try {
-<span class="nc" id="L801">            List&lt;ReflectionPrompt&gt; prompts = ReflectionPromptDAO.GetReflectionPromptsForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L801">            List&lt;ReflectionPrompt&gt; prompts = reflectionPromptDAO.GetReflectionPromptsForLabourId(userQuest.getLabourId());</span>
 <span class="nc bnc" id="L802" title="All 2 branches missed.">            for (ReflectionPrompt prompt : prompts) {</span>
 <span class="nc bnc" id="L803" title="All 2 branches missed.">                if (userQuest.getReactionType().equalsIgnoreCase(prompt.reactionType())) {</span>
 <span class="nc" id="L804">                    return prompt;</span>
@@ -923,7 +923,7 @@ import java.util.concurrent.CompletableFuture;
 
     private void ShowStoredQuestFeedback(UserQuest userQuest) {
         try {
-<span class="nc" id="L926">            String stored = ReflectionFeedbackService.FindForQuest(userQuest.getAccountEmail(), userQuest.getLabourId());</span>
+<span class="nc" id="L926">            String stored = reflectionFeedbackService.FindForQuest(userQuest.getAccountEmail(), userQuest.getLabourId());</span>
 <span class="nc bnc" id="L927" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
 <span class="nc" id="L928">                HideAiFeedback();</span>
 <span class="nc" id="L929">                return;</span>

@@ -96,22 +96,22 @@ import javafx.util.Duration;
 
     private Timeline reactionFlashTimeline;
 
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private  QuestService QuestService;
-    private JournalEntryService JournalEntryService;
-    private ReflectionFeedbackService ReflectionFeedbackService;
-    private ReflectionPromptDAO ReflectionPromptDAO;
-    private QuestOptionDAO QuestOptionDAO;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private  QuestService questService;
+    private JournalEntryService journalEntryService;
+    private ReflectionFeedbackService reflectionFeedbackService;
+    private ReflectionPromptDAO reflectionPromptDAO;
+    private QuestOptionDAO questOptionDAO;
     @Override
     public void initialize(URL location, ResourceBundle resources){
-<span class="nc" id="L108">        TaskService = TaskService.GetInstance();</span>
-<span class="nc" id="L109">        UserQuestService = UserQuestService.GetInstance();</span>
-<span class="nc" id="L110">        QuestService = QuestService.GetInstance();</span>
-<span class="nc" id="L111">        JournalEntryService = JournalEntryService.GetInstance();</span>
-<span class="nc" id="L112">        ReflectionFeedbackService = ReflectionFeedbackService.GetInstance();</span>
-<span class="nc" id="L113">        ReflectionPromptDAO = new ReflectionPromptDAO();</span>
-<span class="nc" id="L114">        QuestOptionDAO = new QuestOptionDAO();</span>
+<span class="nc" id="L108">        taskService = TaskService.GetInstance();</span>
+<span class="nc" id="L109">        userQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L110">        questService = QuestService.GetInstance();</span>
+<span class="nc" id="L111">        journalEntryService = JournalEntryService.GetInstance();</span>
+<span class="nc" id="L112">        reflectionFeedbackService = ReflectionFeedbackService.GetInstance();</span>
+<span class="nc" id="L113">        reflectionPromptDAO = new ReflectionPromptDAO();</span>
+<span class="nc" id="L114">        questOptionDAO = new QuestOptionDAO();</span>
 <span class="nc" id="L115">        navBarController.setCurrentDestination(NavBarController.NavDestination.QUEST_VIEWER);</span>
 <span class="nc" id="L116">        UpdateTabLocks();</span>
 <span class="nc" id="L117">        SelectTab(Tab.STORYLINE);</span>
@@ -127,20 +127,20 @@ import javafx.util.Duration;
         }
 
         try {
-<span class="nc" id="L130">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L130">            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 <span class="nc bnc" id="L131" title="All 2 branches missed.">            if (userQuest == null) {</span>
 <span class="nc" id="L132">                ShowEmptyIntroOverlay(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L133">                return;</span>
             }
 
-<span class="nc" id="L136">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L136">            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc bnc" id="L137" title="All 2 branches missed.">            if (quest == null) {</span>
 <span class="nc" id="L138">                ShowEmptyIntroOverlay(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L139">                return;</span>
             }
 
 <span class="nc" id="L142">            LabourInsight insight = LabourInsight.ForLabourId(quest.getLabourId());</span>
-<span class="nc" id="L143">            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
+<span class="nc" id="L143">            String archetypeName = questService.GetArchetypeName(quest.getArchetypeId());</span>
 
 <span class="nc" id="L145">            introQuestNameLabel.setText(quest.getName() + &quot; - &quot; + archetypeName);</span>
 <span class="nc bnc" id="L146" title="All 2 branches missed.">            introThemeLabel.setText(insight == null ? &quot;—&quot; : insight.getTheme());</span>
@@ -190,12 +190,12 @@ import javafx.util.Duration;
         }
 
         try {
-<span class="nc" id="L193">            List&lt;Task&gt; tasks = TaskService.GetTasksForLabourIdAndReactionType(</span>
+<span class="nc" id="L193">            List&lt;Task&gt; tasks = taskService.GetTasksForLabourIdAndReactionType(</span>
 <span class="nc" id="L194">                    activeUserQuest.getLabourId(), selectedReaction.name());</span>
 <span class="nc bnc" id="L195" title="All 2 branches missed.">            Task task = tasks.isEmpty() ? null : tasks.get(0);</span>
 <span class="nc bnc" id="L196" title="All 2 branches missed.">            String title = task == null ? &quot;Challenge&quot; : task.getName();</span>
 
-<span class="nc" id="L198">            JournalEntryService.AddChallengeEntry(email, activeUserQuest.getLabourId(), title, focusText);</span>
+<span class="nc" id="L198">            journalEntryService.AddChallengeEntry(email, activeUserQuest.getLabourId(), title, focusText);</span>
 <span class="nc" id="L199">            boolean wasAlreadyVisited = challengeVisited;</span>
 <span class="nc" id="L200">            challengeVisited = true;</span>
 <span class="nc bnc" id="L201" title="All 2 branches missed.">            challengeJournalFeedbackLabel.setText(wasAlreadyVisited ? &quot;Updated your journal entry&quot; : &quot;Added to your journal&quot;);</span>
@@ -272,13 +272,13 @@ import javafx.util.Duration;
         }
 
         try {
-<span class="nc" id="L275">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L275">            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 <span class="nc bnc" id="L276" title="All 2 branches missed.">            if (userQuest == null) {</span>
 <span class="nc" id="L277">                ShowEmptyStoryline(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L278">                return;</span>
             }
 
-<span class="nc" id="L281">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L281">            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc bnc" id="L282" title="All 2 branches missed.">            if (quest == null) {</span>
 <span class="nc" id="L283">                ShowEmptyStoryline(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L284">                return;</span>
@@ -313,20 +313,20 @@ import javafx.util.Duration;
         }
 
         try {
-<span class="nc" id="L316">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L316">            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 <span class="nc" id="L317">            activeUserQuest = userQuest;</span>
 <span class="nc bnc" id="L318" title="All 2 branches missed.">            if (userQuest == null) {</span>
 <span class="nc" id="L319">                reactionQuestionLabel.setText(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L320">                return;</span>
             }
 
-<span class="nc" id="L323">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L323">            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc bnc" id="L324" title="All 2 branches missed.">            if (quest == null) {</span>
 <span class="nc" id="L325">                reactionQuestionLabel.setText(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L326">                return;</span>
             }
 
-<span class="nc" id="L329">            List&lt;QuestOption&gt; options = QuestOptionDAO.GetQuestOptionsForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L329">            List&lt;QuestOption&gt; options = questOptionDAO.GetQuestOptionsForLabourId(quest.getLabourId());</span>
 <span class="nc bnc" id="L330" title="All 2 branches missed.">            if (options.isEmpty()){</span>
 <span class="nc" id="L331">                reactionQuestionLabel.setText(&quot;Reaction options are not available for this labour yet&quot;);</span>
 <span class="nc" id="L332">                return;</span>
@@ -396,7 +396,7 @@ import javafx.util.Duration;
 <span class="nc" id="L396">        selectedReaction = option.reactionType();</span>
         try{
 <span class="nc bnc" id="L398" title="All 2 branches missed.">            if (activeUserQuest != null) {</span>
-<span class="nc" id="L399">                activeUserQuest = UserQuestService.SetUserQuestReactionType(</span>
+<span class="nc" id="L399">                activeUserQuest = userQuestService.SetUserQuestReactionType(</span>
 <span class="nc" id="L400">                        activeUserQuest, ApplicationManager.CurrentAccount.getCurrentEmail(), selectedReaction.name());</span>
             }
 <span class="nc" id="L402">        } catch (Exception ignored){ // Non fatal</span>
@@ -410,7 +410,7 @@ import javafx.util.Duration;
 
 <span class="nc bnc" id="L411" title="All 2 branches missed.">        if (activeUserQuest != null) {</span>
             try {
-<span class="nc" id="L413">                Quest quest = QuestService.GetQuestForLabourId(activeUserQuest.getLabourId());</span>
+<span class="nc" id="L413">                Quest quest = questService.GetQuestForLabourId(activeUserQuest.getLabourId());</span>
 <span class="nc bnc" id="L414" title="All 2 branches missed.">                if (quest != null) {</span>
 <span class="nc" id="L415">                    ShowResolutionIfAvailable(quest, false);</span>
                 }
@@ -428,14 +428,14 @@ import javafx.util.Duration;
         }
 
         try {
-<span class="nc" id="L431">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L431">            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 <span class="nc bnc" id="L432" title="All 2 branches missed.">            if (userQuest == null) {</span>
 <span class="nc" id="L433">                challengeDetailsLabel.setText(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L434">                return;</span>
             }
 <span class="nc" id="L436">            activeUserQuest = userQuest;</span>
 
-<span class="nc" id="L438">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L438">            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc bnc" id="L439" title="All 2 branches missed.">            if (quest == null) {</span>
 <span class="nc" id="L440">                challengeDetailsLabel.setText(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L441">                return;</span>
@@ -451,15 +451,15 @@ import javafx.util.Duration;
 <span class="nc" id="L451">                return;</span>
             }
 
-<span class="nc" id="L454">            List&lt;Task&gt; tasks = TaskService.GetTasksForLabourIdAndReactionType(quest.getLabourId(), selectedReaction.name());</span>
+<span class="nc" id="L454">            List&lt;Task&gt; tasks = taskService.GetTasksForLabourIdAndReactionType(quest.getLabourId(), selectedReaction.name());</span>
 <span class="nc bnc" id="L455" title="All 2 branches missed.">            Task task = tasks.isEmpty() ? null : tasks.get(0);</span>
-<span class="nc" id="L456">            String details = TaskService.JoinTaskDetails(tasks);</span>
+<span class="nc" id="L456">            String details = taskService.JoinTaskDetails(tasks);</span>
 <span class="nc bnc" id="L457" title="All 2 branches missed.">            challengeDetailsLabel.setText(details.isEmpty()</span>
 <span class="nc" id="L458">                    ? &quot;No tasks are stored for this labour yet.&quot;</span>
 <span class="nc" id="L459">                    : details);</span>
 <span class="nc bnc" id="L460" title="All 2 branches missed.">            challengeOverviewLabel.setText(task == null ? &quot;&quot; : task.getOverview());</span>
 
-<span class="nc" id="L462">            challengeVisited = JournalEntryService.HasAddedChallengeForLabour(email, userQuest.getLabourId());</span>
+<span class="nc" id="L462">            challengeVisited = journalEntryService.HasAddedChallengeForLabour(email, userQuest.getLabourId());</span>
 <span class="nc bnc" id="L463" title="All 2 branches missed.">            challengeJournalFeedbackLabel.setText(challengeVisited ? &quot;Added to your journal&quot; : &quot;&quot;);</span>
 <span class="nc" id="L464">            challengeJournalEntryArea.setText(FindExistingChallengeEntryText(email, userQuest.getLabourId(), task));</span>
 <span class="nc" id="L465">            UpdateTabLocks();</span>
@@ -470,7 +470,7 @@ import javafx.util.Duration;
 
     private String FindExistingChallengeEntryText(String email, int labourId, Task task) {
         try {
-<span class="nc" id="L473">            List&lt;JournalEntry&gt; entries = JournalEntryService.GetChallengesForEmail(email);</span>
+<span class="nc" id="L473">            List&lt;JournalEntry&gt; entries = journalEntryService.GetChallengesForEmail(email);</span>
 <span class="nc bnc" id="L474" title="All 2 branches missed.">            for (JournalEntry entry : entries) {</span>
 <span class="nc bnc" id="L475" title="All 4 branches missed.">                if (entry.getLabourId() != null &amp;&amp; entry.getLabourId() == labourId) {</span>
 <span class="nc bnc" id="L476" title="All 2 branches missed.">                    String body = entry.getBody() == null ? &quot;&quot; : entry.getBody();</span>
@@ -497,21 +497,21 @@ import javafx.util.Duration;
         }
 
         try {
-<span class="nc" id="L500">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L500">            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 <span class="nc bnc" id="L501" title="All 2 branches missed.">            if (userQuest == null) {</span>
 <span class="nc" id="L502">                reflectionPromptLabel.setText(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L503">                DisableReflectionActions();</span>
 <span class="nc" id="L504">                return;</span>
             }
 
-<span class="nc" id="L507">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L507">            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc bnc" id="L508" title="All 2 branches missed.">            if (quest == null) {</span>
 <span class="nc" id="L509">                reflectionPromptLabel.setText(&quot;Complete the quiz to begin a labour.&quot;);</span>
 <span class="nc" id="L510">                DisableReflectionActions();</span>
 <span class="nc" id="L511">                return;</span>
             }
 
-<span class="nc" id="L514">            List&lt;ReflectionPrompt&gt; prompts = ReflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L514">            List&lt;ReflectionPrompt&gt; prompts = reflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());</span>
 <span class="nc bnc" id="L515" title="All 2 branches missed.">            if (prompts.isEmpty()) {</span>
 <span class="nc" id="L516">                reflectionPromptLabel.setText(&quot;No prompts are stored for this labour yet.&quot;);</span>
 <span class="nc" id="L517">                DisableReflectionActions();</span>
@@ -592,7 +592,7 @@ import javafx.util.Duration;
         }
 
         try{
-            activeUserQuest = UserQuestService.UpdateQuestReflectionToDraft(
+            activeUserQuest = userQuestService.UpdateQuestReflectionToDraft(
                     activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
             reflectionStatusLabel.setText(&quot;Draft Saved&quot;);
             reflectionAdded = true;
@@ -616,7 +616,7 @@ import javafx.util.Duration;
         }
         try {
 <span class="nc" id="L618">            boolean finished = &quot;Finished&quot;.equalsIgnoreCase(activeUserQuest.getReflectionStatus());</span>
-<span class="nc" id="L619">            activeUserQuest = UserQuestService.UpdateQuestReflectionToBeFinished(</span>
+<span class="nc" id="L619">            activeUserQuest = userQuestService.UpdateQuestReflectionToBeFinished(</span>
 <span class="nc" id="L620">                    activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());</span>
 <span class="nc" id="L621">            reflectionSubmitButton.setText(&quot;Submit&quot;);</span>
 <span class="nc" id="L622">            navBarController.FlashTasksButtonOnce();</span>
@@ -649,12 +649,12 @@ import javafx.util.Duration;
 <span class="nc" id="L649">        reflectionStatusLabel.setText(statusMessage);</span>
 <span class="nc" id="L650">        CompletableFuture.supplyAsync(() -&gt; {</span>
             try {
-<span class="nc" id="L652">                Quest questDetails = QuestService.GetQuestForLabourId(quest.getLabourId());</span>
-<span class="nc" id="L653">                List&lt;Task&gt; tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L652">                Quest questDetails = questService.GetQuestForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L653">                List&lt;Task&gt; tasks = taskService.GetTasksForLabourId(quest.getLabourId());</span>
 <span class="nc bnc" id="L654" title="All 2 branches missed.">                Task firstTask = tasks.isEmpty() ? null : tasks.get(0);</span>
 <span class="nc bnc" id="L655" title="All 2 branches missed.">                String questName = questDetails == null ? &quot;&quot; : questDetails.getName();</span>
-<span class="nc" id="L656">                return ReflectionFeedbackService.FeedbackFor(</span>
-<span class="nc" id="L657">                        ReflectionFeedbackService.ContextFor(firstTask, questName, reflection));</span>
+<span class="nc" id="L656">                return reflectionFeedbackService.FeedbackFor(</span>
+<span class="nc" id="L657">                        reflectionFeedbackService.ContextFor(firstTask, questName, reflection));</span>
 <span class="nc" id="L658">            } catch (Exception exception) {</span>
 <span class="nc" id="L659">                throw new RuntimeException(exception);</span>
             }
@@ -665,7 +665,7 @@ import javafx.util.Duration;
 <span class="nc" id="L665">                return;</span>
             }
             try {
-<span class="nc" id="L668">                ReflectionFeedbackService.SaveForQuest(quest.getAccountEmail(), quest.getLabourId(), text);</span>
+<span class="nc" id="L668">                reflectionFeedbackService.SaveForQuest(quest.getAccountEmail(), quest.getLabourId(), text);</span>
 <span class="nc" id="L669">            } catch (Exception ignored) {</span>
                 // Showing the reply still helps even if it cannot be stored.
 <span class="nc" id="L671">            }</span>
@@ -677,7 +677,7 @@ import javafx.util.Duration;
 <span class="nc" id="L677">    }</span>
     private void ShowStoredQuestFeedback(String email, int labourId) {
         try {
-<span class="nc" id="L680">            String stored = ReflectionFeedbackService.FindForQuest(email, labourId);</span>
+<span class="nc" id="L680">            String stored = reflectionFeedbackService.FindForQuest(email, labourId);</span>
 <span class="nc bnc" id="L681" title="All 2 branches missed.">            if (ApplicationManager.isEmpty(stored)) {</span>
 <span class="nc" id="L682">                HideQuestAiFeedback();</span>
 <span class="nc" id="L683">                return;</span>

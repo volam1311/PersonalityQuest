@@ -33,7 +33,7 @@ import java.util.ResourceBundle;
 
     private Integer selectedOption;
 
-    private QuizService QuizService;
+    private QuizService quizService;
 
     /** Initialises quiz controls and loads the first question
      * @param location the location used to resolve relative paths
@@ -41,24 +41,24 @@ import java.util.ResourceBundle;
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L44">        QuizService = QuizService.GetInstance();</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (!QuizService.HasActiveAttempt()) {</span>
-<span class="nc" id="L46">            QuizService.StartQuiz();</span>
+<span class="nc" id="L44">        quizService = QuizService.GetInstance();</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (!quizService.HasActiveAttempt()) {</span>
+<span class="nc" id="L46">            quizService.StartQuiz();</span>
         }
 <span class="nc" id="L48">        RenderCurrentQuestion();</span>
 <span class="nc" id="L49">    }</span>
 
     private void RenderCurrentQuestion() {
-<span class="nc" id="L52">        Question question = QuizService.GetCurrentQuestion();</span>
-<span class="nc" id="L53">        int number = QuizService.GetCurrentQuestionIndex() + 1;</span>
-<span class="nc" id="L54">        int total = QuizService.GetQuestionCount();</span>
+<span class="nc" id="L52">        Question question = quizService.GetCurrentQuestion();</span>
+<span class="nc" id="L53">        int number = quizService.GetCurrentQuestionIndex() + 1;</span>
+<span class="nc" id="L54">        int total = quizService.GetQuestionCount();</span>
 
 <span class="nc" id="L56">        questionNumberLabel.setText(&quot;Question &quot; + number + &quot; of &quot; + total);</span>
 <span class="nc" id="L57">        questionLabel.setText(question.getQuestionPrompt());</span>
 <span class="nc" id="L58">        quizProgress.setProgress((double) number / total);</span>
 <span class="nc" id="L59">        progressLabel.setText(Math.round((number * 100.0) / total) + &quot;%&quot;);</span>
 <span class="nc" id="L60">        feedbackLabel.setText(&quot;&quot;);</span>
-<span class="nc" id="L61">        selectedOption = QuizService.GetAnswerForCurrentQuestion();</span>
+<span class="nc" id="L61">        selectedOption = quizService.GetAnswerForCurrentQuestion();</span>
 
 <span class="nc" id="L63">        optionsBox.getChildren().clear();</span>
 <span class="nc" id="L64">        Option option = question.getOptions();</span>
@@ -66,8 +66,8 @@ import java.util.ResourceBundle;
 <span class="nc" id="L66">        AddOptionButton(option.getOption2(), option.getOption2Archetype());</span>
 <span class="nc" id="L67">        AddOptionButton(option.getOption3(), option.getOption3Archetype());</span>
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        backButton.setDisable(!QuizService.CanGoBack());</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        nextButton.setText(QuizService.IsLastQuestion() ? &quot;See result&quot; : &quot;Next&quot;);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        backButton.setDisable(!quizService.CanGoBack());</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        nextButton.setText(quizService.IsLastQuestion() ? &quot;See result&quot; : &quot;Next&quot;);</span>
 <span class="nc bnc" id="L71" title="All 2 branches missed.">        nextButton.setDisable(selectedOption == null);</span>
 <span class="nc" id="L72">    }</span>
 
@@ -88,7 +88,7 @@ import java.util.ResourceBundle;
 
     private void SelectOption(Button chosen) {
 <span class="nc" id="L90">        selectedOption = (Integer) chosen.getUserData();</span>
-<span class="nc" id="L91">        QuizService.AnswerCurrentQuestion(selectedOption);</span>
+<span class="nc" id="L91">        quizService.AnswerCurrentQuestion(selectedOption);</span>
 <span class="nc" id="L92">        feedbackLabel.setText(&quot;&quot;);</span>
 
 <span class="nc" id="L94">        optionsBox.getChildren().forEach(node -&gt; node.getStyleClass().remove(&quot;selected&quot;));</span>
@@ -100,10 +100,10 @@ import java.util.ResourceBundle;
 
     @FXML
     private void OnBack() {
-<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (!QuizService.CanGoBack()) {</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (!quizService.CanGoBack()) {</span>
 <span class="nc" id="L104">            return;</span>
         }
-<span class="nc" id="L106">        QuizService.GoToPreviousQuestion();</span>
+<span class="nc" id="L106">        quizService.GoToPreviousQuestion();</span>
 <span class="nc" id="L107">        RenderCurrentQuestion();</span>
 <span class="nc" id="L108">    }</span>
 
@@ -114,16 +114,16 @@ import java.util.ResourceBundle;
 <span class="nc" id="L114">            return;</span>
         }
 
-<span class="nc" id="L117">        QuizService.AnswerCurrentQuestion(selectedOption);</span>
+<span class="nc" id="L117">        quizService.AnswerCurrentQuestion(selectedOption);</span>
 
-<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (QuizService.IsLastQuestion()) {</span>
-<span class="nc" id="L120">            QuizService.CompleteQuiz();</span>
-<span class="nc" id="L121">            QuizService.AssignQuestForCurrentResult(ApplicationManager.CurrentAccount.getCurrentEmail());</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (quizService.IsLastQuestion()) {</span>
+<span class="nc" id="L120">            quizService.CompleteQuiz();</span>
+<span class="nc" id="L121">            quizService.AssignQuestForCurrentResult(ApplicationManager.CurrentAccount.getCurrentEmail());</span>
 <span class="nc" id="L122">            NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);</span>
 <span class="nc" id="L123">            return;</span>
         }
 
-<span class="nc" id="L126">        QuizService.GoToNextQuestion();</span>
+<span class="nc" id="L126">        quizService.GoToNextQuestion();</span>
 <span class="nc" id="L127">        RenderCurrentQuestion();</span>
 <span class="nc" id="L128">    }</span>
 }

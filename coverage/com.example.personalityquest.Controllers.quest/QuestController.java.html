@@ -52,18 +52,18 @@ import java.util.ResourceBundle;
     private ListView&lt;QuestListItem&gt; questHistory;
 
 
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private QuestService QuestService;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private QuestService questService;
     /** Initialises quest controls and loads available quests
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L64">        TaskService = TaskService.GetInstance();</span>
-<span class="nc" id="L65">        UserQuestService = UserQuestService.GetInstance();</span>
-<span class="nc" id="L66">        QuestService = QuestService.GetInstance();</span>
+<span class="nc" id="L64">        taskService = TaskService.GetInstance();</span>
+<span class="nc" id="L65">        userQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L66">        questService = QuestService.GetInstance();</span>
 <span class="nc" id="L67">        navBarController.setCurrentDestination(NavBarController.NavDestination.QUESTS);</span>
 <span class="nc" id="L68">        ConfigureTaskList();</span>
 <span class="nc" id="L69">        ConfigureHistoryList();</span>
@@ -85,16 +85,16 @@ import java.util.ResourceBundle;
         }
 
         try {
-<span class="nc" id="L88">            List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
+<span class="nc" id="L88">            List&lt;UserQuest&gt; userQuests = userQuestService.GetUserQuestsForEmail(email);</span>
 <span class="nc" id="L89">            QuestListItem selected = null;</span>
 
 <span class="nc bnc" id="L91" title="All 2 branches missed.">            for (UserQuest userQuest : userQuests) {</span>
-<span class="nc" id="L92">                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L92">                Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc bnc" id="L93" title="All 2 branches missed.">                if (quest == null) {</span>
 <span class="nc" id="L94">                    continue;</span>
                 }
 
-<span class="nc" id="L97">                String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
+<span class="nc" id="L97">                String archetypeName = questService.GetArchetypeName(quest.getArchetypeId());</span>
 <span class="nc" id="L98">                QuestListItem item = new QuestListItem(userQuest, quest, archetypeName);</span>
 <span class="nc" id="L99">                questHistory.getItems().add(item);</span>
 
@@ -125,18 +125,18 @@ import java.util.ResourceBundle;
 <span class="nc" id="L125">        Quest quest = item.quest();</span>
         List&lt;Task&gt; tasks;
         try {
-<span class="nc" id="L128">            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L128">            tasks = taskService.GetTasksForLabourId(quest.getLabourId());</span>
 <span class="nc" id="L129">        } catch (Exception exception) {</span>
 <span class="nc" id="L130">            tasks = List.of();</span>
 <span class="nc" id="L131">        }</span>
 
 <span class="nc" id="L133">        String story = &quot;&quot;;</span>
         try {
-<span class="nc" id="L135">            story = QuestService.GetArchetypeDescription(quest.getArchetypeId());</span>
+<span class="nc" id="L135">            story = questService.GetArchetypeDescription(quest.getArchetypeId());</span>
 <span class="nc" id="L136">        } catch (Exception exception) {</span>
 <span class="nc" id="L137">            story = &quot;&quot;;</span>
 <span class="nc" id="L138">        }</span>
-<span class="nc" id="L139">        String taskDetails = TaskService.JoinTaskDetails(tasks);</span>
+<span class="nc" id="L139">        String taskDetails = taskService.JoinTaskDetails(tasks);</span>
 
 <span class="nc" id="L141">        questTitleLabel.setText(quest.getName());</span>
 <span class="nc" id="L142">        questArchetypeLabel.setText(item.archetypeName());</span>

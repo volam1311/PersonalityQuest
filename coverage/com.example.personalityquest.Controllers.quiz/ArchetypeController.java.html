@@ -69,26 +69,26 @@ import java.util.ResourceBundle;
 <span class="nc" id="L69">    private Map&lt;Archetype, Quest&gt; pinnedQuests = Map.of();</span>
     private Archetype selectedArchetype;
 
-    private QuestService QuestService;
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private UserProfileService UserProfileService;
-    private ArchetypeDAO ArchetypeDAO;
-    private QuizService QuizService;
-    private ReflectionPromptDAO ReflectionPromptDAO;
+    private QuestService questService;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private UserProfileService userProfileService;
+    private ArchetypeDAO archetypeDAO;
+    private QuizService quizService;
+    private ReflectionPromptDAO reflectionPromptDAO;
     /** Initialises archetype controls and loads the selected archetype
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L85">        QuizService = QuizService.GetInstance();</span>
-<span class="nc" id="L86">        TaskService = TaskService.GetInstance();</span>
-<span class="nc" id="L87">        UserQuestService = UserQuestService.GetInstance();</span>
-<span class="nc" id="L88">        QuestService = QuestService.GetInstance();</span>
-<span class="nc" id="L89">        UserProfileService = UserProfileService.GetInstance();</span>
-<span class="nc" id="L90">        ArchetypeDAO = new ArchetypeDAO();</span>
-<span class="nc" id="L91">        ReflectionPromptDAO = new ReflectionPromptDAO();</span>
+<span class="nc" id="L85">        quizService = QuizService.GetInstance();</span>
+<span class="nc" id="L86">        taskService = TaskService.GetInstance();</span>
+<span class="nc" id="L87">        userQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L88">        questService = QuestService.GetInstance();</span>
+<span class="nc" id="L89">        userProfileService = UserProfileService.GetInstance();</span>
+<span class="nc" id="L90">        archetypeDAO = new ArchetypeDAO();</span>
+<span class="nc" id="L91">        reflectionPromptDAO = new ReflectionPromptDAO();</span>
 <span class="nc" id="L92">        navBarController.setCurrentDestination(NavBarController.NavDestination.ARCHETYPE);</span>
 <span class="nc" id="L93">        quadrantRealms = Map.of(</span>
                 egoQuadrantButton, &quot;Ego&quot;,
@@ -109,7 +109,7 @@ import java.util.ResourceBundle;
 
     @FXML
     private void OnRedoQuiz() throws IOException {
-<span class="nc" id="L112">        QuizService.StartQuiz();</span>
+<span class="nc" id="L112">        quizService.StartQuiz();</span>
 <span class="nc" id="L113">        NavigationService.LoadScreen(ScreenEnum.QUIZ);</span>
 <span class="nc" id="L114">    }</span>
 
@@ -123,9 +123,9 @@ import java.util.ResourceBundle;
         // startup (MainApplication). Running DROP/CREATE TABLE here on every
         // visit risks SQLITE_LOCKED if any other DAO still has an open
         // statement on the shared connection.
-<span class="nc" id="L126">        ArchetypeDAO.EnsureTables();</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (!ArchetypeDAO.HasCatalog()) {</span>
-<span class="nc" id="L128">            ArchetypeDAO.SeedCatalog();</span>
+<span class="nc" id="L126">        archetypeDAO.EnsureTables();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (!archetypeDAO.HasCatalog()) {</span>
+<span class="nc" id="L128">            archetypeDAO.SeedCatalog();</span>
         }
 <span class="nc" id="L130">    }</span>
 
@@ -145,25 +145,25 @@ import java.util.ResourceBundle;
         }
 
         try {
-<span class="nc" id="L148">            QuizResult quizResult = QuizService.LoadStoredResult(email);</span>
+<span class="nc" id="L148">            QuizResult quizResult = quizService.LoadStoredResult(email);</span>
 <span class="nc bnc" id="L149" title="All 2 branches missed.">            if (quizResult != null) {</span>
 <span class="nc" id="L150">                ShowQuizResult(quizResult);</span>
 <span class="nc" id="L151">                return;</span>
             }
 
-<span class="nc" id="L154">            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L154">            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 <span class="nc bnc" id="L155" title="All 2 branches missed.">            if (userQuest == null) {</span>
 <span class="nc" id="L156">                ShowEmptyArchetype(&quot;Complete the onboarding quiz to discover your archetype.&quot;);</span>
 <span class="nc" id="L157">                return;</span>
             }
 
-<span class="nc" id="L160">            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());</span>
+<span class="nc" id="L160">            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());</span>
 <span class="nc bnc" id="L161" title="All 2 branches missed.">            if (quest == null) {</span>
 <span class="nc" id="L162">                ShowEmptyArchetype(&quot;Your current quest does not have an archetype yet.&quot;);</span>
 <span class="nc" id="L163">                return;</span>
             }
 
-<span class="nc" id="L166">            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());</span>
+<span class="nc" id="L166">            String archetypeName = questService.GetArchetypeName(quest.getArchetypeId());</span>
 <span class="nc" id="L167">            Archetype archetype = ArchetypeByName(archetypeName);</span>
 <span class="nc bnc" id="L168" title="All 2 branches missed.">            if (archetype == null) {</span>
 <span class="nc" id="L169">                ShowEmptyArchetype(&quot;Your current quest does not have an archetype yet.&quot;);</span>
@@ -206,7 +206,7 @@ import java.util.ResourceBundle;
      * at the end in declaration order.
      */
     private List&lt;Archetype&gt; FullRankedArchetypes(QuizResult quizResult) {
-<span class="nc" id="L209">        List&lt;Archetype&gt; ranked = new ArrayList&lt;&gt;(QuizService.RankedArchetypes(quizResult));</span>
+<span class="nc" id="L209">        List&lt;Archetype&gt; ranked = new ArrayList&lt;&gt;(quizService.RankedArchetypes(quizResult));</span>
 <span class="nc bnc" id="L210" title="All 2 branches missed.">        for (Archetype archetype : Archetype.values()) {</span>
 <span class="nc bnc" id="L211" title="All 2 branches missed.">            if (!ranked.contains(archetype)) {</span>
 <span class="nc" id="L212">                ranked.add(archetype);</span>
@@ -257,9 +257,9 @@ import java.util.ResourceBundle;
         try {
 <span class="nc" id="L258">            Quest quest = assignedQuest;</span>
 <span class="nc bnc" id="L259" title="All 2 branches missed.">            if (quest == null) {</span>
-<span class="nc" id="L260">                Integer archetypeId = QuestService.GetArchetypeIdForName(archetype.getName());</span>
+<span class="nc" id="L260">                Integer archetypeId = questService.GetArchetypeIdForName(archetype.getName());</span>
 <span class="nc bnc" id="L261" title="All 2 branches missed.">                if (archetypeId != null) {</span>
-<span class="nc" id="L262">                    Quest[] quests = QuestService.GetQuestsForArchetypeId(archetypeId);</span>
+<span class="nc" id="L262">                    Quest[] quests = questService.GetQuestsForArchetypeId(archetypeId);</span>
 <span class="nc bnc" id="L263" title="All 4 branches missed.">                    if (quests != null &amp;&amp; quests.length &gt; 0) {</span>
 <span class="nc" id="L264">                        quest = quests[0];</span>
                     }
@@ -274,12 +274,12 @@ import java.util.ResourceBundle;
 <span class="nc" id="L274">                return;</span>
             }
 
-<span class="nc" id="L277">            List&lt;Task&gt; tasks = TaskService.GetTasksForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L277">            List&lt;Task&gt; tasks = taskService.GetTasksForLabourId(quest.getLabourId());</span>
 <span class="nc" id="L278">            String names = JoinNamesOnSeparateLines(tasks.stream().map(Task::getName).toList());</span>
 <span class="nc" id="L279">            questFocusSubjectLabel.setText(LabourSubject(quest.getName()));</span>
 <span class="nc bnc" id="L280" title="All 2 branches missed.">            questFocusLabel.setText(names.isEmpty() ? &quot;Challenge details will appear here.&quot; : names);</span>
 
-<span class="nc" id="L282">            List&lt;ReflectionPrompt&gt; reflections = ReflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());</span>
+<span class="nc" id="L282">            List&lt;ReflectionPrompt&gt; reflections = reflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());</span>
 <span class="nc" id="L283">            String reflectionNames = JoinNamesOnSeparateLines(reflections.stream().map(ReflectionPrompt::name).toList());</span>
 <span class="nc bnc" id="L284" title="All 2 branches missed.">            questReflectionsLabel.setText(reflectionNames.isEmpty() ? &quot;Reflection details will appear here.&quot; : reflectionNames);</span>
 
@@ -372,7 +372,7 @@ import java.util.ResourceBundle;
 <span class="nc" id="L372">            Archetype archetype = rankedArchetypes.get(index);</span>
 <span class="nc" id="L373">            int rank = index + 1;</span>
 
-<span class="nc" id="L375">            Label nameLabel = new Label(&quot;#&quot; + rank + &quot;  &quot; + UserProfileService.FormatArchetypeName(archetype.getName()));</span>
+<span class="nc" id="L375">            Label nameLabel = new Label(&quot;#&quot; + rank + &quot;  &quot; + userProfileService.FormatArchetypeName(archetype.getName()));</span>
 <span class="nc" id="L376">            nameLabel.getStyleClass().add(&quot;ranked-archetype-name&quot;);</span>
 
 <span class="nc" id="L378">            Integer points = scoreByArchetype.get(archetype);</span>
@@ -407,7 +407,7 @@ import java.util.ResourceBundle;
 
 <span class="nc" id="L408">        Integer rank = rankByArchetype.get(archetype);</span>
 <span class="nc bnc" id="L409" title="All 2 branches missed.">        archetypeRankLabel.setText(rank != null ? &quot;#&quot; + rank : &quot;—&quot;);</span>
-<span class="nc" id="L410">        archetypeNameLabel.setText(UserProfileService.FormatArchetypeName(archetype.getName()));</span>
+<span class="nc" id="L410">        archetypeNameLabel.setText(userProfileService.FormatArchetypeName(archetype.getName()));</span>
 <span class="nc" id="L411">        overviewLabel.setText(archetype.getSmallDescription());</span>
 <span class="nc" id="L412">        valueLabel.setText(archetype.getValue() + &quot; — &quot; + archetype.getValueDefinition());</span>
 <span class="nc" id="L413">        strengthsLabel.setText(archetype.getStrengths());</span>

@@ -95,24 +95,24 @@ import java.util.ResourceBundle;
 <span class="nc" id="L95">    private double[] radarValues = new double[RADAR_AXIS_COUNT];</span>
 <span class="nc" id="L96">    private List&lt;Achievement&gt; achievements = List.of();</span>
 
-    private UserQuestService UserQuestService;
-    private QuestService QuestService;
-    private AchievementService AchievementService;
-    private EmailService EmailService;
-    private UserProfileService UserProfileService;
-    private QuizService QuizService;
+    private UserQuestService userQuestService;
+    private QuestService questService;
+    private AchievementService achievementService;
+    private EmailService emailService;
+    private UserProfileService userProfileService;
+    private QuizService quizService;
     /** Initialises profile controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<span class="nc" id="L110">        AchievementService = AchievementService.GetInstance();</span>
-<span class="nc" id="L111">        UserQuestService = UserQuestService.GetInstance();</span>
-<span class="nc" id="L112">        QuestService = QuestService.GetInstance();</span>
-<span class="nc" id="L113">        EmailService = EmailService.GetInstance();</span>
-<span class="nc" id="L114">        UserProfileService = UserProfileService.GetInstance();</span>
-<span class="nc" id="L115">        QuizService = QuizService.GetInstance();</span>
+<span class="nc" id="L110">        achievementService = AchievementService.GetInstance();</span>
+<span class="nc" id="L111">        userQuestService = UserQuestService.GetInstance();</span>
+<span class="nc" id="L112">        questService = QuestService.GetInstance();</span>
+<span class="nc" id="L113">        emailService = EmailService.GetInstance();</span>
+<span class="nc" id="L114">        userProfileService = UserProfileService.GetInstance();</span>
+<span class="nc" id="L115">        quizService = QuizService.GetInstance();</span>
 <span class="nc" id="L116">        navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);</span>
 <span class="nc" id="L117">        JournalEntryService = new JournalEntryService();</span>
 <span class="nc" id="L118">        WeeklyTaskService = new WeeklyTaskService();</span>
@@ -135,50 +135,50 @@ import java.util.ResourceBundle;
 <span class="nc" id="L135">        EmailDetails details = null;</span>
 <span class="nc bnc" id="L136" title="All 2 branches missed.">        if (signedIn) {</span>
             try {
-<span class="nc" id="L138">                details = EmailService.GetDetailsForEmail(email);</span>
+<span class="nc" id="L138">                details = emailService.GetDetailsForEmail(email);</span>
 <span class="nc" id="L139">            } catch (Exception ignored) {</span>
 <span class="nc" id="L140">                details = null;</span>
 <span class="nc" id="L141">            }</span>
         }
-<span class="nc" id="L143">        displayNameLabel.setText(UserProfileService.Username(details));</span>
+<span class="nc" id="L143">        displayNameLabel.setText(userProfileService.Username(details));</span>
 
 <span class="nc" id="L145">        UserProfile progress = UserProfile.empty();</span>
 <span class="nc bnc" id="L146" title="All 2 branches missed.">        if (signedIn) {</span>
             try {
-<span class="nc" id="L148">                progress = AchievementService.GetProgress(email);</span>
+<span class="nc" id="L148">                progress = achievementService.GetProgress(email);</span>
 <span class="nc" id="L149">            } catch (Exception ignored) {</span>
 <span class="nc" id="L150">                progress = UserProfile.empty();</span>
 <span class="nc" id="L151">            }</span>
         }
 <span class="nc" id="L153">        streakLabel.setText(&quot;Week &quot; + progress.currentStreak());</span>
-<span class="nc" id="L154">        radarValues = QuizService.ArchetypeScores(QuizService.LoadStoredResult(email));</span>
+<span class="nc" id="L154">        radarValues = quizService.ArchetypeScores(quizService.LoadStoredResult(email));</span>
 
-<span class="nc" id="L156">        String archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;</span>
+<span class="nc" id="L156">        String archetypeName = userProfileService.UNASSIGNED_ARCHETYPE;</span>
 <span class="nc bnc" id="L157" title="All 2 branches missed.">        if (signedIn) {</span>
             try {
-<span class="nc" id="L159">                UserQuest selectedQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
+<span class="nc" id="L159">                UserQuest selectedQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);</span>
 <span class="nc bnc" id="L160" title="All 2 branches missed.">                if (selectedQuest == null) {</span>
-<span class="nc" id="L161">                    List&lt;UserQuest&gt; userQuests = UserQuestService.GetUserQuestsForEmail(email);</span>
+<span class="nc" id="L161">                    List&lt;UserQuest&gt; userQuests = userQuestService.GetUserQuestsForEmail(email);</span>
 <span class="nc bnc" id="L162" title="All 2 branches missed.">                    if (!userQuests.isEmpty()) {</span>
 <span class="nc" id="L163">                        selectedQuest = userQuests.get(0);</span>
                     }
                 }
 <span class="nc bnc" id="L166" title="All 2 branches missed.">                if (selectedQuest != null) {</span>
-<span class="nc" id="L167">                    Quest quest = QuestService.GetQuestForLabourId(selectedQuest.getLabourId());</span>
+<span class="nc" id="L167">                    Quest quest = questService.GetQuestForLabourId(selectedQuest.getLabourId());</span>
 <span class="nc bnc" id="L168" title="All 2 branches missed.">                    if (quest != null) {</span>
-<span class="nc" id="L169">                        archetypeName = UserProfileService.FormatArchetypeName(</span>
-<span class="nc" id="L170">                                QuestService.GetArchetypeName(quest.getArchetypeId()));</span>
+<span class="nc" id="L169">                        archetypeName = userProfileService.FormatArchetypeName(</span>
+<span class="nc" id="L170">                                questService.GetArchetypeName(quest.getArchetypeId()));</span>
                     }
                 }
 <span class="nc" id="L173">            } catch (Exception ignored) {</span>
-<span class="nc" id="L174">                archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;</span>
+<span class="nc" id="L174">                archetypeName = userProfileService.UNASSIGNED_ARCHETYPE;</span>
 <span class="nc" id="L175">            }</span>
         }
 
 <span class="nc" id="L178">        archetypeBadge.setText(&quot;Main Archetype: &quot; + archetypeName );</span>
 
         try {
-<span class="nc" id="L181">            achievements = AchievementService.GetAchievementsForEmail(email);</span>
+<span class="nc" id="L181">            achievements = achievementService.GetAchievementsForEmail(email);</span>
 <span class="nc" id="L182">            System.out.println(achievements.size());</span>
 <span class="nc" id="L183">            PopulateAchievements(achievements);</span>
 <span class="nc" id="L184">        } catch (Exception ignored) {</span>
@@ -205,7 +205,7 @@ import java.util.ResourceBundle;
 
 <span class="nc bnc" id="L206" title="All 2 branches missed.">        if (!ApplicationManager.isEmpty(email)) {</span>
             try {
-<span class="nc bnc" id="L208" title="All 2 branches missed.">                for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">                for (UserQuest userQuest : userQuestService.GetUserQuestsForEmail(email)) {</span>
 <span class="nc bnc" id="L209" title="All 2 branches missed.">                    if (ApplicationManager.isEmpty(userQuest.getReactionType())) {</span>
 <span class="nc" id="L210">                        continue; // quest not started yet, no reflection assigned</span>
                     }
