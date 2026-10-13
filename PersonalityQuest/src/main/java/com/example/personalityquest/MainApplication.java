@@ -79,11 +79,15 @@ public class MainApplication extends Application {
             catch (Exception e) {
                 System.out.println(e.getMessage());
                 NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
+                return;
             }
         }
         catch (IOException e){
             System.out.println(e.getMessage());
         }
+
+        NavigationService.LoadScreen(ScreenEnum.ACCOUNT_CREATION);
+
     }
 
     static void initialiseUserQuestData() throws Exception{
@@ -92,13 +96,11 @@ public class MainApplication extends Application {
     }
 
     void AttemptLogin(LoginCache loginCache) throws Exception {
-
         if (loginCacheService.IsPastTimeLimit(loginCache.GetLastLoginDate())){
             throw new Exception("Login Cache Expired");
         }
 
-        EmailService emailService = new EmailService();
-        if (!emailService.DoesAccountWithEmailExist(loginCache.GetEmail())){
+        if (!EmailService.GetInstance().DoesAccountWithEmailExist(loginCache.GetEmail())){
             throw new Exception("Account does not exist with this email");
         }
 

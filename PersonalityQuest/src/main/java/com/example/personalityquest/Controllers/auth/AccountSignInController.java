@@ -47,8 +47,8 @@ public class AccountSignInController {
     private EmailService EmailService;
     @FXML
     private void initialize() {
-        PasswordService = new PasswordService();
-        EmailService = new EmailService();
+        PasswordService = PasswordService.GetInstance();
+        EmailService = EmailService.GetInstance();
         Rectangle clip = new Rectangle();
         clip.setArcWidth(56);
         clip.setArcHeight(56);

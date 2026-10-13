@@ -52,7 +52,14 @@ public class QuizService extends ParentService {
         QuizResultDAO = quizResultDAO;
     }
 
+    private static QuizService instance;
+    public static QuizService GetInstance(){
+        if (instance == null){
+            instance = new QuizService();
+        }
 
+        return instance;
+    }
 
     /**
      * Clears any in-progress attempt or stored result.

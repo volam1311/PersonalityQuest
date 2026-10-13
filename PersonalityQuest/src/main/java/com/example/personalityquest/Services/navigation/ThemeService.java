@@ -1,5 +1,8 @@
 package com.example.personalityquest.Services.navigation;
 
+import com.example.personalityquest.Services.ParentService;
+import com.example.personalityquest.Services.profile.AchievementService;
+
 import java.util.Objects;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -37,6 +40,16 @@ public final class ThemeService {
         this.preferences = Objects.requireNonNull(preferences);
         this.currentTheme = ReadSavedTheme();
     }
+
+    private static ThemeService instance;
+    public static ThemeService GetInstance(){
+        if (instance == null){
+            instance = new ThemeService();
+        }
+
+        return instance;
+    }
+
 
     public Theme getCurrentTheme() {
         return currentTheme;

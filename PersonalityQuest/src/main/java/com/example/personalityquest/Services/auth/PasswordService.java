@@ -3,6 +3,7 @@ package com.example.personalityquest.Services.auth;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.auth.AccountDAO;
 import com.example.personalityquest.Services.ParentService;
+import com.example.personalityquest.Services.chat.ReflectionFeedbackService;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -28,6 +29,16 @@ public class PasswordService extends ParentService {
 
         EmailService = new EmailService(accountDAO);
     }
+
+    private static PasswordService instance;
+    public static PasswordService GetInstance(){
+        if (instance == null){
+            instance = new PasswordService();
+        }
+
+        return instance;
+    }
+
     /**
      * Checks to see if the given password is for the given email's account
      * @param email "The email of the account that is for the password"

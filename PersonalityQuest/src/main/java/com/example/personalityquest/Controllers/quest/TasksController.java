@@ -95,13 +95,13 @@ public class TasksController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        QuestService = new QuestService();
-        UserQuestService = new UserQuestService();
-        WeeklyTaskService = new WeeklyTaskService();
-        TaskService = new TaskService();
-        JournalEntryService = new JournalEntryService();
-        StreakService = new StreakService();
-        ReflectionFeedbackService = new ReflectionFeedbackService();
+        QuestService = QuestService.GetInstance();
+        UserQuestService = UserQuestService.GetInstance();
+        WeeklyTaskService = WeeklyTaskService.GetInstance();
+        TaskService = TaskService.GetInstance();
+        JournalEntryService = JournalEntryService.GetInstance();
+        StreakService = StreakService.GetInstance();
+        ReflectionFeedbackService = ReflectionFeedbackService.GetInstance();
         ReflectionPromptDAO = new ReflectionPromptDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
         ConfigureQuestChallengesList();

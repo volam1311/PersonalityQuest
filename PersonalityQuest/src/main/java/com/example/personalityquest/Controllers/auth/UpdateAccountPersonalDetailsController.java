@@ -41,8 +41,8 @@ public class UpdateAccountPersonalDetailsController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        AccountService = new AccountService();
-        EmailService = new EmailService();
+        AccountService = AccountService.GetInstance();
+        EmailService = EmailService.GetInstance();
         oldEmail = ApplicationManager.CurrentAccount.getCurrentEmail();
 
         // attempt to populate the entry fields with the users current account details

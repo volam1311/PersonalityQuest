@@ -61,9 +61,9 @@ public class QuestController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TaskService = new TaskService();
-        UserQuestService = new UserQuestService();
-        QuestService = new QuestService();
+        TaskService = TaskService.GetInstance();
+        UserQuestService = UserQuestService.GetInstance();
+        QuestService = QuestService.GetInstance();
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUESTS);
         ConfigureTaskList();
         ConfigureHistoryList();

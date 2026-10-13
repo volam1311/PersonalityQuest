@@ -25,6 +25,16 @@ public class UserQuestService {
         super();
         this.UserQuestDAO = userQuestDAO;
     }
+
+
+    private static UserQuestService instance;
+    public static UserQuestService GetInstance(){
+        if (instance == null){
+            instance = new UserQuestService();
+        }
+
+        return instance;
+    }
     /**
      * Retrives the current active quest for the user matching the account
      * @param email The email of the account you want to check

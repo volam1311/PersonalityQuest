@@ -41,7 +41,7 @@ public class QuizController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        QuizService = new QuizService();
+        QuizService = QuizService.GetInstance();
         if (!QuizService.HasActiveAttempt()) {
             QuizService.StartQuiz();
         }

@@ -73,8 +73,8 @@ public class NavBarController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        EmailService = new EmailService();
-        QuizService = new QuizService();
+        EmailService =  EmailService.GetInstance();
+        QuizService =  QuizService.GetInstance();
         SetProfileLabel();
         SetSidebarExpanded(sidebarExpanded);
 

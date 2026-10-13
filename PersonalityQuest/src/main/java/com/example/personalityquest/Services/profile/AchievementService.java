@@ -43,6 +43,15 @@ public class AchievementService {
         this.StreakService = new StreakService(streakDAO);
     }
 
+    private static AchievementService instance;
+    public static AchievementService GetInstance(){
+        if (instance == null){
+            instance = new AchievementService();
+        }
+
+        return instance;
+    }
+
     /**
      * Loads streak, quest, and weekly-task totals for an account.
      * Current streak uses {@link StreakService} so missed weeks match the rest of the app.

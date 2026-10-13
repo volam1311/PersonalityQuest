@@ -34,7 +34,7 @@ public class WeeklyTaskReflectionController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        WeeklyTaskService = new WeeklyTaskService();
+        WeeklyTaskService = WeeklyTaskService.GetInstance();
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
     }
 
