@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -42,6 +44,18 @@ class ThemeServiceTest {
         ThemeService service = new ThemeService(preferences);
 
         assertEquals(ThemeService.Theme.DARK, service.getCurrentTheme());
+    }
+
+    @Test
+    void savedThemeNotifiesListeners() {
+        ThemeService service = new ThemeService(preferences);
+        List<ThemeService.Theme> notified = new ArrayList<>();
+        service.addThemeChangeListener(notified::add);
+
+        service.setCurrentTheme(ThemeService.Theme.OCEAN);
+
+        assertEquals(List.of(ThemeService.Theme.OCEAN), notified);
+        assertEquals(ThemeService.Theme.OCEAN, service.getCurrentTheme());
     }
 
     @Test
