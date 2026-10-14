@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AchievementCriteria.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.profile.criteria</a> &gt; <span class="el_source">AchievementCriteria.java</span></div><h1>AchievementCriteria.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.profile.criteria;
+
+import com.example.personalityquest.Services.profile.AchievementService;
+
+import java.util.Map;
+
+/**
+ * Maps each stored achievement criteria type to the strategy that evaluates it.
+ */
+public final class AchievementCriteria {
+<span class="fc" id="L11">    private static final Map&lt;String, AchievementCriterion&gt; BY_TYPE = Map.of(</span>
+            AchievementService.CRITERIA_ACCOUNT, new AccountExistsCriterion(),
+            AchievementService.CRITERIA_CURRENT_STREAK, new CurrentStreakCriterion(),
+            AchievementService.CRITERIA_BEST_STREAK, new BestStreakCriterion(),
+            AchievementService.CRITERIA_FINISHED_TASKS, new FinishedWeeklyTasksCriterion(),
+            AchievementService.CRITERIA_WEEK_COMPLETE, new WeekCompleteCriterion(),
+            AchievementService.CRITERIA_ASSIGNED_QUESTS, new AssignedQuestsCriterion(),
+            AchievementService.CRITERIA_COMPLETED_QUESTS, new CompletedQuestsCriterion(),
+            AchievementService.CRITERIA_QUEST_PROGRESS, new QuestProgressCriterion()
+    );
+
+    private AchievementCriteria() {
+    }
+
+    /**
+     * @param criteriaType the criteria key stored with an achievement
+     * @return the matching strategy, or null when the type is unknown
+     */
+    public static AchievementCriterion ForType(String criteriaType) {
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (criteriaType == null) {</span>
+<span class="fc" id="L31">            return null;</span>
+        }
+<span class="fc" id="L33">        return BY_TYPE.get(criteriaType);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

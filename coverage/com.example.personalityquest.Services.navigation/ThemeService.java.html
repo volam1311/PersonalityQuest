@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ThemeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PersonalityQuest</a> &gt; <a href="index.source.html" class="el_package">com.example.personalityquest.Services.navigation</a> &gt; <span class="el_source">ThemeService.java</span></div><h1>ThemeService.java</h1><pre class="source lang-java linenums">package com.example.personalityquest.Services.navigation;
 
-import com.example.personalityquest.Services.ParentService;
-import com.example.personalityquest.Services.profile.AchievementService;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -11,25 +10,26 @@ import java.util.prefs.Preferences;
 public final class ThemeService {
     private static final String THEME_PREFERENCE_KEY = &quot;theme&quot;;
 
-<span class="fc" id="L14">    public enum Theme {</span>
-<span class="fc" id="L15">        DARK(&quot;theme-dark.css&quot;),</span>
-<span class="fc" id="L16">        DUSK(&quot;theme-dusk.css&quot;),</span>
-<span class="fc" id="L17">        FOREST(&quot;theme-forest.css&quot;),</span>
-<span class="fc" id="L18">        OCEAN(&quot;theme-ocean.css&quot;),</span>
-<span class="fc" id="L19">        LIGHT(&quot;theme-light.css&quot;);</span>
+<span class="fc" id="L13">    public enum Theme {</span>
+<span class="fc" id="L14">        DARK(&quot;theme-dark.css&quot;),</span>
+<span class="fc" id="L15">        DUSK(&quot;theme-dusk.css&quot;),</span>
+<span class="fc" id="L16">        FOREST(&quot;theme-forest.css&quot;),</span>
+<span class="fc" id="L17">        OCEAN(&quot;theme-ocean.css&quot;),</span>
+<span class="fc" id="L18">        LIGHT(&quot;theme-light.css&quot;);</span>
 
         private final String stylesheetName;
 
-<span class="fc" id="L23">        Theme(String stylesheetName) {</span>
-<span class="fc" id="L24">            this.stylesheetName = stylesheetName;</span>
-<span class="fc" id="L25">        }</span>
+<span class="fc" id="L22">        Theme(String stylesheetName) {</span>
+<span class="fc" id="L23">            this.stylesheetName = stylesheetName;</span>
+<span class="fc" id="L24">        }</span>
 
         public String getStylesheetName() {
-<span class="fc" id="L28">            return stylesheetName;</span>
+<span class="fc" id="L27">            return stylesheetName;</span>
         }
     }
 
     private final Preferences preferences;
+<span class="fc" id="L32">    private final List&lt;ThemeChangeListener&gt; listeners = new ArrayList&lt;&gt;();</span>
     private Theme currentTheme;
 
     public ThemeService() {
@@ -55,23 +55,36 @@ public final class ThemeService {
 <span class="fc" id="L55">        return currentTheme;</span>
     }
 
+    /**
+     * Registers a listener that is told after a theme is saved.
+     * @param listener the observer to notify
+     */
+    public void addThemeChangeListener(ThemeChangeListener listener) {
+<span class="pc bpc" id="L63" title="2 of 4 branches missed.">        if (listener != null &amp;&amp; !listeners.contains(listener)) {</span>
+<span class="fc" id="L64">            listeners.add(listener);</span>
+        }
+<span class="fc" id="L66">    }</span>
+
     public void setCurrentTheme(Theme theme) {
-<span class="fc" id="L59">        Theme selectedTheme = Objects.requireNonNull(theme);</span>
-<span class="fc" id="L60">        preferences.put(THEME_PREFERENCE_KEY, selectedTheme.name());</span>
+<span class="fc" id="L69">        Theme selectedTheme = Objects.requireNonNull(theme);</span>
+<span class="fc" id="L70">        preferences.put(THEME_PREFERENCE_KEY, selectedTheme.name());</span>
         try {
-<span class="fc" id="L62">            preferences.flush();</span>
-<span class="fc" id="L63">            currentTheme = selectedTheme;</span>
-<span class="nc" id="L64">        } catch (BackingStoreException exception) {</span>
-<span class="nc" id="L65">            throw new IllegalStateException(&quot;Unable to save the selected theme&quot;, exception);</span>
-<span class="fc" id="L66">        }</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L72">            preferences.flush();</span>
+<span class="fc" id="L73">            currentTheme = selectedTheme;</span>
+<span class="nc" id="L74">        } catch (BackingStoreException exception) {</span>
+<span class="nc" id="L75">            throw new IllegalStateException(&quot;Unable to save the selected theme&quot;, exception);</span>
+<span class="fc" id="L76">        }</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (ThemeChangeListener listener : List.copyOf(listeners)) {</span>
+<span class="fc" id="L78">            listener.themeChanged(currentTheme);</span>
+<span class="fc" id="L79">        }</span>
+<span class="fc" id="L80">    }</span>
 
     private Theme ReadSavedTheme() {
-<span class="fc" id="L70">        String savedTheme = preferences.get(THEME_PREFERENCE_KEY, Theme.DARK.name());</span>
+<span class="fc" id="L83">        String savedTheme = preferences.get(THEME_PREFERENCE_KEY, Theme.DARK.name());</span>
         try {
-<span class="fc" id="L72">            return Theme.valueOf(savedTheme);</span>
-<span class="fc" id="L73">        } catch (IllegalArgumentException exception) {</span>
-<span class="fc" id="L74">            return Theme.DARK;</span>
+<span class="fc" id="L85">            return Theme.valueOf(savedTheme);</span>
+<span class="fc" id="L86">        } catch (IllegalArgumentException exception) {</span>
+<span class="fc" id="L87">            return Theme.DARK;</span>
         }
     }
 }
