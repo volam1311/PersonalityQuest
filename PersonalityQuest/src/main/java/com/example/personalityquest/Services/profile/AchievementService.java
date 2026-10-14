@@ -5,6 +5,8 @@ import com.example.personalityquest.DAO.profile.AchievementDAO;
 import com.example.personalityquest.DAO.profile.StreakDAO;
 import com.example.personalityquest.Model.profile.Achievement;
 import com.example.personalityquest.Model.profile.UserProfile;
+import com.example.personalityquest.Services.profile.criteria.AchievementCriteria;
+import com.example.personalityquest.Services.profile.criteria.AchievementCriterion;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -124,21 +126,11 @@ public class AchievementService {
             return false;
         }
 
-        double threshold = achievement.threshold();
-        return switch (achievement.criteriaType()) {
-            case CRITERIA_ACCOUNT -> progress.accountExists() && threshold <= 1;
-            case CRITERIA_CURRENT_STREAK -> progress.currentStreak() >= threshold;
-            case CRITERIA_BEST_STREAK -> progress.bestStreak() >= threshold;
-            case CRITERIA_FINISHED_TASKS -> progress.finishedWeeklyTasks() >= threshold;
-            case CRITERIA_WEEK_COMPLETE -> progress.weeklyTasksThisWeek() > 0
-                    && progress.finishedWeeklyTasksThisWeek() >= progress.weeklyTasksThisWeek()
-                    && threshold <= 1;
-            case CRITERIA_ASSIGNED_QUESTS -> progress.assignedQuests() >= threshold;
-            case CRITERIA_COMPLETED_QUESTS -> progress.completedQuests() >= threshold;
-            case CRITERIA_QUEST_PROGRESS -> progress.activeQuestProgress() >= threshold
-                    || progress.completedQuests() >= 1;
-            default -> false;
-        };
+        AchievementCriterion criterion = AchievementCriteria.ForType(achievement.criteriaType());
+        if (criterion == null) {
+            return false;
+        }
+        return criterion.IsMet(progress, achievement.threshold());
     }
 
     private void EnsureCatalog() throws SQLException {
