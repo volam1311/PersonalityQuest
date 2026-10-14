@@ -1,6 +1,5 @@
 package com.example.personalityquest.Controllers.navigation;
 
-import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import com.example.personalityquest.Services.navigation.ThemeService;
 import javafx.fxml.FXML;
@@ -10,7 +9,6 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -55,15 +53,9 @@ public class SettingsController implements Initializable {
     private void OnSave() {
         try {
             themeService.setCurrentTheme(GetSelectedTheme());
+            feedbackLabel.setText("");
         } catch (IllegalStateException exception) {
             feedbackLabel.setText("Could not save the selected theme.");
-            return;
-        }
-
-        try {
-            NavigationService.LoadScreen(ScreenEnum.SETTINGS);
-        } catch (IOException exception) {
-            feedbackLabel.setText("Theme saved, but the screen could not refresh.");
         }
     }
 
@@ -73,14 +65,9 @@ public class SettingsController implements Initializable {
         languageEnglishButton.setSelected(true);
         try {
             themeService.setCurrentTheme(ThemeService.Theme.DARK);
+            feedbackLabel.setText("");
         } catch (IllegalStateException exception) {
             feedbackLabel.setText("Could not reset the theme.");
-            return;
-        }
-        try {
-            NavigationService.LoadScreen(ScreenEnum.SETTINGS);
-        } catch (IOException exception) {
-            feedbackLabel.setText("Default theme saved, but the screen could not refresh.");
         }
     }
 

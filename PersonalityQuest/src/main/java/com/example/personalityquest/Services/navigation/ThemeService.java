@@ -1,8 +1,7 @@
 package com.example.personalityquest.Services.navigation;
 
-import com.example.personalityquest.Services.ParentService;
-import com.example.personalityquest.Services.profile.AchievementService;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -30,6 +29,7 @@ public final class ThemeService {
     }
 
     private final Preferences preferences;
+    private final List<ThemeChangeListener> listeners = new ArrayList<>();
     private Theme currentTheme;
 
     public ThemeService() {
@@ -55,6 +55,16 @@ public final class ThemeService {
         return currentTheme;
     }
 
+    /**
+     * Registers a listener that is told after a theme is saved.
+     * @param listener the observer to notify
+     */
+    public void addThemeChangeListener(ThemeChangeListener listener) {
+        if (listener != null && !listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
     public void setCurrentTheme(Theme theme) {
         Theme selectedTheme = Objects.requireNonNull(theme);
         preferences.put(THEME_PREFERENCE_KEY, selectedTheme.name());
@@ -63,6 +73,9 @@ public final class ThemeService {
             currentTheme = selectedTheme;
         } catch (BackingStoreException exception) {
             throw new IllegalStateException("Unable to save the selected theme", exception);
+        }
+        for (ThemeChangeListener listener : List.copyOf(listeners)) {
+            listener.themeChanged(currentTheme);
         }
     }
 
