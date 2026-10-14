@@ -46,7 +46,6 @@ public class AccountDAO extends ParentDAO {
      * @throws SQLException "Database Access"
      */
     public boolean DoesAccountWithEmailExist(String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
         // assign parameters
         statement.setString(1, email);
@@ -73,7 +72,6 @@ public class AccountDAO extends ParentDAO {
      */
     public EmailDetails GetDetailsForEmail(String email) throws Exception {
 
-        Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
         // assign parameters
         statement.setString(1, email);
@@ -106,7 +104,6 @@ public class AccountDAO extends ParentDAO {
      * @throws SQLException Database Access Failure
      */
     public  String GetHashedPasswordForEmail(String email) throws SQLException {
-        Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(accountExists);
         // assign parameters
         statement.setString(1, email);
@@ -124,8 +121,6 @@ public class AccountDAO extends ParentDAO {
      * @throws SQLException "Database Access Failure"
      */
     public boolean UpdatePasswordForEmail(String email, String newPassword) throws SQLException {
-
-        Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(updatePassword);
         // assign parameters
         statement.setString(1, HashingService.Hash(newPassword));
@@ -142,8 +137,6 @@ public class AccountDAO extends ParentDAO {
      * @throws SQLException if account details cannot be updated
      */
     public void UpdateAccountDetails(EmailDetails emailDetails, String currentEmail) throws SQLException {
-
-        Connection connection = SQLite.getConnection();
         PreparedStatement statement = connection.prepareStatement(saveQuery);
         // assign parameters
         statement.setString(1, emailDetails.getEmail());

@@ -50,7 +50,6 @@ public class EmailServiceTest {
                     """);
         }
 
-        SQLite.setConnection(connection);
     }
 
     @Test

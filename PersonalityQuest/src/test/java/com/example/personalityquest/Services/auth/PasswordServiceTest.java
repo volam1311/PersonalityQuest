@@ -57,7 +57,6 @@ public class PasswordServiceTest {
             currentPassword = "test";
         }
 
-        SQLite.setConnection(connection);
     }
 
     @Test

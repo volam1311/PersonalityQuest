@@ -25,7 +25,6 @@ public class ReflectionFeedbackDAOTest {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
         ReflectionFeedbackDAO = new ReflectionFeedbackDAO(connection);
         ReflectionFeedbackService = new ReflectionFeedbackService(ReflectionFeedbackDAO);
-        SQLite.setConnection(connection);
     }
 
     @AfterEach

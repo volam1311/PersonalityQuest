@@ -111,8 +111,6 @@ public class QuestServiceTest {
 
         labourId = 20;
         archetypeId = 99;
-
-        SQLite.setConnection(connection);
     }
 
     @AfterEach

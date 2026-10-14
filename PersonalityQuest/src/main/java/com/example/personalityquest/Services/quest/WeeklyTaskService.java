@@ -1,6 +1,7 @@
 package com.example.personalityquest.Services.quest;
 
 import com.example.personalityquest.DAO.auth.AccountDAO;
+import com.example.personalityquest.DAO.quest.TaskDAO;
 import com.example.personalityquest.Services.auth.EmailService;
 import com.example.personalityquest.DAO.quest.WeeklyTaskDAO;
 import com.example.personalityquest.Model.quest.Task;
@@ -139,7 +140,7 @@ public class WeeklyTaskService {
         int[] taskIds = GetTaskIdsAssignedForWeek(email, weekStart);
 
         WeeklyTask[] tasks = new WeeklyTask[taskIds.length];
-        TaskService taskService = new TaskService();
+        TaskService taskService = new TaskService(new TaskDAO(WeeklyTaskDAO.getConnection()));
         for (int i = 0; i < taskIds.length; i++) {
             Task task = taskService.GetTaskForId(taskIds[i]);
             tasks[i] = new WeeklyTask(email, task.getTaskId(), "Not Started", "", String.valueOf(weekStart));

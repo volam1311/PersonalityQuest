@@ -15,6 +15,7 @@ import com.example.personalityquest.DAO.personalisation.QuestionDAO;
 import com.example.personalityquest.DAO.quest.QuestDAO;
 import com.example.personalityquest.DAO.quest.QuestOptionDAO;
 import com.example.personalityquest.DAO.quest.QuizResultDAO;
+import com.example.personalityquest.DAO.quest.UserQuestDAO;
 import com.example.personalityquest.Model.quest.Quest;
 import com.example.personalityquest.Model.quest.UserQuest;
 import com.example.personalityquest.Model.quiz.Archetype;
@@ -269,8 +270,8 @@ public class QuizService extends ParentService {
         }
 
         try {
-            UserQuestService UserQuestService = new UserQuestService();
-            QuestService QuestService = new QuestService();
+            UserQuestService UserQuestService = new UserQuestService(new UserQuestDAO(QuizResultDAO.getConnection()));
+            QuestService QuestService = new QuestService(new QuestDAO(QuizResultDAO.getConnection()));
             Integer archetypeId = QuestService.GetArchetypeIdForName(result.archetype().getName());
             if (archetypeId == null) {
                 return result;

@@ -85,7 +85,6 @@ public class WeeklyTaskServiceTest {
                     VALUES (9999, "TestTask", "This is a Test Task", 1)
                     """);
         statement.executeUpdate();
-        SQLite.setConnection(connection);
     }
 
     /// RETRIEVING TASKS
