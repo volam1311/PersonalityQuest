@@ -25,6 +25,7 @@ com.example.personalityquest.Services.auth
 com.example.personalityquest.Services.chat
 com.example.personalityquest.Services.navigation
 com.example.personalityquest.Services.profile
+com.example.personalityquest.Services.profile.criteria
 com.example.personalityquest.Services.quest
 com.example.personalityquest.Services.quiz
 com.example.personalityquest.Validators.auth
