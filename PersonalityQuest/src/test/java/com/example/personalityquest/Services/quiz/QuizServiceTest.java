@@ -37,7 +37,6 @@ public class QuizServiceTest {
         QuizService = new QuizService(questionDAO, optionDAO, quizResultDAO);
         QuizService.Reset();
         System.setProperty("quiz.demo", "false");
-        SQLite.setConnection(connection);
     }
 
     @AfterEach

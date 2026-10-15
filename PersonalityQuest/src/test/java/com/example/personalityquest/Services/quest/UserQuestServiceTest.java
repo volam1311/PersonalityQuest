@@ -112,8 +112,6 @@ public class UserQuestServiceTest {
 
             statement.executeUpdate();
         }
-
-        SQLite.setConnection(connection);
         labourId = 20;
     }
 

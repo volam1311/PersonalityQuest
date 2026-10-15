@@ -52,8 +52,6 @@ public class StreakDAOTest {
                     """);
         }
 
-        SQLite.setConnection(connection);
-
     }
 
     @AfterEach

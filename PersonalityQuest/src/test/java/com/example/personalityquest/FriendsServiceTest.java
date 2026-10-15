@@ -89,7 +89,6 @@ public class FriendsServiceTest {
         ){
             statement.executeUpdate();
         }
-        SQLite.setConnection(connection);
     }
 
     @Test

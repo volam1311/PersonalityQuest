@@ -55,7 +55,6 @@ public class StreakServiceTest {
                     """);
         }
 
-        SQLite.setConnection(connection);
 
     }
 
