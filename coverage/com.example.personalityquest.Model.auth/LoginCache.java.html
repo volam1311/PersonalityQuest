@@ -2,21 +2,22 @@
 
 import java.time.LocalDate;
 
+/** Remembers an account email and the date it last signed in. */
 public class LoginCache {
 
     private final String email;
     private final LocalDate lastLoginDate;
-<span class="fc" id="L9">    public LoginCache(String email, LocalDate lastLoginDate){</span>
-<span class="fc" id="L10">        this.email = email;</span>
-<span class="fc" id="L11">        this.lastLoginDate = lastLoginDate;</span>
-<span class="fc" id="L12">    }</span>
+<span class="fc" id="L10">    public LoginCache(String email, LocalDate lastLoginDate){</span>
+<span class="fc" id="L11">        this.email = email;</span>
+<span class="fc" id="L12">        this.lastLoginDate = lastLoginDate;</span>
+<span class="fc" id="L13">    }</span>
 
     public String GetEmail(){
-<span class="fc" id="L15">        return email;</span>
+<span class="fc" id="L16">        return email;</span>
     }
 
     public LocalDate GetLastLoginDate(){
-<span class="fc" id="L19">        return lastLoginDate;</span>
+<span class="fc" id="L20">        return lastLoginDate;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

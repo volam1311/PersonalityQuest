@@ -15,24 +15,25 @@ import static java.awt.SystemColor.text;
 
 public record QuestOption(int questOptionId, int labourId, int archetypeId, ReactionType reactionType, String text) {
 
-<span class="nc" id="L18">    public enum ReactionType{</span>
-<span class="nc" id="L19">        EXCESS, DEFICIT</span>
+    /** Whether a reaction leans toward excess or deficit. */
+<span class="nc" id="L19">    public enum ReactionType{</span>
+<span class="nc" id="L20">        EXCESS, DEFICIT</span>
     }
 
-<span class="nc" id="L22">    public QuestOption{</span>
-<span class="nc bnc" id="L23" title="All 4 branches missed.">        if (text == null || text.isBlank()){</span>
-<span class="nc" id="L24">            throw new IllegalArgumentException(&quot;Quest option text cannot be blank&quot;);</span>
+<span class="nc" id="L23">    public QuestOption{</span>
+<span class="nc bnc" id="L24" title="All 4 branches missed.">        if (text == null || text.isBlank()){</span>
+<span class="nc" id="L25">            throw new IllegalArgumentException(&quot;Quest option text cannot be blank&quot;);</span>
         }
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (labourId &lt;= 0){</span>
-<span class="nc" id="L27">            throw new IllegalArgumentException(&quot;Labour ID is invalid&quot;);</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (labourId &lt;= 0){</span>
+<span class="nc" id="L28">            throw new IllegalArgumentException(&quot;Labour ID is invalid&quot;);</span>
         }
-<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (archetypeId &lt;=0 ){</span>
-<span class="nc" id="L30">            throw new IllegalArgumentException(&quot;Archetype ID is invalid&quot;);</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if (archetypeId &lt;=0 ){</span>
+<span class="nc" id="L31">            throw new IllegalArgumentException(&quot;Archetype ID is invalid&quot;);</span>
         }
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (reactionType == null){</span>
-<span class="nc" id="L33">            throw new IllegalArgumentException(&quot;Reaction type is invalid&quot;);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (reactionType == null){</span>
+<span class="nc" id="L34">            throw new IllegalArgumentException(&quot;Reaction type is invalid&quot;);</span>
         }
-<span class="nc" id="L35">    }</span>
+<span class="nc" id="L36">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

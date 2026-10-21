@@ -4,19 +4,20 @@ import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
 
+/** Supplies the shared database connection used by data-access objects. */
 public class ParentDAO {
 
     protected Connection connection;
-<span class="fc" id="L10">    public ParentDAO(){</span>
-<span class="fc" id="L11">        connection = SQLite.getConnection();</span>
-<span class="fc" id="L12">    }</span>
+<span class="fc" id="L11">    public ParentDAO(){</span>
+<span class="fc" id="L12">        connection = SQLite.getConnection();</span>
+<span class="fc" id="L13">    }</span>
 
-<span class="fc" id="L14">    public ParentDAO(Connection connection){</span>
-<span class="fc" id="L15">        this.connection = connection;</span>
-<span class="fc" id="L16">    }</span>
+<span class="fc" id="L15">    public ParentDAO(Connection connection){</span>
+<span class="fc" id="L16">        this.connection = connection;</span>
+<span class="fc" id="L17">    }</span>
 
     public Connection getConnection(){
-<span class="fc" id="L19">        return connection;</span>
+<span class="fc" id="L20">        return connection;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

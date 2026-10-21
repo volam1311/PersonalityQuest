@@ -9,30 +9,31 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.prefs.Preferences;
 
+/** Remembers a recent sign-in and restores it on the next launch. */
 public class LoginCacheService extends ParentService {
 
 
     public Preferences preferences;
 
     public LoginCacheService(){
-<span class="nc" id="L18">        super();</span>
-<span class="nc" id="L19">        preferences = Preferences.userRoot();</span>
-<span class="nc" id="L20">    }</span>
+<span class="nc" id="L19">        super();</span>
+<span class="nc" id="L20">        preferences = Preferences.userRoot();</span>
+<span class="nc" id="L21">    }</span>
 
     public LoginCacheService(Preferences preferences){
-<span class="fc" id="L23">        super();</span>
-<span class="fc" id="L24">        this.preferences = preferences;</span>
-<span class="fc" id="L25">    }</span>
+<span class="fc" id="L24">        super();</span>
+<span class="fc" id="L25">        this.preferences = preferences;</span>
+<span class="fc" id="L26">    }</span>
 
     private final static int days = 7;
 
     private static LoginCacheService instance;
     public static LoginCacheService GetInstance(){
-<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (instance == null){</span>
-<span class="nc" id="L32">            instance = new LoginCacheService();</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (instance == null){</span>
+<span class="nc" id="L33">            instance = new LoginCacheService();</span>
         }
 
-<span class="nc" id="L35">        return instance;</span>
+<span class="nc" id="L36">        return instance;</span>
     }
 
     /**
@@ -40,9 +41,9 @@ public class LoginCacheService extends ParentService {
      * @return A Login Cache object containing an email and the last time the user logged in
      */
     public LoginCache GetLoginCache(){
-<span class="fc" id="L43">        return new LoginCache(</span>
-<span class="fc" id="L44">                preferences.get(&quot;LoginEmail&quot;, &quot;&quot;),</span>
-<span class="fc" id="L45">                LocalDate.parse(preferences.get(&quot;TimeOfLogin&quot;, LocalDate.now().toString()))</span>
+<span class="fc" id="L44">        return new LoginCache(</span>
+<span class="fc" id="L45">                preferences.get(&quot;LoginEmail&quot;, &quot;&quot;),</span>
+<span class="fc" id="L46">                LocalDate.parse(preferences.get(&quot;TimeOfLogin&quot;, LocalDate.now().toString()))</span>
         );
     }
 
@@ -51,29 +52,29 @@ public class LoginCacheService extends ParentService {
      * @param email The email you want to set the login cache to
      */
     public void UpdateCache(String email){
-<span class="fc" id="L54">        preferences.put(&quot;LoginEmail&quot;, email);</span>
-<span class="fc" id="L55">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L55">        preferences.put(&quot;LoginEmail&quot;, email);</span>
+<span class="fc" id="L56">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Clears the current login data from the cache
      */
     public void ClearCache(){
-<span class="fc" id="L62">        preferences.put(&quot;LoginEmail&quot;, &quot;&quot;);</span>
-<span class="fc" id="L63">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L63">        preferences.put(&quot;LoginEmail&quot;, &quot;&quot;);</span>
+<span class="fc" id="L64">        preferences.put(&quot;TimeOfLogin&quot;, LocalDate.now().toString());</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Checks to see if the given parsed date is past the allowed cache time. Clears the cache if it is past expired time.
      * @return Whether the login cache is now expired
      */
     public boolean IsPastTimeLimit(LocalDate parsedDate){
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (ChronoUnit.DAYS.between(parsedDate, LocalDate.now()) &gt; days){</span>
-<span class="fc" id="L72">            ClearCache();</span>
-<span class="fc" id="L73">            return true;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (ChronoUnit.DAYS.between(parsedDate, LocalDate.now()) &gt; days){</span>
+<span class="fc" id="L73">            ClearCache();</span>
+<span class="fc" id="L74">            return true;</span>
         }
 
-<span class="fc" id="L76">        return false;</span>
+<span class="fc" id="L77">        return false;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
