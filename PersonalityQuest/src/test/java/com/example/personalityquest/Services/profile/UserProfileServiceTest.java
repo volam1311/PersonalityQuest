@@ -9,6 +9,7 @@ import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/** Verifies how a profile formats its display name and archetype. */
 public class UserProfileServiceTest {
     private Connection connection;
 

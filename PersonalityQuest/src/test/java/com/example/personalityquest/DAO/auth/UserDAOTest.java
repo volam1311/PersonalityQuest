@@ -14,6 +14,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies that user records can be stored and loaded. */
 class UserDAOTest {
 
     private Connection connection;

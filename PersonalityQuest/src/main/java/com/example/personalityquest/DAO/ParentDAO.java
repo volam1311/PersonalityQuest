@@ -4,6 +4,7 @@ import com.example.personalityquest.SQLite;
 
 import java.sql.Connection;
 
+/** Supplies the shared database connection used by data-access objects. */
 public class ParentDAO {
 
     protected Connection connection;

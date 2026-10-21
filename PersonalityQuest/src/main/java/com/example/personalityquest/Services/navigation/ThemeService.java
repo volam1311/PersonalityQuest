@@ -10,6 +10,7 @@ import java.util.prefs.Preferences;
 public final class ThemeService {
     private static final String THEME_PREFERENCE_KEY = "theme";
 
+    /** A named colour theme and the stylesheet that applies it. */
     public enum Theme {
         DARK("theme-dark.css"),
         DUSK("theme-dusk.css"),

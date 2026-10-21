@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** Verifies the rules that unlock achievements. */
 class AchievementCriterionTest {
     @Test
     void eachStoredCriteriaTypeHasAStrategy() {

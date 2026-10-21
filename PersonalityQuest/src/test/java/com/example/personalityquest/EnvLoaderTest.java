@@ -7,6 +7,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** Verifies that environment values are read from a file. */
 public class EnvLoaderTest {
     @Test
     void ParseIgnoresCommentsAndBlankLines() {

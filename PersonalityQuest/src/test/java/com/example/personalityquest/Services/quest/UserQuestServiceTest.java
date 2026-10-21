@@ -15,6 +15,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies an account's quest progress updates. */
 public class UserQuestServiceTest {
 
     private Connection connection;

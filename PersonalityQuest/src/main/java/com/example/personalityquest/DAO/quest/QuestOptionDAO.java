@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Stores and retrieves the reaction options for a quest. */
 public class QuestOptionDAO extends ParentDAO {
     private static final String CREATE_QUEST_OPTIONS = """
             CREATE TABLE IF NOT EXISTS QuestOptions (
