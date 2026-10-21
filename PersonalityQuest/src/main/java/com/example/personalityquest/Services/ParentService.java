@@ -1,5 +1,6 @@
 package com.example.personalityquest.Services;
 
+/** Base type for application services. */
 public class ParentService {
 
     public ParentService(){

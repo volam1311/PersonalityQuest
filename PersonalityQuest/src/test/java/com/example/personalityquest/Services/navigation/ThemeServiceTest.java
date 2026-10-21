@@ -13,6 +13,7 @@ import java.util.prefs.Preferences;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/** Verifies that the selected theme is stored and restored. */
 class ThemeServiceTest {
     private Preferences preferences;
 

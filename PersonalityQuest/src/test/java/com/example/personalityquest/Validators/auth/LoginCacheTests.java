@@ -10,6 +10,7 @@ import java.util.prefs.Preferences;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies remembered sign-in details. */
 public class LoginCacheTests {
 
     LoginCacheService loginCacheService;

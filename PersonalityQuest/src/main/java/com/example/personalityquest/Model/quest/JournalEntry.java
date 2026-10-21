@@ -1,6 +1,8 @@
 package com.example.personalityquest.Model.quest;
 
+/** A saved challenge, reflection, or standalone journal entry. */
 public class JournalEntry {
+    /** The kind of writing stored in a journal entry. */
     public enum EntryType{CHALLENGE, REFLECTION, STANDALONE}
 
     private final int id;

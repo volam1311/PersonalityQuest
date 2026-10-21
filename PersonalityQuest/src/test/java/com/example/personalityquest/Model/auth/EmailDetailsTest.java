@@ -8,6 +8,7 @@ import java.sql.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/** Verifies that email details reject missing values. */
 public class EmailDetailsTest {
     private Connection connection;
 

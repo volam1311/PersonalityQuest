@@ -13,6 +13,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies quest lookup and selection. */
 public class QuestServiceTest {
 
     private Connection connection;

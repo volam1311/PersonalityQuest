@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Stores and retrieves the reflection prompts for a quest. */
 public class ReflectionPromptDAO extends ParentDAO {
     private static final String CREATE_REFLECTION_PROMPTS = """
             CREATE TABLE IF NOT EXISTS ReflectionPrompts (

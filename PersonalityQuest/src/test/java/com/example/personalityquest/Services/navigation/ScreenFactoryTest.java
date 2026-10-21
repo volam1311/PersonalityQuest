@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/** Verifies the file name and title chosen for each screen. */
 class ScreenFactoryTest {
     @Test
     void everyScreenHasAnFxmlFileAndTitle() {

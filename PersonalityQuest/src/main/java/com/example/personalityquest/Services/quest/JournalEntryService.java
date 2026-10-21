@@ -8,6 +8,7 @@ import com.example.personalityquest.Services.quiz.QuizService;
 import java.sql.SQLException;
 import java.util.List;
 
+/** Saves and loads journal entries for the signed-in account. */
 public class JournalEntryService {
 
     private JournalEntryDAO JournalEntryDAO;

@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies friendship lookups and updates between accounts. */
 public class FriendsServiceTest {
     private Connection connection;
 

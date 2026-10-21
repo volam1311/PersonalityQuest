@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.prefs.Preferences;
 
+/** Remembers a recent sign-in and restores it on the next launch. */
 public class LoginCacheService extends ParentService {
 
 

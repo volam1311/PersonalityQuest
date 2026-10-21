@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/** Verifies that reflection feedback can be stored and loaded. */
 public class ReflectionFeedbackDAOTest {
     private Connection connection;
 

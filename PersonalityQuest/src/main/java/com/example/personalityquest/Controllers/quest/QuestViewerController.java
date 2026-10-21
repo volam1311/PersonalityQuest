@@ -26,6 +26,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+/** Controls the quest viewer tabs for storyline, reaction, challenge, and reflection. */
 public class QuestViewerController implements Initializable {
 
     private enum Tab {
