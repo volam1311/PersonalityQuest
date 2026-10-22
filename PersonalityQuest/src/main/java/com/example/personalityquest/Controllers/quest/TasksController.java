@@ -68,7 +68,19 @@ public class TasksController implements Initializable {
     private ListView<ReflectionListItem> questReflectionsList;
 
     private record ChallengeListItem(JournalEntry entry, Quest quest, Task task, WeeklyTask weeklyTask){}
-    private record ReflectionListItem(UserQuest userQuest, Quest quest, ReflectionPrompt prompt){}
+    private record ReflectionListItem(UserQuest userQuest, Quest quest, ReflectionPrompt prompt, JournalEntry entry){
+        static ReflectionListItem forQuest(UserQuest userQuest, Quest quest, ReflectionPrompt prompt) {
+            return new ReflectionListItem(userQuest, quest, prompt, null);
+        }
+
+        static ReflectionListItem forStandalone(JournalEntry entry) {
+            return new ReflectionListItem(null, null, null, entry);
+        }
+
+        boolean isStandalone() {
+            return entry != null;
+        }
+    }
 
     /** The weekly-challenge list item currently shown in the detail panel, or null if a quest challenge/reflection is shown instead */
     private ChallengeListItem selectedWeeklyChallenge;
@@ -76,6 +88,8 @@ public class TasksController implements Initializable {
     private ChallengeListItem selectedJournalChallenge;
     /** The quest reflection currently shown in the detail panel, or null if a challenge is shown instead */
     private ReflectionListItem selectedReflectionItem;
+    /** True while the detail panel is a personal reflection that has not been saved yet */
+    private boolean writingNewReflection;
     private boolean generatingFeedback;
     private int feedbackRequestId;
 
@@ -125,6 +139,7 @@ public class TasksController implements Initializable {
     }
 
     private void ShowJournalChallenge(ChallengeListItem item){
+        writingNewReflection = false;
         if (item.weeklyTask() != null) {
             ShowWeeklyChallenge(item);
             return;
@@ -194,6 +209,7 @@ public class TasksController implements Initializable {
     }
 
     private void ShowEmptyDetail() {
+        writingNewReflection = false;
         selectedWeeklyChallenge = null;
         selectedReflectionItem = null;
         selectedJournalChallenge = null;
@@ -298,6 +314,38 @@ public class TasksController implements Initializable {
             return;
         }
 
+        if (writingNewReflection) {
+            try {
+                JournalEntry saved = journalEntryService.AddStandaloneEntry(
+                        email, TitleForNewReflection(reflection), reflection);
+                writingNewReflection = false;
+                LoadQuestReflections();
+                ReselectStandalone(saved.getId());
+                RequestStandaloneAiFeedback(saved, reflection, "Reflection submitted. Generating AI feedback...");
+                feedbackLabel.setText("Submitted!");
+                savedStatusLabel.setText("Saved");
+            } catch (Exception exception) {
+                feedbackLabel.setText("Could not submit this reflection right now.");
+            }
+            return;
+        }
+
+        if (selectedReflectionItem != null && selectedReflectionItem.isStandalone()) {
+            JournalEntry existing = selectedReflectionItem.entry();
+            try {
+                JournalEntry updated = journalEntryService.UpdateStandaloneEntry(
+                        email, existing.getId(), TitleForNewReflection(reflection), reflection);
+                LoadQuestReflections();
+                ReselectStandalone(updated.getId());
+                RequestStandaloneAiFeedback(updated, reflection, "Reflection submitted. Generating AI feedback...");
+                feedbackLabel.setText("Re-Submitted your Reflection!");
+                savedStatusLabel.setText("Saved");
+            } catch (Exception exception) {
+                feedbackLabel.setText("Could not submit this reflection right now.");
+            }
+            return;
+        }
+
         if (selectedReflectionItem != null) {
             ReflectionListItem submitted = selectedReflectionItem;
             try {
@@ -364,6 +412,16 @@ public class TasksController implements Initializable {
             return;
         }
 
+        if (writingNewReflection) {
+            RequestDraftStandaloneFeedback(reflection, "Generating AI feedback...");
+            return;
+        }
+
+        if (selectedReflectionItem != null && selectedReflectionItem.isStandalone()) {
+            RequestStandaloneAiFeedback(selectedReflectionItem.entry(), reflection, "Generating AI feedback...");
+            return;
+        }
+
         if (selectedReflectionItem != null) {
             RequestQuestAiFeedback(selectedReflectionItem, reflection, "Generating AI feedback...");
         }
@@ -389,7 +447,16 @@ public class TasksController implements Initializable {
 
     private void ReselectReflection(UserQuest userQuest) {
         for (ReflectionListItem item : questReflectionsList.getItems()) {
-            if (item.userQuest().getLabourId() == userQuest.getLabourId()) {
+            if (item.userQuest() != null && item.userQuest().getLabourId() == userQuest.getLabourId()) {
+                questReflectionsList.getSelectionModel().select(item);
+                return;
+            }
+        }
+    }
+
+    private void ReselectStandalone(int entryId) {
+        for (ReflectionListItem item : questReflectionsList.getItems()) {
+            if (item.entry() != null && item.entry().getId() == entryId) {
                 questReflectionsList.getSelectionModel().select(item);
                 return;
             }
@@ -466,6 +533,7 @@ public class TasksController implements Initializable {
 
             generatingFeedback = false;
             if (selectedReflectionItem == null
+                    || selectedReflectionItem.userQuest() == null
                     || selectedReflectionItem.userQuest().getLabourId() != userQuest.getLabourId()) {
                 feedbackButton.setDisable(selectedReflectionItem == null);
                 return;
@@ -486,6 +554,138 @@ public class TasksController implements Initializable {
             feedbackLabel.setText("AI feedback is ready.");
             feedbackButton.setDisable(false);
         }));
+    }
+
+    /** Asks for coaching on a saved personal reflection and stores the reply on that entry. */
+    private void RequestStandaloneAiFeedback(JournalEntry entry, String reflection, String statusMessage) {
+        int entryId = entry.getId();
+        String email = entry.getAccountEmail();
+
+        int requestId = ++feedbackRequestId;
+        generatingFeedback = true;
+        feedbackButton.setDisable(true);
+        feedbackLabel.setText(statusMessage);
+        ShowAiFeedback("Writing feedback from your reflection...");
+
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                return reflectionFeedbackService.FeedbackFor(
+                        reflectionFeedbackService.ContextFor(null, "Personal reflection", reflection));
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
+        }).whenComplete((text, error) -> Platform.runLater(() -> {
+            if (requestId != feedbackRequestId) {
+                return;
+            }
+
+            generatingFeedback = false;
+            if (!IsSelectedStandalone(entryId)) {
+                feedbackButton.setDisable(selectedReflectionItem == null);
+                return;
+            }
+
+            if (error != null) {
+                feedbackLabel.setText(FriendlyFeedbackError(error));
+                feedbackButton.setDisable(false);
+                return;
+            }
+
+            try {
+                journalEntryService.SaveStandaloneFeedback(email, entryId, text);
+                RefreshStandaloneEntry(entryId);
+            } catch (Exception ignored) {
+                // Showing the reply still helps even if it cannot be stored.
+            }
+            ShowAiFeedback(text);
+            feedbackLabel.setText("AI feedback is ready.");
+            feedbackButton.setDisable(false);
+        }));
+    }
+
+    /** Asks for coaching on a personal reflection that has not been saved yet. */
+    private void RequestDraftStandaloneFeedback(String reflection, String statusMessage) {
+        int requestId = ++feedbackRequestId;
+        generatingFeedback = true;
+        feedbackButton.setDisable(true);
+        feedbackLabel.setText(statusMessage);
+        ShowAiFeedback("Writing feedback from your reflection...");
+
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                return reflectionFeedbackService.FeedbackFor(
+                        reflectionFeedbackService.ContextFor(null, "Personal reflection", reflection));
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
+        }).whenComplete((text, error) -> Platform.runLater(() -> {
+            if (requestId != feedbackRequestId) {
+                return;
+            }
+
+            generatingFeedback = false;
+            if (!writingNewReflection) {
+                feedbackButton.setDisable(selectedReflectionItem == null);
+                return;
+            }
+
+            if (error != null) {
+                feedbackLabel.setText(FriendlyFeedbackError(error));
+                feedbackButton.setDisable(false);
+                return;
+            }
+
+            ShowAiFeedback(text);
+            feedbackLabel.setText("AI feedback is ready.");
+            feedbackButton.setDisable(false);
+        }));
+    }
+
+    private boolean IsSelectedStandalone(int entryId) {
+        return selectedReflectionItem != null
+                && selectedReflectionItem.entry() != null
+                && selectedReflectionItem.entry().getId() == entryId;
+    }
+
+    /** Reloads a saved personal reflection into the list without resetting the open editor. */
+    private void RefreshStandaloneEntry(int entryId) {
+        String email = ApplicationManager.CurrentAccount.getCurrentEmail();
+        JournalEntry updated = null;
+        try {
+            for (JournalEntry entry : journalEntryService.GetStandaloneForEmail(email)) {
+                if (entry.getId() == entryId) {
+                    updated = entry;
+                    break;
+                }
+            }
+        } catch (Exception exception) {
+            return;
+        }
+        if (updated == null) {
+            return;
+        }
+
+        updatingJournalSelection = true;
+        var items = questReflectionsList.getItems();
+        for (int index = 0; index < items.size(); index++) {
+            ReflectionListItem item = items.get(index);
+            if (item.entry() != null && item.entry().getId() == entryId) {
+                ReflectionListItem replacement = ReflectionListItem.forStandalone(updated);
+                items.set(index, replacement);
+                questReflectionsList.getSelectionModel().select(replacement);
+                selectedReflectionItem = replacement;
+                break;
+            }
+        }
+        updatingJournalSelection = false;
+    }
+
+    private static String TitleForNewReflection(String reflection) {
+        String line = reflection.split("\\R", 2)[0].trim();
+        if (line.length() > 48) {
+            return line.substring(0, 45).trim() + "...";
+        }
+        return line;
     }
 
     private String QuestNameForTask(Task task) {
@@ -774,11 +974,18 @@ public class TasksController implements Initializable {
                 if (ApplicationManager.isEmpty(userQuest.getReactionType())) continue; // quest not started yet
                 Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
                 ReflectionPrompt prompt = FindReflectionPrompt(userQuest);
-                questReflectionsList.getItems().add(new ReflectionListItem(userQuest, quest, prompt));
+                questReflectionsList.getItems().add(ReflectionListItem.forQuest(userQuest, quest, prompt));
             }
-            // TODO: append standalone journal entry
         } catch (Exception exception) {
             System.err.println("Could not load quest reflections" + exception.getMessage());
+        }
+
+        try {
+            for (JournalEntry entry : journalEntryService.GetStandaloneForEmail(email)) {
+                questReflectionsList.getItems().add(ReflectionListItem.forStandalone(entry));
+            }
+        } catch (Exception exception) {
+            System.err.println("Could not load personal reflections" + exception.getMessage());
         }
 
         UpdateReflectionsCount();
@@ -789,7 +996,7 @@ public class TasksController implements Initializable {
         int total = questReflectionsList.getItems().size();
         int finished = 0;
         for (ReflectionListItem item : questReflectionsList.getItems()) {
-            if (IsFinished(item.userQuest().getReflectionStatus())) {
+            if (item.isStandalone() || IsFinished(item.userQuest().getReflectionStatus())) {
                 finished++;
             }
         }
@@ -811,11 +1018,13 @@ public class TasksController implements Initializable {
 
     @FXML
     private void OnWriteNewReflection(){
+        CancelPendingFeedback();
         questReflectionsList.getSelectionModel().clearSelection();
         questChallengesList.getSelectionModel().clearSelection();
         selectedWeeklyChallenge = null;
         selectedJournalChallenge = null;
         selectedReflectionItem = null;
+        writingNewReflection = true;
 
         ShowTaskContent();
         taskEyebrowLabel.setText("NEW REFLECTION");
@@ -827,11 +1036,11 @@ public class TasksController implements Initializable {
         reflectionArea.setDisable(false);
         SetEditButtonVisible(false);
         submitButton.setDisable(false);
+        submitButton.setText("Submit");
         feedbackButton.setDisable(false);
         feedbackLabel.setText("");
         savedStatusLabel.setText("");
         HideAiFeedback();
-        // Add full save to journal entries
     }
 
     private void ConfigureQuestReflectionsList(){
@@ -864,11 +1073,18 @@ public class TasksController implements Initializable {
                     setGraphic(null);
                     return;
                 }
-                String subject = item.quest() == null ? "REFLECTION" : LabourSubject(item.quest().getName()).toUpperCase();
-                eyebrowLabel.setText(subject);
-                nameLabel.setText(item.prompt() == null ? "Reflection" : item.prompt().name());
-                overviewLabel.setText(item.prompt() == null ? "" : item.prompt().overview());
-                SetStatusIconFinished(statusIcon, IsFinished(item.userQuest().getReflectionStatus()));
+                if (item.isStandalone()) {
+                    eyebrowLabel.setText("PERSONAL");
+                    nameLabel.setText(item.entry().getTitle());
+                    overviewLabel.setText(item.entry().getBody());
+                    SetStatusIconFinished(statusIcon, true);
+                } else {
+                    String subject = item.quest() == null ? "REFLECTION" : LabourSubject(item.quest().getName()).toUpperCase();
+                    eyebrowLabel.setText(subject);
+                    nameLabel.setText(item.prompt() == null ? "Reflection" : item.prompt().name());
+                    overviewLabel.setText(item.prompt() == null ? "" : item.prompt().overview());
+                    SetStatusIconFinished(statusIcon, IsFinished(item.userQuest().getReflectionStatus()));
+                }
                 setText(null);
                 setGraphic(row);
             }
@@ -886,6 +1102,12 @@ public class TasksController implements Initializable {
     }
 
     private void ShowReflection(ReflectionListItem item){
+        writingNewReflection = false;
+        if (item.isStandalone()) {
+            ShowStandaloneReflection(item);
+            return;
+        }
+
         selectedWeeklyChallenge = null;
         selectedJournalChallenge = null;
         selectedReflectionItem = item;
@@ -910,6 +1132,7 @@ public class TasksController implements Initializable {
 
         boolean keepGenerating = generatingFeedback
                 && selectedReflectionItem != null
+                && selectedReflectionItem.userQuest() != null
                 && selectedReflectionItem.userQuest().getLabourId() == item.userQuest().getLabourId();
         feedbackButton.setDisable(keepGenerating);
         if (keepGenerating) {
@@ -918,6 +1141,40 @@ public class TasksController implements Initializable {
         } else {
             feedbackLabel.setText(finished ? "Click Edit, to change the reflection you have written" : "");
             ShowStoredQuestFeedback(item.userQuest());
+        }
+    }
+
+    private void ShowStandaloneReflection(ReflectionListItem item) {
+        selectedWeeklyChallenge = null;
+        selectedJournalChallenge = null;
+        selectedReflectionItem = item;
+
+        ShowTaskContent();
+
+        JournalEntry entry = item.entry();
+        taskEyebrowLabel.setText("REFLECTION");
+        taskTitleLabel.setText(ApplicationManager.isEmpty(entry.getTitle()) ? "Personal reflection" : entry.getTitle());
+        descriptionLabel.setText("Not tied to a specific quest. Write freely about anything on your mind.");
+        SetReflectionAreaCompact(false);
+        reflectionArea.setPromptText("Begin with what happened…");
+        reflectionArea.setText(entry.getBody() == null ? "" : entry.getBody());
+        reflectionArea.setDisable(true);
+        SetEditButtonVisible(true);
+        submitButton.setDisable(true);
+        submitButton.setText("Submit");
+        savedStatusLabel.setText("Saved");
+
+        boolean keepGenerating = generatingFeedback && IsSelectedStandalone(entry.getId());
+        feedbackButton.setDisable(keepGenerating);
+        if (keepGenerating) {
+            feedbackLabel.setText("Generating AI feedback...");
+            ShowAiFeedback("Writing feedback from your reflection...");
+        } else if (ApplicationManager.isEmpty(entry.getAiFeedback())) {
+            feedbackLabel.setText("Click Edit, to change the reflection you have written");
+            HideAiFeedback();
+        } else {
+            feedbackLabel.setText("Click Edit, to change the reflection you have written");
+            ShowAiFeedback(entry.getAiFeedback());
         }
     }
 
