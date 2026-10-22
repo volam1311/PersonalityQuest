@@ -1,6 +1,6 @@
-    97	Lam
-    73	Kappikin
-    19	Daniel
-    18	OpineDev
+   117	Lam
+   102	Kappikin
+    31	Daniel
+    26	OpineDev
      4	Roaming
      1	dfitt10
