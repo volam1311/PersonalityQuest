@@ -1,3 +1,5 @@
+bd94c21 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1792650742, 3 minutes ago, message: Merge pull request #214 from volam1311/chore/commit_history
+9a6372f was Lam (vophuclam1311@gmail.com), 1792650686, 4 minutes ago, message: chore: Add commit messages before final submission
 0ccf21e was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1792580371, 20 hours ago, message: Merge pull request #212 from volam1311/refactor/javadoc_comment
 855b418 was Lam (vophuclam1311@gmail.com), 1792580116, 20 hours ago, message: refactor: Add Javadoc comments
 de81a9b was Kappikin (thisisthefinalliamkorver@gmail.com), 1792027724, 7 days ago, message: Merge pull request #211 from volam1311/Removed-SQLite-setConnection-in-tests
