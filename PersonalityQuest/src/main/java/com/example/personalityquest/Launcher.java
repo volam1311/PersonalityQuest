@@ -4,7 +4,9 @@ import javafx.application.Application;
 
 /** Provides the application entry point */
 public class Launcher {
-    /** Launches the JavaFX application
+    /**
+     * Launches the JavaFX application
+     *
      * @param args command-line arguments
      */
     public static void main(String[] args) {

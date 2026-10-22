@@ -133,6 +133,55 @@ public class JournalEntryDAO extends ParentDAO {
         }
     }
 
+    /** Loads one journal entry by id, or null when it does not exist. */
+    public JournalEntry GetById(int id) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM JournalEntries WHERE id = ?")) {
+            statement.setInt(1, id);
+            List<JournalEntry> entries = ReadAll(statement);
+            return entries.isEmpty() ? null : entries.get(0);
+        }
+    }
+
+    /**
+     * Updates a personal reflection owned by this account.
+     * @return the updated entry, or null when no matching standalone row exists
+     */
+    public JournalEntry UpdateStandalone(String email, int id, String title, String body) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                UPDATE JournalEntries
+                SET title = ?, body = ?
+                WHERE id = ? AND accountEmail = ? AND entryType = ?
+                """)) {
+            statement.setString(1, title);
+            statement.setString(2, body);
+            statement.setInt(3, id);
+            statement.setString(4, email);
+            statement.setString(5, JournalEntry.EntryType.STANDALONE.name());
+            if (statement.executeUpdate() == 0) {
+                return null;
+            }
+        }
+        return GetById(id);
+    }
+
+    /** Stores AI feedback on a personal reflection owned by this account. */
+    public void UpdateAiFeedback(String email, int id, String feedback) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                """
+                UPDATE JournalEntries
+                SET aiFeedback = ?
+                WHERE id = ? AND accountEmail = ? AND entryType = ?
+                """)) {
+            statement.setString(1, feedback);
+            statement.setInt(2, id);
+            statement.setString(3, email);
+            statement.setString(4, JournalEntry.EntryType.STANDALONE.name());
+            statement.executeUpdate();
+        }
+    }
+
     private List<JournalEntry> ReadAll(PreparedStatement statement) throws SQLException {
         ResultSet rs = statement.executeQuery();
         List<JournalEntry> entries = new ArrayList<>();
