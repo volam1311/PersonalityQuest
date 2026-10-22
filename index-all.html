@@ -173,6 +173,10 @@ initTheme();
 <dd>
 <div class="block">Adds a friend to your account</div>
 </dd>
+<dt><a href="com/example/personalityquest/Services/quest/JournalEntryService.html#AddStandaloneEntry(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">AddStandaloneEntry(String, String, String)</a> - Method in class com.example.personalityquest.Services.quest.<a href="com/example/personalityquest/Services/quest/JournalEntryService.html" title="class in com.example.personalityquest.Services.quest">JournalEntryService</a></dt>
+<dd>
+<div class="block">Inserts a personal reflection that is not attached to a quest.</div>
+</dd>
 <dt><a href="com/example/personalityquest/Services/navigation/ThemeService.html#addThemeChangeListener(com.example.personalityquest.Services.navigation.ThemeChangeListener)" class="member-name-link">addThemeChangeListener(ThemeChangeListener)</a> - Method in class com.example.personalityquest.Services.navigation.<a href="com/example/personalityquest/Services/navigation/ThemeService.html" title="class in com.example.personalityquest.Services.navigation">ThemeService</a></dt>
 <dd>
 <div class="block">Registers a listener that is told after a theme is saved.</div>
@@ -864,6 +868,10 @@ attention to it (e.g. after adding a challenge or submitting a reflection).</div
 </dd>
 <dt><a href="com/example/personalityquest/Model/quest/JournalEntry.html#getBody()" class="member-name-link">getBody()</a> - Method in class com.example.personalityquest.Model.quest.<a href="com/example/personalityquest/Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/example/personalityquest/DAO/quest/JournalEntryDAO.html#GetById(int)" class="member-name-link">GetById(int)</a> - Method in class com.example.personalityquest.DAO.quest.<a href="com/example/personalityquest/DAO/quest/JournalEntryDAO.html" title="class in com.example.personalityquest.DAO.quest">JournalEntryDAO</a></dt>
+<dd>
+<div class="block">Loads one journal entry by id, or null when it does not exist.</div>
+</dd>
 <dt><a href="com/example/personalityquest/DAO/personalisation/ArchetypeDAO.html#GetCatalog()" class="member-name-link">GetCatalog()</a> - Method in class com.example.personalityquest.DAO.personalisation.<a href="com/example/personalityquest/DAO/personalisation/ArchetypeDAO.html" title="class in com.example.personalityquest.DAO.personalisation">ArchetypeDAO</a></dt>
 <dd>
 <div class="block">Returns archetype catalog records ordered by ID</div>
@@ -1232,6 +1240,10 @@ capped at <code>limit</code>.</div>
 <dt><a href="com/example/personalityquest/Model/quiz/Archetype.html#getSmallDescription()" class="member-name-link">getSmallDescription()</a> - Method in enum class com.example.personalityquest.Model.quiz.<a href="com/example/personalityquest/Model/quiz/Archetype.html" title="enum class in com.example.personalityquest.Model.quiz">Archetype</a></dt>
 <dd>
 <div class="block">Returns the short archetype description</div>
+</dd>
+<dt><a href="com/example/personalityquest/Services/quest/JournalEntryService.html#GetStandaloneForEmail(java.lang.String)" class="member-name-link">GetStandaloneForEmail(String)</a> - Method in class com.example.personalityquest.Services.quest.<a href="com/example/personalityquest/Services/quest/JournalEntryService.html" title="class in com.example.personalityquest.Services.quest">JournalEntryService</a></dt>
+<dd>
+<div class="block">Loads personal reflections for this account, newest first.</div>
 </dd>
 <dt><a href="com/example/personalityquest/Model/quest/UserQuest.html#getStatus()" class="member-name-link">getStatus()</a> - Method in class com.example.personalityquest.Model.quest.<a href="com/example/personalityquest/Model/quest/UserQuest.html" title="class in com.example.personalityquest.Model.quest">UserQuest</a></dt>
 <dd>
@@ -2212,6 +2224,10 @@ match an archetypeId</div>
 <dd>
 <div class="block">Save or overwrites the logged in accounts quiz results</div>
 </dd>
+<dt><a href="com/example/personalityquest/Services/quest/JournalEntryService.html#SaveStandaloneFeedback(java.lang.String,int,java.lang.String)" class="member-name-link">SaveStandaloneFeedback(String, int, String)</a> - Method in class com.example.personalityquest.Services.quest.<a href="com/example/personalityquest/Services/quest/JournalEntryService.html" title="class in com.example.personalityquest.Services.quest">JournalEntryService</a></dt>
+<dd>
+<div class="block">Stores AI feedback against a personal reflection.</div>
+</dd>
 <dt><a href="com/example/personalityquest/ApplicationManager.SceneInfo.html#SCENEHEIGHT" class="member-name-link">SCENEHEIGHT</a> - Static variable in class com.example.personalityquest.<a href="com/example/personalityquest/ApplicationManager.SceneInfo.html" title="class in com.example.personalityquest">ApplicationManager.SceneInfo</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/example/personalityquest/ApplicationManager.SceneInfo.html#%3Cinit%3E()" class="member-name-link">SceneInfo()</a> - Constructor for class com.example.personalityquest.<a href="com/example/personalityquest/ApplicationManager.SceneInfo.html" title="class in com.example.personalityquest">ApplicationManager.SceneInfo</a></dt>
@@ -2678,6 +2694,10 @@ in the form of its name</div>
 </dd>
 <dt><a href="com/example/personalityquest/Controllers/auth/UpdateAccountPersonalDetailsController.html#%3Cinit%3E()" class="member-name-link">UpdateAccountPersonalDetailsController()</a> - Constructor for class com.example.personalityquest.Controllers.auth.<a href="com/example/personalityquest/Controllers/auth/UpdateAccountPersonalDetailsController.html" title="class in com.example.personalityquest.Controllers.auth">UpdateAccountPersonalDetailsController</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/example/personalityquest/DAO/quest/JournalEntryDAO.html#UpdateAiFeedback(java.lang.String,int,java.lang.String)" class="member-name-link">UpdateAiFeedback(String, int, String)</a> - Method in class com.example.personalityquest.DAO.quest.<a href="com/example/personalityquest/DAO/quest/JournalEntryDAO.html" title="class in com.example.personalityquest.DAO.quest">JournalEntryDAO</a></dt>
+<dd>
+<div class="block">Stores AI feedback on a personal reflection owned by this account.</div>
+</dd>
 <dt><a href="com/example/personalityquest/Services/auth/LoginCacheService.html#UpdateCache(java.lang.String)" class="member-name-link">UpdateCache(String)</a> - Method in class com.example.personalityquest.Services.auth.<a href="com/example/personalityquest/Services/auth/LoginCacheService.html" title="class in com.example.personalityquest.Services.auth">LoginCacheService</a></dt>
 <dd>
 <div class="block">Updates the Login Cache with the new email and current date time</div>
@@ -2720,6 +2740,14 @@ in the form of its name</div>
 <dd>&nbsp;</dd>
 <dt><a href="com/example/personalityquest/Services/quest/UserQuestService.html#UpdateQuestReflectionToDraft(com.example.personalityquest.Model.quest.UserQuest,java.lang.String,java.lang.String)" class="member-name-link">UpdateQuestReflectionToDraft(UserQuest, String, String)</a> - Method in class com.example.personalityquest.Services.quest.<a href="com/example/personalityquest/Services/quest/UserQuestService.html" title="class in com.example.personalityquest.Services.quest">UserQuestService</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/example/personalityquest/DAO/quest/JournalEntryDAO.html#UpdateStandalone(java.lang.String,int,java.lang.String,java.lang.String)" class="member-name-link">UpdateStandalone(String, int, String, String)</a> - Method in class com.example.personalityquest.DAO.quest.<a href="com/example/personalityquest/DAO/quest/JournalEntryDAO.html" title="class in com.example.personalityquest.DAO.quest">JournalEntryDAO</a></dt>
+<dd>
+<div class="block">Updates a personal reflection owned by this account.</div>
+</dd>
+<dt><a href="com/example/personalityquest/Services/quest/JournalEntryService.html#UpdateStandaloneEntry(java.lang.String,int,java.lang.String,java.lang.String)" class="member-name-link">UpdateStandaloneEntry(String, int, String, String)</a> - Method in class com.example.personalityquest.Services.quest.<a href="com/example/personalityquest/Services/quest/JournalEntryService.html" title="class in com.example.personalityquest.Services.quest">JournalEntryService</a></dt>
+<dd>
+<div class="block">Replaces the title and body of a personal reflection owned by this account.</div>
+</dd>
 <dt><a href="com/example/personalityquest/DAO/auth/IUserDAO.html#updateUser(com.example.personalityquest.Model.auth.User)" class="member-name-link">updateUser(User)</a> - Method in interface com.example.personalityquest.DAO.auth.<a href="com/example/personalityquest/DAO/auth/IUserDAO.html" title="interface in com.example.personalityquest.DAO.auth">IUserDAO</a></dt>
 <dd>
 <div class="block">Updates a stored user record</div>

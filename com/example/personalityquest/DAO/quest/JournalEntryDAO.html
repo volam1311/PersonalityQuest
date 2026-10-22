@@ -77,6 +77,9 @@ initTheme();
 <li><a href="#Upsert(java.lang.String,java.lang.Integer,com.example.personalityquest.Model.quest.JournalEntry.EntryType,java.lang.String,java.lang.String)" tabindex="0">Upsert(String, Integer, JournalEntry.EntryType, String, String)</a></li>
 <li><a href="#GetForEmailAndType(java.lang.String,com.example.personalityquest.Model.quest.JournalEntry.EntryType)" tabindex="0">GetForEmailAndType(String, JournalEntry.EntryType)</a></li>
 <li><a href="#ExistsForLabourAndType(java.lang.String,int,com.example.personalityquest.Model.quest.JournalEntry.EntryType)" tabindex="0">ExistsForLabourAndType(String, int, JournalEntry.EntryType)</a></li>
+<li><a href="#GetById(int)" tabindex="0">GetById(int)</a></li>
+<li><a href="#UpdateStandalone(java.lang.String,int,java.lang.String,java.lang.String)" tabindex="0">UpdateStandalone(String, int, String, String)</a></li>
+<li><a href="#UpdateAiFeedback(java.lang.String,int,java.lang.String)" tabindex="0">UpdateAiFeedback(String, int, String)</a></li>
 </ol>
 </li>
 </ol>
@@ -153,24 +156,44 @@ initTheme();
  int&nbsp;labourId,
  <a href="../../Model/quest/JournalEntry.EntryType.html" title="enum class in com.example.personalityquest.Model.quest">JournalEntry.EntryType</a>&nbsp;entryType)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetForEmailAndType(java.lang.String,com.example.personalityquest.Model.quest.JournalEntry.EntryType)" class="member-name-link">GetForEmailAndType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetById(int)" class="member-name-link">GetById</a><wbr>(int&nbsp;id)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Loads one journal entry by id, or null when it does not exist.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#GetForEmailAndType(java.lang.String,com.example.personalityquest.Model.quest.JournalEntry.EntryType)" class="member-name-link">GetForEmailAndType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
  <a href="../../Model/quest/JournalEntry.EntryType.html" title="enum class in com.example.personalityquest.Model.quest">JournalEntry.EntryType</a>&nbsp;entryType)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#Insert(java.lang.String,java.lang.Integer,com.example.personalityquest.Model.quest.JournalEntry.EntryType,java.lang.String,java.lang.String)" class="member-name-link">Insert</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#Insert(java.lang.String,java.lang.Integer,com.example.personalityquest.Model.quest.JournalEntry.EntryType,java.lang.String,java.lang.String)" class="member-name-link">Insert</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a>&nbsp;labourId,
  <a href="../../Model/quest/JournalEntry.EntryType.html" title="enum class in com.example.personalityquest.Model.quest">JournalEntry.EntryType</a>&nbsp;entryType,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;body)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UpdateAiFeedback(java.lang.String,int,java.lang.String)" class="member-name-link">UpdateAiFeedback</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+ int&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;feedback)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Stores AI feedback on a personal reflection owned by this account.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#Upsert(java.lang.String,java.lang.Integer,com.example.personalityquest.Model.quest.JournalEntry.EntryType,java.lang.String,java.lang.String)" class="member-name-link">Upsert</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a>&nbsp;labourId,
- <a href="../../Model/quest/JournalEntry.EntryType.html" title="enum class in com.example.personalityquest.Model.quest">JournalEntry.EntryType</a>&nbsp;entryType,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UpdateStandalone(java.lang.String,int,java.lang.String,java.lang.String)" class="member-name-link">UpdateStandalone</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+ int&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Updates a personal reflection owned by this account.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#Upsert(java.lang.String,java.lang.Integer,com.example.personalityquest.Model.quest.JournalEntry.EntryType,java.lang.String,java.lang.String)" class="member-name-link">Upsert</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class in java.lang" class="external-link">Integer</a>&nbsp;labourId,
+ <a href="../../Model/quest/JournalEntry.EntryType.html" title="enum class in com.example.personalityquest.Model.quest">JournalEntry.EntryType</a>&nbsp;entryType,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;title,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;body)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Inserts a new journal entry for this labour/type, or updates the existing one if the
 user has already added one - so editing and re-saving updates the same entry instead
 of creating duplicates.</div>
@@ -300,6 +323,55 @@ of creating duplicates.</div>
  int&nbsp;labourId,
  <a href="../../Model/quest/JournalEntry.EntryType.html" title="enum class in com.example.personalityquest.Model.quest">JournalEntry.EntryType</a>&nbsp;entryType)</span>
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></code></dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="GetById(int)">
+<h3>GetById</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a></span>&nbsp;<span class="element-name">GetById</span><wbr><span class="parameters">(int&nbsp;id)</span>
+                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+<div class="block">Loads one journal entry by id, or null when it does not exist.</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></code></dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="UpdateStandalone(java.lang.String,int,java.lang.String,java.lang.String)">
+<h3>UpdateStandalone</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../Model/quest/JournalEntry.html" title="class in com.example.personalityquest.Model.quest">JournalEntry</a></span>&nbsp;<span class="element-name">UpdateStandalone</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+ int&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;title,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;body)</span>
+                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+<div class="block">Updates a personal reflection owned by this account.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the updated entry, or null when no matching standalone row exists</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></code></dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="UpdateAiFeedback(java.lang.String,int,java.lang.String)">
+<h3>UpdateAiFeedback</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UpdateAiFeedback</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;email,
+ int&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class in java.lang" class="external-link">String</a>&nbsp;feedback)</span>
+                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></span></div>
+<div class="block">Stores AI feedback on a personal reflection owned by this account.</div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/SQLException.html" title="class in java.sql" class="external-link">SQLException</a></code></dd>
