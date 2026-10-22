@@ -95,24 +95,24 @@ public class ProfileController implements Initializable {
     private double[] radarValues = new double[RADAR_AXIS_COUNT];
     private List<Achievement> achievements = List.of();
 
-    private UserQuestService UserQuestService;
-    private QuestService QuestService;
-    private AchievementService AchievementService;
-    private EmailService EmailService;
-    private UserProfileService UserProfileService;
-    private QuizService QuizService;
+    private UserQuestService userQuestService;
+    private QuestService questService;
+    private AchievementService achievementService;
+    private EmailService emailService;
+    private UserProfileService userProfileService;
+    private QuizService quizService;
     /** Initialises profile controls and loads account data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        AchievementService = new AchievementService();
-        UserQuestService = new UserQuestService();
-        QuestService = new QuestService();
-        EmailService = new EmailService();
-        UserProfileService = new UserProfileService();
-        QuizService = new QuizService();
+        achievementService = AchievementService.GetInstance();
+        userQuestService = UserQuestService.GetInstance();
+        questService = QuestService.GetInstance();
+        emailService = EmailService.GetInstance();
+        userProfileService = UserProfileService.GetInstance();
+        quizService = QuizService.GetInstance();
         navBarController.setCurrentDestination(NavBarController.NavDestination.PROFILE);
         JournalEntryService = new JournalEntryService();
         WeeklyTaskService = new WeeklyTaskService();
@@ -135,50 +135,50 @@ public class ProfileController implements Initializable {
         EmailDetails details = null;
         if (signedIn) {
             try {
-                details = EmailService.GetDetailsForEmail(email);
+                details = emailService.GetDetailsForEmail(email);
             } catch (Exception ignored) {
                 details = null;
             }
         }
-        displayNameLabel.setText(UserProfileService.Username(details));
+        displayNameLabel.setText(userProfileService.Username(details));
 
         UserProfile progress = UserProfile.empty();
         if (signedIn) {
             try {
-                progress = AchievementService.GetProgress(email);
+                progress = achievementService.GetProgress(email);
             } catch (Exception ignored) {
                 progress = UserProfile.empty();
             }
         }
         streakLabel.setText("Week " + progress.currentStreak());
-        radarValues = QuizService.ArchetypeScores(QuizService.LoadStoredResult(email));
+        radarValues = quizService.ArchetypeScores(quizService.LoadStoredResult(email));
 
-        String archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;
+        String archetypeName = userProfileService.UNASSIGNED_ARCHETYPE;
         if (signedIn) {
             try {
-                UserQuest selectedQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+                UserQuest selectedQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
                 if (selectedQuest == null) {
-                    List<UserQuest> userQuests = UserQuestService.GetUserQuestsForEmail(email);
+                    List<UserQuest> userQuests = userQuestService.GetUserQuestsForEmail(email);
                     if (!userQuests.isEmpty()) {
                         selectedQuest = userQuests.get(0);
                     }
                 }
                 if (selectedQuest != null) {
-                    Quest quest = QuestService.GetQuestForLabourId(selectedQuest.getLabourId());
+                    Quest quest = questService.GetQuestForLabourId(selectedQuest.getLabourId());
                     if (quest != null) {
-                        archetypeName = UserProfileService.FormatArchetypeName(
-                                QuestService.GetArchetypeName(quest.getArchetypeId()));
+                        archetypeName = userProfileService.FormatArchetypeName(
+                                questService.GetArchetypeName(quest.getArchetypeId()));
                     }
                 }
             } catch (Exception ignored) {
-                archetypeName = UserProfileService.UNASSIGNED_ARCHETYPE;
+                archetypeName = userProfileService.UNASSIGNED_ARCHETYPE;
             }
         }
 
         archetypeBadge.setText("Main Archetype: " + archetypeName );
 
         try {
-            achievements = AchievementService.GetAchievementsForEmail(email);
+            achievements = achievementService.GetAchievementsForEmail(email);
             System.out.println(achievements.size());
             PopulateAchievements(achievements);
         } catch (Exception ignored) {
@@ -205,7 +205,7 @@ public class ProfileController implements Initializable {
 
         if (!ApplicationManager.isEmpty(email)) {
             try {
-                for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {
+                for (UserQuest userQuest : userQuestService.GetUserQuestsForEmail(email)) {
                     if (ApplicationManager.isEmpty(userQuest.getReactionType())) {
                         continue; // quest not started yet, no reflection assigned
                     }

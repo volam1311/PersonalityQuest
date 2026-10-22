@@ -15,6 +15,7 @@ import static java.awt.SystemColor.text;
 
 public record QuestOption(int questOptionId, int labourId, int archetypeId, ReactionType reactionType, String text) {
 
+    /** Whether a reaction leans toward excess or deficit. */
     public enum ReactionType{
         EXCESS, DEFICIT
     }

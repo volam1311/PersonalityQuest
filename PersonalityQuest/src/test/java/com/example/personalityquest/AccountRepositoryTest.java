@@ -7,6 +7,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies that account records can be stored and loaded. */
 class AccountRepositoryTest {
 
     private Connection connection;

@@ -1,5 +1,7 @@
 package com.example.personalityquest.Services.navigation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -8,6 +10,7 @@ import java.util.prefs.Preferences;
 public final class ThemeService {
     private static final String THEME_PREFERENCE_KEY = "theme";
 
+    /** A named colour theme and the stylesheet that applies it. */
     public enum Theme {
         DARK("theme-dark.css"),
         DUSK("theme-dusk.css"),
@@ -27,6 +30,7 @@ public final class ThemeService {
     }
 
     private final Preferences preferences;
+    private final List<ThemeChangeListener> listeners = new ArrayList<>();
     private Theme currentTheme;
 
     public ThemeService() {
@@ -38,8 +42,28 @@ public final class ThemeService {
         this.currentTheme = ReadSavedTheme();
     }
 
+    private static ThemeService instance;
+    public static ThemeService GetInstance(){
+        if (instance == null){
+            instance = new ThemeService();
+        }
+
+        return instance;
+    }
+
+
     public Theme getCurrentTheme() {
         return currentTheme;
+    }
+
+    /**
+     * Registers a listener that is told after a theme is saved.
+     * @param listener the observer to notify
+     */
+    public void addThemeChangeListener(ThemeChangeListener listener) {
+        if (listener != null && !listeners.contains(listener)) {
+            listeners.add(listener);
+        }
     }
 
     public void setCurrentTheme(Theme theme) {
@@ -50,6 +74,9 @@ public final class ThemeService {
             currentTheme = selectedTheme;
         } catch (BackingStoreException exception) {
             throw new IllegalStateException("Unable to save the selected theme", exception);
+        }
+        for (ThemeChangeListener listener : List.copyOf(listeners)) {
+            listener.themeChanged(currentTheme);
         }
     }
 

@@ -26,6 +26,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+/** Controls the quest viewer tabs for storyline, reaction, challenge, and reflection. */
 public class QuestViewerController implements Initializable {
 
     private enum Tab {
@@ -96,22 +97,22 @@ public class QuestViewerController implements Initializable {
 
     private Timeline reactionFlashTimeline;
 
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private  QuestService QuestService;
-    private JournalEntryService JournalEntryService;
-    private ReflectionFeedbackService ReflectionFeedbackService;
-    private ReflectionPromptDAO ReflectionPromptDAO;
-    private QuestOptionDAO QuestOptionDAO;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private  QuestService questService;
+    private JournalEntryService journalEntryService;
+    private ReflectionFeedbackService reflectionFeedbackService;
+    private ReflectionPromptDAO reflectionPromptDAO;
+    private QuestOptionDAO questOptionDAO;
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        TaskService = new TaskService();
-        UserQuestService = new UserQuestService();
-        QuestService = new QuestService();
-        JournalEntryService = new JournalEntryService();
-        ReflectionFeedbackService = new ReflectionFeedbackService();
-        ReflectionPromptDAO = new ReflectionPromptDAO();
-        QuestOptionDAO = new QuestOptionDAO();
+        taskService = TaskService.GetInstance();
+        userQuestService = UserQuestService.GetInstance();
+        questService = QuestService.GetInstance();
+        journalEntryService = JournalEntryService.GetInstance();
+        reflectionFeedbackService = ReflectionFeedbackService.GetInstance();
+        reflectionPromptDAO = new ReflectionPromptDAO();
+        questOptionDAO = new QuestOptionDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUEST_VIEWER);
         UpdateTabLocks();
         SelectTab(Tab.STORYLINE);
@@ -127,20 +128,20 @@ public class QuestViewerController implements Initializable {
         }
 
         try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
             if (userQuest == null) {
                 ShowEmptyIntroOverlay("Complete the quiz to begin a labour.");
                 return;
             }
 
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
             if (quest == null) {
                 ShowEmptyIntroOverlay("Complete the quiz to begin a labour.");
                 return;
             }
 
             LabourInsight insight = LabourInsight.ForLabourId(quest.getLabourId());
-            String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
+            String archetypeName = questService.GetArchetypeName(quest.getArchetypeId());
 
             introQuestNameLabel.setText(quest.getName() + " - " + archetypeName);
             introThemeLabel.setText(insight == null ? "—" : insight.getTheme());
@@ -190,12 +191,12 @@ public class QuestViewerController implements Initializable {
         }
 
         try {
-            List<Task> tasks = TaskService.GetTasksForLabourIdAndReactionType(
+            List<Task> tasks = taskService.GetTasksForLabourIdAndReactionType(
                     activeUserQuest.getLabourId(), selectedReaction.name());
             Task task = tasks.isEmpty() ? null : tasks.get(0);
             String title = task == null ? "Challenge" : task.getName();
 
-            JournalEntryService.AddChallengeEntry(email, activeUserQuest.getLabourId(), title, focusText);
+            journalEntryService.AddChallengeEntry(email, activeUserQuest.getLabourId(), title, focusText);
             boolean wasAlreadyVisited = challengeVisited;
             challengeVisited = true;
             challengeJournalFeedbackLabel.setText(wasAlreadyVisited ? "Updated your journal entry" : "Added to your journal");
@@ -272,13 +273,13 @@ public class QuestViewerController implements Initializable {
         }
 
         try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
             if (userQuest == null) {
                 ShowEmptyStoryline("Complete the quiz to begin a labour.");
                 return;
             }
 
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
             if (quest == null) {
                 ShowEmptyStoryline("Complete the quiz to begin a labour.");
                 return;
@@ -313,20 +314,20 @@ public class QuestViewerController implements Initializable {
         }
 
         try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
             activeUserQuest = userQuest;
             if (userQuest == null) {
                 reactionQuestionLabel.setText("Complete the quiz to begin a labour.");
                 return;
             }
 
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
             if (quest == null) {
                 reactionQuestionLabel.setText("Complete the quiz to begin a labour.");
                 return;
             }
 
-            List<QuestOption> options = QuestOptionDAO.GetQuestOptionsForLabourId(quest.getLabourId());
+            List<QuestOption> options = questOptionDAO.GetQuestOptionsForLabourId(quest.getLabourId());
             if (options.isEmpty()){
                 reactionQuestionLabel.setText("Reaction options are not available for this labour yet");
                 return;
@@ -396,7 +397,7 @@ public class QuestViewerController implements Initializable {
         selectedReaction = option.reactionType();
         try{
             if (activeUserQuest != null) {
-                activeUserQuest = UserQuestService.SetUserQuestReactionType(
+                activeUserQuest = userQuestService.SetUserQuestReactionType(
                         activeUserQuest, ApplicationManager.CurrentAccount.getCurrentEmail(), selectedReaction.name());
             }
         } catch (Exception ignored){ // Non fatal
@@ -410,7 +411,7 @@ public class QuestViewerController implements Initializable {
 
         if (activeUserQuest != null) {
             try {
-                Quest quest = QuestService.GetQuestForLabourId(activeUserQuest.getLabourId());
+                Quest quest = questService.GetQuestForLabourId(activeUserQuest.getLabourId());
                 if (quest != null) {
                     ShowResolutionIfAvailable(quest, false);
                 }
@@ -428,14 +429,14 @@ public class QuestViewerController implements Initializable {
         }
 
         try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
             if (userQuest == null) {
                 challengeDetailsLabel.setText("Complete the quiz to begin a labour.");
                 return;
             }
             activeUserQuest = userQuest;
 
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
             if (quest == null) {
                 challengeDetailsLabel.setText("Complete the quiz to begin a labour.");
                 return;
@@ -451,15 +452,15 @@ public class QuestViewerController implements Initializable {
                 return;
             }
 
-            List<Task> tasks = TaskService.GetTasksForLabourIdAndReactionType(quest.getLabourId(), selectedReaction.name());
+            List<Task> tasks = taskService.GetTasksForLabourIdAndReactionType(quest.getLabourId(), selectedReaction.name());
             Task task = tasks.isEmpty() ? null : tasks.get(0);
-            String details = TaskService.JoinTaskDetails(tasks);
+            String details = taskService.JoinTaskDetails(tasks);
             challengeDetailsLabel.setText(details.isEmpty()
                     ? "No tasks are stored for this labour yet."
                     : details);
             challengeOverviewLabel.setText(task == null ? "" : task.getOverview());
 
-            challengeVisited = JournalEntryService.HasAddedChallengeForLabour(email, userQuest.getLabourId());
+            challengeVisited = journalEntryService.HasAddedChallengeForLabour(email, userQuest.getLabourId());
             challengeJournalFeedbackLabel.setText(challengeVisited ? "Added to your journal" : "");
             challengeJournalEntryArea.setText(FindExistingChallengeEntryText(email, userQuest.getLabourId(), task));
             UpdateTabLocks();
@@ -470,7 +471,7 @@ public class QuestViewerController implements Initializable {
 
     private String FindExistingChallengeEntryText(String email, int labourId, Task task) {
         try {
-            List<JournalEntry> entries = JournalEntryService.GetChallengesForEmail(email);
+            List<JournalEntry> entries = journalEntryService.GetChallengesForEmail(email);
             for (JournalEntry entry : entries) {
                 if (entry.getLabourId() != null && entry.getLabourId() == labourId) {
                     String body = entry.getBody() == null ? "" : entry.getBody();
@@ -497,21 +498,21 @@ public class QuestViewerController implements Initializable {
         }
 
         try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
             if (userQuest == null) {
                 reflectionPromptLabel.setText("Complete the quiz to begin a labour.");
                 DisableReflectionActions();
                 return;
             }
 
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
             if (quest == null) {
                 reflectionPromptLabel.setText("Complete the quiz to begin a labour.");
                 DisableReflectionActions();
                 return;
             }
 
-            List<ReflectionPrompt> prompts = ReflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());
+            List<ReflectionPrompt> prompts = reflectionPromptDAO.GetReflectionPromptsForLabourId(quest.getLabourId());
             if (prompts.isEmpty()) {
                 reflectionPromptLabel.setText("No prompts are stored for this labour yet.");
                 DisableReflectionActions();
@@ -592,7 +593,7 @@ public class QuestViewerController implements Initializable {
         }
 
         try{
-            activeUserQuest = UserQuestService.UpdateQuestReflectionToDraft(
+            activeUserQuest = userQuestService.UpdateQuestReflectionToDraft(
                     activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
             reflectionStatusLabel.setText("Draft Saved");
             reflectionAdded = true;
@@ -616,7 +617,7 @@ public class QuestViewerController implements Initializable {
         }
         try {
             boolean finished = "Finished".equalsIgnoreCase(activeUserQuest.getReflectionStatus());
-            activeUserQuest = UserQuestService.UpdateQuestReflectionToBeFinished(
+            activeUserQuest = userQuestService.UpdateQuestReflectionToBeFinished(
                     activeUserQuest, reflection, ApplicationManager.CurrentAccount.getCurrentEmail());
             reflectionSubmitButton.setText("Submit");
             navBarController.FlashTasksButtonOnce();
@@ -649,12 +650,12 @@ public class QuestViewerController implements Initializable {
         reflectionStatusLabel.setText(statusMessage);
         CompletableFuture.supplyAsync(() -> {
             try {
-                Quest questDetails = QuestService.GetQuestForLabourId(quest.getLabourId());
-                List<Task> tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
+                Quest questDetails = questService.GetQuestForLabourId(quest.getLabourId());
+                List<Task> tasks = taskService.GetTasksForLabourId(quest.getLabourId());
                 Task firstTask = tasks.isEmpty() ? null : tasks.get(0);
                 String questName = questDetails == null ? "" : questDetails.getName();
-                return ReflectionFeedbackService.FeedbackFor(
-                        ReflectionFeedbackService.ContextFor(firstTask, questName, reflection));
+                return reflectionFeedbackService.FeedbackFor(
+                        reflectionFeedbackService.ContextFor(firstTask, questName, reflection));
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -665,7 +666,7 @@ public class QuestViewerController implements Initializable {
                 return;
             }
             try {
-                ReflectionFeedbackService.SaveForQuest(quest.getAccountEmail(), quest.getLabourId(), text);
+                reflectionFeedbackService.SaveForQuest(quest.getAccountEmail(), quest.getLabourId(), text);
             } catch (Exception ignored) {
                 // Showing the reply still helps even if it cannot be stored.
             }
@@ -677,7 +678,7 @@ public class QuestViewerController implements Initializable {
     }
     private void ShowStoredQuestFeedback(String email, int labourId) {
         try {
-            String stored = ReflectionFeedbackService.FindForQuest(email, labourId);
+            String stored = reflectionFeedbackService.FindForQuest(email, labourId);
             if (ApplicationManager.isEmpty(stored)) {
                 HideQuestAiFeedback();
                 return;

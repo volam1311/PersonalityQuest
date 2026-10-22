@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies task lookup and selection. */
 public class TaskServiceTest {
     private Connection connection;
 
@@ -92,7 +93,6 @@ public class TaskServiceTest {
         dummyTasks[0] = new Task(7777, "TestTask", "This is a Test Task", 1);
         dummyTasks[1] = new Task(8888, "TestTask2", "This is a 2nd Test Task", 2);
         dummyTasks[2] = new Task(9999, "TestTask3", "This is a 3rd Test Task", 2);
-        SQLite.setConnection(connection);
     }
 
 

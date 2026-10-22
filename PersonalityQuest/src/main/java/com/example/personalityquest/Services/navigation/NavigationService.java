@@ -19,22 +19,26 @@ public class NavigationService {
 
     public static Stage stage;
     private static ThemeService themeService;
+    private static final ScreenFactory screenFactory = new ScreenFactory();
 
     /** Sets the primary stage used for navigation
      * @param currentStage the primary JavaFX stage
      */
     public static void Init(Stage currentStage){
         stage = currentStage;
-        if (themeService == null) {
-            themeService = new ThemeService();
-        }
+        EnsureThemeService();
     }
 
     public static ThemeService GetThemeService() {
+        EnsureThemeService();
+        return themeService;
+    }
+
+    private static void EnsureThemeService() {
         if (themeService == null) {
             themeService = new ThemeService();
+            themeService.addThemeChangeListener(theme -> ApplyThemeToCurrentScene());
         }
-        return themeService;
     }
 
     /** Loads the requested screen into the primary stage
@@ -46,8 +50,10 @@ public class NavigationService {
 
         FXMLLoader fxmlLoader = new FXMLLoader(UpdateAccountPersonalDetailsApplication.class.getResource(fxmlString));
         Scene scene = new Scene(fxmlLoader.load(), SCENEWIDTH, SCENEHEIGHT);
-        scene.getStylesheets().add(UpdateAccountPersonalDetailsApplication.class.getResource(
-                fxmlPrefix + "css/" + GetThemeService().getCurrentTheme().getStylesheetName()).toExternalForm());
+        String stylesheet = StylesheetForCurrentTheme();
+        if (stylesheet != null) {
+            scene.getStylesheets().add(stylesheet);
+        }
         stage.setTitle(TitleFor(screen));
         stage.setScene(scene);
         stage.show();
@@ -58,40 +64,32 @@ public class NavigationService {
      * @return the FXML resource path
      */
     public static String SetFxmlDoc(ScreenEnum screenEnum){
-        return fxmlPrefix + switch (screenEnum){
-            case ScreenEnum.ACCOUNT_CREATION -> "AccountCreation.fxml";
-            case ScreenEnum.ACCOUNT_SIGN_IN -> "AccountSignIn.fxml";
-            case ScreenEnum.DASHBOARD -> "Dashboard.fxml";
-            case ScreenEnum.PROFILE -> "Profile.fxml";
-            case ScreenEnum.ARCHETYPE -> "Archetype.fxml";
-            case ScreenEnum.QUESTS -> "Quest.fxml";
-            case ScreenEnum.QUEST_VIEWER ->  "QuestViewer.fxml";
-            case ScreenEnum.QUIZ -> "Quiz.fxml";
-            case ScreenEnum.QUIZ_RESULT -> "QuizResult.fxml";
-            case ScreenEnum.SETTINGS -> "Settings.fxml";
-            case ScreenEnum.TASKS -> "Tasks.fxml";
-            case ScreenEnum.UPDATE_ACCOUNT_PASSWORD -> "UpdateAccountPassword.fxml";
-            case ScreenEnum.UPDATE_PERSONAL_DETAILS -> "UpdateAccountPersonalDetails.fxml";
-            case ScreenEnum.WEEKLY_TASK_REFLECTION -> "WeeklyTaskReflection.fxml";
-        };
+        return fxmlPrefix + screenFactory.Create(screenEnum).fxmlFileName();
     }
 
     private static String TitleFor(ScreenEnum screen) {
-        return switch (screen) {
-            case ACCOUNT_CREATION -> "Create Account";
-            case ACCOUNT_SIGN_IN -> "Account Login";
-            case DASHBOARD -> "Dashboard";
-            case PROFILE -> "Profile";
-            case ARCHETYPE -> "Archetype";
-            case QUESTS -> "Questline";
-            case QUEST_VIEWER -> "Quest Viewer";
-            case QUIZ -> "Archetype Quiz";
-            case QUIZ_RESULT -> "Your Archetype";
-            case SETTINGS -> "Settings";
-            case TASKS -> "Journal";
-            case UPDATE_ACCOUNT_PASSWORD -> "Update Password";
-            case UPDATE_PERSONAL_DETAILS -> "Update Details";
-            case WEEKLY_TASK_REFLECTION -> "Weekly Reflection";
-        };
+        return screenFactory.Create(screen).title();
+    }
+
+    private static void ApplyThemeToCurrentScene() {
+        if (stage == null || stage.getScene() == null) {
+            return;
+        }
+        String stylesheet = StylesheetForCurrentTheme();
+        if (stylesheet == null) {
+            return;
+        }
+        var stylesheets = stage.getScene().getStylesheets();
+        stylesheets.removeIf(url -> url.contains("/css/theme-"));
+        stylesheets.add(stylesheet);
+    }
+
+    private static String StylesheetForCurrentTheme() {
+        var resource = UpdateAccountPersonalDetailsApplication.class.getResource(
+                fxmlPrefix + "css/" + GetThemeService().getCurrentTheme().getStylesheetName());
+        if (resource == null) {
+            return null;
+        }
+        return resource.toExternalForm();
     }
 }

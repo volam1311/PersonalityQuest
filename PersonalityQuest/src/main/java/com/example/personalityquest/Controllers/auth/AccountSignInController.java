@@ -2,7 +2,6 @@ package com.example.personalityquest.Controllers.auth;
 
 import com.example.personalityquest.ScreenEnum;
 import com.example.personalityquest.Services.auth.EmailService;
-import com.example.personalityquest.Services.auth.HashingService;
 import com.example.personalityquest.Services.auth.LoginCacheService;
 import com.example.personalityquest.Services.navigation.NavigationService;
 import com.example.personalityquest.Services.auth.PasswordService;
@@ -19,7 +18,6 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.prefs.Preferences;
 
 /** Controls account sign-in */
@@ -43,12 +41,12 @@ public class AccountSignInController {
     @FXML
     private Label Message;
 
-    private PasswordService PasswordService;
-    private EmailService EmailService;
+    private PasswordService passwordService;
+    private EmailService emailService;
     @FXML
     private void initialize() {
-        PasswordService = new PasswordService();
-        EmailService = new EmailService();
+        passwordService = PasswordService.GetInstance();
+        emailService = EmailService.GetInstance();
         Rectangle clip = new Rectangle();
         clip.setArcWidth(56);
         clip.setArcHeight(56);
@@ -169,8 +167,8 @@ public class AccountSignInController {
         }
 
         // Does the email exist and does the password match the email
-        if (!EmailService.DoesAccountWithEmailExist(emailEntry.getText())
-        || !PasswordService.isPasswordForEmail(emailEntry.getText(), passwordEntry.getText())){
+        if (!emailService.DoesAccountWithEmailExist(emailEntry.getText())
+        || !passwordService.isPasswordForEmail(emailEntry.getText(), passwordEntry.getText())){
             markFieldError(emailEntry);
             markFieldError(passwordEntry);
             Message.setText("Email or Password Was entered incorrectly");

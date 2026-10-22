@@ -12,6 +12,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies password checks and updates. */
 public class PasswordServiceTest {
     private Connection connection;
 
@@ -57,7 +58,6 @@ public class PasswordServiceTest {
             currentPassword = "test";
         }
 
-        SQLite.setConnection(connection);
     }
 
     @Test

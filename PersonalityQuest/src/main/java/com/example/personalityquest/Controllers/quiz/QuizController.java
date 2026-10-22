@@ -33,7 +33,7 @@ public class QuizController implements Initializable {
 
     private Integer selectedOption;
 
-    private QuizService QuizService;
+    private QuizService quizService;
 
     /** Initialises quiz controls and loads the first question
      * @param location the location used to resolve relative paths
@@ -41,24 +41,24 @@ public class QuizController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        QuizService = new QuizService();
-        if (!QuizService.HasActiveAttempt()) {
-            QuizService.StartQuiz();
+        quizService = QuizService.GetInstance();
+        if (!quizService.HasActiveAttempt()) {
+            quizService.StartQuiz();
         }
         RenderCurrentQuestion();
     }
 
     private void RenderCurrentQuestion() {
-        Question question = QuizService.GetCurrentQuestion();
-        int number = QuizService.GetCurrentQuestionIndex() + 1;
-        int total = QuizService.GetQuestionCount();
+        Question question = quizService.GetCurrentQuestion();
+        int number = quizService.GetCurrentQuestionIndex() + 1;
+        int total = quizService.GetQuestionCount();
 
         questionNumberLabel.setText("Question " + number + " of " + total);
         questionLabel.setText(question.getQuestionPrompt());
         quizProgress.setProgress((double) number / total);
         progressLabel.setText(Math.round((number * 100.0) / total) + "%");
         feedbackLabel.setText("");
-        selectedOption = QuizService.GetAnswerForCurrentQuestion();
+        selectedOption = quizService.GetAnswerForCurrentQuestion();
 
         optionsBox.getChildren().clear();
         Option option = question.getOptions();
@@ -66,8 +66,8 @@ public class QuizController implements Initializable {
         AddOptionButton(option.getOption2(), option.getOption2Archetype());
         AddOptionButton(option.getOption3(), option.getOption3Archetype());
 
-        backButton.setDisable(!QuizService.CanGoBack());
-        nextButton.setText(QuizService.IsLastQuestion() ? "See result" : "Next");
+        backButton.setDisable(!quizService.CanGoBack());
+        nextButton.setText(quizService.IsLastQuestion() ? "See result" : "Next");
         nextButton.setDisable(selectedOption == null);
     }
 
@@ -88,7 +88,7 @@ public class QuizController implements Initializable {
 
     private void SelectOption(Button chosen) {
         selectedOption = (Integer) chosen.getUserData();
-        QuizService.AnswerCurrentQuestion(selectedOption);
+        quizService.AnswerCurrentQuestion(selectedOption);
         feedbackLabel.setText("");
 
         optionsBox.getChildren().forEach(node -> node.getStyleClass().remove("selected"));
@@ -100,10 +100,10 @@ public class QuizController implements Initializable {
 
     @FXML
     private void OnBack() {
-        if (!QuizService.CanGoBack()) {
+        if (!quizService.CanGoBack()) {
             return;
         }
-        QuizService.GoToPreviousQuestion();
+        quizService.GoToPreviousQuestion();
         RenderCurrentQuestion();
     }
 
@@ -114,16 +114,16 @@ public class QuizController implements Initializable {
             return;
         }
 
-        QuizService.AnswerCurrentQuestion(selectedOption);
+        quizService.AnswerCurrentQuestion(selectedOption);
 
-        if (QuizService.IsLastQuestion()) {
-            QuizService.CompleteQuiz();
-            QuizService.AssignQuestForCurrentResult(ApplicationManager.CurrentAccount.getCurrentEmail());
+        if (quizService.IsLastQuestion()) {
+            quizService.CompleteQuiz();
+            quizService.AssignQuestForCurrentResult(ApplicationManager.CurrentAccount.getCurrentEmail());
             NavigationService.LoadScreen(ScreenEnum.ARCHETYPE);
             return;
         }
 
-        QuizService.GoToNextQuestion();
+        quizService.GoToNextQuestion();
         RenderCurrentQuestion();
     }
 }

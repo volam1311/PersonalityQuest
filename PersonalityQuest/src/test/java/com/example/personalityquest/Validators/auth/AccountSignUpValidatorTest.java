@@ -5,6 +5,7 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies the checks applied to sign-up fields. */
 class AccountSignUpValidatorTest {
 
     @Test

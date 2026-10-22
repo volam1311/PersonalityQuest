@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** Verifies reflection text sent for feedback and the reply that comes back. */
 public class ReflectionFeedbackServiceTest {
 
     ReflectionFeedbackService ReflectionFeedbackService;

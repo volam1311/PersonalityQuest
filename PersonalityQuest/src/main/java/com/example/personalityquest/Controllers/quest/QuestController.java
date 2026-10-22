@@ -52,18 +52,18 @@ public class QuestController implements Initializable {
     private ListView<QuestListItem> questHistory;
 
 
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private QuestService QuestService;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private QuestService questService;
     /** Initialises quest controls and loads available quests
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TaskService = new TaskService();
-        UserQuestService = new UserQuestService();
-        QuestService = new QuestService();
+        taskService = TaskService.GetInstance();
+        userQuestService = UserQuestService.GetInstance();
+        questService = QuestService.GetInstance();
         navBarController.setCurrentDestination(NavBarController.NavDestination.QUESTS);
         ConfigureTaskList();
         ConfigureHistoryList();
@@ -85,16 +85,16 @@ public class QuestController implements Initializable {
         }
 
         try {
-            List<UserQuest> userQuests = UserQuestService.GetUserQuestsForEmail(email);
+            List<UserQuest> userQuests = userQuestService.GetUserQuestsForEmail(email);
             QuestListItem selected = null;
 
             for (UserQuest userQuest : userQuests) {
-                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+                Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
                 if (quest == null) {
                     continue;
                 }
 
-                String archetypeName = QuestService.GetArchetypeName(quest.getArchetypeId());
+                String archetypeName = questService.GetArchetypeName(quest.getArchetypeId());
                 QuestListItem item = new QuestListItem(userQuest, quest, archetypeName);
                 questHistory.getItems().add(item);
 
@@ -125,18 +125,18 @@ public class QuestController implements Initializable {
         Quest quest = item.quest();
         List<Task> tasks;
         try {
-            tasks = TaskService.GetTasksForLabourId(quest.getLabourId());
+            tasks = taskService.GetTasksForLabourId(quest.getLabourId());
         } catch (Exception exception) {
             tasks = List.of();
         }
 
         String story = "";
         try {
-            story = QuestService.GetArchetypeDescription(quest.getArchetypeId());
+            story = questService.GetArchetypeDescription(quest.getArchetypeId());
         } catch (Exception exception) {
             story = "";
         }
-        String taskDetails = TaskService.JoinTaskDetails(tasks);
+        String taskDetails = taskService.JoinTaskDetails(tasks);
 
         questTitleLabel.setText(quest.getName());
         questArchetypeLabel.setText(item.archetypeName());

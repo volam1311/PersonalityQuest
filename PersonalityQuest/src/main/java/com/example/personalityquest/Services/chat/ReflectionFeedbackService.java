@@ -1,6 +1,7 @@
 package com.example.personalityquest.Services.chat;
 
 import com.example.personalityquest.Services.ParentService;
+import com.example.personalityquest.Services.navigation.ThemeService;
 import com.example.personalityquest.Services.quest.QuestService;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.chat.ReflectionFeedbackDAO;
@@ -37,6 +38,15 @@ public final class ReflectionFeedbackService extends ParentService {
     public ReflectionFeedbackService(ChatCompletionClient client){
         super();
         this.client = client;
+    }
+
+    private static ReflectionFeedbackService instance;
+    public static ReflectionFeedbackService GetInstance(){
+        if (instance == null){
+            instance = new ReflectionFeedbackService();
+        }
+
+        return instance;
     }
 
     public ReflectionFeedbackService(ReflectionFeedbackDAO reflectionFeedbackDAO) {

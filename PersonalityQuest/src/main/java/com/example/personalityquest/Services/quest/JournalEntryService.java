@@ -3,10 +3,12 @@ package com.example.personalityquest.Services.quest;
 import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.DAO.quest.JournalEntryDAO;
 import com.example.personalityquest.Model.quest.JournalEntry;
+import com.example.personalityquest.Services.quiz.QuizService;
 
 import java.sql.SQLException;
 import java.util.List;
 
+/** Saves and loads journal entries for the signed-in account. */
 public class JournalEntryService {
 
     private JournalEntryDAO JournalEntryDAO;
@@ -19,6 +21,15 @@ public class JournalEntryService {
     public JournalEntryService(JournalEntryDAO journalEntryDAO){
         super();
         this.JournalEntryDAO = journalEntryDAO;
+    }
+
+    private static JournalEntryService instance;
+    public static JournalEntryService GetInstance(){
+        if (instance == null){
+            instance = new JournalEntryService();
+        }
+
+        return instance;
     }
 
 

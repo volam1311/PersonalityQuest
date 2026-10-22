@@ -18,6 +18,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies weekly task assignment and completion. */
 public class WeeklyTaskServiceTest {
     private Connection connection;
 
@@ -85,7 +86,6 @@ public class WeeklyTaskServiceTest {
                     VALUES (9999, "TestTask", "This is a Test Task", 1)
                     """);
         statement.executeUpdate();
-        SQLite.setConnection(connection);
     }
 
     /// RETRIEVING TASKS

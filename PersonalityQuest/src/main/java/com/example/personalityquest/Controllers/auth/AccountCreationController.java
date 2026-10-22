@@ -54,10 +54,10 @@ public class AccountCreationController {
     @FXML
     private Label Message;
 
-    private QuizService QuizService;
+    private QuizService quizService;
     @FXML
     private void initialize() {
-        QuizService = new QuizService();
+        quizService = QuizService.GetInstance();
         Rectangle clip = new Rectangle();
         clip.setArcWidth(56);
         clip.setArcHeight(56);
@@ -220,7 +220,7 @@ public class AccountCreationController {
         }
 
         ApplicationManager.CurrentAccount.setCurrentEmail(emailEntry.getText());
-        QuizService.StartQuiz();
+        quizService.StartQuiz();
         NavigationService.LoadScreen(ScreenEnum.QUIZ);
         System.out.println("Account created");
     }

@@ -81,28 +81,28 @@ public class TasksController implements Initializable {
 
     private boolean updatingJournalSelection;
 
-    private WeeklyTaskService WeeklyTaskService;
-    private UserQuestService UserQuestService;
-    private TaskService TaskService;
-    private QuestService QuestService;
-    private JournalEntryService JournalEntryService;
-    private StreakService StreakService;
-    private ReflectionFeedbackService ReflectionFeedbackService;
-    private ReflectionPromptDAO ReflectionPromptDAO;
+    private WeeklyTaskService weeklyTaskService;
+    private UserQuestService userQuestService;
+    private TaskService taskService;
+    private QuestService questService;
+    private JournalEntryService journalEntryService;
+    private StreakService streakService;
+    private ReflectionFeedbackService reflectionFeedbackService;
+    private ReflectionPromptDAO reflectionPromptDAO;
     /** Initialises quest challenge/reflection controls and loads the active quest's data
      * @param location the location used to resolve relative paths
      * @param resources the localisation resources for the screen
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        QuestService = new QuestService();
-        UserQuestService = new UserQuestService();
-        WeeklyTaskService = new WeeklyTaskService();
-        TaskService = new TaskService();
-        JournalEntryService = new JournalEntryService();
-        StreakService = new StreakService();
-        ReflectionFeedbackService = new ReflectionFeedbackService();
-        ReflectionPromptDAO = new ReflectionPromptDAO();
+        questService = QuestService.GetInstance();
+        userQuestService = UserQuestService.GetInstance();
+        weeklyTaskService = WeeklyTaskService.GetInstance();
+        taskService = TaskService.GetInstance();
+        journalEntryService = JournalEntryService.GetInstance();
+        streakService = StreakService.GetInstance();
+        reflectionFeedbackService = ReflectionFeedbackService.GetInstance();
+        reflectionPromptDAO = new ReflectionPromptDAO();
         navBarController.setCurrentDestination(NavBarController.NavDestination.TASKS);
         ConfigureQuestChallengesList();
         ConfigureQuestReflectionsList();
@@ -263,7 +263,7 @@ public class TasksController implements Initializable {
             WeeklyTask weeklyTask = submitted.weeklyTask();
             try {
                 boolean alreadyFinished = IsFinished(weeklyTask.getStatus());
-                WeeklyTaskService.UpdateGivenTaskToBeFinished(weeklyTask, reflection, email);
+                weeklyTaskService.UpdateGivenTaskToBeFinished(weeklyTask, reflection, email);
                 RequestWeeklyAiFeedback(submitted, reflection, "Task submitted. Generating AI feedback...");
                 LoadQuestChallenges();
                 ReselectWeeklyChallenge(weeklyTask);
@@ -287,7 +287,7 @@ public class TasksController implements Initializable {
             JournalEntry entry = submitted.entry();
             try {
                 String title = submitted.task() == null ? entry.getTitle() : submitted.task().getName();
-                JournalEntryService.AddChallengeEntry(email, entry.getLabourId(), title, reflection);
+                journalEntryService.AddChallengeEntry(email, entry.getLabourId(), title, reflection);
                 LoadQuestChallenges();
                 ReselectJournalChallenge(entry.getLabourId());
                 feedbackLabel.setText("Saved!");
@@ -301,7 +301,7 @@ public class TasksController implements Initializable {
         if (selectedReflectionItem != null) {
             ReflectionListItem submitted = selectedReflectionItem;
             try {
-                UserQuest updated = UserQuestService.UpdateQuestReflectionToBeFinished(
+                UserQuest updated = userQuestService.UpdateQuestReflectionToBeFinished(
                         submitted.userQuest(), reflection, email);
                 RequestQuestAiFeedback(submitted, reflection, "Reflection submitted. Generating AI feedback...");
                 LoadQuestReflections();
@@ -336,15 +336,15 @@ public class TasksController implements Initializable {
                 return;
             }
 
-            StreakService.RecordCompletion(email, LocalDate.now());
-            UserQuest currentActiveQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            streakService.RecordCompletion(email, LocalDate.now());
+            UserQuest currentActiveQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
 
-            UserQuest updatedQuest = UserQuestService.SetUserQuestToPercentageComplete(
+            UserQuest updatedQuest = userQuestService.SetUserQuestToPercentageComplete(
                     currentActiveQuest, email, currentActiveQuest.getPercentageComplete() + 0.1f);
 
             if (updatedQuest.getPercentageComplete() >= 1.0f) {
-                UserQuestService.SetUserQuestStatusAsComplete(updatedQuest, email);
-                StreakService.IncreaseTotalQuestsCompleted(email);
+                userQuestService.SetUserQuestStatusAsComplete(updatedQuest, email);
+                streakService.IncreaseTotalQuestsCompleted(email);
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
@@ -409,8 +409,8 @@ public class TasksController implements Initializable {
 
         CompletableFuture.supplyAsync(() -> {
             try {
-                return ReflectionFeedbackService.FeedbackFor(
-                        ReflectionFeedbackService.ContextFor(task, questName, reflection));
+                return reflectionFeedbackService.FeedbackFor(
+                        reflectionFeedbackService.ContextFor(task, questName, reflection));
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -432,7 +432,7 @@ public class TasksController implements Initializable {
             }
 
             try {
-                ReflectionFeedbackService.Save(weeklyTask, text);
+                reflectionFeedbackService.Save(weeklyTask, text);
             } catch (Exception ignored) {
                 // Showing the reply still helps even if it cannot be stored.
             }
@@ -454,8 +454,8 @@ public class TasksController implements Initializable {
 
         CompletableFuture.supplyAsync(() -> {
             try {
-                return ReflectionFeedbackService.FeedbackFor(
-                        ReflectionFeedbackService.ContextFor(null, questName, reflection));
+                return reflectionFeedbackService.FeedbackFor(
+                        reflectionFeedbackService.ContextFor(null, questName, reflection));
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -478,7 +478,7 @@ public class TasksController implements Initializable {
             }
 
             try {
-                ReflectionFeedbackService.SaveForQuest(userQuest.getAccountEmail(), userQuest.getLabourId(), text);
+                reflectionFeedbackService.SaveForQuest(userQuest.getAccountEmail(), userQuest.getLabourId(), text);
             } catch (Exception ignored) {
                 // Showing the reply still helps even if it cannot be stored.
             }
@@ -493,7 +493,7 @@ public class TasksController implements Initializable {
             return "your current quest";
         }
         try {
-            Quest quest = QuestService.GetQuestForLabourId(task.getLabourId());
+            Quest quest = questService.GetQuestForLabourId(task.getLabourId());
             if (quest != null && !ApplicationManager.isEmpty(quest.getName())) {
                 return quest.getName();
             }
@@ -505,7 +505,7 @@ public class TasksController implements Initializable {
 
     private void ShowStoredFeedback(WeeklyTask weeklyTask) {
         try {
-            String stored = ReflectionFeedbackService.Find(weeklyTask);
+            String stored = reflectionFeedbackService.Find(weeklyTask);
             if (ApplicationManager.isEmpty(stored)) {
                 HideAiFeedback();
                 return;
@@ -583,14 +583,14 @@ public class TasksController implements Initializable {
     private void PopulateActiveQuestHeader(){
         String email = ApplicationManager.CurrentAccount.getCurrentEmail();
         try {
-            UserQuest userQuest = UserQuestService.GetCurrentActiveUserQuestForEmail(email);
+            UserQuest userQuest = userQuestService.GetCurrentActiveUserQuestForEmail(email);
             if (userQuest == null) {
                 questTitleLabel.setText("No active quest");
                 questProgress.setProgress(0);
                 questProgressLabel.setText("0% Complete");
                 return;
             }
-            Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+            Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
             questTitleLabel.setText(LabourSubject(quest.getName()));
             questProgress.setProgress(userQuest.getPercentageComplete());
             questProgressLabel.setText(String.format("%.0f%% Complete", userQuest.getPercentageComplete() *100));
@@ -710,8 +710,8 @@ public class TasksController implements Initializable {
         }
 
         try {
-            for (JournalEntry entry : JournalEntryService.GetChallengesForEmail(email)) {
-                Quest quest = QuestService.GetQuestForLabourId(entry.getLabourId());
+            for (JournalEntry entry : journalEntryService.GetChallengesForEmail(email)) {
+                Quest quest = questService.GetQuestForLabourId(entry.getLabourId());
                 Task task = FindChallengeTask(email, entry.getLabourId());
                 questChallengesList.getItems().add(new ChallengeListItem(entry, quest, task, null));
             }
@@ -720,13 +720,13 @@ public class TasksController implements Initializable {
         }
 
         try {
-            WeeklyTask[] weekly = WeeklyTaskService.GetTasksForEmailForThisWeek(email);
+            WeeklyTask[] weekly = weeklyTaskService.GetTasksForEmailForThisWeek(email);
             if (weekly == null) {
-                weekly = WeeklyTaskService.GenerateTasksForThisWeek(email);
+                weekly = weeklyTaskService.GenerateTasksForThisWeek(email);
             }
             if (weekly != null) {
                 for (WeeklyTask weeklyTask : weekly) {
-                    Task task = TaskService.GetTaskForId(weeklyTask.getTaskId());
+                    Task task = taskService.GetTaskForId(weeklyTask.getTaskId());
                     questChallengesList.getItems().add(new ChallengeListItem(null, null, task, weeklyTask));
                 }
             }
@@ -752,9 +752,9 @@ public class TasksController implements Initializable {
 
     private Task FindChallengeTask(String email, int labourId) {
         try {
-            UserQuest userQuest = UserQuestService.GetUserQuestForEmailAndLabourId(email, labourId);
+            UserQuest userQuest = userQuestService.GetUserQuestForEmailAndLabourId(email, labourId);
             if (userQuest == null || ApplicationManager.isEmpty(userQuest.getReactionType())) return null;
-            List<Task> tasks = TaskService.GetTasksForLabourIdAndReactionType(labourId, userQuest.getReactionType());
+            List<Task> tasks = taskService.GetTasksForLabourIdAndReactionType(labourId, userQuest.getReactionType());
             return tasks.isEmpty() ? null : tasks.get(0);
         } catch (Exception ignored) {
             return null;
@@ -770,9 +770,9 @@ public class TasksController implements Initializable {
         }
 
         try {
-            for (UserQuest userQuest : UserQuestService.GetUserQuestsForEmail(email)) {
+            for (UserQuest userQuest : userQuestService.GetUserQuestsForEmail(email)) {
                 if (ApplicationManager.isEmpty(userQuest.getReactionType())) continue; // quest not started yet
-                Quest quest = QuestService.GetQuestForLabourId(userQuest.getLabourId());
+                Quest quest = questService.GetQuestForLabourId(userQuest.getLabourId());
                 ReflectionPrompt prompt = FindReflectionPrompt(userQuest);
                 questReflectionsList.getItems().add(new ReflectionListItem(userQuest, quest, prompt));
             }
@@ -798,7 +798,7 @@ public class TasksController implements Initializable {
 
     private ReflectionPrompt FindReflectionPrompt(UserQuest userQuest) {
         try {
-            List<ReflectionPrompt> prompts = ReflectionPromptDAO.GetReflectionPromptsForLabourId(userQuest.getLabourId());
+            List<ReflectionPrompt> prompts = reflectionPromptDAO.GetReflectionPromptsForLabourId(userQuest.getLabourId());
             for (ReflectionPrompt prompt : prompts) {
                 if (userQuest.getReactionType().equalsIgnoreCase(prompt.reactionType())) {
                     return prompt;
@@ -923,7 +923,7 @@ public class TasksController implements Initializable {
 
     private void ShowStoredQuestFeedback(UserQuest userQuest) {
         try {
-            String stored = ReflectionFeedbackService.FindForQuest(userQuest.getAccountEmail(), userQuest.getLabourId());
+            String stored = reflectionFeedbackService.FindForQuest(userQuest.getAccountEmail(), userQuest.getLabourId());
             if (ApplicationManager.isEmpty(stored)) {
                 HideAiFeedback();
                 return;

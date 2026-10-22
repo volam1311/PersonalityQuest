@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Stores and retrieves journal entries for an account. */
 public class JournalEntryDAO extends ParentDAO {
 
     private static final String CREATE_JOURNAL_TABLE = """

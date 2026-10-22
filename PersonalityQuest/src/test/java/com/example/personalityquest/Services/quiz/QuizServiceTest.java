@@ -22,6 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies quiz scoring and saved results. */
 public class QuizServiceTest {
     private static final int QUIZ_QUESTION_COUNT = 16;
 
@@ -37,7 +38,6 @@ public class QuizServiceTest {
         QuizService = new QuizService(questionDAO, optionDAO, quizResultDAO);
         QuizService.Reset();
         System.setProperty("quiz.demo", "false");
-        SQLite.setConnection(connection);
     }
 
     @AfterEach

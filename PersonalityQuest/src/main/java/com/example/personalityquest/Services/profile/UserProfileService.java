@@ -4,6 +4,7 @@ import com.example.personalityquest.ApplicationManager;
 import com.example.personalityquest.Model.auth.EmailDetails;
 import com.example.personalityquest.Model.profile.UserProfile;
 import com.example.personalityquest.Services.ParentService;
+import com.example.personalityquest.Services.quest.JournalEntryService;
 
 import java.util.Locale;
 
@@ -18,6 +19,16 @@ public class UserProfileService extends ParentService {
     public UserProfileService() {
         super();
     }
+
+    private static UserProfileService instance;
+    public static UserProfileService GetInstance(){
+        if (instance == null){
+            instance = new UserProfileService();
+        }
+
+        return instance;
+    }
+
 
     /**
      * Builds a display name from first and last name, falling back to username.

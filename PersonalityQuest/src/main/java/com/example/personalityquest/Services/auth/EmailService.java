@@ -23,6 +23,16 @@ public class EmailService extends ParentService {
         super();
         this.AccountDAO = accountDAO;
     }
+
+    private static EmailService instance;
+    public static EmailService GetInstance(){
+        if (instance == null){
+            instance = new EmailService();
+        }
+
+        return instance;
+    }
+
     /**
      * Checks to see whether an account exists in the database with the given email
      * @param email "The email for the presumed account you want to check"

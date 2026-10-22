@@ -10,6 +10,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Stores and retrieves an account's quiz result. */
 public class QuizResultDAO extends ParentDAO {
     private static final String CREATE_QUIZ_RESULTS = """
             CREATE TABLE IF NOT EXISTS QuizResults(

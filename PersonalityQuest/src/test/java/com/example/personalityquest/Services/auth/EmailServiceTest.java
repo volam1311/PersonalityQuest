@@ -14,6 +14,7 @@ import java.sql.Statement;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies email lookups and the account details returned for an address. */
 public class EmailServiceTest {
     private Connection connection;
 
@@ -50,7 +51,6 @@ public class EmailServiceTest {
                     """);
         }
 
-        SQLite.setConnection(connection);
     }
 
     @Test

@@ -9,6 +9,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies that startup keeps existing quest progress. */
 public class MainApplicationTest {
     private Connection connection;
 

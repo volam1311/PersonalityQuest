@@ -15,6 +15,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Verifies that streak progress can be stored and loaded. */
 public class StreakDAOTest {
     private Connection connection;
 
@@ -51,8 +52,6 @@ public class StreakDAOTest {
                         ('test', 'test', 'Test', 'User', 'password')
                     """);
         }
-
-        SQLite.setConnection(connection);
 
     }
 
