@@ -1,7 +1,11 @@
-bd94c21 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1792650742, 3 minutes ago, message: Merge pull request #214 from volam1311/chore/commit_history
-9a6372f was Lam (vophuclam1311@gmail.com), 1792650686, 4 minutes ago, message: chore: Add commit messages before final submission
-0ccf21e was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1792580371, 20 hours ago, message: Merge pull request #212 from volam1311/refactor/javadoc_comment
-855b418 was Lam (vophuclam1311@gmail.com), 1792580116, 20 hours ago, message: refactor: Add Javadoc comments
+32c0dd3 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1792661677, 2 hours ago, message: Merge pull request #217 from volam1311/fix/reflection_button
+9e29596 was Lam (vophuclam1311@gmail.com), 1792661617, 2 hours ago, message: fix: Fix the reflection button
+2d733c5 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1792651002, 5 hours ago, message: Merge pull request #215 from volam1311/documentation/presentation
+4119a03 was Lam (vophuclam1311@gmail.com), 1792650932, 5 hours ago, message: documentation: Add final presentation slides
+bd94c21 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1792650742, 5 hours ago, message: Merge pull request #214 from volam1311/chore/commit_history
+9a6372f was Lam (vophuclam1311@gmail.com), 1792650686, 5 hours ago, message: chore: Add commit messages before final submission
+0ccf21e was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1792580371, 25 hours ago, message: Merge pull request #212 from volam1311/refactor/javadoc_comment
+855b418 was Lam (vophuclam1311@gmail.com), 1792580116, 25 hours ago, message: refactor: Add Javadoc comments
 de81a9b was Kappikin (thisisthefinalliamkorver@gmail.com), 1792027724, 7 days ago, message: Merge pull request #211 from volam1311/Removed-SQLite-setConnection-in-tests
 856ffce was Kappikin (thisisthefinalliamkorver@gmail.com), 1791971042, 8 days ago, message: Removed sqlite .setconnection and fixed bugs from that
 2aee249 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1791967978, 8 days ago, message: Merge pull request #209 from volam1311/refactor/oop_patterns
@@ -147,10 +151,10 @@ a226181 was Lam (vophuclam1311@gmail.com), 1789370387, 5 weeks ago, message: fix
 6d24715 was Lam (vophuclam1311@gmail.com), 1789370369, 5 weeks ago, message: fix: Modify the task services
 ca50cfa was Lam (vophuclam1311@gmail.com), 1789370311, 5 weeks ago, message: fix: Add type of task
 9878632 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789364850, 5 weeks ago, message: Merge pull request #152 from volam1311/dev
-740dee7 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789340548, 5 weeks ago, message: Merge pull request #149 from volam1311/fix/context
-119cc0e was Lam (vophuclam1311@gmail.com), 1789340494, 5 weeks ago, message: fix: Fix the assignment of task weekly
-9e7a07d was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789339163, 5 weeks ago, message: Merge pull request #148 from volam1311/fix/context
-0a59424 was Lam (vophuclam1311@gmail.com), 1789339107, 5 weeks ago, message: fix: Fix the content of the quest task
+740dee7 was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789340548, 6 weeks ago, message: Merge pull request #149 from volam1311/fix/context
+119cc0e was Lam (vophuclam1311@gmail.com), 1789340494, 6 weeks ago, message: fix: Fix the assignment of task weekly
+9e7a07d was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789339163, 6 weeks ago, message: Merge pull request #148 from volam1311/fix/context
+0a59424 was Lam (vophuclam1311@gmail.com), 1789339107, 6 weeks ago, message: fix: Fix the content of the quest task
 f433ffc was Phuc Lam Vo (155338174+volam1311@users.noreply.github.com), 1789305154, 6 weeks ago, message: Merge pull request #147 from volam1311/feat/AI_feedback
 e35e6de was Lam (vophuclam1311@gmail.com), 1789305077, 6 weeks ago, message: feat: Build UI for AI feedback
 1c629c1 was Lam (vophuclam1311@gmail.com), 1789305062, 6 weeks ago, message: feat: Build services for AI feedback
